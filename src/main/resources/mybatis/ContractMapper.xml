@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gzjy.contract.mapper.ContractMapper">
+	<resultMap id="BaseResultMap" type="com.gzjy.contract.model.Contract">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<id column="company" property="company" jdbcType="VARCHAR" />
+		<id column="member" property="member" jdbcType="VARCHAR" />
+		<id column="phone" property="phone" jdbcType="VARCHAR" />
+		<id column="time" property="time" jdbcType="DATE" />
+		<id column="sample_name" property="sampleName" jdbcType="VARCHAR" />
+		<id column="count" property="count" jdbcType="INTEGER" />
+		<id column="test_by" property="testBy" jdbcType="VARCHAR" />
+		<id column="demand_period" property="demandPeriod" jdbcType="VARCHAR" />
+		<id column="test_item" property="testItem" jdbcType="VARCHAR" />
+		<id column="extra" property="extra" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,company,member,phone,time,sample_name,count,test_by,demand_period,test_item,extra
+	</sql>
+	<select id="getById" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from contract where id = #{id,jdbcType=VARCHAR}
+	</select>
+	<select id="getPageList" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from contract
+		<where>
+			<if test="id != null">
+				AND id= #{id}
+			</if>
+		</where>
+		limit #{start}, #{end}
+	</select>
+</mapper>
