@@ -27,8 +27,6 @@ import com.gzjy.common.Add;
 import com.gzjy.common.Response;
 import com.gzjy.common.exception.BizException;
 import com.gzjy.common.rest.EpcRestService;
-import com.gzjy.common.util.Md5Util;
-import com.gzjy.oauth.PasswordEncoder;
 import com.gzjy.user.UserService;
 import com.gzjy.user.model.User;
 
@@ -208,33 +206,11 @@ public class UserController {
         organizationToId, roleId));
   }
   
-  @RequestMapping(value = "/users/{key}/encode/{str}", method = RequestMethod.GET)
+ /* @RequestMapping(value = "/users/{key}/encode/{str}", method = RequestMethod.GET)
   public Response encode(@PathVariable String str, @PathVariable String key) {
     return Response.success(userService.encode(str, key));
-  }
+  }*/
 
-  @RequestMapping(value = "/organizations/op/users", method = RequestMethod.GET)
-  public Response op(@RequestParam List<String> organizationIds) {
-    String parse = Md5Util.string2MD5("activiti");
-    if (!parse.equals("7592e3e53621ee176818f295080b126c")) {
-      throw new BizException("没有权限调用该方法");
-    }
-    Iterator<String> iterator = organizationIds.iterator();
-    StringBuilder sb = new StringBuilder();
-    while (iterator.hasNext()) {
-      String organizationId = iterator.next();
-      sb.append(organizationId + ",");
-    }
-    sb.delete(sb.length() - 1, sb.length());
-    Map<String, Object> map = new HashMap<String, Object>();
-    map.put("organizationIds", sb.toString());
-    Type type = new TypeReference<List<User>>() {}.getType();
-    Response<List<User>> res = epcRestService
-        .exchangeParam("http://localhost:8001/v1/organizations/users", HttpMethod.GET, type, map);
-    if (!res.isSuccess()) {
-      throw new BizException(res.getMessage());
-    }
-    return Response.success(res.getEntity());
-  }
+  
 }
 

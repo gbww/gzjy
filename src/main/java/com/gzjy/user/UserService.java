@@ -274,10 +274,5 @@ public interface UserService {
 
   Response<OAuth2AccessToken> getToken(String username, String password);
   
-  /**
-   * Epc密文加密方法
-   * @param username : 
-   * @return
-   */
-  String encode(String str, String key);
+
 }

@@ -36,7 +36,6 @@ import com.gzjy.common.rest.EpcSyncRestTemplate;
 import com.gzjy.oauth.config.OauthInitBeanCollection;
 import com.gzjy.oauth.entity.OauthUser;
 import com.gzjy.oauth.property.EpcOauthProperties;
-import com.gzjy.oauth.security.Decoder;
 import com.gzjy.oauth.security.KaptchaReceiver;
 
 @RestController
@@ -193,13 +192,13 @@ public class OauthUserController {
     String username = map.get("username");
     String password = map.get("password");
     String scope = map.get("scope");
-    if (scope == null) map.put("scope", "cmss");
-    Decoder decoder = getDecoder();
-    map.put("username", decoder.decode(username));
-    map.put("password", decoder.decode(password));
+    if (scope == null) map.put("scope", "gzjy");
+   
+    map.put("username", username);
+    map.put("password", password);
   }
 
-  private Decoder loginDecoder;
+
 
   private KaptchaReceiver<?> kaptchaReceiver;
 
@@ -211,10 +210,5 @@ public class OauthUserController {
         .getBean(oauthProperties.getKaptchaReceiver());
   }
 
-  private Decoder getDecoder() {
-    if (loginDecoder != null) {
-      return loginDecoder;
-    }
-    return (Decoder) OauthInitBeanCollection.getBean(oauthProperties.getDecoder());
-  }
+
 }

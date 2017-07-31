@@ -27,8 +27,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.gzjy.common.util.ReflectUtil;
 import com.gzjy.oauth.condition.TokenStoreJdbcCondition;
 import com.gzjy.oauth.property.EpcOauthProperties;
-import com.gzjy.oauth.security.DefaultPasswordEncoder;
-import com.gzjy.oauth.security.Encoder;
 
 
 
@@ -46,17 +44,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
   @PostConstruct
   public void init() {
-    ReflectUtil<Encoder> reflectUtil = new ReflectUtil<>();
-    String passwordEncoder = oauthProperties.getEncoder();
-    if (passwordEncoder != null) {
-      Encoder instance = reflectUtil.getInstance(passwordEncoder);
-
-      OauthInitBeanCollection.add(passwordEncoder, instance);
-    }
-    String loginDecoder = oauthProperties.getDecoder();
-    if (loginDecoder != null) {
-      OauthInitBeanCollection.add(loginDecoder, reflectUtil.getInstance(loginDecoder));
-    }
+    ReflectUtil<Object> reflectUtil = new ReflectUtil<>();
+   
     String kaptchaReceiver = oauthProperties.getKaptchaReceiver();
     if (kaptchaReceiver != null) {
       OauthInitBeanCollection.add(kaptchaReceiver, reflectUtil.getInstance(kaptchaReceiver));
@@ -69,14 +58,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     DaoAuthenticationConfigurer<AuthenticationManagerBuilder, UserDetailServiceImpl> configurer =
         auth.userDetailsService(userDetailService);
-    if (oauthProperties.getEncoder() != null) {
-
-      DefaultPasswordEncoder passwordEncoder = new DefaultPasswordEncoder();
-      passwordEncoder.setPasswordEncoder(
-          (Encoder) OauthInitBeanCollection.getBean(oauthProperties.getEncoder()));
-      configurer.passwordEncoder(passwordEncoder);
-
-    }
+    
   }
 
   @Override

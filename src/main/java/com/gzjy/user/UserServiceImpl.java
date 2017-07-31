@@ -41,9 +41,6 @@ import com.gzjy.common.Response;
 import com.gzjy.common.annotation.Privileges;
 import com.gzjy.common.exception.BizException;
 import com.gzjy.common.util.UUID;
-import com.gzjy.oauth.LoginDecoder;
-import com.gzjy.oauth.LoginEncoder;
-import com.gzjy.oauth.PasswordEncoder;
 import com.gzjy.organization.model.Organization;
 import com.gzjy.organization.model.Organization.OrganizationType;
 import com.gzjy.organization.service.OrganizationService;
@@ -129,11 +126,8 @@ public class UserServiceImpl implements UserService {
      * if (user.getPassword().equals(pswEncoder.encode(password)))
      */
     
-    // Use encrypted password
-    LoginDecoder decoder = new LoginDecoder();
-    PasswordEncoder encoder = new PasswordEncoder();
-    String dcPassword = decoder.passwordDecode(password);
-    if (user.getPassword().equals(encoder.encode(dcPassword)))
+   
+    if (user.getPassword().equals(password))
       return user;
     else
       throw new BizException("用户密码错误，请检查！");
@@ -209,8 +203,8 @@ public class UserServiceImpl implements UserService {
   @Override
   @Transactional
   public User initDefaultAdminForOrganization(User user) {
-    PasswordEncoder pswEncoder = new PasswordEncoder();
-    user.setPassword(pswEncoder.encode(user.getPassword()));
+   
+    user.setPassword(user.getPassword());
     userMapper.insert(user);
     return user;
   }
@@ -265,11 +259,10 @@ public class UserServiceImpl implements UserService {
     }
     // END HERE
 
-    PasswordEncoder pswEncoder = new PasswordEncoder();
     user.setId(UUID.random());
     user.setRoleId(roleId);
     user.setOrganizationId(organizationId);
-    user.setPassword(pswEncoder.encode(user.getPassword()));
+    user.setPassword(user.getPassword());
     user.setState(UserStatus.ACTIVATE.getCode());
     user.setCreatedAt(new Date());
     user.setUpdatedAt(new Date());
@@ -508,12 +501,11 @@ public class UserServiceImpl implements UserService {
   @Override
   public Response<OAuth2AccessToken> getToken(String username, String password) {
     String url = oauth_token_url;
-    ParameterizedTypeReference<Response<OAuth2AccessToken>> type = new ParameterizedTypeReference<Response<OAuth2AccessToken>>() {};
-    LoginEncoder encoder = new LoginEncoder();
+    ParameterizedTypeReference<Response<OAuth2AccessToken>> type = new ParameterizedTypeReference<Response<OAuth2AccessToken>>() {};   
     Map<String,Object> requestParams = Maps.newHashMap();
     requestParams.put("grant_type","password");
-    requestParams.put("username", encoder.encodeUsername(username));
-    requestParams.put("password", encoder.encodePassword(password));
+    requestParams.put("username", username);
+    requestParams.put("password", password);
     
     Map<String, String> headers = new HashMap<>();
     headers.put("Authorization", "Basic Q0xJRU5UOlNFQ1JFVA==");
@@ -825,26 +817,10 @@ public class UserServiceImpl implements UserService {
     User u = getCurrentUser();
     if (!id.equals(u.getId())) throw new BizException("只能更新自己的密码，无法更改其他用户密码！");
     validate(oldPassword);
-//    PasswordEncoder pswEncoder = new PasswordEncoder();
-//    u.setPassword(pswEncoder.encode(newPassword));
-    LoginDecoder decoder = new LoginDecoder();
-    PasswordEncoder encoder = new PasswordEncoder();
-    String dcNewPassword = decoder.passwordDecode(newPassword);
-    u.setPassword(encoder.encode(dcNewPassword));
+    u.setPassword(newPassword);
     userMapper.updateByIdSelective(u);
     return u;
   }
 
-  @Override
-  public String encode(String str, String key) {
-    String encryptedStr = null;
-    Md5PasswordEncoder md5 = new Md5PasswordEncoder();
-    if ("a622d7a3d4cdeaf66925dea0a2029e9f".equals(md5.encodePassword(key, null))) {
-      LoginEncoder encoder = new LoginEncoder();
-      encryptedStr = encoder.encodeUsername(str);
-    } else {
-      throw new BizException("没有权限调用该接口");
-    }
-    return encryptedStr;
-  }
+
 }

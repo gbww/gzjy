@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gzjy.user.mapper.KaptchasMapper" >
+  <resultMap id="BaseResultMap" type="com.gzjy.user.model.Kaptchas" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="session_id" property="sessionId" jdbcType="CHAR" />
+    <result column="checkcode" property="checkcode" jdbcType="VARCHAR" />
+    <result column="expire_time" property="expireTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, session_id, checkcode, expire_time
+  </sql>
+  
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from kaptchas
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from kaptchas
+  </select>
+  
+  <select id="selectBySessionId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from kaptchas
+    where session_id = #{sessionId,jdbcType=CHAR}
+  </select>
+  
+  <delete id="deleteById" parameterType="java.lang.String" >
+    delete from kaptchas
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  
+  <delete id="deleteBySessionId" parameterType="java.lang.String" >
+    delete from kaptchas
+    where session_id = #{sessionId,jdbcType=CHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="com.gzjy.user.model.Kaptchas" >
+    insert into kaptchas (id, session_id, checkcode, 
+      expire_time)
+    values (#{id,jdbcType=CHAR}, #{sessionId,jdbcType=CHAR}, #{checkcode,jdbcType=VARCHAR}, 
+      #{expireTime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.gzjy.user.model.Kaptchas" >
+    insert into kaptchas
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="sessionId != null" >
+        session_id,
+      </if>
+      <if test="checkcode != null" >
+        checkcode,
+      </if>
+      <if test="expireTime != null" >
+        expire_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="sessionId != null" >
+        #{sessionId,jdbcType=CHAR},
+      </if>
+      <if test="checkcode != null" >
+        #{checkcode,jdbcType=VARCHAR},
+      </if>
+      <if test="expireTime != null" >
+        #{expireTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByIdSelective" parameterType="com.gzjy.user.model.Kaptchas" >
+    update kaptchas
+    <set >
+      <if test="sessionId != null" >
+        session_id = #{sessionId,jdbcType=CHAR},
+      </if>
+      <if test="checkcode != null" >
+        checkcode = #{checkcode,jdbcType=VARCHAR},
+      </if>
+      <if test="expireTime != null" >
+        expire_time = #{expireTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  
+  <update id="updateBySessionIdSelective" parameterType="com.gzjy.user.model.Kaptchas" >
+    update kaptchas
+    <set >
+      <if test="sessionId != null" >
+        id = #{id,jdbcType=CHAR},
+      </if>
+      <if test="checkcode != null" >
+        checkcode = #{checkcode,jdbcType=VARCHAR},
+      </if>
+      <if test="expireTime != null" >
+        expire_time = #{expireTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where session_id = #{sessionId,jdbcType=CHAR}
+  </update>
+  
+  <update id="updateById" parameterType="com.gzjy.user.model.Kaptchas" >
+    update kaptchas
+    set session_id = #{sessionId,jdbcType=CHAR},
+      checkcode = #{checkcode,jdbcType=VARCHAR},
+      expire_time = #{expireTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>
