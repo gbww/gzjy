@@ -1,7 +1,10 @@
 package com.gzjy.contract.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.gzjy.contract.model.Contract;
 
+@Mapper
 public interface ContractMapper {
     int deleteByPrimaryKey(String id);
 
