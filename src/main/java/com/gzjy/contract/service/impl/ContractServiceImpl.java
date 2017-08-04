@@ -19,4 +19,16 @@ public class ContractServiceImpl implements ContractService {
 		return contractMapper.selectByPrimaryKey(id);
 	}
 
+	@Override
+	public int insert(Contract record) {
+		// TODO Auto-generated method stub
+		return contractMapper.insert(record);
+	}
+
+	@Override
+	public int deleteByPrimaryKey(String id) {
+		// TODO Auto-generated method stub
+		return contractMapper.deleteByPrimaryKey(id);
+	}
+
 }

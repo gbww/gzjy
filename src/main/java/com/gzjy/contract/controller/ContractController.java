@@ -7,40 +7,42 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gzjy.common.Response;
-import com.gzjy.contract.mapper.ContractMapper;
 import com.gzjy.contract.model.Contract;
+import com.gzjy.contract.service.ContractService;
 
 @RestController
 @RequestMapping({ "/v1/ahgz" })
 public class ContractController {
+	
 	@Autowired
-	ContractMapper contractMapper;
-
+	ContractService contractService;
+	
+	/** 
+	 * 通过ID获取合同信息
+	 * @param id
+	 * @return JSON对象(包含查询到的Contract实体信息)
+	 */
 	@RequestMapping(value = "/contract/{id}", method = RequestMethod.GET)
 	public Response getContractById(@PathVariable String id) {
-		Contract contract = contractMapper.selectByPrimaryKey(id);
+		Contract contract = contractService.getContractById(id);
 		return Response.success(contract);
 	}
 	
-	@RequestMapping(value = "/contract/{id}", method = RequestMethod.DELETE)	
+	/**
+	 * 通过ID删除合同信息
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "/contract/{id}", method = RequestMethod.DELETE)
 	public Response delContractById(@PathVariable String id) {
-		Contract contract = contractMapper.selectByPrimaryKey(id);
+		int result = contractService.deleteByPrimaryKey(id);
 		return Response.success("success");
 	}
 	
-	@RequestMapping(value = "/contract/{id}", method = RequestMethod.PUT)	
+	@RequestMapping(value = "/contract/{id}", method = RequestMethod.PUT)
 	public String updateContract(@PathVariable String id) {
-		Contract contract = contractMapper.selectByPrimaryKey("111");
+		Contract contract = contractService.getContractById("111");
 		return contract.toString();
-	}
+	}	
 	
-	/*@RequestMapping(value = "/contracts", method = RequestMethod.GET)
-	@ResponseBody
-	public JSONObject getPageList() {
-		HashMap<String, Object> result = new HashMap<String, Object>();
-		ArrayList<Contract> list = contractMapper.getPageList("111", 1, 10);
-		result.put("total", list.size());
-		result.put("list", list);		
-		return null;
-	}*/
 }
