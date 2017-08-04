@@ -14,7 +14,7 @@ public class ContractServiceImpl implements ContractService {
 	private ContractMapper contractMapper;
 	
 	@Override
-	public Contract getContractById(String id) {
+	public Contract selectByPrimaryKey(String id) {
 		// TODO Auto-generated method stub
 		return contractMapper.selectByPrimaryKey(id);
 	}

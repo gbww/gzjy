@@ -4,7 +4,7 @@ import com.gzjy.contract.model.Contract;
 
 public interface ContractService {
 	
-	Contract getContractById(String id);
+	Contract selectByPrimaryKey(String id);
 	
 	int insert(Contract record);
 	

@@ -24,7 +24,7 @@ public class ContractController {
 	 */
 	@RequestMapping(value = "/contract/{id}", method = RequestMethod.GET)
 	public Response getContractById(@PathVariable String id) {
-		Contract contract = contractService.getContractById(id);
+		Contract contract = contractService.selectByPrimaryKey(id);
 		return Response.success(contract);
 	}
 	
@@ -41,7 +41,7 @@ public class ContractController {
 	
 	@RequestMapping(value = "/contract/{id}", method = RequestMethod.PUT)
 	public String updateContract(@PathVariable String id) {
-		Contract contract = contractService.getContractById("111");
+		Contract contract = contractService.selectByPrimaryKey("111");
 		return contract.toString();
 	}	
 	
