@@ -94,17 +94,29 @@
 			<groupId>com.thoughtworks.xstream</groupId> 
 				<artifactId>xstream</artifactId> 
 				<version>1.4.9</version> 
-			</dependency> 
-		
+			</dependency>
 
-		<!-- <dependency> <groupId>org.activiti</groupId> <artifactId>activiti-spring-boot-starter-basic</artifactId> 
-			<version>${spring-boot-activiti-version}</version> </dependency> <dependency> 
-			<groupId>org.activiti</groupId> <artifactId>activiti-spring-boot-starter-security</artifactId> 
-			<version>${spring-boot-activiti-version}</version> </dependency> <dependency> 
-			<groupId>org.activiti</groupId> <artifactId>activiti-spring-boot-starter-actuator</artifactId> 
-			<version>${spring-boot-activiti-version}</version> </dependency> <dependency> 
-			<groupId>org.activiti</groupId> <artifactId>activiti-spring-boot-starter-jpa</artifactId> 
-			<version>${spring-boot-activiti-version}</version> </dependency> -->
+
+	<dependency>
+		<groupId>org.activiti</groupId>
+		<artifactId>activiti-spring-boot-starter-basic</artifactId>
+		<version>${spring-boot-activiti-version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.activiti</groupId>
+		<artifactId>activiti-spring-boot-starter-security</artifactId>
+		<version>${spring-boot-activiti-version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.activiti</groupId>
+		<artifactId>activiti-spring-boot-starter-actuator</artifactId>
+		<version>${spring-boot-activiti-version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.activiti</groupId>
+		<artifactId>activiti-spring-boot-starter-jpa</artifactId>
+		<version>${spring-boot-activiti-version}</version>
+	</dependency> 
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
