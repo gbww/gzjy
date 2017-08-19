@@ -67,6 +67,7 @@ public class ContractServiceImpl implements ContractService {
         contract.setId(contractId);
         contract.setActivity1(processId);
         contractMapper.updateByPrimaryKey(contract);
+//        test
 	}
 
 }
