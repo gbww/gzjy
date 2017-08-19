@@ -1,13 +1,17 @@
 package com.gzjy.contract.controller;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gzjy.common.Response;
 import com.gzjy.contract.model.Contract;
+import com.gzjy.contract.model.ContractProcess;
 import com.gzjy.contract.service.ContractService;
 
 @RestController
@@ -43,6 +47,18 @@ public class ContractController {
 	public String updateContract(@PathVariable String id) {
 		Contract contract = contractService.selectByPrimaryKey("111");
 		return contract.toString();
-	}	
+	}
 	
+	/**
+	 * 启动合同流程
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "/contract/{id}/process", method = RequestMethod.POST)
+	public Response startContractProcess(@PathVariable String id, @RequestBody ContractProcess contractProcess) {
+		ArrayList<String> approveUsers = contractProcess.getApproveUsers();
+		String updateContractUser = contractProcess.getUpdateContractUser();
+		contractService.deploymentProcess(id, approveUsers, updateContractUser);
+		return Response.success("success");
+	}	
 }
