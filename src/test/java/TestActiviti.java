@@ -28,7 +28,7 @@ import com.gzjy.Application;
  * @author xuewenlong@cmss.chinamobile.com
  * @updated 2017年5月1日
  */
-@RunWith(SpringJUnit4ClassRunner.class)  
+@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes=Application.class)
 public class TestActiviti {
     @Autowired
