@@ -23,7 +23,7 @@ import com.gzjy.Application;
 import com.gzjy.contract.service.impl.TaskComplete;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)  
+@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes=Application.class)
 public class TestContractProcess {
 

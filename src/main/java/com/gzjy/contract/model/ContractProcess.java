@@ -8,6 +8,8 @@ public class ContractProcess {
 	/*修改合同人*/
 	private String updateContractUser;
 
+	private String contractId;
+	
 	public ArrayList<String> getApproveUsers() {
 		return approveUsers;
 	}
@@ -23,5 +25,14 @@ public class ContractProcess {
 	public void setUpdateContractUser(String updateContractUser) {
 		this.updateContractUser = updateContractUser;
 	}
+
+	public String getContractId() {
+		return contractId;
+	}
+
+	public void setContractId(String contractId) {
+		this.contractId = contractId;
+	}
+	
 
 }

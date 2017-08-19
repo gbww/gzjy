@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gzjy.contract.mapper.ContractMapper">
+	
+
   <resultMap id="BaseResultMap" type="com.gzjy.contract.model.Contract">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="sample_id" jdbcType="VARCHAR" property="sampleId" />
     <result column="protocol_id" jdbcType="VARCHAR" property="protocolId" />
     <result column="sample_name" jdbcType="VARCHAR" property="sampleName" />
-    <result column="process_ technology" jdbcType="VARCHAR" property="processTechnology" />
-    <result column="quality _level" jdbcType="VARCHAR" property="qualityLevel" />
+    <result column="process_technology" jdbcType="VARCHAR" property="processTechnology" />
+    <result column="quality_level" jdbcType="VARCHAR" property="qualityLevel" />
     <result column="specification_quantity" jdbcType="VARCHAR" property="specificationQuantity" />
     <result column="product_date" jdbcType="VARCHAR" property="productDate" />
     <result column="storage_condition" jdbcType="VARCHAR" property="storageCondition" />
-    <result column="storage_time" jdbcType="TIMESTAMP" property="storageTime" />
+    <result column="storage_time" jdbcType="VARCHAR" property="storageTime" />
     <result column="sample_traits" jdbcType="VARCHAR" property="sampleTraits" />
     <result column="process_demand" jdbcType="VARCHAR" property="processDemand" />
     <result column="detect_purpose" jdbcType="VARCHAR" property="detectPurpose" />
@@ -39,24 +41,29 @@
     <result column="acceptor" jdbcType="VARCHAR" property="acceptor" />
     <result column="acceptance_date" jdbcType="TIMESTAMP" property="acceptanceDate" />
     <result column="cost" jdbcType="REAL" property="cost" />
-    <result column="activity1" jdbcType="VARCHAR" property="activity1" />
-    <result column="activity2" jdbcType="VARCHAR" property="activity2" />
+    <result column="process_id" jdbcType="VARCHAR" property="processId" />
+    <result column="activity1" jdbcType="VARCHAR" property="activity1" />    
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.gzjy.contract.model.Contract">
     <result column="extra" jdbcType="LONGVARCHAR" property="extra" />
   </resultMap>
+  
+  
+  
   <sql id="Base_Column_List">
-    id, sample_id, protocol_id, sample_name, "process_ technology", "quality _level", 
+    id, sample_id, protocol_id, sample_name, process_technology, quality_level, 
     specification_quantity, product_date, storage_condition, storage_time, sample_traits, 
     process_demand, detect_purpose, other_data, detect_type, detect_project, execute_standard, 
     detect_by, is_use_standard, is_subcontracting, is_expedited, is_evaluation, product_unit, 
     inspection_unit, sampling_address, inspection_unit_address, zip_code, phone, fax, 
     contact_person, report_method, report_count, inspection_user, inspection_date, acceptor, 
-    acceptance_date, cost, activity1, activity2
+    acceptance_date, cost, process_id, activity1
   </sql>
   <sql id="Blob_Column_List">
     extra
   </sql>
+  
+  
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
@@ -65,25 +72,21 @@
     from contract
     where id = #{id,jdbcType=VARCHAR}
   </select>
+  
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from contract
     where id = #{id,jdbcType=VARCHAR}
   </delete>
+  
+  
   <insert id="insert" parameterType="com.gzjy.contract.model.Contract">
-    insert into contract (id, sample_id, protocol_id, 
-      sample_name, "process_ technology", "quality _level", 
-      specification_quantity, product_date, storage_condition, 
-      storage_time, sample_traits, process_demand, 
-      detect_purpose, other_data, detect_type, 
-      detect_project, execute_standard, detect_by, 
-      is_use_standard, is_subcontracting, is_expedited, 
-      is_evaluation, product_unit, inspection_unit, 
-      sampling_address, inspection_unit_address, 
-      zip_code, phone, fax, 
-      contact_person, report_method, report_count, 
-      inspection_user, inspection_date, acceptor, 
-      acceptance_date, cost, activity1, 
-      activity2, extra)
+    insert into contract (id, sample_id, protocol_id, sample_name, process_technology, quality_level, 
+      specification_quantity, product_date, storage_condition, storage_time, sample_traits, process_demand, 
+      detect_purpose, other_data, detect_type, detect_project, execute_standard, detect_by, 
+      is_use_standard, is_subcontracting, is_expedited, is_evaluation, product_unit, inspection_unit, 
+      sampling_address, inspection_unit_address, zip_code, phone, fax, contact_person, report_method, report_count, 
+      inspection_user, inspection_date, acceptor, acceptance_date, cost, activity1, process_id, extra)
     values (#{id,jdbcType=VARCHAR}, #{sampleId,jdbcType=VARCHAR}, #{protocolId,jdbcType=VARCHAR}, 
       #{sampleName,jdbcType=VARCHAR}, #{processTechnology,jdbcType=VARCHAR}, #{qualityLevel,jdbcType=VARCHAR}, 
       #{specificationQuantity,jdbcType=VARCHAR}, #{productDate,jdbcType=VARCHAR}, #{storageCondition,jdbcType=VARCHAR}, 
@@ -97,8 +100,10 @@
       #{contactPerson,jdbcType=VARCHAR}, #{reportMethod,jdbcType=VARCHAR}, #{reportCount,jdbcType=INTEGER}, 
       #{inspectionUser,jdbcType=VARCHAR}, #{inspectionDate,jdbcType=TIMESTAMP}, #{acceptor,jdbcType=VARCHAR}, 
       #{acceptanceDate,jdbcType=TIMESTAMP}, #{cost,jdbcType=REAL}, #{activity1,jdbcType=VARCHAR}, 
-      #{activity2,jdbcType=VARCHAR}, #{extra,jdbcType=LONGVARCHAR})
+      #{processId,jdbcType=VARCHAR}, #{extra,jdbcType=LONGVARCHAR})
   </insert>
+  
+  
   <insert id="insertSelective" parameterType="com.gzjy.contract.model.Contract">
     insert into contract
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -216,8 +221,8 @@
       <if test="activity1 != null">
         activity1,
       </if>
-      <if test="activity2 != null">
-        activity2,
+      <if test="processId != null">
+        process_id,
       </if>
       <if test="extra != null">
         extra,
@@ -338,14 +343,16 @@
       <if test="activity1 != null">
         #{activity1,jdbcType=VARCHAR},
       </if>
-      <if test="activity2 != null">
-        #{activity2,jdbcType=VARCHAR},
+      <if test="processId != null">
+        #{process_id,jdbcType=VARCHAR},
       </if>
       <if test="extra != null">
         #{extra,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
+  
+  
   <update id="updateByPrimaryKeySelective" parameterType="com.gzjy.contract.model.Contract">
     update contract
     <set>
@@ -359,10 +366,10 @@
         sample_name = #{sampleName,jdbcType=VARCHAR},
       </if>
       <if test="processTechnology != null">
-        "process_ technology" = #{processTechnology,jdbcType=VARCHAR},
+        process_technology = #{processTechnology,jdbcType=VARCHAR},
       </if>
       <if test="qualityLevel != null">
-        "quality _level" = #{qualityLevel,jdbcType=VARCHAR},
+        quality_level = #{qualityLevel,jdbcType=VARCHAR},
       </if>
       <if test="specificationQuantity != null">
         specification_quantity = #{specificationQuantity,jdbcType=VARCHAR},
@@ -374,7 +381,7 @@
         storage_condition = #{storageCondition,jdbcType=VARCHAR},
       </if>
       <if test="storageTime != null">
-        storage_time = #{storageTime,jdbcType=TIMESTAMP},
+        storage_time = #{storageTime,jdbcType=VARCHAR},
       </if>
       <if test="sampleTraits != null">
         sample_traits = #{sampleTraits,jdbcType=VARCHAR},
@@ -460,8 +467,8 @@
       <if test="activity1 != null">
         activity1 = #{activity1,jdbcType=VARCHAR},
       </if>
-      <if test="activity2 != null">
-        activity2 = #{activity2,jdbcType=VARCHAR},
+      <if test="processId != null">
+        process_id = #{processId,jdbcType=VARCHAR},
       </if>
       <if test="extra != null">
         extra = #{extra,jdbcType=LONGVARCHAR},
@@ -469,13 +476,15 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
+  
+  
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.gzjy.contract.model.Contract">
-    update contract
-    set sample_id = #{sampleId,jdbcType=VARCHAR},
+    update contract set 
+      sample_id = #{sampleId,jdbcType=VARCHAR},
       protocol_id = #{protocolId,jdbcType=VARCHAR},
       sample_name = #{sampleName,jdbcType=VARCHAR},
-      "process_ technology" = #{processTechnology,jdbcType=VARCHAR},
-      "quality _level" = #{qualityLevel,jdbcType=VARCHAR},
+      process_technology = #{processTechnology,jdbcType=VARCHAR},
+      quality_level = #{qualityLevel,jdbcType=VARCHAR},
       specification_quantity = #{specificationQuantity,jdbcType=VARCHAR},
       product_date = #{productDate,jdbcType=VARCHAR},
       storage_condition = #{storageCondition,jdbcType=VARCHAR},
@@ -508,21 +517,23 @@
       acceptance_date = #{acceptanceDate,jdbcType=TIMESTAMP},
       cost = #{cost,jdbcType=REAL},
       activity1 = #{activity1,jdbcType=VARCHAR},
-      activity2 = #{activity2,jdbcType=VARCHAR},
+      process_id = #{processId,jdbcType=VARCHAR},
       extra = #{extra,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+  
+  
   <update id="updateByPrimaryKey" parameterType="com.gzjy.contract.model.Contract">
     update contract
     set sample_id = #{sampleId,jdbcType=VARCHAR},
       protocol_id = #{protocolId,jdbcType=VARCHAR},
       sample_name = #{sampleName,jdbcType=VARCHAR},
-      "process_ technology" = #{processTechnology,jdbcType=VARCHAR},
-      "quality _level" = #{qualityLevel,jdbcType=VARCHAR},
+      process_technology = #{processTechnology,jdbcType=VARCHAR},
+      quality_level = #{qualityLevel,jdbcType=VARCHAR},
       specification_quantity = #{specificationQuantity,jdbcType=VARCHAR},
       product_date = #{productDate,jdbcType=VARCHAR},
       storage_condition = #{storageCondition,jdbcType=VARCHAR},
-      storage_time = #{storageTime,jdbcType=TIMESTAMP},
+      storage_time = #{storageTime,jdbcType=VARCHAR},
       sample_traits = #{sampleTraits,jdbcType=VARCHAR},
       process_demand = #{processDemand,jdbcType=VARCHAR},
       detect_purpose = #{detectPurpose,jdbcType=VARCHAR},
@@ -551,7 +562,8 @@
       acceptance_date = #{acceptanceDate,jdbcType=TIMESTAMP},
       cost = #{cost,jdbcType=REAL},
       activity1 = #{activity1,jdbcType=VARCHAR},
-      activity2 = #{activity2,jdbcType=VARCHAR}
+      process_id = #{processId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>   
+
 </mapper>
