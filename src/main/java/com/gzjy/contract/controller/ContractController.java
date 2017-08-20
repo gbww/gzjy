@@ -2,7 +2,6 @@ package com.gzjy.contract.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.gzjy.common.Response;
 import com.gzjy.common.util.UUID;
 import com.gzjy.contract.model.Contract;
@@ -180,7 +178,6 @@ public class ContractController {
 		catch (Exception e) {
 			System.out.println(e);
 			return Response.fail(e.getMessage());
-		}
-		
+		}		
 	}
 }
