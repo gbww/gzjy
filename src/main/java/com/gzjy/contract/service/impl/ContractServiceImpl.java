@@ -90,6 +90,8 @@ public class ContractServiceImpl implements ContractService {
 			int result = (int)runtimeService.getVariable(task.getExecutionId(), "result");
 			runtimeService.setVariable(task.getExecutionId(), "result", result + 1);
 		}
+		//taskService.setVariable(taskId, "请假日期", new Date());
+        //taskService.setVariable(taskId, "请假原因", "回家探亲");
 		taskService.complete(task.getId());
 	}
 	
