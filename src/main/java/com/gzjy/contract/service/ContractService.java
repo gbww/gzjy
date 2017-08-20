@@ -17,7 +17,7 @@ public interface ContractService {
 	
 	void deploymentProcess(String contractId,ArrayList<String> approveUsers, String updateContractUser);
 	
-	List<Task> getTaskByUserId(String userId);
+	List<Task> getTaskByUserId(String taskName, String userId);
 	
 	void completeApproveTask(String taskId, String approve);
 	

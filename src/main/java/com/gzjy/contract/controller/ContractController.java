@@ -2,7 +2,6 @@ package com.gzjy.contract.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.gzjy.common.Add;
 import com.gzjy.common.Response;
 import com.gzjy.common.util.UUID;
@@ -20,7 +18,6 @@ import com.gzjy.contract.model.Contract;
 import com.gzjy.contract.model.ContractProcess;
 import com.gzjy.contract.service.ContractService;
 import com.gzjy.user.model.User;
-
 import ch.qos.logback.classic.Logger;
 
 @RestController
@@ -126,10 +123,10 @@ public class ContractController {
 	 * @param user_id
 	 * @return
 	 */
-	@RequestMapping(value = "/contract/process/task/user/{user_id}", method = RequestMethod.GET)
-	public Response getContractTaskByUserId(@PathVariable String user_id) {
+	@RequestMapping(value = "/contract/process/task", method = RequestMethod.GET)
+	public Response getContractTaskByUserId(@RequestParam String user_id, @RequestParam String taskName) {
 		try {
-			List<Task> tasks= contractService.getTaskByUserId(user_id);
+			List<Task> tasks= contractService.getTaskByUserId(taskName, user_id);
 			for (Task task :tasks) {
 				System.out.println("ID:"+task.getId()+",姓名:"+task.getName()+",接收人:"+task.getAssignee()+",开始时间:"+task.getCreateTime());
 			}

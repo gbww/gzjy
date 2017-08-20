@@ -70,9 +70,9 @@ public class ContractServiceImpl implements ContractService {
 	/**
 	 * 根据用户ID获取当前用户在合同流程中的任务
 	 */
-	public List<Task> getTaskByUserId(String userId) {
+	public List<Task> getTaskByUserId(String taskName,String userId) {
 		TaskService taskService = processEngine.getTaskService();
-		List<Task> tasks = taskService.createTaskQuery().taskAssignee(userId).list();
+		List<Task> tasks = taskService.createTaskQuery().taskAssignee(userId).taskName(taskName).list();
 		return tasks;
 	}
 	
