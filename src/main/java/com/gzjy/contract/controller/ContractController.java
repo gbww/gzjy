@@ -124,7 +124,8 @@ public class ContractController {
 	 * @return
 	 */
 	@RequestMapping(value = "/contract/process/task", method = RequestMethod.GET)
-	public Response getContractTaskByUserId(@RequestParam String user_id, @RequestParam String taskName) {
+	public Response getContractTaskByUserId(@RequestParam(required = true) String user_id,
+			@RequestParam(required = true) String taskName) {
 		try {
 			List<Task> tasks= contractService.getTaskByUserId(taskName, user_id);
 			for (Task task :tasks) {
