@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzjy.contract.mapper.ContractCommentMapper">
+	
+
+  <resultMap id="BaseResultMap" type="com.gzjy.contract.model.ContractComment">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="contract_id" jdbcType="VARCHAR" property="contractId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="context" jdbcType="VARCHAR" property="context" />
+    <result column="task_id" jdbcType="VARCHAR" property="taskId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>  
+  
+  <sql id="Base_Column_List">
+    id, contract_id, user_id, user_name, context, task_id, create_time
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />   
+    from contract_comment
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from contract_comment
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  
+  
+  <insert id="insert" parameterType="com.gzjy.contract.model.ContractComment">
+    insert into contract_comment (id, contract_id, user_id, user_name, context, task_id, create_time)
+    values (
+    	#{id,jdbcType=VARCHAR}, #{contract_id,jdbcType=VARCHAR}, 
+    	#{user_id,jdbcType=VARCHAR}, #{user_name,jdbcType=VARCHAR}, 
+    	#{context,jdbcType=VARCHAR}, #{task_id,jdbcType=VARCHAR}, 
+      	#{create_time,jdbcType=TIMESTAMP}
+    )
+  </insert>
+  
+  
+  <insert id="insertSelective" parameterType="com.gzjy.contract.model.ContractComment">
+    insert into contract_comment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="contractId != null">
+        contract_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="context != null">
+        context,
+      </if>
+      <if test="taskId != null">
+        task_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="contractId != null">
+        #{contract_id,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{user_id,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{user_name,jdbcType=VARCHAR},
+      </if>
+      <if test="context != null">
+        #{context,jdbcType=VARCHAR},
+      </if>
+      <if test="taskId != null">
+        #{task_id,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{create_time,jdbcType=TIMESTAMP},
+      </if>      
+    </trim>
+  </insert>
+     
+
+</mapper>
