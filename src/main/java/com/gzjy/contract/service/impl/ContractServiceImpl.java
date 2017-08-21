@@ -1,9 +1,11 @@
 package com.gzjy.contract.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
@@ -11,8 +13,12 @@ import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.gzjy.common.util.UUID;
+import com.gzjy.contract.mapper.ContractCommentMapper;
 import com.gzjy.contract.mapper.ContractMapper;
 import com.gzjy.contract.model.Contract;
+import com.gzjy.contract.model.ContractComment;
 import com.gzjy.contract.service.ContractService;
 
 @Service
@@ -20,6 +26,9 @@ public class ContractServiceImpl implements ContractService {
 	
 	@Autowired
 	private ContractMapper contractMapper;
+	
+	@Autowired
+	private ContractCommentMapper contractCommentMapper;
 	
 	@Autowired
 	private ProcessEngine processEngine;
@@ -81,7 +90,7 @@ public class ContractServiceImpl implements ContractService {
 	 * @param task
 	 * @param approve
 	 */	
-	public void completeApproveTask(String taskId, String approve) {
+	public void completeApproveTask(String taskId, String approve, String context) {
 		TaskService taskService = processEngine.getTaskService();
 		RuntimeService runtimeService = processEngine.getRuntimeService();
 		Task task = (Task) taskService.createTaskQuery().taskId(taskId).list().get(0);
@@ -90,9 +99,16 @@ public class ContractServiceImpl implements ContractService {
 			int result = (int)runtimeService.getVariable(task.getExecutionId(), "resultCount");
 			runtimeService.setVariable(task.getExecutionId(), "resultCount", result + 1);
 		}
-		//taskService.setVariable(taskId, "请假日期", new Date());
-        //taskService.setVariable(taskId, "请假原因", "回家探亲");
+//		将评审意见插入到合同评审意见表中
 		taskService.complete(task.getId());
+		ContractComment contractComment = new ContractComment();
+		contractComment.setId(UUID.random());
+		contractComment.setTaskId(taskId);
+		contractComment.setUserId("11111");
+		contractComment.setUserName("zhangsna");
+		contractComment.setContext(context);
+		contractComment.setCreateTime(new Date());
+		contractCommentMapper.insertSelective(contractComment);
 	}
 	
 	/**

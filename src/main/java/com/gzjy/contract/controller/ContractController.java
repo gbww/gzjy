@@ -149,9 +149,11 @@ public class ContractController {
 	 * @return
 	 */
 	@RequestMapping(value = "/contract/process/task/{taskId}", method = RequestMethod.GET)
-	public Response approveContractTask(@PathVariable String taskId, @RequestParam(required = true) String approve) {
+	public Response approveContractTask(@PathVariable String taskId, 
+			@RequestParam(required = true) String approve,
+			@RequestParam(required = true) String context) {
 		try {
-			contractService.completeApproveTask(taskId, approve);
+			contractService.completeApproveTask(taskId, approve, context);
 			return Response.success("success");
 		}
 		catch (Exception e) {
