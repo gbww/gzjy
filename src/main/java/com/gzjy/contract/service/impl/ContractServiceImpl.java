@@ -84,11 +84,11 @@ public class ContractServiceImpl implements ContractService {
 	public void completeApproveTask(String taskId, String approve) {
 		TaskService taskService = processEngine.getTaskService();
 		RuntimeService runtimeService = processEngine.getRuntimeService();
-		Task task = (Task) taskService.createTaskQuery().taskId(taskId);
+		Task task = (Task) taskService.createTaskQuery().taskId(taskId).list().get(0);
 //		如果是审批流程中的同意状态，则需要将result值加1，否则不需额外操作
 		if(approve.equals("true")) {
-			int result = (int)runtimeService.getVariable(task.getExecutionId(), "result");
-			runtimeService.setVariable(task.getExecutionId(), "result", result + 1);
+			int result = (int)runtimeService.getVariable(task.getExecutionId(), "resultCount");
+			runtimeService.setVariable(task.getExecutionId(), "resultCount", result + 1);
 		}
 		//taskService.setVariable(taskId, "请假日期", new Date());
         //taskService.setVariable(taskId, "请假原因", "回家探亲");
