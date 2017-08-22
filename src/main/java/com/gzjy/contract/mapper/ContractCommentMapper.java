@@ -11,6 +11,5 @@ public interface ContractCommentMapper {
 	ContractComment selectByPrimaryKey(String id);
 	int deleteByPrimaryKey(String id);
 	int insertSelective(ContractComment recoed);
-	List<ContractComment> selectLatestComment(String contract_id);
-	
+	List<ContractComment> selectLatestComment(String contract_id);	
 }

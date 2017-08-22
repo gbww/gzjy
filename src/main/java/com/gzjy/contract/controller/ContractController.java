@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gzjy.common.Response;
 import com.gzjy.common.util.UUID;
 import com.gzjy.contract.model.Contract;
+import com.gzjy.contract.model.ContractComment;
 import com.gzjy.contract.model.ContractProcess;
 import com.gzjy.contract.model.ContractTask;
+import com.gzjy.contract.service.ContractCommentService;
 import com.gzjy.contract.service.ContractService;
 
 @RestController
@@ -23,6 +25,9 @@ public class ContractController {
 	
 	@Autowired
 	ContractService contractService;
+	
+	@Autowired
+	ContractCommentService contractCommentService;
 	
 	/** 
 	 * 录入合同信息到数据库
@@ -174,6 +179,18 @@ public class ContractController {
 		try {
 			contractService.completeUpdateTask(taskId);
 			return Response.success("success");
+		}
+		catch (Exception e) {
+			System.out.println(e);
+			return Response.fail(e.getMessage());
+		}		
+	}
+	
+	@RequestMapping(value = "/contract/process/comment", method = RequestMethod.GET)
+	public Response getContractComment(@RequestParam(required = true) String contract_id) {
+		try {
+			List<ContractComment> result = contractCommentService.selectLatestComment(contract_id);
+			return Response.success(result);
 		}
 		catch (Exception e) {
 			System.out.println(e);
