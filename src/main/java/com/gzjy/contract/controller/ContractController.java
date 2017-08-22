@@ -108,7 +108,7 @@ public class ContractController {
 	public Response startContractProcess(@RequestBody ContractProcess contractProcess) {
 		ArrayList<String> approveUsers = contractProcess.getApproveUsers();
 		String updateContractUser = contractProcess.getUpdateContractUser();
-		String contractId = contractProcess.getContractId();
+		String contractId = contractProcess.getContractId();		
 		try {
 			
 			contractService.deploymentProcess(contractId, approveUsers, updateContractUser);
@@ -149,42 +149,31 @@ public class ContractController {
 	}
 	
 	/**
-	 * 执行合同流程中多人审批任务
+	 * 执行合同流程中任务
 	 * @param id
 	 * @return
 	 */
 	@RequestMapping(value = "/contract/process/task/{taskId}", method = RequestMethod.GET)
 	public Response approveContractTask(@PathVariable String taskId, 
-			@RequestParam(required = true) String approve,
-			@RequestParam(required = true) String context) {
+			@RequestParam String approve, @RequestParam String context,
+			@RequestParam(required = true) String action,
+			@RequestParam String contractId) {
 		try {
-			contractService.completeApproveTask(taskId, approve, context);
+			if (action.equals("approve")){
+				if(approve.equals("")||context.equals(""))
+					return Response.fail("Param approve or context must not null");
+				contractService.completeApproveTask(taskId, contractId, approve, context);
+			}else if (action.equals("update")){
+				contractService.completeUpdateTask(taskId);
+			}			
 			return Response.success("success");
 		}
 		catch (Exception e) {
 			System.out.println(e);
 			return Response.fail(e.getMessage());
 		}
-	}
+	}	
 	
-	/**
-	 * 
-	 * @param id
-	 * @return
-	 */
-	@RequestMapping(value = "/contract/process/task/{taskId}/update", method = RequestMethod.GET)
-	public Response updateContractTask(@PathVariable String id, 
-			@PathVariable String taskId,
-			@RequestParam(required = true) String approve) {
-		try {
-			contractService.completeUpdateTask(taskId);
-			return Response.success("success");
-		}
-		catch (Exception e) {
-			System.out.println(e);
-			return Response.fail(e.getMessage());
-		}		
-	}
 	
 	@RequestMapping(value = "/contract/process/comment", method = RequestMethod.GET)
 	public Response getContractComment(@RequestParam(required = true) String contract_id) {

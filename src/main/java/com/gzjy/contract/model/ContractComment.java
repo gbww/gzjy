@@ -51,7 +51,6 @@ public class ContractComment {
 	}
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
-	}
-	
+	}	
 	
 }

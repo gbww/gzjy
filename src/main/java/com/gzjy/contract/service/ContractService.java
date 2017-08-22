@@ -19,7 +19,7 @@ public interface ContractService {
 	
 	List<Task> getTaskByUserId(String taskName, String userId);
 	
-	void completeApproveTask(String taskId, String approve, String context);
+	void completeApproveTask(String taskId, String contractId, String approve, String context);
 	
 	void completeUpdateTask(String taskId);
 }
