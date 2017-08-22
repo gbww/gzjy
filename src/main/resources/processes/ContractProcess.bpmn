@@ -11,7 +11,7 @@
     <endEvent id="endevent2" name="End"></endEvent>
     <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
     <sequenceFlow id="flow2" sourceRef="usertask1" targetRef="exclusivegateway1"></sequenceFlow>
-    <userTask id="usertask2" name="修改合同"></userTask>
+    <userTask id="usertask2" name="修改合同" activiti:assignee="${update_contract_user}"></userTask>
     <sequenceFlow id="flow3" sourceRef="exclusivegateway1" targetRef="usertask2">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${result == 0}]]></conditionExpression>
     </sequenceFlow>
