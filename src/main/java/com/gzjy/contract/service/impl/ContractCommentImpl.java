@@ -1,5 +1,7 @@
 package com.gzjy.contract.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +17,10 @@ public class ContractCommentImpl implements ContractCommentService {
 	
 	
 	public ContractComment selectByPrimaryKey(String id) {
-		// TODO Auto-generated method stub
 		return contractCommentMapper.selectByPrimaryKey(id);
 	}
 
+	public List<ContractComment> selectLatestComment(String contract_id){
+		return contractCommentMapper.selectLatestComment(contract_id);
+	}
 }

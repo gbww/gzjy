@@ -92,5 +92,14 @@
     </trim>
   </insert>
      
+     
+  <select id="selectLatestComment" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />   
+    from contract_comment WHERE create_time IN (SELECT MAX(create_time) FROM contract_comment
+		WHERE contract_id = #{contract_id,jdbcType=VARCHAR} GROUP BY user_id)
+  </select>
+     
+  
 
 </mapper>
