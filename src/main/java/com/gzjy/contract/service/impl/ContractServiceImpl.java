@@ -67,6 +67,7 @@ public class ContractServiceImpl implements ContractService {
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("approve_users", approveUsers);
         variables.put("resultCount", 0);
+        variables.put("result", 1);
         variables.put("update_contract_user", updateContractUser);
         variables.put("taskComplete", new TaskComplete());
         String processId = runtimeService.startProcessInstanceByKey("ContractProcess",variables).getId();
@@ -102,15 +103,15 @@ public class ContractServiceImpl implements ContractService {
 		}
 //		将评审意见插入到合同评审意见表中
 		taskService.complete(task.getId());
-//		ContractComment contractComment = new ContractComment();
-//		contractComment.setId(UUID.random());
-//		contractComment.setTaskId(taskId);
-//		contractComment.setUserId("11111");
-//		contractComment.setUserName("zhangsna");
-//		contractComment.setContext(context);
-//		contractComment.setContractId(contractId);
-//		contractComment.setCreateTime(new Date());
-//		contractCommentMapper.insertSelective(contractComment);
+		ContractComment contractComment = new ContractComment();
+		contractComment.setId(UUID.random());
+		contractComment.setTaskId(taskId);
+		contractComment.setUserId("11111");
+		contractComment.setUserName("zhangsna");
+		contractComment.setContext(context);
+		contractComment.setContractId(contractId);
+		contractComment.setCreateTime(new Date());
+		contractCommentMapper.insertSelective(contractComment);
 	}
 	
 	/**

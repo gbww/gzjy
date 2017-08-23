@@ -160,9 +160,17 @@ public class ContractController {
 			@RequestParam(required = true) String action,
 			@RequestParam(required = false) String contractId) {
 		try {
+			//如果是审批操作
 			if (action.equals("approve")){
-				if(approve.equals("")||context.equals(""))
-					return Response.fail("Param approve or context must not null");
+				//必须带上行为true/false
+				if(approve==null || !(approve.equals("true") || approve.equals("false"))) {
+					return Response.fail("Param approve must be true or false");
+				}
+				if(contractId==null ||contractId.equals("")) {
+					return Response.fail("Param contractId must not null");
+				}
+				if(approve.equals("false") && context==null)
+					return Response.fail("Param  context must not null");
 				contractService.completeApproveTask(taskId, contractId, approve, context);
 			}else if (action.equals("update")){
 				contractService.completeUpdateTask(taskId);
