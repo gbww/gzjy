@@ -23,4 +23,14 @@ public class ContractCommentImpl implements ContractCommentService {
 	public List<ContractComment> selectLatestComment(String contract_id){
 		return contractCommentMapper.selectLatestComment(contract_id);
 	}
+
+	public int insertSelective(ContractComment record) {
+		// TODO Auto-generated method stub
+		return contractCommentMapper.insertSelective(record);
+	}
+	
+	public int insert(ContractComment record) {
+		// TODO Auto-generated method stub
+		return contractCommentMapper.insert(record);
+	}
 }

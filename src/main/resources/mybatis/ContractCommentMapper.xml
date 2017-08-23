@@ -34,10 +34,10 @@
   <insert id="insert" parameterType="com.gzjy.contract.model.ContractComment">
     insert into contract_comment (id, contract_id, user_id, user_name, context, task_id, create_time)
     values (
-    	#{id,jdbcType=VARCHAR}, #{contract_id,jdbcType=VARCHAR}, 
-    	#{user_id,jdbcType=VARCHAR}, #{user_name,jdbcType=VARCHAR}, 
-    	#{context,jdbcType=VARCHAR}, #{task_id,jdbcType=VARCHAR}, 
-      	#{create_time,jdbcType=TIMESTAMP}
+    	#{id,jdbcType=VARCHAR}, #{contractId,jdbcType=VARCHAR}, 
+    	#{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+    	#{context,jdbcType=VARCHAR}, #{taskId,jdbcType=VARCHAR}, 
+      	#{createTime,jdbcType=TIMESTAMP}
     )
   </insert>
   
@@ -72,22 +72,22 @@
         #{id,jdbcType=VARCHAR},
       </if>
       <if test="contractId != null">
-        #{contract_id,jdbcType=VARCHAR},
+        #{contractId,jdbcType=VARCHAR},
       </if>
       <if test="userId != null">
-        #{user_id,jdbcType=VARCHAR},
+        #{userId,jdbcType=VARCHAR},
       </if>
       <if test="userName != null">
-        #{user_name,jdbcType=VARCHAR},
+        #{userName,jdbcType=VARCHAR},
       </if>
       <if test="context != null">
         #{context,jdbcType=VARCHAR},
       </if>
       <if test="taskId != null">
-        #{task_id,jdbcType=VARCHAR},
+        #{taskId,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
-        #{create_time,jdbcType=TIMESTAMP},
+        #{createTime,jdbcType=TIMESTAMP},
       </if>      
     </trim>
   </insert>

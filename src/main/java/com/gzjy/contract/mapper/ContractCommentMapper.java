@@ -10,6 +10,7 @@ import com.gzjy.contract.model.ContractComment;
 public interface ContractCommentMapper {
 	ContractComment selectByPrimaryKey(String id);
 	int deleteByPrimaryKey(String id);
-	int insertSelective(ContractComment recoed);
+	int insertSelective(ContractComment record);
+	int insert(ContractComment record);
 	List<ContractComment> selectLatestComment(String contract_id);	
 }

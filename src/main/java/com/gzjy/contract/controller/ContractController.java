@@ -186,4 +186,17 @@ public class ContractController {
 			return Response.fail(e.getMessage());
 		}		
 	}
+	
+	
+	@RequestMapping(value = "/contract/process/comment", method = RequestMethod.POST)
+	public Response insertSelective(@RequestBody ContractComment contractComment) {
+		try {
+			contractCommentService.insert(contractComment);
+			return Response.success("success");
+		}
+		catch (Exception e) {
+			System.out.println(e);
+			return Response.fail(e.getMessage());
+		}		
+	}	 
 }
