@@ -155,9 +155,10 @@ public class ContractController {
 	 */
 	@RequestMapping(value = "/contract/process/task/{taskId}", method = RequestMethod.GET)
 	public Response approveContractTask(@PathVariable String taskId, 
-			@RequestParam String approve, @RequestParam String context,
+			@RequestParam(required = false) String approve, 
+			@RequestParam(required = false)String context,
 			@RequestParam(required = true) String action,
-			@RequestParam String contractId) {
+			@RequestParam(required = false) String contractId) {
 		try {
 			if (action.equals("approve")){
 				if(approve.equals("")||context.equals(""))
@@ -165,7 +166,7 @@ public class ContractController {
 				contractService.completeApproveTask(taskId, contractId, approve, context);
 			}else if (action.equals("update")){
 				contractService.completeUpdateTask(taskId);
-			}			
+			}
 			return Response.success("success");
 		}
 		catch (Exception e) {
