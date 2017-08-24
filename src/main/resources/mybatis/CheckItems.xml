@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzjy.checkitems.mapper.CheckItemsMapper">
+	
+
+  <resultMap id="BaseResultMap" type="com.gzjy.checkitems.model.CheckItems">
+    <id column="product_id" jdbcType="VARCHAR" property="productId" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />    
+  </resultMap>  
+  
+  <sql id="Base_Column_List">
+    product_id, product_name, parent_id
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />   
+    from check_items
+    where product_id = #{productId,jdbcType=VARCHAR}
+  </select>     
+  
+
+</mapper>
