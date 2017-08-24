@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzjy.checkitems.mapper.CheckItemMapper">
+	
+
+  <resultMap id="BaseResultMap" type="com.gzjy.checkitems.model.CheckItemsCatalog">
+    <id column="id" jdbcType="VARCHAR" property="Id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="method" jdbcType="VARCHAR" property="method" />  
+    <result column="laboratory" jdbcType="VARCHAR" property="laboratory" />  
+    <result column="unit" jdbcType="VARCHAR" property="unit" />  
+    <result column="standard_value" jdbcType="VARCHAR" property="standardValue" />  
+    <result column="detection_limit" jdbcType="VARCHAR" property="detectionLimit" />  
+    <result column="quantitation_limit" jdbcType="VARCHAR" property="quantitationLimit" />  
+    <result column="device" jdbcType="VARCHAR" property="device" />  
+    <result column="catalog_id" jdbcType="VARCHAR" property="catalogId" />  
+  </resultMap>  
+  
+  <sql id="Base_Column_List">
+    id, name, method, laboratory, unit, standard_value, detection_limit, quantitation_limit, device, catalog_id
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />   
+    from check_item
+    where id = #{id,jdbcType=VARCHAR}
+  </select>     
+  
+
+</mapper>
