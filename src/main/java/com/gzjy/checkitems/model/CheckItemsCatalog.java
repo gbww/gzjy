@@ -1,6 +1,6 @@
 package com.gzjy.checkitems.model;
 
-public class CheckItems {
+public class CheckItemsCatalog {
 	private String productId;
 	private String productName;
 	private String parentId;
