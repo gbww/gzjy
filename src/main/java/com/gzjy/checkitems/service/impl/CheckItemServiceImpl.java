@@ -17,4 +17,16 @@ public class CheckItemServiceImpl implements CheckItemService {
 		return checkItemMapper.selectByPrimaryKey(id);
 	}
 
+	public int insert(CheckItem checkItem) {
+		return checkItemMapper.insert(checkItem);
+	}
+
+	public int updateByPrimaryKeySelective(CheckItem checkItem) {
+		return checkItemMapper.updateByPrimaryKeySelective(checkItem);
+	}
+
+	public int deleteByPrimaryKey(String id) {
+		return checkItemMapper.deleteByPrimaryKey(id);
+	}
+
 }

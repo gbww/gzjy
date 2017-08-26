@@ -24,5 +24,48 @@
     where id = #{id,jdbcType=VARCHAR}
   </select>     
   
+  <insert id="insert" parameterType="com.gzjy.checkitems.model.CheckItem">
+    insert into check_item(id, name, method, unit, standard_value, detection_limit,quantitation_limit)
+    values (
+    	#{id,jdbcType=VARCHAR}, 
+	    #{name,jdbcType=VARCHAR}, 
+	    #{method,jdbcType=VARCHAR}, 
+	    #{unit,jdbcType=VARCHAR},
+	    #{standardValue,jdbcType=VARCHAR},
+	    #{detectionLimit,jdbcType=VARCHAR},
+	    #{quantitationLimit,jdbcType=VARCHAR}
+    )
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.gzjy.checkitems.model.CheckItem">
+    update check_item
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="method != null">
+        method = #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="standardValue != null">
+        standard_value = #{standardValue,jdbcType=VARCHAR},
+      </if>  
+      <if test="detectionLimit != null">
+        detection_limit = #{detectionLimit,jdbcType=VARCHAR},
+      </if>  
+      <if test="quantitationLimit != null">
+        quantitation_limit = #{quantitationLimit,jdbcType=VARCHAR},
+      </if>      
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from check_item
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  
 
 </mapper>
