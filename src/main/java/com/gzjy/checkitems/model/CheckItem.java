@@ -14,7 +14,7 @@ public class CheckItem {
 	//检出限
 	private String detectionLimit;
 	//定量限
-	private String quantitationLimit;	
+	private String quantitationLimit;
 	public String getId() {
 		return id;
 	}
