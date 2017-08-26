@@ -1,12 +1,14 @@
 package com.gzjy.checkitems.model;
 
-public class CheckItem {
+public class CheckItemsCatalogMapping {
 	//序号
 	private String id; 
 	//名称
 	private String name;
 	//检测方法
-	private String method;	
+	private String method;
+	//实验室
+	private String laboratory;
 	//单位
 	private String unit;
 	//标准值
@@ -14,7 +16,11 @@ public class CheckItem {
 	//检出限
 	private String detectionLimit;
 	//定量限
-	private String quantitationLimit;	
+	private String quantitationLimit;
+	//设备
+	private String device;
+	//目录编号
+	private String catalogId;
 	public String getId() {
 		return id;
 	}
@@ -32,7 +38,13 @@ public class CheckItem {
 	}
 	public void setMethod(String method) {
 		this.method = method;
-	}	
+	}
+	public String getLaboratory() {
+		return laboratory;
+	}
+	public void setLaboratory(String laboratory) {
+		this.laboratory = laboratory;
+	}
 	public String getUnit() {
 		return unit;
 	}
@@ -56,5 +68,19 @@ public class CheckItem {
 	}
 	public void setQuantitationLimit(String quantitationLimit) {
 		this.quantitationLimit = quantitationLimit;
-	}	
+	}
+	public String getDevice() {
+		return device;
+	}
+	public void setDevice(String device) {
+		this.device = device;
+	}
+	public String getCatalogId() {
+		return catalogId;
+	}
+	public void setCatalogId(String catalogId) {
+		this.catalogId = catalogId;
+	}
+	
+	
 }

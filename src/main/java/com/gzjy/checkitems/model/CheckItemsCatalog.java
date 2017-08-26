@@ -1,9 +1,17 @@
 package com.gzjy.checkitems.model;
 
 public class CheckItemsCatalog {
+	private String id;
 	private String productId;
 	private String productName;
 	private String parentId;
+	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public String getProductId() {
 		return productId;
 	}
