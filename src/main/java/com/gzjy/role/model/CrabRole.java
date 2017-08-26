@@ -10,11 +10,7 @@ import com.google.common.base.MoreObjects;
 import com.gzjy.common.Add;
 import com.gzjy.common.Update;
 
-/**
- * 
- * @author yangxiaoming@cmss.chinamobile.com
- *
- */
+
 public final class CrabRole implements Role{
   /**
    * 主键id
@@ -205,72 +201,27 @@ public final class CrabRole implements Role{
     }
     return false;
   }
-
+  /* 
+   * @see com.gzjy.role.model.Role#isAnHuiAdmin()
+   */
   @Override
-  public boolean isOrganizationAdmin() {
-    if ("461ce92f8ebd4773867aed7cbb23928a".equals(id)){
-      return true;
-    }
-    return false;
+  public boolean isAnHuiAdmin() {
+      if ("94d99f91ba8d444dae6e4302e18de2a9".equals(id)){
+          return true;
+        }
+        return false;
   }
 
-  @Override
-  public boolean isOrganizationUser() {
-    if (scope != null && 1 == scope && !"461ce92f8ebd4773867aed7cbb23928a".equals(id)){
-      return true;
-    }
-    return false;
-  }
-
-  @Override
-  public boolean isOperationsAdmin() {
-    if ("9f6ad093eace4239bf5f6c43fa0606bb".equals(id)){
-      return true;
-    }
-    return false;
-  }
-
-  @Override
-  public boolean isOperationsUser() {
-    if (scope != null && 2 == scope && !"9f6ad093eace4239bf5f6c43fa0606bb".equals(id)){
-      return true;
-    }
-    return false;
-  }
-
-  @Override
-  public boolean isMaintainsAdmin() {
-    if ("7f2d72d01d5a4b7f81635894e0f469ce".equals(id)){
-      return true;
-    }
-    return false;
-  }
-
-  @Override
-  public boolean isMaintainsUser() {
-    if (scope != null && 3 == scope && !"7f2d72d01d5a4b7f81635894e0f469ce".equals(id)){
-      return true;
-    }
-    return false;
-  }
 
   @Override
   public RoleIdentity getRoleIdentity() {
     if (isSuperAdmin()){
       return RoleIdentity.SUPER_ADMIN;
-    }else if (isOrganizationAdmin()){
-      return RoleIdentity.ORGANIZATIONS_ADMIN;
-    }else if (isOrganizationUser()){
-      return RoleIdentity.ORGANIZATIONS_USER;
-    }else if (isOperationsAdmin()){
-      return RoleIdentity.OPERATIONS_ADMIN;
-    }else if (isOperationsUser()){
-      return RoleIdentity.OPERATIONS_USER;
-    }else if (isMaintainsAdmin()){
-      return RoleIdentity.MAINTAINS_ADMIN;
-    }else if (isMaintainsUser()){
-      return RoleIdentity.MAINTAINS_USER;
+    }else if (isAnHuiAdmin()){
+      return RoleIdentity.ANHUI_ADMIN;
     }
     return null;
   }
+
+
 }

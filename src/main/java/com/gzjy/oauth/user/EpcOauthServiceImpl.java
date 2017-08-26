@@ -1,11 +1,10 @@
-package com.gzjy.oauth;
+package com.gzjy.oauth.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gzjy.common.exception.BizException;
 import com.gzjy.oauth.entity.OauthUser;
-import com.gzjy.oauth.user.EpcOauthUserService;
 import com.gzjy.user.mapper.UserMapper;
 import com.gzjy.user.model.User;
 

@@ -2,8 +2,8 @@ package com.gzjy.oauth.property;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = EpcOauthProperties.EPC_PREFIX, locations = "classpath:epc.properties")
-public class EpcOauthProperties {
+@ConfigurationProperties(prefix = LimsOauthProperties.EPC_PREFIX, locations = "classpath:epc.properties")
+public class LimsOauthProperties {
   public final static String EPC_PREFIX = "epc.oauth";
 
   public enum TokenStoreType {

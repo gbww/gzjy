@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzjy.role.mapper.RoleMapper">
+	<resultMap id="BaseResultMap" type="com.gzjy.role.model.CrabRole">
+		<id column="id" property="id" jdbcType="CHAR" />
+		<result column="organization_id" jdbcType="CHAR" property="organizationId" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="scope" property="scope" jdbcType="INTEGER" />
+		<result column="defaults" property="defaults" jdbcType="BIT" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+		<result column="deleted" property="deleted" jdbcType="BIT" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, organization_id, name, description, scope,
+		defaults, created_at, updated_at, deleted
+	</sql>
+
+	<select id="selectById" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from roles
+		where id = #{id,jdbcType=CHAR}
+	</select>
+
+	<select id="selectByName" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from roles
+		where name = #{name,jdbcType=VARCHAR} and deleted = false
+		limit 1
+	</select>
+	
+	<select id="selectByNameBasedOrganization" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from roles
+		where deleted = false and 
+		<if test="organizationId == '-1'">
+			scope = #{scope}
+		</if>
+		<if test="organizationId != '-1'">
+			(organization_id = #{organizationId} or (organization_id = '-1' and scope = #{scope}))
+		</if>
+		and name = #{name}
+		limit 1
+	</select>
+
+	<select id="selectHasOrganizationRole" resultType="boolean"
+		parameterType="java.lang.String">
+    <![CDATA[select ifnull((select 1 from roles
+    where organization_id = #{organizationId,jdbcType=CHAR} and deleted = false limit 1),0)]]>
+	</select>
+
+	<select id="selectGlobalRoles" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from roles
+		where scope = #{scope,jdbcType=INTEGER} and organization_id = '-1' and deleted = false
+	</select>
+	
+	<select id="selectDefaultsAdminRole" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from roles
+		where 
+		<choose>
+			<when test="scope == 1">
+				id = '461ce92f8ebd4773867aed7cbb23928a'
+			</when>
+			<when test="scope == 2">
+				id = '9f6ad093eace4239bf5f6c43fa0606bb'	
+			</when>
+			<when test="scope == 3">
+				id = '7f2d72d01d5a4b7f81635894e0f469ce'
+			</when>
+			<when test="scope == 4">
+				id = '6a81e8c14cf74cb09cbbd5bd1ed0c65e'
+			</when>
+		</choose>
+		limit 1
+	</select>
+	
+	<select id="selectDefaultsUserRole" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from roles
+		where 
+		<choose>
+			<when test="scope == 1">
+				id = 'f7a026cd281c41bb832dc7ce4f0468a2'
+			</when>
+			<when test="scope == 2">
+				id = '8968e187cb7640298defe7ad8d64a3e8'	
+			</when>
+			<when test="scope == 3">
+				id = '2c763c43f2e04bc394f72087e033e8de'
+			</when>
+			<when test="scope == 4">
+				id = '6a81e8c14cf74cb09cbbd5bd1ed0c65e'
+			</when>
+		</choose>
+		limit 1
+	</select>
+
+	<select id="selectRolesBasedOrganization" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from roles
+		where deleted = false and (organization_id =
+		#{organizationId} or (organization_id = '-1' and scope = #{scope}))
+		order by updated_at desc
+	</select>
+	
+	<select id="selectRolesBasedOrganizationExceptGlobalRoles" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from roles
+		where deleted = false and (organization_id =
+		#{organizationId})
+		order by updated_at desc
+	</select>
+	
+	<select id="selectRolesByOperationAdmin" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select * from roles
+		where deleted = false and (
+		organization_id = #{organizationId} or
+		(organization_id = '-1' and scope = 2) or
+		(organization_id = '-1' and scope = 1))
+		order by updated_at desc
+	</select>
+	
+	<select id="selectRolesByOperationUser" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select * from roles
+		where deleted = false and (
+		id = #{roleId} or
+		(organization_id = '-1' and scope = 1))
+		order by updated_at desc
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap">
+		select * from roles where
+		deleted = false
+		order by updated_at desc
+	</select>
+
+	<delete id="deleteById" parameterType="java.lang.String">
+		update roles set deleted =
+		true
+		where id = #{id,jdbcType=CHAR}
+	</delete>
+
+	<insert id="insert" parameterType="com.gzjy.role.model.CrabRole">
+		insert into roles (id,
+		organization_id, name, description,
+		scope, defaults,
+		created_at,
+		updated_at)
+		values (#{id,jdbcType=CHAR},
+		#{organizationId,jdbcType=CHAR},
+		#{name,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},
+		#{scope,jdbcType=INTEGER},
+		#{defaults,jdbcType=BIT},
+		#{createdAt,jdbcType=TIMESTAMP},
+		#{updatedAt,jdbcType=TIMESTAMP})
+	</insert>
+
+	<insert id="insertSelective" parameterType="com.gzjy.role.model.CrabRole">
+		insert into roles
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="organizationId != null">
+				organization_id,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+			<if test="scope != null">
+				scope,
+			</if>
+			<if test="defaults != null">
+				defaults,
+			</if>
+			<if test="createdAt != null">
+				created_at,
+			</if>
+			<if test="updatedAt != null">
+				updated_at,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=CHAR},
+			</if>
+			<if test="organizationId != null">
+				#{organizationId,jdbcType=CHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="scope != null">
+				#{scope,jdbcType=INTEGER},
+			</if>
+			<if test="defaults != null">
+				#{defaults,jdbcType=BIT},
+			</if>
+			<if test="createdAt != null">
+				#{createdAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedAt != null">
+				#{updatedAt,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateByIdSelective" parameterType="com.gzjy.role.model.CrabRole">
+		update roles
+		<set>
+			<if test="organizationId != null">
+				organization_id = #{organizationId,jdbcType=CHAR},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR},
+			</if>
+			<if test="scope != null">
+				scope = #{scope,jdbcType=INTEGER},
+			</if>
+			<if test="defaults != null">
+				defaults = #{defaults,jdbcType=BIT},
+			</if>
+			<if test="createdAt != null">
+				created_at = #{createdAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedAt != null">
+				updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=CHAR}
+	</update>
+
+	<update id="updateById" parameterType="com.gzjy.role.model.CrabRole">
+		update roles
+		set
+		organization_id = #{organizationId,jdbcType=CHAR},
+		name =
+		#{name,jdbcType=VARCHAR},
+		description =
+		#{description,jdbcType=VARCHAR},
+		scope = #{scope,jdbcType=INTEGER},
+		defaults = #{defaults,jdbcType=BIT},
+		created_at =
+		#{createdAt,jdbcType=TIMESTAMP},
+		updated_at =
+		#{updatedAt,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=CHAR}
+	</update>
+</mapper>

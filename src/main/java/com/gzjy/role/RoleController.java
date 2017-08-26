@@ -40,11 +40,11 @@ public class RoleController {
     return Response.success(r);
   }
   
-  @RequestMapping(value = "/roles/{id}/action/assign", method = RequestMethod.PUT)
+  /*@RequestMapping(value = "/roles/{id}/action/assign", method = RequestMethod.PUT)
   public Response assign(@PathVariable String id, @RequestBody List<String> privileges) {
     int result = roleService.assignPrivilegeForRole(id, privileges);
     return Response.success(result);
-  }
+  }*/
   
   @RequestMapping(value = "/roles/{id}/action/privileges/init", method = RequestMethod.PUT)
   public Response initPrivileges(@PathVariable String id, @RequestBody List<String> privileges) {

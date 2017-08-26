@@ -41,14 +41,14 @@ public interface RoleMapper {
    * @param organizationId ：运营管理员所在部门的id
    * @return
    */
-  List<Role> selectRolesByOperationAdmin(@Param("organizationId") String organizationId);
+  //List<Role> selectRolesByOperationAdmin(@Param("organizationId") String organizationId);
   
   /**
    * 运营管理用户获取其可见的角色列表
    * @param roleId ：运营普通用户的角色id
    * @return
    */
-  List<Role> selectRolesByOperationUser(@Param("roleId") String roleId);
+  //List<Role> selectRolesByOperationUser(@Param("roleId") String roleId);
   
   /**
    * 查询部门角色

@@ -35,7 +35,7 @@ import com.gzjy.common.exception.BizException;
 import com.gzjy.common.rest.EpcSyncRestTemplate;
 import com.gzjy.oauth.config.OauthInitBeanCollection;
 import com.gzjy.oauth.entity.OauthUser;
-import com.gzjy.oauth.property.EpcOauthProperties;
+import com.gzjy.oauth.property.LimsOauthProperties;
 import com.gzjy.oauth.security.KaptchaReceiver;
 
 @RestController
@@ -44,7 +44,7 @@ public class OauthUserController {
   @Autowired(required = true)
   private EpcOauthUserService userService;
   @Autowired(required = false)
-  private EpcOauthProperties oauthProperties;
+  private LimsOauthProperties oauthProperties;
   @Autowired(required = false)
   private DefaultTokenServices defaultTokenServices;
   // 根据principal获取用户信息，这里只返回用户名等
@@ -77,7 +77,7 @@ public class OauthUserController {
   @RequestMapping(method = RequestMethod.POST, value = "user/login")
   public Response<?> login(@RequestParam Map<String, String> parameters) {
     logger.info("用户登录");
-    String id = parameters.get("id");
+ /*   String id = parameters.get("id");
     if (id == null) {
       throw new BizException("非法请求！");
     }
@@ -95,13 +95,14 @@ public class OauthUserController {
       } catch (Exception e) {
         throw e;
       }
-    }
+    }*/
     // return getToken(principal, parameters);
     Map<String, Object> params = new HashMap<>();
     params.put("username", parameters.get("username"));
     params.put("password", parameters.get("password"));
     params.put("grant_type", "password");
-    params.put("scope", parameters.get("id"));
+    //params.put("scope", parameters.get("id"));
+    params.put("scope", "gzjy");
     EpcSyncRestTemplate restTemplate = new EpcSyncRestTemplate();
     String client = Base64.getEncoder().encodeToString("CLIENT:SECRET".getBytes());
     Map<String, String> header = Maps.newHashMap();

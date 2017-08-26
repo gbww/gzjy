@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.gzjy.common.util.ReflectUtil;
 import com.gzjy.oauth.condition.TokenStoreJdbcCondition;
-import com.gzjy.oauth.property.EpcOauthProperties;
+import com.gzjy.oauth.property.LimsOauthProperties;
 
 
 
@@ -35,12 +35,12 @@ import com.gzjy.oauth.property.EpcOauthProperties;
 @EnableAuthorizationServer
 @EnableResourceServer
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
-@EnableConfigurationProperties(EpcOauthProperties.class)
+@EnableConfigurationProperties(LimsOauthProperties.class)
 @EnableTransactionManagement
 public class WebSecurity extends WebSecurityConfigurerAdapter {
   private static Logger logger = LoggerFactory.getLogger(WebSecurity.class);
   @Autowired
-  private EpcOauthProperties oauthProperties;
+  private LimsOauthProperties oauthProperties;
 
   @PostConstruct
   public void init() {

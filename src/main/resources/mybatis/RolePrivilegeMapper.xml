@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chinamobile.epic.crab.dao.RolePrivilegeMapper" >
+  <resultMap id="BaseResultMap" type="com.gzjy.role.model.RolePrivilege" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="role_id" property="roleId" jdbcType="CHAR" />
+    <result column="privilege_id" property="privilegeId" jdbcType="CHAR" />
+  </resultMap>
+  
+  <resultMap id="PrivilegeMap" type="com.gzjy.privilege.model.Privilege" >
+    <id column="id" property="id" jdbcType="CHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="display_name" property="displayName" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="category" property="category" jdbcType="VARCHAR" />
+		<result column="scope" property="scope" jdbcType="INTEGER" />
+		<result column="view" property="view" jdbcType="BIT" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, role_id, privilege_id
+  </sql>
+  
+  <sql id="Privilege_Column_List">
+		id, CONCAT(name, -scope) name, display_name, description, category, scope, view
+  </sql>
+	
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from role_privileges
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  
+  <select id="selectAll" resultMap="BaseResultMap">
+    select * from role_privileges
+  </select>
+  
+  <select id="selectCategoryPrivilegesByRoleId" resultMap="PrivilegeMap">
+    select
+    <include refid="Privilege_Column_List" />
+	from privileges where 
+    <if test="category != null">
+    	category = #{category} and 
+    </if> 
+    (id in (select privilege_id from role_privileges 
+    where role_id = #{roleId}))
+  </select>
+  
+  <select id="selectRolesByPrivilegeId" resultType="com.gzjy.role.model.Role" parameterType="java.lang.String" >
+    select * from roles where id in 
+    (select role_id from role_privileges 
+    where privilege_id = #{privilegeId,jdbcType=CHAR})
+  </select>
+  
+  <select id="selectIsBothExist" resultType="boolean">
+    <![CDATA[select ifnull((select 1 from role_privileges
+    where role_id = #{0} and privilege_id = #{1} limit 1),0)]]>
+  </select>
+  
+  <delete id="deleteById" parameterType="java.lang.String" >
+    delete from role_privileges
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  
+  <delete id="deleteByRoleId" parameterType="java.lang.String" >
+    delete from role_privileges
+    where role_id = #{roleId,jdbcType=CHAR}
+  </delete>
+  
+  <delete id="deleteByPrivilegeId" parameterType="java.lang.String" >
+    delete from role_privileges
+    where privilege_id = #{privilegeId,jdbcType=CHAR}
+  </delete>
+  
+  <delete id="deleteByCombine" >
+    delete from role_privileges
+    where role_id = #{0} and privilege_id = #{1}
+  </delete>
+  
+  <insert id="insert" parameterType="com.gzjy.role.model.RolePrivilege" >
+    insert into role_privileges (id, role_id, privilege_id
+      )
+    values (#{id,jdbcType=CHAR}, #{roleId,jdbcType=CHAR}, #{privilegeId,jdbcType=CHAR}
+      )
+  </insert>
+  
+   <insert id="batchInsert" parameterType="com.gzjy.role.model.RolePrivilege" >
+    insert into role_privileges(id, role_id, privilege_id)
+    values
+    <foreach collection="list" item="rolePrivilege" separator=",">
+      (#{rolePrivilege.id,  jdbcType=CHAR}, #{rolePrivilege.roleId,  jdbcType=CHAR}, #{rolePrivilege.privilegeId,  jdbcType=CHAR})
+    </foreach>
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.gzjy.role.model.RolePrivilege" >
+    insert into role_privileges
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="roleId != null" >
+        role_id,
+      </if>
+      <if test="privilegeId != null" >
+        privilege_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="roleId != null" >
+        #{roleId,jdbcType=CHAR},
+      </if>
+      <if test="privilegeId != null" >
+        #{privilegeId,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByIdSelective" parameterType="com.gzjy.role.model.RolePrivilege" >
+    update role_privileges
+    <set >
+      <if test="roleId != null" >
+        role_id = #{roleId,jdbcType=CHAR},
+      </if>
+      <if test="privilegeId != null" >
+        privilege_id = #{privilegeId,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  
+  <update id="updateById" parameterType="com.gzjy.role.model.RolePrivilege" >
+    update role_privileges
+    set role_id = #{roleId,jdbcType=CHAR},
+      privilege_id = #{privilegeId,jdbcType=CHAR}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

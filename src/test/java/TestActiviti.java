@@ -158,6 +158,7 @@ public class TestActiviti {
         for (Task task : tasks) {
             System.out.println("李四的任务：name:"+task.getName()+",id:"+task.getId());
             taskService.complete(task.getId());
+            
         }
 
         System.out.println("李四的任务数量："+taskService.createTaskQuery().taskAssignee("李四").count());

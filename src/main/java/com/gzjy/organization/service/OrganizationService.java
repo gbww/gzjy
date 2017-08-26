@@ -9,31 +9,7 @@ import com.gzjy.user.model.UserOrganization;
 
 public interface OrganizationService {
 
-  /**
-   * 检查指定id的部门
-   * 
-   * @param id ：部门id
-   * @return 存在返回部门，否则为null
-   */
-  Organization check(String id);
-
-
-
-  /**
-   * 判断当前用户是否允许访问该部门
-   * 
-   * @param id ：部门id
-   * @return 允许为true，否则为false
-   */
-  boolean allowAccessOrganization(String id);
-
-  /**
-   * 判断当前用户是否允许修改该部门
-   * 
-   * @param id
-   * @return
-   */
-  boolean allowManipulateOrganization(String id);
+ 
 
   /**
    * 删除部门
@@ -61,23 +37,11 @@ public interface OrganizationService {
   Organization getById(String id);
 
 
+  public PageInfo<Organization>  select(Integer pageNum, Integer pageSize, String name,String orderBy);
 
-  /**
-   * 获取当前用户可访问的部门列表
-   * 
-   * @return 部门列表
-   */
-  List<Organization> getOrganizations(String name);
-
-  /**
-   * 获取当前用户可见的部门列表
-   * 
-   * @return 部门列表
-   */
-  PageInfo<Organization> getOrganizations(String name, Integer pageNum, Integer pageSize);
 
   
-  public Organization add(UserOrganization userOrganization);
+  public Organization add(Organization organization);
 
   
 

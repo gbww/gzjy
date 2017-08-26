@@ -32,21 +32,9 @@ public interface UserService {
    */
   User validate(String password);
 
-  /**
-   * 判断当前用户是否允许访问该用户
-   * 
-   * @param id ：用户id
-   * @return 允许为true，否则为false
-   */
-  boolean allowAccessUser(String id);
+ 
 
-  /**
-   * 判断当前用户是否允许创建用户
-   * @param organizationId ：部门id
-   * @param user ：新建用户
-   * @return 允许为true，否则为false
-   */
-  boolean allowCreateUser(String organizationId, User user);
+
 
   /**
    * 初始化新增部门管理员
@@ -75,16 +63,7 @@ public interface UserService {
    */
   User assignRoleForUser(String organizationId, String userId, String roleId);
 
-  /**
-   * 为用户换部门
-   * @param id ：用户id
-   * @param organizationFromId ：旧部门id
-   * @param organizationToId ：新部门id
-   * @param roleId ：角色id
-   * @return 用户
-   */
-  User changeOrganizationForUser(String id, String organizationFromId, String organizationToId,
-      String roleId);
+
 
   /**
    * 激活用户
@@ -188,7 +167,10 @@ public interface UserService {
    */
   User getUser(String id);
   
-  
+  /*
+   * 查询所有用户
+   */
+  PageInfo<User> getUsers(Integer pageNum, Integer pageSize, String search);
   
  
 
@@ -219,32 +201,8 @@ public interface UserService {
   
   Kaptchas receiveKaptcha(String id);
   
-  /**
-   * 获取指定部门的用户
-   * @param organizationIds ：部门id列表
-   * @return 用户列表
-   */
-  public List<User> getUsersBaseOrganizations(List<String> organizationIds);
-  
-  /**
-   * 分页查询当前用户可见的用户列表
-   * @param organizationId ：部门id
-   * @param roleId ：角色id
-   * @param status ：用户状态
-   * @param pageNum ：查看的页数
-   * @param pageSize ：每页显示记录
-   * @return
-   */
-  PageInfo<User> getUsers(String organizationId, String roleId, Integer status, Integer pageNum, Integer pageSize, String search);
 
-  /**
-   * @param organizationId ：部门id
-   * @param roleId ：角色id
-   * @param status ：用户状态
-   * 查询当前用户可见的用户列表
-   * @return 用户列表
-   */
-  List<User> getUsers(String organizationId, String roleId, Integer status, String search);
+
 
   /**
    * 更新用户

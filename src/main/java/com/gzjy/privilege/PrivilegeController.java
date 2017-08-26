@@ -50,9 +50,5 @@ public class PrivilegeController {
     return Response.success(privilegeService.getCategoriesWithCapitals());
   }
   
-  @RequestMapping(value = "/privileges/log/op", method = RequestMethod.GET)
-  @Privileges(name = "INSTANCE-START", scope = {1, 2}, identity = {Role.RoleIdentity.OPERATIONS_ADMIN, RoleIdentity.SUPER_ADMIN})
-  public Response privilege() {
-    return Response.success("有权执行");
-  }
+
 }

@@ -73,7 +73,7 @@ public interface UserMapper {
    * @param domainId 
    * @return
    */
-  List<User> selectUsersBasedScope(@Param("scopes")List<Integer> scopes, @Param("domainId")String domainId);
+  List<User> selectUsersBasedScope(@Param("scopes")List<Integer> scopes);
   
   /**
    * 查询指定部门和角色的指定状态用户
@@ -93,7 +93,7 @@ public interface UserMapper {
    */
   List<User> selectStatusUsersBasedOrganizationsAndRole(@Param("organizations")List<Organization> organizations, @Param("roleId")String roleId, @Param("status")Integer status, @Param("username")String username);
   
-  
+  List<User> seletTest();
   /**
    * 更新记录
    * 

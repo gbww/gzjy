@@ -95,7 +95,7 @@ public class RolePrivilegeService {
    */
   @Transactional
   public int assignPrivilegeForRole(String roleId, List<String> privileges) {
-    privileges = checkPrivileges(roleId, privileges);
+   // privileges = checkPrivileges(roleId, privileges);
     deleteByRoleId(roleId);
     if (privileges.size() == 0)
       return 0;

@@ -54,15 +54,9 @@ public class PrivilegeService {
    * @return 更新权限
    */
   @Transactional
-  @Privileges(identity = {RoleIdentity.SUPER_ADMIN, RoleIdentity.OPERATIONS_ADMIN, 
-                          RoleIdentity.ORGANIZATIONS_ADMIN, RoleIdentity.MAINTAINS_ADMIN})
   public Privilege update(String id, Privilege privilege) {
     Privilege p = check(id);
-    CrabRole role = userService.getCurrentUser().getRole();
     int privilegeScope = p.getScope();
-    if (!role.isSuperAdmin() && role.getScope() != privilegeScope) {
-      throw new BizException("没有权限修改该权限");
-    }
     p.setName(null);
     p.setDescription(privilege.getDescription());
     privilegeMapper.updateByIdSelective(p);
@@ -101,8 +95,7 @@ public class PrivilegeService {
    */
   public List<Privilege> getPrivileges(String category) {
     CrabRole role = userService.getCurrentUser().getRole();
-    if (!role.isSuperAdmin() && !role.isOperationsAdmin() && !role.isOrganizationAdmin()
-        && !role.isMaintainsAdmin()) {
+    if (!role.isSuperAdmin() && !role.isAnHuiAdmin()) {
       return rolePrivilegeService.getCategoryPrivilegesByRoleId(role.getId(), category);
     }
     return getPrivilegesByAdmin(category, role.getScope());
@@ -118,8 +111,7 @@ public class PrivilegeService {
   public PageInfo<Privilege> getPrivileges(String category, Integer pageNum, Integer pageSize) {
     CrabRole role = userService.getCurrentUser().getRole();
     PageInfo<Privilege> pages = null;
-    if (!role.isSuperAdmin() && !role.isOperationsAdmin() && !role.isOrganizationAdmin()
-        && !role.isMaintainsAdmin()) {
+    if (!role.isSuperAdmin() && !role.isAnHuiAdmin()) {
       pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
         @Override
         public void doSelect() {

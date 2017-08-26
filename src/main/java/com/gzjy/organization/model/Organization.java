@@ -13,54 +13,9 @@ import com.gzjy.common.Add;
 import com.gzjy.common.Update;
 
 public class Organization {
-  /**
-   * 部门类型： 1、自服务 2、运营 3、运维 4、全平台
-   */
-  public enum OrganizationType {
-    ORGANIZATIONS(1), OPERATIONS(2), MAINTAINS(3), WHOLE(4);
-
-    /**
-     * 部门类型代号
-     */
-    private int code;
-
-    private OrganizationType(int code) {
-      this.code = code;
-    }
-
-    /**
-     * 取得部门代号
-     * 
-     * @return 部门代号
-     */
-    public int getCode() {
-      return code;
-    }
-
-    /**
-     * 根据部门类型代号获取部门类型枚举
-     * 
-     * @param code ：部门类型代号
-     * @return 部门枚举
-     */
-    public static OrganizationType getOrganizationType(int code) {
-      switch (code) {
-        case 1:
-          return ORGANIZATIONS;
-        case 2:
-          return OPERATIONS;
-        case 3:
-          return MAINTAINS;
-        case 4:
-          return WHOLE;
-      }
-      return null;
-    }
-  }
-
+  
   private String id;
 
-  private String domainId;
 
   /**
    * 部门名称
@@ -70,11 +25,7 @@ public class Organization {
       Update.class})
   private String name;
 
-  /**
-   * 所属的资源池
-   */
-  @NotEmpty(message = "资源池不能为空", groups = {Add.class})
-  private List<Pool> pools;
+ 
 
   /**
    * 部门描述
@@ -87,32 +38,23 @@ public class Organization {
   @NotNull(message = "父部门不能为空", groups = {Add.class})
   private String parent = "-1";
 
-  /**
-   * 部门类型，具体详见枚举OrganizationType {@link OrganizationType}
-   */
-  @NotNull(message = "部门类型不能为空", groups = {Add.class})
-  private Integer type;
 
   private Date createdAt;
 
   private Date updatedAt;
-
-  /**
-   * 是否启用部门
-   */
-  private Boolean enabled = true;
-
   private Boolean deleted = false;
+  
 
-  public Integer getType() {
-    return type;
-  }
 
-  public void setType(Integer type) {
-    this.type = type;
-  }
+  public Boolean getDeleted() {
+    return deleted;
+}
 
-  public String getId() {
+public void setDeleted(Boolean deleted) {
+    this.deleted = deleted;
+}
+
+public String getId() {
     return id;
   }
 
@@ -120,13 +62,7 @@ public class Organization {
     this.id = id == null ? null : id.trim();
   }
 
-  public String getDomainId() {
-    return domainId;
-  }
-
-  public void setDomainId(String domainId) {
-    this.domainId = domainId;
-  }
+ 
 
   public String getName() {
     return name;
@@ -136,13 +72,7 @@ public class Organization {
     this.name = name == null ? null : name.trim();
   }
 
-  public List<Pool> getPools() {
-    return pools;
-  }
 
-  public void setPools(List<Pool> pools) {
-    this.pools = pools;
-  }
 
   public String getDescription() {
     return description;
@@ -176,21 +106,7 @@ public class Organization {
     this.updatedAt = updatedAt;
   }
 
-  public Boolean getEnabled() {
-    return enabled;
-  }
 
-  public void setEnabled(Boolean enabled) {
-    this.enabled = enabled;
-  }
-
-  public Boolean getDeleted() {
-    return deleted;
-  }
-
-  public void setDeleted(Boolean deleted) {
-    this.deleted = deleted;
-  }
 
   @Override
   public boolean equals(Object obj) {
@@ -209,7 +125,7 @@ public class Organization {
   @Override
   public String toString() {
     return MoreObjects.toStringHelper(this).omitNullValues().add("id", id).add("name", name)
-        .add("pools", pools).add("parent", parent).add("type", type).add("enabled", enabled)
+        .add("parent", parent)
         .toString();
   }
 }

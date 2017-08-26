@@ -53,26 +53,8 @@ public class RoleServiceImpl implements RoleService {
     CrabRole role = (CrabRole) check(id);
     User user = userService.getCurrentUser();
     CrabRole r = user.getRole();
-    if (r.isSuperAdmin()) 
+    if (r.isSuperAdmin()||r.isAnHuiAdmin()) 
       return true;       //超管
-    else if (r.isOperationsAdmin() && role.getOrganizationId().equals("-1") && role.getScope() == RoleScope.ORGANIZATIONS.getCode()) //运营管理员查看自服务全局角色
-      return true;
-    else {
-      if (r.isMaintainsAdmin() || r.isOperationsAdmin() || r.isOrganizationAdmin()) {       //管理员
-        if (role.getOrganizationId().equals("-1"))   {//全局角色
-          if (role.getScope() == r.getScope())
-            return true;
-        }
-        else {
-          if (role.getOrganizationId().equals(user.getOrganizationId()))
-            return true;
-        }
-      }
-      else      //普通用户
-        if (r.getId().equals(role.getId()))
-          return true;
-    }
-//    if (getRoles(null).contains(role)) return true;
     return false;
   }
 
@@ -86,59 +68,24 @@ public class RoleServiceImpl implements RoleService {
     CrabRole role = (CrabRole) check(id);
     User user = userService.getCurrentUser();
     CrabRole r = user.getRole();
-    if (r.isSuperAdmin()) 
+    if (r.isSuperAdmin()||r.isAnHuiAdmin()) 
       return true;       //超管
-    else if (r.isOperationsAdmin() && role.getOrganizationId().equals("-1") && role.getScope() == RoleScope.ORGANIZATIONS.getCode()) //运营管理员查看自服务全局角色
-      return true;
-    else {
-      if (r.isMaintainsAdmin() || r.isOperationsAdmin() || r.isOrganizationAdmin()) {       //管理员
-        if (role.getOrganizationId().equals("-1"))  { //全局角色
-          if (role.getScope() == r.getScope())
-            return true;
-        } else {
-          if (role.getOrganizationId().equals(user.getOrganizationId()))
-            return true;
-        }
-      }
-    }
-//    if (getAdminRoles().contains(role)) return true;
+   
     return false;
   }
 
   @Override
   @Transactional
-  @Privileges(name = "ROLE-ADD", scope = {1, 2, 3}, identity = {RoleIdentity.SUPER_ADMIN,
-                                                        RoleIdentity.OPERATIONS_ADMIN, RoleIdentity.ORGANIZATIONS_ADMIN,
-                                                        RoleIdentity.MAINTAINS_ADMIN})
   public Role add(CrabRole role) {
-    User user = userService.getCurrentUser();
-    CrabRole roleOfUser = user.getRole();
-    Integer scope = role.getScope(); // 获取scope参数
-    String organizationId = user.getOrganizationId(); // 获取用户部门
+  //  User user = userService.getCurrentUser();
+    //CrabRole roleOfUser = user.getRole();
+   // Integer scope = role.getScope(); // 获取scope参数
+    Integer scope =1;
+    String organizationId = role.getOrganizationId(); // 获取用户部门
     if (role.getDefaults()) {
       throw new BizException("无法创建默认角色");
     }
-    if (scope != null) {
-      if (!roleOfUser.isSuperAdmin()) {
-        throw new BizException("无法指定scope！");
-      }
-      RoleScope roleScope = RoleScope.getRoleScope(role.getScope());
-      if (roleScope == null || roleScope == RoleScope.SUPER) { // 角色不存在或不能创建超级角色
-        throw new BizException("不存在该类型的角色");
-      }
-      organizationId = "-1"; // 创建全局角色
-    } else {
-      if (roleOfUser.isSuperAdmin()) {
-        throw new BizException("超级管理员必须指定scope");
-      } else if (!roleOfUser.isOrganizationAdmin() && !roleOfUser.isOperationsAdmin()
-          && !roleOfUser.isMaintainsAdmin())
-        throw new BizException("没有权限创建新角色");
-      scope = organizationService.check(organizationId).getType(); // 指定对应部门角色的类型
-    }
-    String name = role.getName();
-    if (nameExist(scope, organizationId, name)) {
-      throw new BizException("该角色名称已经存在，请使用其他名称");
-    }
+  
     role = (CrabRole) CrabRole.builder().from(role).id(UUID.random()).scope(scope)
         .organizationId(organizationId).createdAt(new Date()).updatedAt(new Date()).build();
     roleMapper.insert(role);
@@ -147,9 +94,6 @@ public class RoleServiceImpl implements RoleService {
 
   @Override
   @Transactional
-  @Privileges(name = "ROLE-PRIVILEGE-ASSIGN", scope = {1, 2, 3}, identity = {RoleIdentity.SUPER_ADMIN,
-                                                        RoleIdentity.OPERATIONS_ADMIN, RoleIdentity.ORGANIZATIONS_ADMIN,
-                                                        RoleIdentity.MAINTAINS_ADMIN})
   public int assignPrivilegeForRole(String id, List<String> privileges) {
     if (!allowManipulateRole(id)) {
       throw new BizException("没有权限为该角色分配权限");
@@ -157,10 +101,6 @@ public class RoleServiceImpl implements RoleService {
     Role role = check(id);
     if (role.getDefaults()) {
       throw new BizException("无法为默认角色重新分配权限");
-    }
-    if (role.isOperationsAdmin() || role.isOrganizationAdmin() || role.isMaintainsAdmin()
-        || role.isSuperAdmin()) {
-      throw new BizException("无法为管理员分配权限");
     }
     if (role.getOrganizationId().equals("-1")
         && !userService.getCurrentUser().getRole().isSuperAdmin()) { // 非超级管理员不能修改全局角色
@@ -205,9 +145,6 @@ public class RoleServiceImpl implements RoleService {
 
   @Override
   @Transactional
-  @Privileges(name = "ROLE-DELETE", scope = {1, 2, 3}, identity = {RoleIdentity.SUPER_ADMIN,
-                                                                             RoleIdentity.OPERATIONS_ADMIN, RoleIdentity.ORGANIZATIONS_ADMIN,
-                                                                             RoleIdentity.MAINTAINS_ADMIN})
   public int delete(String id) {
     if (!allowManipulateRole(id)) {
       throw new BizException("没有权限删除该角色");
@@ -230,9 +167,7 @@ public class RoleServiceImpl implements RoleService {
 
   @Override
   public int deleteByOrganizationId(String organizationId) {
-    if (!organizationService.allowManipulateOrganization(organizationId)) {
-      throw new BizException("没有权限删除该部门的角色");
-    }
+   
     List<Role> roles = roleMapper.selectRolesBasedOrganizationExceptGlobalRoles(organizationId);
     for (Role r : roles) {
       rolePrivilegeService.deleteByRoleId(r.getId());
@@ -243,9 +178,6 @@ public class RoleServiceImpl implements RoleService {
 
   @Override
   @Transactional
-  @Privileges(name = "ROLE-UPDATE", scope = {1, 2, 3}, identity = {RoleIdentity.SUPER_ADMIN,
-                                                                   RoleIdentity.OPERATIONS_ADMIN, RoleIdentity.ORGANIZATIONS_ADMIN,
-                                                                   RoleIdentity.MAINTAINS_ADMIN})
   public Role update(String id, CrabRole role) {
     if (!allowManipulateRole(id)) {
       throw new BizException("没有权限更新该角色");
@@ -267,9 +199,9 @@ public class RoleServiceImpl implements RoleService {
 
   @Override
   public Role getById(String id) {
-    if (!allowAccessRole(id)) {
+   /* if (!allowAccessRole(id)) {
       throw new BizException("没有权限访问该角色");
-    }
+    }*/
     Role role = roleMapper.selectById(id);
     return role;
   }
@@ -290,8 +222,7 @@ public class RoleServiceImpl implements RoleService {
   public PageInfo<Privilege> getPrivileges(String id, String category, Integer pageNum, Integer pageSize) {
     CrabRole role = (CrabRole) getById(id);
     PageInfo<Privilege> pages = null;
-    if (!role.isSuperAdmin() && !role.isOrganizationAdmin() && !role.isOperationsAdmin()
-        && !role.isMaintainsAdmin()) {
+    if (!role.isSuperAdmin() && !role.isAnHuiAdmin()) {
       pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
         @Override
         public void doSelect() {
@@ -312,63 +243,30 @@ public class RoleServiceImpl implements RoleService {
   @Override
   public List<Privilege> getPrivileges(String id, String category) {
     CrabRole role = (CrabRole) getById(id);
-    if (!role.isSuperAdmin() && !role.isOrganizationAdmin() && !role.isOperationsAdmin()
-        && !role.isMaintainsAdmin()) {
+    if (!role.isSuperAdmin() && !role.isAnHuiAdmin()) {
       return rolePrivilegeService.getCategoryPrivilegesByRoleId(id, category);
     }
     return privilegeService.getPrivilegesByAdmin(category, role.getScope());
   }
 
   @Override
-  @Privileges(name = "ROLE-LIST-VIEW", scope = {1, 2, 3}, identity = {RoleIdentity.SUPER_ADMIN,
-                                                                 RoleIdentity.OPERATIONS_ADMIN, RoleIdentity.ORGANIZATIONS_ADMIN,
-                                                                 RoleIdentity.MAINTAINS_ADMIN})
   public PageInfo<Role> getRoles(String organizationId, Integer pageNum, Integer pageSize) {
     PageInfo<Role> pages;
     User user = userService.getCurrentUser();
     CrabRole role = user.getRole();
     int scope = role.getScope();
-    if (organizationId != null) {
-      if (!organizationService.allowAccessOrganization(organizationId)) 
-        throw new BizException("没有权限访问该部门的角色");
-      Organization o = organizationService.check(organizationId);
+ 
+     
       pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
         @Override
         public void doSelect() {
-          if (role.isSuperAdmin()) {
-            roleMapper.selectRolesBasedOrganization(o.getType(), o.getId());
-          } else if ((role.isOperationsAdmin() || role.isOperationsUser()) && o.getType() == 1) {     //运营管理员查看自服务部门角色
-            roleMapper.selectGlobalRoles(RoleScope.ORGANIZATIONS.getCode());
-          } else {
-            if (!organizationId.equals(user.getOrganizationId()))
-              throw new BizException("没有权限查看该部门的角色");
-            else { // 查看本部门
-              if (role.isOperationsAdmin() || role.isOrganizationAdmin() || role.isMaintainsAdmin())
-                roleMapper.selectRolesBasedOrganization(o.getType(), o.getId());
-              else
+        
                 roleMapper.selectById(user.getRoleId());
-            }
-          }
+           
+          
         }
       });
-    } else {
-      pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
-        @Override
-        public void doSelect() {
-          if (role.isSuperAdmin()) {
-            roleMapper.selectAll();
-          } else if (role.isOperationsAdmin()) {
-            roleMapper.selectRolesByOperationAdmin(user.getOrganizationId());
-          } else if (role.isOperationsUser()) {
-            roleMapper.selectRolesByOperationUser(role.getId());
-          } else if (role.isOrganizationAdmin() || role.isMaintainsAdmin()) { 
-            roleMapper.selectRolesBasedOrganization(scope, user.getOrganizationId());
-          } else {
-            roleMapper.selectById(user.getRoleId());
-          }
-        }
-      });
-    }
+  
     return pages;
   }
 
@@ -379,39 +277,8 @@ public class RoleServiceImpl implements RoleService {
     CrabRole role = user.getRole();
     int scope = role.getScope();
     
-    if (organizationId != null) {
-      if (!organizationService.allowAccessOrganization(organizationId)) 
-        throw new BizException("没有权限访问该部门的角色");
-      Organization o = organizationService.check(organizationId);
-      if (role.isSuperAdmin()) {    //超级管理员
-        roles = roleMapper.selectRolesBasedOrganization(o.getType(), o.getId());
-      } else if ((role.isOperationsAdmin() || role.isOperationsUser()) && o.getType() == 1) {     //运营管理员查看自服务部门角色
-          roles = roleMapper.selectGlobalRoles(RoleScope.ORGANIZATIONS.getCode());
-      } else {
-        if (!organizationId.equals(user.getOrganizationId()))
-          throw new BizException("没有权限查看该部门的角色");
-        else { // 查看本部门
-          if (role.isOperationsAdmin() || role.isOrganizationAdmin() || role.isMaintainsAdmin())
-            roles = roleMapper.selectRolesBasedOrganization(o.getType(), o.getId());
-          else
-            roles.add(role);
-        }
-      }
-    } else {
-      if (role.isSuperAdmin()) {
         roles = roleMapper.selectAll();
-      } else if (role.isOrganizationAdmin() || role.isMaintainsAdmin()) {
-        roles = roleMapper.selectRolesBasedOrganization(scope, user.getOrganizationId());
-      } else if (role.isOperationsAdmin()) {
-        roles = roleMapper.selectRolesBasedOrganization(scope, user.getOrganizationId());
-        roles.addAll(roleMapper.selectGlobalRoles(RoleScope.ORGANIZATIONS.getCode()));
-      } else if (role.isOperationsUser()) {
-        roles.addAll(roleMapper.selectGlobalRoles(RoleScope.ORGANIZATIONS.getCode()));
-        roles.add(role);
-      } else {
-        roles.add(role);
-      }
-    }
+ 
     return roles;
   }
 

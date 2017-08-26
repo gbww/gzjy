@@ -19,7 +19,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    /*if (oauthUserService == null) {
+    if (oauthUserService == null) {
       oauthUserService =
           (EpcOauthUserService) SpringContenxtHelper.getBean(EpcOauthUserService.class);
       logger.debug("设置UserDetailServiceIMPl中，EPCOauthService值{}", oauthUserService);
@@ -32,10 +32,10 @@ public class UserDetailServiceImpl implements UserDetailsService {
     org.springframework.security.core.userdetails.User userDetails =
         new org.springframework.security.core.userdetails.User(user.getUsername(),
             user.getPassword(), Collections.emptyList());
-    logger.debug("用户信息是{}", user);*/
-      org.springframework.security.core.userdetails.User userDetails =
+    logger.debug("用户信息是{}", user);
+      /*org.springframework.security.core.userdetails.User userDetails =
               new org.springframework.security.core.userdetails.User("epic",
-                  "epic1234", Collections.emptyList());
+                  "epic1234", Collections.emptyList());*/
     return userDetails;
   }
 

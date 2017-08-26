@@ -12,39 +12,7 @@ public class Privilege {
   public enum Category{
     USER("USER", "用户"), 
     ORGANIZATION("ORGANIZATION", "部门"),
-    ROLE("ROLE", "角色"),
-    INSTANCE("INSTANCE", "虚拟机"), 
-    INSTANCETEMPLATE("INSTANCETEMPLATE", "虚拟机模板"),
-    INSTANCEIMAGE("INSTANCEIMAGE", "虚拟机镜像"),
-    TICKET("TICKET","工单"),
-    VPC("VPC", "VPC服务"),
-    VPN("VPN", "VPN服务"),
-    VOLUME("VOLUME", "块存储"), 
-    VOLUMETEMPLATE("VOLUMETEMPLATE", "块存储模板"),
-    SECURITYGROUP("SECURITYGROUP", "安全组"), 
-    QUOTA("QUOTA", "配额"),
-    PROJECT("PROJECT", "项目管理"),
-    BUSINESS("BUSINESS", "业务系统"),
-    PRODUCT("PRODUCT", "产品"),
-    PHYSICALINSTANCETEMPLATE("PHYSICALINSTANCETEMPLATE","物理机模板"),
-    PHYSIALINSTANCEIMAGE("PHYSIALINSTANCEIMAGE","物理机镜像"),
-    ORDER("ORDER","订单"),
-    NOTICE("NOTICE","公告"),
-    LOADBALANCE("LOADBALANCE", "负载均衡"),
-    KEYPAIR("KEYPAIR", "密钥对"),
-    FLOATINGIP("FLOATINGIP","浮动IP"), 
-    BANDWIDTHTEMPLATE("BANDWIDTHTEMPLATE","宽带模板"),
-    APPROVAL("APPROVAL","审批"),
-    ALARM("ALARM","告警"),
-    POOL("POOL","资源池"),
-    USAGE("USAGE","资源使用"),
-    LOG("LOG","日志管理"),
-    ASSET("ASSET","资产管理"),
-    BACKUP("BACKUP","备份管理"),
-    OVERVIEW("OVERVIEW","总览"),
-    HYPERVISOR("HYPERVISOR","宿主机"),
-    KNOWLEDGE("KNOWLEDGE","知识库"),
-    SHARE("SHARE","分布式文件系统");
+    ROLE("ROLE", "角色");
       
     private String name;
     private String description;
@@ -66,39 +34,7 @@ public class Privilege {
   public enum CategoryWithCapitals{
     USER("USER", new String[]{"用户", "Y"}), 
     ORGANIZATION("ORGANIZATION", new String[]{"部门", "B"}),
-    ROLE("ROLE", new String[]{"角色", "J"}),
-    INSTANCE("INSTANCE", new String[]{"虚拟机", "X"}), 
-    INSTANCETEMPLATE("INSTANCETEMPLATE", new String[]{"虚拟机模板", "X"}),
-    INSTANCEIMAGE("INSTANCEIMAGE", new String[]{"虚拟机镜像", "X"}),
-    TICKET("TICKET", new String[]{"工单", "G"}),
-    VPC("VPC", new String[]{"VPC服务", "V"}),
-    VPN("VPN", new String[]{"VPN服务", "V"}),
-    VOLUME("VOLUME", new String[]{"块存储", "K"}), 
-    VOLUMETEMPLATE("VOLUMETEMPLATE", new String[]{"块存储模板", "K"}),
-    SECURITYGROUP("SECURITYGROUP", new String[]{"安全组", "A"}), 
-    QUOTA("QUOTA", new String[]{"配额", "P"}),
-    PROJECT("PROJECT", new String[]{"项目管理", "X"}),
-    BUSINESS("BUSINESS", new String[]{"业务系统", "Y"}),
-    PRODUCT("PRODUCT", new String[]{"产品", "C"}),
-    PHYSICALINSTANCETEMPLATE("PHYSICALINSTANCETEMPLATE", new String[]{"物理机模板", "W"}),
-    PHYSIALINSTANCEIMAGE("PHYSIALINSTANCEIMAGE", new String[]{"物理机镜像", "W"}),
-    ORDER("ORDER", new String[]{"订单", "D"}),
-    NOTICE("NOTICE", new String[]{"公告", "G"}),
-    LOADBALANCE("LOADBALANCE", new String[]{"负载均衡", "F"}),
-    KEYPAIR("KEYPAIR", new String[]{"密钥对", "M"}),
-    FLOATINGIP("FLOATINGIP", new String[]{"浮动IP", "F"}), 
-    BANDWIDTHTEMPLATE("BANDWIDTHTEMPLATE", new String[]{"宽带模板", "K"}),
-    APPROVAL("APPROVAL", new String[]{"审批", "S"}),
-    ALARM("ALARM", new String[]{"告警", "G"}),
-    POOL("POOL", new String[]{"资源池", "Z"}),
-    USAGE("USAGE", new String[]{"资源使用", "Z"}),
-    LOG("LOG", new String[]{"日志管理", "R"}),
-    ASSET("ASSET", new String[]{"资产管理", "Z"}),
-    BACKUP("BACKUP", new String[]{"备份管理", "B"}),
-    OVERVIEW("OVERVIEW", new String[]{"总览", "Z"}),
-    HYPERVISOR("HYPERVISOR", new String[]{"宿主机", "H"}),
-    KNOWLEDGE("KNOWLEDGE", new String[]{"知识库", "Z"}),
-    SHARE("SHARE", new String[]{"分布式文件系统", "F"});
+    ROLE("ROLE", new String[]{"角色", "J"});
       
     private String name;
     private String[] details;
@@ -122,7 +58,7 @@ public class Privilege {
    * 1、自服务  2、运营    3、运维 
    */
   public enum PrivilegeScope{
-    ORGANIZATIONS(1), OPERATIONS(2), MAINTAINS(3);  
+    ANHUI(1);  
     /**
      * 权限类型代号
      */
@@ -148,11 +84,8 @@ public class Privilege {
     public static PrivilegeScope getPrivilegeScope(int code){
       switch(code){
         case 1:
-          return ORGANIZATIONS;
-        case 2:
-          return OPERATIONS;
-        case 3:
-          return MAINTAINS;
+          return ANHUI;
+       
       }
       return null;
     }
