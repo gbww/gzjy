@@ -15,6 +15,9 @@ public class CheckItem {
 	private String detectionLimit;
 	//定量限
 	private String quantitationLimit;
+	
+	private String device;
+	private double defaultPrice;
 	public String getId() {
 		return id;
 	}
@@ -56,5 +59,19 @@ public class CheckItem {
 	}
 	public void setQuantitationLimit(String quantitationLimit) {
 		this.quantitationLimit = quantitationLimit;
+	}
+	public String getDevice() {
+		return device;
+	}
+	public void setDevice(String device) {
+		this.device = device;
+	}
+	public double getDefaultPrice() {
+		return defaultPrice;
+	}
+	public void setDefaultPrice(double defaultPrice) {
+		this.defaultPrice = defaultPrice;
 	}	
+	
+	
 }
