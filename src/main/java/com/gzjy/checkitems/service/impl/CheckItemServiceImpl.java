@@ -1,8 +1,14 @@
 package com.gzjy.checkitems.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.github.pagehelper.ISelect;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.gzjy.checkitems.mapper.CheckItemMapper;
 import com.gzjy.checkitems.model.CheckItem;
 import com.gzjy.checkitems.service.CheckItemService;
@@ -29,4 +35,15 @@ public class CheckItemServiceImpl implements CheckItemService {
 		return checkItemMapper.deleteByPrimaryKey(id);
 	}
 
+	public PageInfo<CheckItem> getPageList(Integer pageNum, Integer pageSize, String name, String method) {
+		List<CheckItem> list = new ArrayList<CheckItem>();
+	    PageInfo<CheckItem> pages = new PageInfo<CheckItem>(list);
+	    pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
+	        @Override
+	        public void doSelect() {
+	        	checkItemMapper.selectAll(name, method);
+	        }
+	    });
+	    return pages;
+	}
 }

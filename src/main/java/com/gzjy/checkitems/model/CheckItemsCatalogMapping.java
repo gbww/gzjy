@@ -9,8 +9,7 @@ public class CheckItemsCatalogMapping {
 	private String checkItemId;
 	//实验室
 	private String laboratory;
-	//设备
-	private String device;
+	
 	public String getId() {
 		return id;
 	}
@@ -34,12 +33,5 @@ public class CheckItemsCatalogMapping {
 	}
 	public void setLaboratory(String laboratory) {
 		this.laboratory = laboratory;
-	}
-	public String getDevice() {
-		return device;
-	}
-	public void setDevice(String device) {
-		this.device = device;
 	}	
-	
 }

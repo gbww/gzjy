@@ -11,10 +11,10 @@ import com.gzjy.checkitems.service.CheckItemsCatalogMappingService;
 public class CheckItemsCatalogMappingServiceImpl implements CheckItemsCatalogMappingService {
 
 	@Autowired
-	private CheckItemsCatalogMappingMapper checkItemMapper;
+	private CheckItemsCatalogMappingMapper checkItemsCatalogMappingMapper;
 	
 	public CheckItemsCatalogMapping selectByPrimaryKey(String id) {
-		return checkItemMapper.selectByPrimaryKey(id);
+		return checkItemsCatalogMappingMapper.selectByPrimaryKey(id);
 	}
 
 }

@@ -4,26 +4,20 @@
 	
 
   <resultMap id="BaseResultMap" type="com.gzjy.checkitems.model.CheckItemsCatalogMapping">
-    <id column="id" jdbcType="VARCHAR" property="Id" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="method" jdbcType="VARCHAR" property="method" />  
-    <result column="laboratory" jdbcType="VARCHAR" property="laboratory" />  
-    <result column="unit" jdbcType="VARCHAR" property="unit" />  
-    <result column="standard_value" jdbcType="VARCHAR" property="standardValue" />  
-    <result column="detection_limit" jdbcType="VARCHAR" property="detectionLimit" />  
-    <result column="quantitation_limit" jdbcType="VARCHAR" property="quantitationLimit" />  
-    <result column="device" jdbcType="VARCHAR" property="device" />  
+    <id column="id" jdbcType="VARCHAR" property="Id" />    
     <result column="catalog_id" jdbcType="VARCHAR" property="catalogId" />  
+    <result column="check_item_id" jdbcType="VARCHAR" property="checkItemId" />  
+    <result column="laboratory" jdbcType="VARCHAR" property="laboratory" />  
   </resultMap>  
   
   <sql id="Base_Column_List">
-    id, name, method, laboratory, unit, standard_value, detection_limit, quantitation_limit, device, catalog_id
+    id, catalog_id, check_item_id, laboratory
   </sql>
   
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />   
-    from check_item
+    from check_item_catalog_mapping
     where id = #{id,jdbcType=VARCHAR}
   </select>     
   

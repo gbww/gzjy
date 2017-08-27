@@ -1,6 +1,7 @@
 package com.gzjy.checkitems.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.pagehelper.PageInfo;
 import com.gzjy.checkitems.model.CheckItem;
 import com.gzjy.checkitems.model.CheckItemsCatalog;
 import com.gzjy.checkitems.service.CheckItemService;
@@ -138,10 +140,15 @@ public class CheckItemsController {
 	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/item", method = RequestMethod.GET)
-	public Response getCheckItemList(@RequestParam String name) {
-		try {
-//			checkItemService.insert(record);
-			return Response.success("success");
+	public Response getCheckItemList(
+			@RequestParam(required = false) String name, 
+			@RequestParam(required = false) String method,
+		    @RequestParam(required = false,defaultValue="1") Integer pageNum,
+		    @RequestParam(required = false,defaultValue="10") Integer pageSize,
+		    @RequestParam(required = false, name = "searchValue") String search) {
+		try {	
+			PageInfo<CheckItem> result = checkItemService.getPageList(pageNum, pageSize, name, method);
+			return Response.success(result);
 		}
 		catch (Exception e) {
 			System.out.println(e);
