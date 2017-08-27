@@ -1,7 +1,7 @@
 package com.gzjy.checkitems.controller;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +15,7 @@ import com.github.pagehelper.PageInfo;
 import com.gzjy.checkitems.model.CheckItem;
 import com.gzjy.checkitems.model.CheckItemsCatalog;
 import com.gzjy.checkitems.service.CheckItemService;
+import com.gzjy.checkitems.service.CheckItemsCatalogMappingService;
 import com.gzjy.checkitems.service.CheckItemsCatalogService;
 import com.gzjy.common.Response;
 import com.gzjy.common.util.UUID;
@@ -28,6 +29,9 @@ public class CheckItemsController {
 	
 	@Autowired
 	CheckItemService checkItemService;
+	
+	@Autowired
+	CheckItemsCatalogMappingService checkItemsCatalogMappingService;
 	
 	/**
 	 * 根据ID获取当前目录
@@ -201,6 +205,23 @@ public class CheckItemsController {
 		try {
 			CheckItem item = checkItemService.selectByPrimaryKey(id);
 			return Response.success(item);
+		}
+		catch (Exception e) {
+			System.out.println(e);
+			return Response.fail(e.getMessage());
+		}
+	}
+	
+	/**
+	 * 获取检验项列表树
+	 * @param record
+	 * @return
+	 */
+	@RequestMapping(value = "/checkitemscatalog/item/{catalogId}/tree", method = RequestMethod.GET)
+	public Response getCheckItemListById(@PathVariable String catalogId) {
+		try {	
+			List<HashMap<String, Object>> result = checkItemsCatalogMappingService.selectCheckItemsById(catalogId);
+			return Response.success(result);
 		}
 		catch (Exception e) {
 			System.out.println(e);

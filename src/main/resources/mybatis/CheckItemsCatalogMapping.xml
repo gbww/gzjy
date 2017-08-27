@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gzjy.checkitems.mapper.CheckItemsCatalogMappingMapper">
-	
 
   <resultMap id="BaseResultMap" type="com.gzjy.checkitems.model.CheckItemsCatalogMapping">
-    <id column="id" jdbcType="VARCHAR" property="Id" />    
-    <result column="catalog_id" jdbcType="VARCHAR" property="catalogId" />  
-    <result column="check_item_id" jdbcType="VARCHAR" property="checkItemId" />  
-    <result column="laboratory" jdbcType="VARCHAR" property="laboratory" />  
-  </resultMap>  
+    <id column="id" jdbcType="VARCHAR" property="Id" />
+    <result column="catalog_id" jdbcType="VARCHAR" property="catalogId" />
+    <result column="check_item_id" jdbcType="VARCHAR" property="checkItemId" />
+    <result column="laboratory" jdbcType="VARCHAR" property="laboratory" />
+  </resultMap>
   
   <sql id="Base_Column_List">
     id, catalog_id, check_item_id, laboratory
@@ -21,5 +20,46 @@
     where id = #{id,jdbcType=VARCHAR}
   </select>     
   
+  <select id="selectCheckItemsById" resultType="hashmap">
+  	select A.id, A.catalog_id, A.check_item_id, A.laboratory, B.id, B.name, B.method, 
+  	B.unit, B.standard_value, B.detection_limit, B.quantitation_limit, B.device, B.default_price
+    from check_item_catalog_mapping A, check_item B 
+    where A.check_item_id = B.id 
+    <if test="catalogId != null">
+		and catalog_id = #{catalogId,jdbcType=VARCHAR}
+	</if>
+  </select>
+  
+  <insert id="insert" parameterType="com.gzjy.checkitems.model.CheckItemsCatalogMapping">
+		insert into check_item_catalog_mapping(id, catalog_id, check_item_id, laboratory)
+		values (
+		#{id,jdbcType=VARCHAR},
+		#{catalog_id,jdbcType=VARCHAR},
+		#{check_item_id,jdbcType=VARCHAR},
+		#{laboratory,jdbcType=VARCHAR}		
+		)
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.gzjy.checkitems.model.CheckItemsCatalogMapping">
+		update check_item_catalog_mapping
+		<set>
+			<if test="catalogId != null">
+				catalog_id = #{catalogId,jdbcType=VARCHAR},
+			</if>
+			<if test="checkItemId != null">
+				check_item_id = #{checkItemId,jdbcType=VARCHAR},
+			</if>
+			<if test="laboratory != null">
+				laboratory = #{laboratory,jdbcType=VARCHAR},
+			</if>			
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from check_item_catalog_mapping
+		where id = #{id,jdbcType=VARCHAR}
+  </delete>
 
+  
 </mapper>
