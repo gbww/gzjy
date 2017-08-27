@@ -15,8 +15,9 @@ public class CheckItem {
 	private String detectionLimit;
 	//定量限
 	private String quantitationLimit;
-	
+	//设备仪器
 	private String device;
+	//默认价格
 	private double defaultPrice;
 	public String getId() {
 		return id;
@@ -71,7 +72,5 @@ public class CheckItem {
 	}
 	public void setDefaultPrice(double defaultPrice) {
 		this.defaultPrice = defaultPrice;
-	}	
-	
-	
+	}
 }
