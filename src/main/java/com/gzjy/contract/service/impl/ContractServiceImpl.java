@@ -14,6 +14,10 @@ import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.github.pagehelper.ISelect;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.gzjy.checkitems.model.CheckItem;
 import com.gzjy.common.util.UUID;
 import com.gzjy.contract.mapper.ContractCommentMapper;
 import com.gzjy.contract.mapper.ContractMapper;
@@ -122,5 +126,17 @@ public class ContractServiceImpl implements ContractService {
 	public void completeUpdateTask(String taskId) {
 		TaskService taskService = processEngine.getTaskService();
 		taskService.complete(taskId);
+	}
+
+	public PageInfo<Contract> getPageList(Integer pageNum, Integer pageSize, String sampleName) {
+		List<Contract> list = new ArrayList<Contract>();
+	    PageInfo<Contract> pages = new PageInfo<Contract>(list);
+	    pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
+	        @Override
+	        public void doSelect() {
+	        	contractMapper.selectAll(sampleName);
+	        }
+	    });
+	    return pages;
 	}
 }

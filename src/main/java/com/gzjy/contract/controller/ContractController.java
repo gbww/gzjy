@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.pagehelper.PageInfo;
 import com.gzjy.common.Response;
 import com.gzjy.common.ShortUUID;
 import com.gzjy.contract.model.Contract;
@@ -42,6 +43,25 @@ public class ContractController {
 			contract.setId(ShortUUID.getInstance().generateShortID());
 			contractService.insert(contract);
 			return Response.success("success");
+		}
+		catch (Exception e) {
+			System.out.println(e);
+			return Response.fail(e.getMessage());
+		}
+	}
+	
+	/** 
+	 * 获取合同列表信息
+	 * @param Contract实体对象
+	 * @return 
+	 */
+	@RequestMapping(value = "/contract", method = RequestMethod.GET)
+	public Response getContractList(@RequestParam(required = false) String sampleName, 			
+		    @RequestParam(required = false,defaultValue="1") Integer pageNum,
+		    @RequestParam(required = false,defaultValue="10") Integer pageSize) {
+		try {			
+			PageInfo<Contract> result = contractService.getPageList(pageNum, pageSize, sampleName);
+			return Response.success(result);
 		}
 		catch (Exception e) {
 			System.out.println(e);

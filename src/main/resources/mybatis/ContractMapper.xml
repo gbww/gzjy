@@ -73,6 +73,19 @@
     where id = #{id,jdbcType=VARCHAR}
   </select>
   
+  <select id="selectAll" resultMap="BaseResultMap">
+		<if test="sampleName != null">
+			<bind name="sampleNamePattern" value="'%' + sampleName + '%'" />
+		</if>		
+		select
+		<include refid="Base_Column_List" />
+		from contract
+		<where>
+			<if test="sampleName != null">
+				sample_name like #{sampleNamePattern}
+			</if>					
+		</where>
+	</select>
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from contract

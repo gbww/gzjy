@@ -3,11 +3,16 @@ package com.gzjy.contract.service;
 import java.util.ArrayList;
 import java.util.List;
 import org.activiti.engine.task.Task;
+
+import com.github.pagehelper.PageInfo;
+import com.gzjy.checkitems.model.CheckItem;
 import com.gzjy.contract.model.Contract;
 
 public interface ContractService {
 	
 	Contract selectByPrimaryKey(String id);
+	
+	PageInfo<Contract> getPageList(Integer pageNum, Integer pageSize, String name);
 	
 	int insert(Contract record);
 	

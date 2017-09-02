@@ -1,6 +1,9 @@
 package com.gzjy.contract.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.gzjy.contract.model.Contract;
 
@@ -8,6 +11,8 @@ import com.gzjy.contract.model.Contract;
 public interface ContractMapper {
     int deleteByPrimaryKey(String id);
 
+    List<Contract> selectAll(@Param("sampleName")String sampleName);
+    
     int insert(Contract record);
 
     int insertSelective(Contract record);
