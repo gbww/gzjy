@@ -63,10 +63,10 @@ public class RoleController {
     return Response.success(roleService.getById(id));
   }
   
-  @RequestMapping(value = "/crabroles", method = RequestMethod.GET)
+/*  @RequestMapping(value = "/crabroles", method = RequestMethod.GET)
   public Response crabroles(@RequestParam(required=false) String organizationId) {
     return Response.success(roleService.getCrabRoles(organizationId));
-  }
+  }*/
   
   @RequestMapping(value = "/roles", method = RequestMethod.GET)
   public Response roles(@RequestParam(required=false) String organizationId, @RequestParam(required=false) Integer pageNum, @RequestParam(required=false) Integer pageSize) {
@@ -90,7 +90,7 @@ public class RoleController {
     return Response.success(r);
   }
   
-  @RequestMapping(value = "/roles/get/recall/privilege/{roleId}", method = RequestMethod.GET)
+ /* @RequestMapping(value = "/roles/get/recall/privilege/{roleId}", method = RequestMethod.GET)
   public Response get(@PathVariable String roleId) {
     Type type = new TypeReference<List<Privilege>>() {}.getType();
     Response<List<Privilege>> res = epcRestService.exchangeBody("http://localhost:8001/v1/roles/" + roleId + "/privileges", HttpMethod.GET, null, type);
@@ -99,5 +99,5 @@ public class RoleController {
     }
     List<Privilege> list = res.getEntity();
     return Response.success(list);
-  }
+  }*/
 }

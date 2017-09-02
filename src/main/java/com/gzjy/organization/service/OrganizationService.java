@@ -38,6 +38,8 @@ public interface OrganizationService {
 
 
   public PageInfo<Organization>  select(Integer pageNum, Integer pageSize, String name,String orderBy);
+  
+  public List<Organization>  selectAll(String name,String orderBy);
 
 
   

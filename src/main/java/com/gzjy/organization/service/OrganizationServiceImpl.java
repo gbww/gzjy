@@ -1,5 +1,6 @@
 package com.gzjy.organization.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -65,7 +66,6 @@ public class OrganizationServiceImpl implements OrganizationService {
     return o;
   }
   @Override
- 
   public PageInfo<Organization>  select(Integer pageNum, Integer pageSize, String name,String orderBy){
       OrganizationExample example=new OrganizationExample();
       Criteria criteria =example.createCriteria();
@@ -85,6 +85,23 @@ public class OrganizationServiceImpl implements OrganizationService {
           }
       });
       return pages;
+  }
+  @Override
+  public List<Organization>  selectAll( String name,String orderBy){
+      OrganizationExample example=new OrganizationExample();
+      Criteria criteria =example.createCriteria();
+      criteria.andNameLike("%"+name+"%");
+      if (StringUtils.isBlank(orderBy)) {
+      orderBy = "created_at desc";
+  }
+      example.setOrderByClause(orderBy);
+      
+      List<Organization>records =new ArrayList<Organization>();
+             
+      records =   organizationMapper.selectByExample(example);
+           
+      
+      return records;
   }
 
   /**

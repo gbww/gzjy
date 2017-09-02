@@ -41,13 +41,15 @@ public class OrganizationController {
     return Response.success(organizationService.getById(id));
   }
   @RequestMapping(value = "/organizations", method = RequestMethod.GET)
-  public Response list(@RequestParam(value = "pageNum", required = false, defaultValue="1") Integer pageNum,
-          @RequestParam(value = "pageSize", required = false, defaultValue="10") Integer pageSize,
+  public Response list(@RequestParam(value = "pageNum", required = false, defaultValue="0") Integer pageNum,
+          @RequestParam(value = "pageSize", required = false, defaultValue="0") Integer pageSize,
           @RequestParam(value = "name", required = false, defaultValue="")String name,
           @RequestParam(value = "orderby", required = false, defaultValue="")String orderBy
                       ) {
-    
-
+    if(pageNum==0||pageSize==0) {
+        return Response.success(organizationService.selectAll(name, orderBy));
+    }
+    else
     return Response.success(organizationService.select(pageNum, pageSize, name, orderBy));
   }
  

@@ -252,16 +252,12 @@ public class RoleServiceImpl implements RoleService {
   @Override
   public PageInfo<Role> getRoles(String organizationId, Integer pageNum, Integer pageSize) {
     PageInfo<Role> pages;
-    User user = userService.getCurrentUser();
-    CrabRole role = user.getRole();
-    int scope = role.getScope();
- 
-     
+    
       pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
         @Override
         public void doSelect() {
         
-                roleMapper.selectById(user.getRoleId());
+          roleMapper.selectAll();
            
           
         }
@@ -273,10 +269,6 @@ public class RoleServiceImpl implements RoleService {
   @Override
   public List<Role> getRoles(String organizationId) {
     List<Role> roles = new ArrayList<>();
-    User user = userService.getCurrentUser();
-    CrabRole role = user.getRole();
-    int scope = role.getScope();
-    
         roles = roleMapper.selectAll();
  
     return roles;

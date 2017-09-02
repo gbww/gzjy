@@ -48,6 +48,7 @@ public class UserController {
     return Response.success(u);
   }
 //删除用户
+  //@Privileges(name = "USER-DELETE", scope = 1)
   @RequestMapping(value = "/organizations/{organizationId}/users/{id}", method = RequestMethod.DELETE)
   public Response delete(@PathVariable String organizationId, @PathVariable("id") String id) {
     int result = userService.delete(organizationId, id);
@@ -137,13 +138,13 @@ public class UserController {
     return Response.success(userService.getUser(organizationId, id));
   }
 
-  @RequestMapping(value = "/log/users", method = RequestMethod.GET)
+/*  @RequestMapping(value = "/log/users", method = RequestMethod.GET)
   public Response logusers() {
     return Response.success(userService.getLogUsers());
-  }
+  }*/
 
 
-  @RequestMapping(value = "/user/kaptcha/request", method = RequestMethod.GET)
+ /* @RequestMapping(value = "/user/kaptcha/request", method = RequestMethod.GET)
   public Response sendKaptcha(HttpServletRequest request, HttpServletResponse response)
       throws Exception {
     return Response.success(userService.getKaptcha(request, response));
@@ -153,7 +154,7 @@ public class UserController {
   public Response receiveKaptcha(@RequestParam String id)
       throws Exception {
     return Response.success(userService.receiveKaptcha(id));
-  }
+  }*/
 
 
   @RequestMapping(value = "/organizations/{organizationId}/users/{userId}/roles/{roleId}/action/assignRole", method = RequestMethod.PUT)
