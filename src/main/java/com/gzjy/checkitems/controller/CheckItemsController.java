@@ -18,7 +18,7 @@ import com.gzjy.checkitems.service.CheckItemService;
 import com.gzjy.checkitems.service.CheckItemsCatalogMappingService;
 import com.gzjy.checkitems.service.CheckItemsCatalogService;
 import com.gzjy.common.Response;
-import com.gzjy.common.util.UUID;
+import com.gzjy.common.ShortUUID;
 
 @RestController
 @RequestMapping({ "/v1/ahgz" })
@@ -62,7 +62,7 @@ public class CheckItemsController {
 			return Response.fail("参数不正确");
 		}
 		try {
-			record.setId(UUID.random());
+			record.setId(ShortUUID.getInstance().generateShortID());
 			checkItemsCatalogService.createCheckItemsCatalog(record);
 			return Response.success("success");
 		}
@@ -128,7 +128,7 @@ public class CheckItemsController {
 	@RequestMapping(value = "/checkitemscatalog/item", method = RequestMethod.POST)
 	public Response createCheckItem(@RequestBody CheckItem record) {
 		try {
-			record.setId(UUID.random());
+			record.setId(ShortUUID.getInstance().generateShortID());
 			checkItemService.insert(record);
 			return Response.success("success");
 		}
