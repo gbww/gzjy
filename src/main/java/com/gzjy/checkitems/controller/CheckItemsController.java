@@ -76,8 +76,8 @@ public class CheckItemsController {
 	 * @param record
 	 * @return
 	 */
-	@RequestMapping(value = "/checkitemscatalog/{parentId}/children", method = RequestMethod.GET)
-	public Response getCheckItemsCatalogChildren(@PathVariable String parentId) {
+	@RequestMapping(value = "/checkitemscatalog/children", method = RequestMethod.GET)
+	public Response getCheckItemsCatalogChildren(@RequestParam(required = true) String parentId) {
 		try {
 			List<CheckItemsCatalog> result = checkItemsCatalogService.selectByParentId(parentId);
 			return Response.success(result);
