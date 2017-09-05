@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.util.ClassUtils;
 
 import com.github.pagehelper.ISelect;
 import com.github.pagehelper.PageHelper;
@@ -65,7 +66,13 @@ public class TestUsers {
       
         System.out.print(pages.getSize());
     }
-     
+    
+    @Test
+    public void testpath() throws Exception {
+    
+        String name=ClassUtils.getDefaultClassLoader().getResource("sign/xue.png").getPath();
+        System.out.println(name);
+    }
       
     
     

@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("epic.nfs")
 public class EpicNFSConfig {
   private String baseDir="/var/lib/docs";
-  private String[] userNames={"crab","zebra","nami","moria"};
+  private String[] userNames={"crab","zebra","nami","gzjy"};
 
   public String getBaseDir() {
     return baseDir;

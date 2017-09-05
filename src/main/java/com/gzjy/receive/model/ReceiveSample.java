@@ -2,22 +2,28 @@ package com.gzjy.receive.model;
 
 import java.util.Date;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class ReceiveSample {
     //接样单编号
+    @NotEmpty
     private String receiveSampleId;
     //报告编号
     private String reportId;
     //报告页数
     private Integer reportPageNumber;
     //样品类别
+    @NotEmpty
     private String sampleType;
     //检验类型
+    @NotEmpty
     private String checkType;
     //报告格式
     private String reportLayout;
     //封面格式
     private String coverLayout;
     //委托单位
+    
     private String entrustedUnit;
     //委托单位地址
     private String entrustedUnitAddress;
@@ -58,6 +64,7 @@ public class ReceiveSample {
     //规格型号
     private String specificationModel;
      //执行标准
+    @NotEmpty
     private String executeStandard;
     //抽样人或单位
     private String sampleNames;

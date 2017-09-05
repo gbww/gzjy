@@ -19,7 +19,7 @@ public class EpicNFSService {
   private EpicNFSConfig nfsConfig;
   public EpicNFSClient getClient(String name) {
     if (!ArrayUtils.contains(nfsConfig.getUserNames(),name)) {
-      throw new BizException("�ļ��������û�����");
+      throw new BizException("文件服务器用户错误！");
     }
     EpicNFSClient instance = EpicNFSClient.getInstance(nfsConfig.getBaseDir(), name, null, 0);
     return instance;

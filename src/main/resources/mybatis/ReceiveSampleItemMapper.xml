@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gzjy.receive.mapper.ReceiveSampleItemMapper" >
+  <resultMap id="BaseResultMap" type="com.gzjy.receive.model.ReceiveSampleItem" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="receive_sample_id" property="receiveSampleId" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="method" property="method" jdbcType="VARCHAR" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="standard_value" property="standardValue" jdbcType="VARCHAR" />
+    <result column="detection_limit" property="detectionLimit" jdbcType="VARCHAR" />
+    <result column="quantitation_limit" property="quantitationLimit" jdbcType="VARCHAR" />
+    <result column="device" property="device" jdbcType="VARCHAR" />
+    <result column="default_price" property="defaultPrice" jdbcType="DOUBLE" />
+    <result column="test_room" property="testRoom" jdbcType="VARCHAR" />
+    <result column="subpackage" property="subpackage" jdbcType="VARCHAR" />
+    <result column="item_result" property="itemResult" jdbcType="VARCHAR" />
+    <result column="measured_value" property="measuredValue" jdbcType="VARCHAR" />
+    <result column="test_user" property="testUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, receive_sample_id, name, method, unit, standard_value, detection_limit, quantitation_limit, 
+    device, default_price, test_room, subpackage, item_result, measured_value, test_user
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from receive_sample_item
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  
+  <select id="selectByReceiveSampleId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from receive_sample_item
+    where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from receive_sample_item
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+   <delete id="deleteByReceiveSampleId" parameterType="java.lang.String" >
+    delete from receive_sample_item
+    where receive_sample_id = #{id,jdbcType=CHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="com.gzjy.receive.model.ReceiveSampleItem" >
+    insert into receive_sample_item (id, receive_sample_id, name, 
+      method, unit, standard_value, 
+      detection_limit, quantitation_limit, device, 
+      default_price, test_room, subpackage, 
+      item_result, measured_value, test_user
+      )
+    values (#{id,jdbcType=CHAR}, #{receiveSampleId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{method,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, #{standardValue,jdbcType=VARCHAR}, 
+      #{detectionLimit,jdbcType=VARCHAR}, #{quantitationLimit,jdbcType=VARCHAR}, #{device,jdbcType=VARCHAR}, 
+      #{defaultPrice,jdbcType=DOUBLE}, #{testRoom,jdbcType=VARCHAR}, #{subpackage,jdbcType=VARCHAR}, 
+      #{itemResult,jdbcType=VARCHAR}, #{measuredValue,jdbcType=VARCHAR}, #{testUser,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gzjy.receive.model.ReceiveSampleItem" >
+    insert into receive_sample_item
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="receiveSampleId != null" >
+        receive_sample_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="method != null" >
+        method,
+      </if>
+      <if test="unit != null" >
+        unit,
+      </if>
+      <if test="standardValue != null" >
+        standard_value,
+      </if>
+      <if test="detectionLimit != null" >
+        detection_limit,
+      </if>
+      <if test="quantitationLimit != null" >
+        quantitation_limit,
+      </if>
+      <if test="device != null" >
+        device,
+      </if>
+      <if test="defaultPrice != null" >
+        default_price,
+      </if>
+      <if test="testRoom != null" >
+        test_room,
+      </if>
+      <if test="subpackage != null" >
+        subpackage,
+      </if>
+      <if test="itemResult != null" >
+        item_result,
+      </if>
+      <if test="measuredValue != null" >
+        measured_value,
+      </if>
+      <if test="testUser != null" >
+        test_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="receiveSampleId != null" >
+        #{receiveSampleId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="method != null" >
+        #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null" >
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="standardValue != null" >
+        #{standardValue,jdbcType=VARCHAR},
+      </if>
+      <if test="detectionLimit != null" >
+        #{detectionLimit,jdbcType=VARCHAR},
+      </if>
+      <if test="quantitationLimit != null" >
+        #{quantitationLimit,jdbcType=VARCHAR},
+      </if>
+      <if test="device != null" >
+        #{device,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultPrice != null" >
+        #{defaultPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="testRoom != null" >
+        #{testRoom,jdbcType=VARCHAR},
+      </if>
+      <if test="subpackage != null" >
+        #{subpackage,jdbcType=VARCHAR},
+      </if>
+      <if test="itemResult != null" >
+        #{itemResult,jdbcType=VARCHAR},
+      </if>
+      <if test="measuredValue != null" >
+        #{measuredValue,jdbcType=VARCHAR},
+      </if>
+      <if test="testUser != null" >
+        #{testUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gzjy.receive.model.ReceiveSampleItem" >
+    update receive_sample_item
+    <set >
+      <if test="receiveSampleId != null" >
+        receive_sample_id = #{receiveSampleId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="method != null" >
+        method = #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null" >
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="standardValue != null" >
+        standard_value = #{standardValue,jdbcType=VARCHAR},
+      </if>
+      <if test="detectionLimit != null" >
+        detection_limit = #{detectionLimit,jdbcType=VARCHAR},
+      </if>
+      <if test="quantitationLimit != null" >
+        quantitation_limit = #{quantitationLimit,jdbcType=VARCHAR},
+      </if>
+      <if test="device != null" >
+        device = #{device,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultPrice != null" >
+        default_price = #{defaultPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="testRoom != null" >
+        test_room = #{testRoom,jdbcType=VARCHAR},
+      </if>
+      <if test="subpackage != null" >
+        subpackage = #{subpackage,jdbcType=VARCHAR},
+      </if>
+      <if test="itemResult != null" >
+        item_result = #{itemResult,jdbcType=VARCHAR},
+      </if>
+      <if test="measuredValue != null" >
+        measured_value = #{measuredValue,jdbcType=VARCHAR},
+      </if>
+      <if test="testUser != null" >
+        test_user = #{testUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gzjy.receive.model.ReceiveSampleItem" >
+    update receive_sample_item
+    set receive_sample_id = #{receiveSampleId,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      method = #{method,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      standard_value = #{standardValue,jdbcType=VARCHAR},
+      detection_limit = #{detectionLimit,jdbcType=VARCHAR},
+      quantitation_limit = #{quantitationLimit,jdbcType=VARCHAR},
+      device = #{device,jdbcType=VARCHAR},
+      default_price = #{defaultPrice,jdbcType=DOUBLE},
+      test_room = #{testRoom,jdbcType=VARCHAR},
+      subpackage = #{subpackage,jdbcType=VARCHAR},
+      item_result = #{itemResult,jdbcType=VARCHAR},
+      measured_value = #{measuredValue,jdbcType=VARCHAR},
+      test_user = #{testUser,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

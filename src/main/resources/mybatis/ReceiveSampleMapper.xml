@@ -1,0 +1,736 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gzjy.receive.mapper.ReceiveSampleMapper" >
+  <resultMap id="BaseResultMap" type="com.gzjy.receive.model.ReceiveSample" >
+    <id column="receive_sample_id" property="receiveSampleId" jdbcType="CHAR" />
+    <result column="report_id" property="reportId" jdbcType="CHAR" />
+    <result column="report_page_number" property="reportPageNumber" jdbcType="INTEGER" />
+    <result column="sample_type" property="sampleType" jdbcType="VARCHAR" />
+    <result column="check_type" property="checkType" jdbcType="VARCHAR" />
+    <result column="report_layout" property="reportLayout" jdbcType="VARCHAR" />
+    <result column="cover_layout" property="coverLayout" jdbcType="VARCHAR" />
+    <result column="entrusted_unit" property="entrustedUnit" jdbcType="VARCHAR" />
+    <result column="entrusted_unit_address" property="entrustedUnitAddress" jdbcType="VARCHAR" />
+    <result column="entrusted_user" property="entrustedUser" jdbcType="VARCHAR" />
+    <result column="entrusted_user_phone" property="entrustedUserPhone" jdbcType="VARCHAR" />
+    <result column="entrusted_user_email" property="entrustedUserEmail" jdbcType="VARCHAR" />
+    <result column="inspected_unit" property="inspectedUnit" jdbcType="VARCHAR" />
+    <result column="inspected_unit_address" property="inspectedUnitAddress" jdbcType="VARCHAR" />
+    <result column="inspected_user" property="inspectedUser" jdbcType="VARCHAR" />
+    <result column="inspected_user_phone" property="inspectedUserPhone" jdbcType="VARCHAR" />
+    <result column="inspected_user_email" property="inspectedUserEmail" jdbcType="VARCHAR" />
+    <result column="sample_address" property="sampleAddress" jdbcType="VARCHAR" />
+    <result column="sample_name" property="sampleName" jdbcType="VARCHAR" />
+    <result column="sample_link" property="sampleLink" jdbcType="VARCHAR" />
+    <result column="sample_trademark" property="sampleTrademark" jdbcType="VARCHAR" />
+    <result column="sample_report_id" property="sampleReportId" jdbcType="VARCHAR" />
+    <result column="sample_circulate" property="sampleCirculate" jdbcType="VARCHAR" />
+    <result column="sample_circulate_date" property="sampleCirculateDate" jdbcType="TIMESTAMP" />
+    <result column="sample_date" property="sampleDate" jdbcType="TIMESTAMP" />
+    <result column="sample_way" property="sampleWay" jdbcType="VARCHAR" />
+    <result column="specification_model" property="specificationModel" jdbcType="VARCHAR" />
+    <result column="execute_standard" property="executeStandard" jdbcType="VARCHAR" />
+    <result column="sample_names" property="sampleNames" jdbcType="VARCHAR" />
+    <result column="processing_technology" property="processingTechnology" jdbcType="VARCHAR" />
+    <result column="closed_status" property="closedStatus" jdbcType="VARCHAR" />
+    <result column="sample_number" property="sampleNumber" jdbcType="VARCHAR" />
+    <result column="sample_status" property="sampleStatus" jdbcType="VARCHAR" />
+    <result column="sample_basenumber" property="sampleBasenumber" jdbcType="VARCHAR" />
+    <result column="save_way" property="saveWay" jdbcType="VARCHAR" />
+    <result column="production_unit" property="productionUnit" jdbcType="VARCHAR" />
+    <result column="production_address" property="productionAddress" jdbcType="VARCHAR" />
+    <result column="production_user" property="productionUser" jdbcType="VARCHAR" />
+    <result column="production_phone" property="productionPhone" jdbcType="VARCHAR" />
+    <result column="cost" property="cost" jdbcType="VARCHAR" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="data_remarks" property="dataRemarks" jdbcType="VARCHAR" />
+    <result column="responsible_person" property="responsiblePerson" jdbcType="VARCHAR" />
+    <result column="sample_holder" property="sampleHolder" jdbcType="VARCHAR" />
+    <result column="receive_user" property="receiveUser" jdbcType="VARCHAR" />
+    <result column="receive_date" property="receiveDate" jdbcType="TIMESTAMP" />
+    <result column="arrange_finish_date" property="arrangeFinishDate" jdbcType="TIMESTAMP" />
+    <result column="finish_date" property="finishDate" jdbcType="TIMESTAMP" />
+    <result column="protocol_id" property="protocolId" jdbcType="VARCHAR" />
+    <result column="subpackage" property="subpackage" jdbcType="VARCHAR" />
+    <result column="result" property="result" jdbcType="VARCHAR" />
+    <result column="determine" property="determine" jdbcType="VARCHAR" />
+    <result column="approval_user" property="approvalUser" jdbcType="VARCHAR" />
+    <result column="examine_user" property="examineUser" jdbcType="VARCHAR" />
+    <result column="draw_user" property="drawUser" jdbcType="VARCHAR" />
+    <result column="principal_inspector" property="principalInspector" jdbcType="VARCHAR" />
+    <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    receive_sample_id, report_id, report_page_number, sample_type, check_type, report_layout, 
+    cover_layout, entrusted_unit, entrusted_unit_address, entrusted_user, entrusted_user_phone, 
+    entrusted_user_email, inspected_unit, inspected_unit_address, inspected_user, inspected_user_phone, 
+    inspected_user_email, sample_address, sample_name, sample_link, sample_trademark, 
+    sample_report_id, sample_circulate, sample_circulate_date, sample_date, sample_way, 
+    specification_model, execute_standard, sample_names, processing_technology, closed_status, 
+    sample_number, sample_status, sample_basenumber, save_way, production_unit, production_address, 
+    production_user, production_phone, cost, remarks, data_remarks, responsible_person, 
+    sample_holder, receive_user, receive_date, arrange_finish_date, finish_date, protocol_id, 
+    subpackage, result, determine, approval_user, examine_user, draw_user, principal_inspector, 
+    created_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from receive_sample
+    where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}
+  </select>
+  
+
+  
+    <select id="selectAll" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from receive_sample
+    <where>
+    	<foreach collection="filter.keys" item="key" separator="and">
+    	    <if test="null!=filter[key]">
+    	    ${key} = #{filter[${key}]}
+    	    </if>				
+		</foreach>
+    </where>
+    <choose>
+        <when test="null!=order">
+            order by ${order}
+        </when>
+        <otherwise>
+            order by created_at desc
+        </otherwise>
+    </choose>
+   
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from receive_sample
+    where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzjy.receive.model.ReceiveSample" >
+    insert into receive_sample (receive_sample_id, report_id, report_page_number, 
+      sample_type, check_type, report_layout, 
+      cover_layout, entrusted_unit, entrusted_unit_address, 
+      entrusted_user, entrusted_user_phone, entrusted_user_email, 
+      inspected_unit, inspected_unit_address, inspected_user, 
+      inspected_user_phone, inspected_user_email, 
+      sample_address, sample_name, sample_link, 
+      sample_trademark, sample_report_id, sample_circulate, 
+      sample_circulate_date, sample_date, sample_way, 
+      specification_model, execute_standard, sample_names, 
+      processing_technology, closed_status, sample_number, 
+      sample_status, sample_basenumber, save_way, 
+      production_unit, production_address, production_user, 
+      production_phone, cost, remarks, 
+      data_remarks, responsible_person, sample_holder, 
+      receive_user, receive_date, arrange_finish_date, 
+      finish_date, protocol_id, subpackage, 
+      result, determine, approval_user, 
+      examine_user, draw_user, principal_inspector, 
+      created_at)
+    values (#{receiveSampleId,jdbcType=CHAR}, #{reportId,jdbcType=CHAR}, #{reportPageNumber,jdbcType=INTEGER}, 
+      #{sampleType,jdbcType=VARCHAR}, #{checkType,jdbcType=VARCHAR}, #{reportLayout,jdbcType=VARCHAR}, 
+      #{coverLayout,jdbcType=VARCHAR}, #{entrustedUnit,jdbcType=VARCHAR}, #{entrustedUnitAddress,jdbcType=VARCHAR}, 
+      #{entrustedUser,jdbcType=VARCHAR}, #{entrustedUserPhone,jdbcType=VARCHAR}, #{entrustedUserEmail,jdbcType=VARCHAR}, 
+      #{inspectedUnit,jdbcType=VARCHAR}, #{inspectedUnitAddress,jdbcType=VARCHAR}, #{inspectedUser,jdbcType=VARCHAR}, 
+      #{inspectedUserPhone,jdbcType=VARCHAR}, #{inspectedUserEmail,jdbcType=VARCHAR}, 
+      #{sampleAddress,jdbcType=VARCHAR}, #{sampleName,jdbcType=VARCHAR}, #{sampleLink,jdbcType=VARCHAR}, 
+      #{sampleTrademark,jdbcType=VARCHAR}, #{sampleReportId,jdbcType=VARCHAR}, #{sampleCirculate,jdbcType=VARCHAR}, 
+      #{sampleCirculateDate,jdbcType=TIMESTAMP}, #{sampleDate,jdbcType=TIMESTAMP}, #{sampleWay,jdbcType=VARCHAR}, 
+      #{specificationModel,jdbcType=VARCHAR}, #{executeStandard,jdbcType=VARCHAR}, #{sampleNames,jdbcType=VARCHAR}, 
+      #{processingTechnology,jdbcType=VARCHAR}, #{closedStatus,jdbcType=VARCHAR}, #{sampleNumber,jdbcType=VARCHAR}, 
+      #{sampleStatus,jdbcType=VARCHAR}, #{sampleBasenumber,jdbcType=VARCHAR}, #{saveWay,jdbcType=VARCHAR}, 
+      #{productionUnit,jdbcType=VARCHAR}, #{productionAddress,jdbcType=VARCHAR}, #{productionUser,jdbcType=VARCHAR}, 
+      #{productionPhone,jdbcType=VARCHAR}, #{cost,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, 
+      #{dataRemarks,jdbcType=VARCHAR}, #{responsiblePerson,jdbcType=VARCHAR}, #{sampleHolder,jdbcType=VARCHAR}, 
+      #{receiveUser,jdbcType=VARCHAR}, #{receiveDate,jdbcType=TIMESTAMP}, #{arrangeFinishDate,jdbcType=TIMESTAMP}, 
+      #{finishDate,jdbcType=TIMESTAMP}, #{protocolId,jdbcType=VARCHAR}, #{subpackage,jdbcType=VARCHAR}, 
+      #{result,jdbcType=VARCHAR}, #{determine,jdbcType=VARCHAR}, #{approvalUser,jdbcType=VARCHAR}, 
+      #{examineUser,jdbcType=VARCHAR}, #{drawUser,jdbcType=VARCHAR}, #{principalInspector,jdbcType=VARCHAR}, 
+      #{createdAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gzjy.receive.model.ReceiveSample" >
+    insert into receive_sample
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="receiveSampleId != null" >
+        receive_sample_id,
+      </if>
+      <if test="reportId != null" >
+        report_id,
+      </if>
+      <if test="reportPageNumber != null" >
+        report_page_number,
+      </if>
+      <if test="sampleType != null" >
+        sample_type,
+      </if>
+      <if test="checkType != null" >
+        check_type,
+      </if>
+      <if test="reportLayout != null" >
+        report_layout,
+      </if>
+      <if test="coverLayout != null" >
+        cover_layout,
+      </if>
+      <if test="entrustedUnit != null" >
+        entrusted_unit,
+      </if>
+      <if test="entrustedUnitAddress != null" >
+        entrusted_unit_address,
+      </if>
+      <if test="entrustedUser != null" >
+        entrusted_user,
+      </if>
+      <if test="entrustedUserPhone != null" >
+        entrusted_user_phone,
+      </if>
+      <if test="entrustedUserEmail != null" >
+        entrusted_user_email,
+      </if>
+      <if test="inspectedUnit != null" >
+        inspected_unit,
+      </if>
+      <if test="inspectedUnitAddress != null" >
+        inspected_unit_address,
+      </if>
+      <if test="inspectedUser != null" >
+        inspected_user,
+      </if>
+      <if test="inspectedUserPhone != null" >
+        inspected_user_phone,
+      </if>
+      <if test="inspectedUserEmail != null" >
+        inspected_user_email,
+      </if>
+      <if test="sampleAddress != null" >
+        sample_address,
+      </if>
+      <if test="sampleName != null" >
+        sample_name,
+      </if>
+      <if test="sampleLink != null" >
+        sample_link,
+      </if>
+      <if test="sampleTrademark != null" >
+        sample_trademark,
+      </if>
+      <if test="sampleReportId != null" >
+        sample_report_id,
+      </if>
+      <if test="sampleCirculate != null" >
+        sample_circulate,
+      </if>
+      <if test="sampleCirculateDate != null" >
+        sample_circulate_date,
+      </if>
+      <if test="sampleDate != null" >
+        sample_date,
+      </if>
+      <if test="sampleWay != null" >
+        sample_way,
+      </if>
+      <if test="specificationModel != null" >
+        specification_model,
+      </if>
+      <if test="executeStandard != null" >
+        execute_standard,
+      </if>
+      <if test="sampleNames != null" >
+        sample_names,
+      </if>
+      <if test="processingTechnology != null" >
+        processing_technology,
+      </if>
+      <if test="closedStatus != null" >
+        closed_status,
+      </if>
+      <if test="sampleNumber != null" >
+        sample_number,
+      </if>
+      <if test="sampleStatus != null" >
+        sample_status,
+      </if>
+      <if test="sampleBasenumber != null" >
+        sample_basenumber,
+      </if>
+      <if test="saveWay != null" >
+        save_way,
+      </if>
+      <if test="productionUnit != null" >
+        production_unit,
+      </if>
+      <if test="productionAddress != null" >
+        production_address,
+      </if>
+      <if test="productionUser != null" >
+        production_user,
+      </if>
+      <if test="productionPhone != null" >
+        production_phone,
+      </if>
+      <if test="cost != null" >
+        cost,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+      <if test="dataRemarks != null" >
+        data_remarks,
+      </if>
+      <if test="responsiblePerson != null" >
+        responsible_person,
+      </if>
+      <if test="sampleHolder != null" >
+        sample_holder,
+      </if>
+      <if test="receiveUser != null" >
+        receive_user,
+      </if>
+      <if test="receiveDate != null" >
+        receive_date,
+      </if>
+      <if test="arrangeFinishDate != null" >
+        arrange_finish_date,
+      </if>
+      <if test="finishDate != null" >
+        finish_date,
+      </if>
+      <if test="protocolId != null" >
+        protocol_id,
+      </if>
+      <if test="subpackage != null" >
+        subpackage,
+      </if>
+      <if test="result != null" >
+        result,
+      </if>
+      <if test="determine != null" >
+        determine,
+      </if>
+      <if test="approvalUser != null" >
+        approval_user,
+      </if>
+      <if test="examineUser != null" >
+        examine_user,
+      </if>
+      <if test="drawUser != null" >
+        draw_user,
+      </if>
+      <if test="principalInspector != null" >
+        principal_inspector,
+      </if>
+      <if test="createdAt != null" >
+        created_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="receiveSampleId != null" >
+        #{receiveSampleId,jdbcType=CHAR},
+      </if>
+      <if test="reportId != null" >
+        #{reportId,jdbcType=CHAR},
+      </if>
+      <if test="reportPageNumber != null" >
+        #{reportPageNumber,jdbcType=INTEGER},
+      </if>
+      <if test="sampleType != null" >
+        #{sampleType,jdbcType=VARCHAR},
+      </if>
+      <if test="checkType != null" >
+        #{checkType,jdbcType=VARCHAR},
+      </if>
+      <if test="reportLayout != null" >
+        #{reportLayout,jdbcType=VARCHAR},
+      </if>
+      <if test="coverLayout != null" >
+        #{coverLayout,jdbcType=VARCHAR},
+      </if>
+      <if test="entrustedUnit != null" >
+        #{entrustedUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="entrustedUnitAddress != null" >
+        #{entrustedUnitAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="entrustedUser != null" >
+        #{entrustedUser,jdbcType=VARCHAR},
+      </if>
+      <if test="entrustedUserPhone != null" >
+        #{entrustedUserPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="entrustedUserEmail != null" >
+        #{entrustedUserEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="inspectedUnit != null" >
+        #{inspectedUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="inspectedUnitAddress != null" >
+        #{inspectedUnitAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="inspectedUser != null" >
+        #{inspectedUser,jdbcType=VARCHAR},
+      </if>
+      <if test="inspectedUserPhone != null" >
+        #{inspectedUserPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="inspectedUserEmail != null" >
+        #{inspectedUserEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleAddress != null" >
+        #{sampleAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleName != null" >
+        #{sampleName,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleLink != null" >
+        #{sampleLink,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleTrademark != null" >
+        #{sampleTrademark,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleReportId != null" >
+        #{sampleReportId,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleCirculate != null" >
+        #{sampleCirculate,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleCirculateDate != null" >
+        #{sampleCirculateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sampleDate != null" >
+        #{sampleDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sampleWay != null" >
+        #{sampleWay,jdbcType=VARCHAR},
+      </if>
+      <if test="specificationModel != null" >
+        #{specificationModel,jdbcType=VARCHAR},
+      </if>
+      <if test="executeStandard != null" >
+        #{executeStandard,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleNames != null" >
+        #{sampleNames,jdbcType=VARCHAR},
+      </if>
+      <if test="processingTechnology != null" >
+        #{processingTechnology,jdbcType=VARCHAR},
+      </if>
+      <if test="closedStatus != null" >
+        #{closedStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleNumber != null" >
+        #{sampleNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleStatus != null" >
+        #{sampleStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleBasenumber != null" >
+        #{sampleBasenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="saveWay != null" >
+        #{saveWay,jdbcType=VARCHAR},
+      </if>
+      <if test="productionUnit != null" >
+        #{productionUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="productionAddress != null" >
+        #{productionAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="productionUser != null" >
+        #{productionUser,jdbcType=VARCHAR},
+      </if>
+      <if test="productionPhone != null" >
+        #{productionPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="cost != null" >
+        #{cost,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="dataRemarks != null" >
+        #{dataRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="responsiblePerson != null" >
+        #{responsiblePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleHolder != null" >
+        #{sampleHolder,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveUser != null" >
+        #{receiveUser,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveDate != null" >
+        #{receiveDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="arrangeFinishDate != null" >
+        #{arrangeFinishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishDate != null" >
+        #{finishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="protocolId != null" >
+        #{protocolId,jdbcType=VARCHAR},
+      </if>
+      <if test="subpackage != null" >
+        #{subpackage,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null" >
+        #{result,jdbcType=VARCHAR},
+      </if>
+      <if test="determine != null" >
+        #{determine,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalUser != null" >
+        #{approvalUser,jdbcType=VARCHAR},
+      </if>
+      <if test="examineUser != null" >
+        #{examineUser,jdbcType=VARCHAR},
+      </if>
+      <if test="drawUser != null" >
+        #{drawUser,jdbcType=VARCHAR},
+      </if>
+      <if test="principalInspector != null" >
+        #{principalInspector,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null" >
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gzjy.receive.model.ReceiveSample" >
+    update receive_sample
+    <set >
+      <if test="reportId != null" >
+        report_id = #{reportId,jdbcType=CHAR},
+      </if>
+      <if test="reportPageNumber != null" >
+        report_page_number = #{reportPageNumber,jdbcType=INTEGER},
+      </if>
+      <if test="sampleType != null" >
+        sample_type = #{sampleType,jdbcType=VARCHAR},
+      </if>
+      <if test="checkType != null" >
+        check_type = #{checkType,jdbcType=VARCHAR},
+      </if>
+      <if test="reportLayout != null" >
+        report_layout = #{reportLayout,jdbcType=VARCHAR},
+      </if>
+      <if test="coverLayout != null" >
+        cover_layout = #{coverLayout,jdbcType=VARCHAR},
+      </if>
+      <if test="entrustedUnit != null" >
+        entrusted_unit = #{entrustedUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="entrustedUnitAddress != null" >
+        entrusted_unit_address = #{entrustedUnitAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="entrustedUser != null" >
+        entrusted_user = #{entrustedUser,jdbcType=VARCHAR},
+      </if>
+      <if test="entrustedUserPhone != null" >
+        entrusted_user_phone = #{entrustedUserPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="entrustedUserEmail != null" >
+        entrusted_user_email = #{entrustedUserEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="inspectedUnit != null" >
+        inspected_unit = #{inspectedUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="inspectedUnitAddress != null" >
+        inspected_unit_address = #{inspectedUnitAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="inspectedUser != null" >
+        inspected_user = #{inspectedUser,jdbcType=VARCHAR},
+      </if>
+      <if test="inspectedUserPhone != null" >
+        inspected_user_phone = #{inspectedUserPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="inspectedUserEmail != null" >
+        inspected_user_email = #{inspectedUserEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleAddress != null" >
+        sample_address = #{sampleAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleName != null" >
+        sample_name = #{sampleName,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleLink != null" >
+        sample_link = #{sampleLink,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleTrademark != null" >
+        sample_trademark = #{sampleTrademark,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleReportId != null" >
+        sample_report_id = #{sampleReportId,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleCirculate != null" >
+        sample_circulate = #{sampleCirculate,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleCirculateDate != null" >
+        sample_circulate_date = #{sampleCirculateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sampleDate != null" >
+        sample_date = #{sampleDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sampleWay != null" >
+        sample_way = #{sampleWay,jdbcType=VARCHAR},
+      </if>
+      <if test="specificationModel != null" >
+        specification_model = #{specificationModel,jdbcType=VARCHAR},
+      </if>
+      <if test="executeStandard != null" >
+        execute_standard = #{executeStandard,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleNames != null" >
+        sample_names = #{sampleNames,jdbcType=VARCHAR},
+      </if>
+      <if test="processingTechnology != null" >
+        processing_technology = #{processingTechnology,jdbcType=VARCHAR},
+      </if>
+      <if test="closedStatus != null" >
+        closed_status = #{closedStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleNumber != null" >
+        sample_number = #{sampleNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleStatus != null" >
+        sample_status = #{sampleStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleBasenumber != null" >
+        sample_basenumber = #{sampleBasenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="saveWay != null" >
+        save_way = #{saveWay,jdbcType=VARCHAR},
+      </if>
+      <if test="productionUnit != null" >
+        production_unit = #{productionUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="productionAddress != null" >
+        production_address = #{productionAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="productionUser != null" >
+        production_user = #{productionUser,jdbcType=VARCHAR},
+      </if>
+      <if test="productionPhone != null" >
+        production_phone = #{productionPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="cost != null" >
+        cost = #{cost,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="dataRemarks != null" >
+        data_remarks = #{dataRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="responsiblePerson != null" >
+        responsible_person = #{responsiblePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleHolder != null" >
+        sample_holder = #{sampleHolder,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveUser != null" >
+        receive_user = #{receiveUser,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveDate != null" >
+        receive_date = #{receiveDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="arrangeFinishDate != null" >
+        arrange_finish_date = #{arrangeFinishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishDate != null" >
+        finish_date = #{finishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="protocolId != null" >
+        protocol_id = #{protocolId,jdbcType=VARCHAR},
+      </if>
+      <if test="subpackage != null" >
+        subpackage = #{subpackage,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null" >
+        result = #{result,jdbcType=VARCHAR},
+      </if>
+      <if test="determine != null" >
+        determine = #{determine,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalUser != null" >
+        approval_user = #{approvalUser,jdbcType=VARCHAR},
+      </if>
+      <if test="examineUser != null" >
+        examine_user = #{examineUser,jdbcType=VARCHAR},
+      </if>
+      <if test="drawUser != null" >
+        draw_user = #{drawUser,jdbcType=VARCHAR},
+      </if>
+      <if test="principalInspector != null" >
+        principal_inspector = #{principalInspector,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null" >
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gzjy.receive.model.ReceiveSample" >
+    update receive_sample
+    set report_id = #{reportId,jdbcType=CHAR},
+      report_page_number = #{reportPageNumber,jdbcType=INTEGER},
+      sample_type = #{sampleType,jdbcType=VARCHAR},
+      check_type = #{checkType,jdbcType=VARCHAR},
+      report_layout = #{reportLayout,jdbcType=VARCHAR},
+      cover_layout = #{coverLayout,jdbcType=VARCHAR},
+      entrusted_unit = #{entrustedUnit,jdbcType=VARCHAR},
+      entrusted_unit_address = #{entrustedUnitAddress,jdbcType=VARCHAR},
+      entrusted_user = #{entrustedUser,jdbcType=VARCHAR},
+      entrusted_user_phone = #{entrustedUserPhone,jdbcType=VARCHAR},
+      entrusted_user_email = #{entrustedUserEmail,jdbcType=VARCHAR},
+      inspected_unit = #{inspectedUnit,jdbcType=VARCHAR},
+      inspected_unit_address = #{inspectedUnitAddress,jdbcType=VARCHAR},
+      inspected_user = #{inspectedUser,jdbcType=VARCHAR},
+      inspected_user_phone = #{inspectedUserPhone,jdbcType=VARCHAR},
+      inspected_user_email = #{inspectedUserEmail,jdbcType=VARCHAR},
+      sample_address = #{sampleAddress,jdbcType=VARCHAR},
+      sample_name = #{sampleName,jdbcType=VARCHAR},
+      sample_link = #{sampleLink,jdbcType=VARCHAR},
+      sample_trademark = #{sampleTrademark,jdbcType=VARCHAR},
+      sample_report_id = #{sampleReportId,jdbcType=VARCHAR},
+      sample_circulate = #{sampleCirculate,jdbcType=VARCHAR},
+      sample_circulate_date = #{sampleCirculateDate,jdbcType=TIMESTAMP},
+      sample_date = #{sampleDate,jdbcType=TIMESTAMP},
+      sample_way = #{sampleWay,jdbcType=VARCHAR},
+      specification_model = #{specificationModel,jdbcType=VARCHAR},
+      execute_standard = #{executeStandard,jdbcType=VARCHAR},
+      sample_names = #{sampleNames,jdbcType=VARCHAR},
+      processing_technology = #{processingTechnology,jdbcType=VARCHAR},
+      closed_status = #{closedStatus,jdbcType=VARCHAR},
+      sample_number = #{sampleNumber,jdbcType=VARCHAR},
+      sample_status = #{sampleStatus,jdbcType=VARCHAR},
+      sample_basenumber = #{sampleBasenumber,jdbcType=VARCHAR},
+      save_way = #{saveWay,jdbcType=VARCHAR},
+      production_unit = #{productionUnit,jdbcType=VARCHAR},
+      production_address = #{productionAddress,jdbcType=VARCHAR},
+      production_user = #{productionUser,jdbcType=VARCHAR},
+      production_phone = #{productionPhone,jdbcType=VARCHAR},
+      cost = #{cost,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      data_remarks = #{dataRemarks,jdbcType=VARCHAR},
+      responsible_person = #{responsiblePerson,jdbcType=VARCHAR},
+      sample_holder = #{sampleHolder,jdbcType=VARCHAR},
+      receive_user = #{receiveUser,jdbcType=VARCHAR},
+      receive_date = #{receiveDate,jdbcType=TIMESTAMP},
+      arrange_finish_date = #{arrangeFinishDate,jdbcType=TIMESTAMP},
+      finish_date = #{finishDate,jdbcType=TIMESTAMP},
+      protocol_id = #{protocolId,jdbcType=VARCHAR},
+      subpackage = #{subpackage,jdbcType=VARCHAR},
+      result = #{result,jdbcType=VARCHAR},
+      determine = #{determine,jdbcType=VARCHAR},
+      approval_user = #{approvalUser,jdbcType=VARCHAR},
+      examine_user = #{examineUser,jdbcType=VARCHAR},
+      draw_user = #{drawUser,jdbcType=VARCHAR},
+      principal_inspector = #{principalInspector,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP}
+    where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}
+  </update>
+</mapper>

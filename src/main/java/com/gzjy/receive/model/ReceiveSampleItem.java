@@ -1,13 +1,18 @@
 package com.gzjy.receive.model;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class ReceiveSampleItem {
     //接样检验项目的id
     private String id;
     //接样编号
+    @NotEmpty
     private String receiveSampleId;
     //项目名称
+    @NotEmpty
     private String name;
     //检测方法
+    @NotEmpty
     private String method;
     //单位
     private String unit;
