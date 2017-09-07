@@ -31,10 +31,10 @@ public class CheckItemsCatalog {
 	public void setParentId(String parentId) {
 		this.parentId = parentId;
 	}
-	public String isCatalog() {
+	public String getIsCatalog() {
 		return isCatalog;
 	}
-	public void setCatalog(String isCatalog) {
+	public void setIsCatalog(String isCatalog) {
 		this.isCatalog = isCatalog;
 	}	
 	

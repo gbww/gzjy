@@ -41,7 +41,7 @@
     	#{id,jdbcType=VARCHAR}, 
 	    #{productId,jdbcType=VARCHAR}, 
 	    #{productName,jdbcType=VARCHAR}, 
-	    #{parentId,jdbcType=VARCHAR} 
+	    #{parentId,jdbcType=VARCHAR},
 	    #{isCatalog,jdbcType=VARCHAR}
     )
   </insert>

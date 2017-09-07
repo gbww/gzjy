@@ -58,7 +58,7 @@ public class CheckItemsController {
 	@RequestMapping(value = "/checkitemscatalog", method = RequestMethod.POST)
 	public Response createCheckItemsCatalog(@RequestBody CheckItemsCatalog record) {
 		if(record.getParentId() == null || record.getProductId() == null 
-				||record.getProductName()==null) {
+				||record.getProductName()==null ||record.getIsCatalog()==null) {
 			return Response.fail("参数不正确");
 		}
 		try {
