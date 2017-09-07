@@ -5,6 +5,7 @@ public class CheckItemsCatalog {
 	private String productId;
 	private String productName;
 	private String parentId;
+	private String isCatalog;
 	
 	public String getId() {
 		return id;
@@ -30,6 +31,11 @@ public class CheckItemsCatalog {
 	public void setParentId(String parentId) {
 		this.parentId = parentId;
 	}
-	
+	public String isCatalog() {
+		return isCatalog;
+	}
+	public void setCatalog(String isCatalog) {
+		this.isCatalog = isCatalog;
+	}	
 	
 }

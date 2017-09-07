@@ -7,11 +7,12 @@
     <id column="id" jdbcType="VARCHAR" property="id" />
     <id column="product_id" jdbcType="VARCHAR" property="productId" />
     <result column="product_name" jdbcType="VARCHAR" property="productName" />
-    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />    
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="is_catalog" jdbcType="VARCHAR" property="isCatalog" />
   </resultMap>  
   
   <sql id="Base_Column_List">
-    id, product_id, product_name, parent_id
+    id, product_id, product_name, parent_id, is_catalog
   </sql>
   
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -35,12 +36,13 @@
   </select>   
   
   <insert id="insert" parameterType="com.gzjy.checkitems.model.CheckItemsCatalog">
-    insert into check_items_catalog (id, product_id, product_name, parent_id)
+    insert into check_items_catalog (id, product_id, product_name, parent_id, is_catalog)
     values (
     	#{id,jdbcType=VARCHAR}, 
 	    #{productId,jdbcType=VARCHAR}, 
 	    #{productName,jdbcType=VARCHAR}, 
 	    #{parentId,jdbcType=VARCHAR} 
+	    #{isCatalog,jdbcType=VARCHAR}
     )
   </insert>
   
@@ -53,9 +55,12 @@
       <if test="productName != null">
         product_name = #{productName,jdbcType=VARCHAR},
       </if>
-      <if test="sampleName != null">
+      <if test="parentId != null">
         parent_id = #{parentId,jdbcType=VARCHAR},
-      </if>      
+      </if>  
+      <if test="isCatalog != null">
+        is_catalog = #{isCatalog,jdbcType=VARCHAR},
+      </if>     
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
