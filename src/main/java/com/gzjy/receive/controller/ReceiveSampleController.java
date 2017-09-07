@@ -30,6 +30,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gzjy.common.Add;
 import com.gzjy.common.Response;
+import com.gzjy.common.ShortUUID;
+import com.gzjy.common.util.fs.EpicNFSClient;
+import com.gzjy.common.util.fs.EpicNFSService;
 import com.gzjy.receive.model.ReceiveSample;
 import com.gzjy.receive.model.ReceiveSampleItem;
 import com.gzjy.receive.service.ReceiveSampleService;
@@ -46,6 +49,9 @@ public class ReceiveSampleController {
 	
 	@Autowired
 	private ReceiveSampleService receiveSampleService;
+	
+	@Autowired
+	private EpicNFSService epicNFSService;
 
 	// 添加接样基本信息
 	@RequestMapping(value = "/receiveSample", method = RequestMethod.POST)
@@ -163,48 +169,46 @@ public class ReceiveSampleController {
 
 		return Response.success(receiveSampleService.getItem(itemId));
 	}
-
-	// 导出excel
-	@RequestMapping(value = "/receiveSample/sampleItems/test", method = RequestMethod.GET)
-	public Response getExcel(HttpServletResponse response) {
-		receiveSampleService.copyFile("D://test1.xls", "E://test1.xls");
-		HashMap<String, String> data = new HashMap<String, String>();
-		data.put("reportId", "XXXXXXXX");
-		data.put("sampleType", "AAAAAAAA");
-		data.put("receiveDate", "SSSSSSS");
-		data.put("entrustedUnit", "QQQQQQQQ");
-		data.put("entrustedUnitAddress", "ZZZZZZZ");
-		data.put("sampleName", "WWWWWWW");
-		data.put("sampleNames", "EEEEEEE");
-		data.put("sampleNumber", "RRRRRRR");
-		data.put("sampleWay", "DDDDDDD");
-		data.put("specificationModel", "CCCCCCC");
-		data.put("sampleTrademark", "RRRRRRR");
-		data.put("sampleBasenumber", "FFFFFFFF");
-		data.put("processingTechnology", "VVVVVVVV");
-		data.put("sampleStatus", "BBBBBBB");
-		data.put("executeStandard", "GGGGGGG");
-		data.put("sampleAddress", "RRTTTT");
-		data.put("productionUnit", "YYYYYY");
-		data.put("inspectedUnit", "HHHHHHH");
-		data.put("inspectedUnitAddress", "UUUUUUU");
-		data.put("finishDate", "MMMMMM");
+	
+	
+	/**
+	 * 通过模板导出excel并下载
+	 * @param response
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "/receiveSample/sampleItems/excel/{id}", method = RequestMethod.GET)
+	public Response getExcel(HttpServletResponse response, @PathVariable(name = "id") String id) {
+		EpicNFSClient client = epicNFSService.getClient("gzjy");
+		//生成临时模板excel文件
+		String tempFileName = ShortUUID.getInstance().generateShortID()+".xls";
+		//建立远程存放excel模板文件目录
+		if (!client.hasRemoteDir("temp")) {
+			client.createRemoteDir("temp");        
+		}
 		try {
+			//将模板文件复制到缓存文件
+			receiveSampleService.copyFile("D://test1.xls", "E://test1.xls");
+			//获取报告数据
+			ReceiveSample receiveSample = receiveSampleService.getReceiveSample(id);		
 			InputStream input = new FileInputStream("E://test1.xls");
 			HSSFWorkbook workbook = new HSSFWorkbook(input);
-			receiveSampleService.generateExcel(workbook, data);
+			//将数据写入流中
+			receiveSampleService.generateExcel(workbook, receiveSample);	
 			response.reset();
-			response.setHeader("Content-disposition", "attachment;filename="+ URLEncoder.encode("1.xls", "UTF-8"));
+			response.setHeader("Content-disposition", "attachment;filename="+ URLEncoder.encode(tempFileName, "UTF-8"));
 			response.setContentType("application/vnd.ms-excel;charset=UTF-8");
 			OutputStream out = response.getOutputStream();
 			workbook.write(out);
 			input.close();
 			out.flush();
 			out.close();
+			//删除缓存模板文件
+			receiveSampleService.deleteFile("E://test1.xls");
 		} catch (Exception e) {
 			logger.error(e+"");
 			return Response.fail(e.getMessage());
-		}		
+		}
 		return Response.success("success");
 	}
 }

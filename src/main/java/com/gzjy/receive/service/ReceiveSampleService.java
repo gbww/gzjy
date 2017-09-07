@@ -213,7 +213,7 @@ public class ReceiveSampleService {
 	 * @param workbook
 	 * @param data
 	 */
-	public void generateExcel(HSSFWorkbook workbook, HashMap<String, String> data) {
+	public void generateExcel(HSSFWorkbook workbook, ReceiveSample data) {
 		HSSFSheet sheet = workbook.getSheetAt(0);
 		Iterator<Row> rows = sheet.rowIterator();
 		while (rows.hasNext()) {			
@@ -245,175 +245,175 @@ public class ReceiveSampleService {
 					break;
 				}				
 				if (value.contains("&reportId")) {
-					cell.setCellValue(data.get("reportId"));
+					cell.setCellValue(data.getReportId());
 				}
 				if (value.contains("&sampleType")) {
-					cell.setCellValue(data.get("sampleType"));
+					cell.setCellValue(data.getSampleType());
 				}
 				if (value.contains("&receiveSampleId")) {
-					cell.setCellValue(data.get("receiveSampleId"));
+					cell.setCellValue(data.getReceiveSampleId());
 				}
 				if (value.contains("&checkType")) {
-					cell.setCellValue(data.get("checkType"));
+					cell.setCellValue(data.getCheckType());
 				}
 				if (value.contains("&reportLayout")) {
-					cell.setCellValue(data.get("reportLayout"));
+					cell.setCellValue(data.getReportLayout());
 				}
 				if (value.contains("&coverLayout")) {
-					cell.setCellValue(data.get("coverLayout"));
+					cell.setCellValue(data.getCoverLayout());
 				}
 				if (value.contains("&sampleType")) {
-					cell.setCellValue(data.get("sampleType"));
+					cell.setCellValue(data.getSampleType());
 				}
 				if (value.contains("&entrustedUnit")) {
-					cell.setCellValue(data.get("entrustedUnit"));
+					cell.setCellValue(data.getEntrustedUnit());
 				}
 				if (value.contains("&entrustedUnitAddress")) {
-					cell.setCellValue(data.get("entrustedUnitAddress"));
+					cell.setCellValue(data.getEntrustedUnitAddress());
 				}
 				if (value.contains("&entrustedUser")) {
-					cell.setCellValue(data.get("entrustedUser"));
+					cell.setCellValue(data.getEntrustedUser());
 				}
 				if (value.contains("&entrustedUserPhone")) {
-					cell.setCellValue(data.get("entrustedUserPhone"));
+					cell.setCellValue(data.getEntrustedUserPhone());
 				}
 				if (value.contains("&entrustedUserEmail")) {
-					cell.setCellValue(data.get("entrustedUserEmail"));
+					cell.setCellValue(data.getEntrustedUserEmail());
 				}
 				if (value.contains("&inspectedUnit")) {
-					cell.setCellValue(data.get("inspectedUnit"));
+					cell.setCellValue(data.getInspectedUnit());
 				}
 				if (value.contains("&inspectedUnitAddress")) {
-					cell.setCellValue(data.get("inspectedUnitAddress"));
+					cell.setCellValue(data.getInspectedUnitAddress());
 				}
 				if (value.contains("&inspectedUser")) {
-					cell.setCellValue(data.get("inspectedUser"));
+					cell.setCellValue(data.getInspectedUser());
 				}
 				if (value.contains("&inspectedUserPhone")) {
-					cell.setCellValue(data.get("inspectedUserPhone"));
+					cell.setCellValue(data.getInspectedUserPhone());
 				}
 				if (value.contains("&inspectedUserEmail")) {
-					cell.setCellValue(data.get("inspectedUserEmail"));
+					cell.setCellValue(data.getInspectedUserEmail());
 				}
 				if (value.contains("&sampleAddress")) {
-					cell.setCellValue(data.get("sampleAddress"));
+					cell.setCellValue(data.getSampleAddress());
 				}
 				if (value.contains("&sampleName")) {
-					cell.setCellValue(data.get("sampleName"));
+					cell.setCellValue(data.getSampleName());
 				}
 				if (value.contains("&sampleLink")) {
-					cell.setCellValue(data.get("sampleLink"));
+					cell.setCellValue(data.getSampleLink());
 				}
 				if (value.contains("&sampleTrademark")) {
-					cell.setCellValue(data.get("sampleTrademark"));
+					cell.setCellValue(data.getSampleTrademark());
 				}
 				if (value.contains("&sampleReportId")) {
-					cell.setCellValue(data.get("sampleReportId"));
+					cell.setCellValue(data.getSampleReportId());
 				}
 				if (value.contains("&sampleCirculate")) {
-					cell.setCellValue(data.get("sampleCirculate"));
+					cell.setCellValue(data.getSampleCirculate());
 				}
 				if (value.contains("&sampleCirculateDate")) {
-					cell.setCellValue(data.get("sampleCirculateDate"));
+					cell.setCellValue(data.getSampleCirculateDate());
 				}
 				if (value.contains("&sampleDate")) {
-					cell.setCellValue(data.get("sampleDate"));
+					cell.setCellValue(data.getSampleDate());
 				}
 				if (value.contains("&sampleWay")) {
-					cell.setCellValue(data.get("sampleWay"));
+					cell.setCellValue(data.getSampleWay());
 				}
 				if (value.contains("&specificationModel")) {
-					cell.setCellValue(data.get("specificationModel"));
+					cell.setCellValue(data.getSpecificationModel());
 				}
 				if (value.contains("&executeStandard")) {
-					cell.setCellValue(data.get("executeStandard"));
+					cell.setCellValue(data.getExecuteStandard());
 				}
 				if (value.contains("&sampleNames")) {
-					cell.setCellValue(data.get("sampleNames"));
+					cell.setCellValue(data.getSampleNames());
 				}
 				if (value.contains("&processingTechnology")) {
-					cell.setCellValue(data.get("processingTechnology"));
+					cell.setCellValue(data.getProcessingTechnology());
 				}
 				if (value.contains("&closedStatus")) {
-					cell.setCellValue(data.get("closedStatus"));
+					cell.setCellValue(data.getClosedStatus());
 				}
 				if (value.contains("&sampleNumber")) {
-					cell.setCellValue(data.get("sampleNumber"));
+					cell.setCellValue(data.getSampleNumber());
 				}
 				if (value.contains("&sampleStatus")) {
-					cell.setCellValue(data.get("sampleStatus"));
+					cell.setCellValue(data.getSampleStatus());
 				}
 				if (value.contains("&sampleBasenumber")) {
-					cell.setCellValue(data.get("sampleBasenumber"));
+					cell.setCellValue(data.getSampleBasenumber());
 				}
 				if (value.contains("&saveWay")) {
-					cell.setCellValue(data.get("saveWay"));
+					cell.setCellValue(data.getSaveWay());
 				}
 				if (value.contains("&productionUnit")) {
-					cell.setCellValue(data.get("productionUnit"));
+					cell.setCellValue(data.getProductionUnit());
 				}
 				if (value.contains("&productionAddress")) {
-					cell.setCellValue(data.get("productionAddress"));
+					cell.setCellValue(data.getProductionAddress());
 				}
 				if (value.contains("&productionUser")) {
-					cell.setCellValue(data.get("productionUser"));
+					cell.setCellValue(data.getProductionUser());
 				}
 				if (value.contains("&productionPhone")) {
-					cell.setCellValue(data.get("productionPhone"));
+					cell.setCellValue(data.getProductionPhone());
 				}
 				if (value.contains("&cost")) {
-					cell.setCellValue(data.get("cost"));
+					cell.setCellValue(data.getCost());
 				}
 				if (value.contains("&remarks")) {
-					cell.setCellValue(data.get("remarks"));
+					cell.setCellValue(data.getRemarks());
 				}
 				if (value.contains("&dataRemarks")) {
-					cell.setCellValue(data.get("dataRemarks"));
+					cell.setCellValue(data.getDataRemarks());
 				}
 				if (value.contains("&responsiblePerson")) {
-					cell.setCellValue(data.get("responsiblePerson"));
+					cell.setCellValue(data.getResponsiblePerson());
 				}
 				if (value.contains("&sampleHolder")) {
-					cell.setCellValue(data.get("sampleHolder"));
+					cell.setCellValue(data.getSampleHolder());
 				}
 				if (value.contains("&receiveUser")) {
-					cell.setCellValue(data.get("receiveUser"));
+					cell.setCellValue(data.getReceiveUser());
 				}
 				if (value.contains("&receiveDate")) {
-					cell.setCellValue(data.get("receiveDate"));
+					cell.setCellValue(data.getReceiveDate()+"");
 				}
 				if (value.contains("&arrangeFinishDate")) {
-					cell.setCellValue(data.get("arrangeFinishDate"));
+					cell.setCellValue(data.getArrangeFinishDate()+"");
 				}
 				if (value.contains("&finishDate")) {
-					cell.setCellValue(data.get("finishDate"));
+					cell.setCellValue(data.getFinishDate()+"");
 				}
 				if (value.contains("&protocolId")) {
-					cell.setCellValue(data.get("protocolId"));
+					cell.setCellValue(data.getProtocolId());
 				}
 				if (value.contains("&subpackage")) {
-					cell.setCellValue(data.get("subpackage"));
+					cell.setCellValue(data.getSubpackage());
 				}
 				if (value.contains("&result")) {
-					cell.setCellValue(data.get("result"));
+					cell.setCellValue(data.getResult());
 				}
 				if (value.contains("&determine")) {
-					cell.setCellValue(data.get("determine"));
+					cell.setCellValue(data.getDetermine());
 				}
 				if (value.contains("&approvalUser")) {
-					cell.setCellValue(data.get("approvalUser"));
+					cell.setCellValue(data.getApprovalUser());
 				}
 				if (value.contains("&examineUser")) {
-					cell.setCellValue(data.get("examineUser"));
+					cell.setCellValue(data.getExamineUser());
 				}
 				if (value.contains("&drawUser")) {
-					cell.setCellValue(data.get("drawUser"));
+					cell.setCellValue(data.getDrawUser());
 				}
 				if (value.contains("&principalInspector")) {
-					cell.setCellValue(data.get("principalInspector"));
+					cell.setCellValue(data.getPrincipalInspector());
 				}
 				if (value.contains("&createdAt")) {
-					cell.setCellValue(data.get("createdAt"));
+					cell.setCellValue(data.getCreatedAt()+"");
 				}
 			}
 		}		
