@@ -236,13 +236,40 @@ public class CheckItemsController {
 	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/item/mapping", method = RequestMethod.POST)
-	public Response getCheckItemListById(@RequestBody CheckItemsCatalogMapping record) {
+	public Response createCheckItemMapping(@RequestBody CheckItemsCatalogMapping record) {
 		if(record.getCatalogId() ==null || record.getCheckItemId()==null) {
 			return Response.fail("Param Invalid");
 		}
 		try {
 			record.setId(ShortUUID.getInstance().generateShortID());
 			checkItemsCatalogMappingService.insert(record);
+			return Response.success("success");
+		}
+		catch (Exception e) {
+			System.out.println(e);
+			return Response.fail(e.getMessage());
+		}
+	}
+	
+	/**
+	 * 批量插入数据到检验项关系表中
+	 * @param record
+	 * @return
+	 */
+	@RequestMapping(value = "/checkitemscatalog/item/mapping/list", method = RequestMethod.POST)
+	public Response getCheckItemListById(@RequestBody List<HashMap<String, String>> records) {
+		if(records ==null || records.size()==0) {			
+			return Response.fail("Param Invalid");
+		}
+		try {
+			for(HashMap<String, String> record: records) {
+				CheckItemsCatalogMapping model = new CheckItemsCatalogMapping();				
+				model.setId(ShortUUID.getInstance().generateShortID());
+				model.setCatalogId(record.get("catalogId"));
+				model.setCheckItemId(record.get("checkItemId"));
+				model.setLaboratory(record.get("laboratory"));
+				checkItemsCatalogMappingService.insert(model);
+			}			
 			return Response.success("success");
 		}
 		catch (Exception e) {
