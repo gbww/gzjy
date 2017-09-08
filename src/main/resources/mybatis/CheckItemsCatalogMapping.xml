@@ -34,8 +34,8 @@
 		insert into check_item_catalog_mapping(id, catalog_id, check_item_id, laboratory)
 		values (
 		#{id,jdbcType=VARCHAR},
-		#{catalog_id,jdbcType=VARCHAR},
-		#{check_item_id,jdbcType=VARCHAR},
+		#{catalogId,jdbcType=VARCHAR},
+		#{checkItemId,jdbcType=VARCHAR},
 		#{laboratory,jdbcType=VARCHAR}		
 		)
   </insert>

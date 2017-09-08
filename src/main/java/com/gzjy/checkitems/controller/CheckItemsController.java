@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.pagehelper.PageInfo;
 import com.gzjy.checkitems.model.CheckItem;
 import com.gzjy.checkitems.model.CheckItemsCatalog;
+import com.gzjy.checkitems.model.CheckItemsCatalogMapping;
 import com.gzjy.checkitems.service.CheckItemService;
 import com.gzjy.checkitems.service.CheckItemsCatalogMappingService;
 import com.gzjy.checkitems.service.CheckItemsCatalogService;
@@ -222,6 +223,27 @@ public class CheckItemsController {
 		try {	
 			List<HashMap<String, Object>> result = checkItemsCatalogMappingService.selectCheckItemsById(catalogId);
 			return Response.success(result);
+		}
+		catch (Exception e) {
+			System.out.println(e);
+			return Response.fail(e.getMessage());
+		}
+	}
+	
+	/**
+	 * 插入数据到检验项关系表中
+	 * @param record
+	 * @return
+	 */
+	@RequestMapping(value = "/checkitemscatalog/item/mapping", method = RequestMethod.POST)
+	public Response getCheckItemListById(@RequestBody CheckItemsCatalogMapping record) {
+		if(record.getCatalogId() ==null || record.getCheckItemId()==null) {
+			return Response.fail("Param Invalid");
+		}
+		try {
+			record.setId(ShortUUID.getInstance().generateShortID());
+			checkItemsCatalogMappingService.insert(record);
+			return Response.success("success");
 		}
 		catch (Exception e) {
 			System.out.println(e);
