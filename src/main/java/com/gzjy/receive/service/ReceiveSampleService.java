@@ -271,175 +271,175 @@ public class ReceiveSampleService {
 					break;
 				}				
 				if (value.contains("&reportId")) {
-					cell.setCellValue(data.getReportId());
+					cell.setCellValue("："+data.getReportId());
 				}
 				if (value.contains("&sampleType")) {
-					cell.setCellValue(data.getSampleType());
+					cell.setCellValue("："+data.getSampleType());
 				}
 				if (value.contains("&receiveSampleId")) {
-					cell.setCellValue(data.getReceiveSampleId());
+					cell.setCellValue("："+data.getReceiveSampleId());
 				}
 				if (value.contains("&checkType")) {
-					cell.setCellValue(data.getCheckType());
+					cell.setCellValue("："+data.getCheckType());
 				}
 				if (value.contains("&reportLayout")) {
-					cell.setCellValue(data.getReportLayout());
+					cell.setCellValue("："+data.getReportLayout());
 				}
 				if (value.contains("&coverLayout")) {
-					cell.setCellValue(data.getCoverLayout());
+					cell.setCellValue("："+data.getCoverLayout());
 				}
 				if (value.contains("&sampleType")) {
-					cell.setCellValue(data.getSampleType());
+					cell.setCellValue("："+data.getSampleType());
 				}
 				if (value.contains("&entrustedUnit")) {
-					cell.setCellValue(data.getEntrustedUnit());
+					cell.setCellValue("："+data.getEntrustedUnit());
 				}
 				if (value.contains("&entrustedUnitAddress")) {
-					cell.setCellValue(data.getEntrustedUnitAddress());
+					cell.setCellValue("："+data.getEntrustedUnitAddress());
 				}
 				if (value.contains("&entrustedUser")) {
-					cell.setCellValue(data.getEntrustedUser());
+					cell.setCellValue("："+data.getEntrustedUser());
 				}
 				if (value.contains("&entrustedUserPhone")) {
-					cell.setCellValue(data.getEntrustedUserPhone());
+					cell.setCellValue("："+data.getEntrustedUserPhone());
 				}
 				if (value.contains("&entrustedUserEmail")) {
-					cell.setCellValue(data.getEntrustedUserEmail());
+					cell.setCellValue("："+data.getEntrustedUserEmail());
 				}
 				if (value.contains("&inspectedUnit")) {
-					cell.setCellValue(data.getInspectedUnit());
+					cell.setCellValue("："+data.getInspectedUnit());
 				}
 				if (value.contains("&inspectedUnitAddress")) {
-					cell.setCellValue(data.getInspectedUnitAddress());
+					cell.setCellValue("："+data.getInspectedUnitAddress());
 				}
 				if (value.contains("&inspectedUser")) {
-					cell.setCellValue(data.getInspectedUser());
+					cell.setCellValue("："+data.getInspectedUser());
 				}
 				if (value.contains("&inspectedUserPhone")) {
-					cell.setCellValue(data.getInspectedUserPhone());
+					cell.setCellValue("："+data.getInspectedUserPhone());
 				}
 				if (value.contains("&inspectedUserEmail")) {
-					cell.setCellValue(data.getInspectedUserEmail());
+					cell.setCellValue("："+data.getInspectedUserEmail());
 				}
 				if (value.contains("&sampleAddress")) {
-					cell.setCellValue(data.getSampleAddress());
+					cell.setCellValue("："+data.getSampleAddress());
 				}
 				if (value.contains("&sampleName")) {
-					cell.setCellValue(data.getSampleName());
+					cell.setCellValue("："+data.getSampleName());
 				}
 				if (value.contains("&sampleLink")) {
-					cell.setCellValue(data.getSampleLink());
+					cell.setCellValue("："+data.getSampleLink());
 				}
 				if (value.contains("&sampleTrademark")) {
-					cell.setCellValue(data.getSampleTrademark());
+					cell.setCellValue("："+data.getSampleTrademark());
 				}
 				if (value.contains("&sampleReportId")) {
-					cell.setCellValue(data.getSampleReportId());
+					cell.setCellValue("："+data.getSampleReportId());
 				}
 				if (value.contains("&sampleCirculate")) {
-					cell.setCellValue(data.getSampleCirculate());
+					cell.setCellValue("："+data.getSampleCirculate());
 				}
 				if (value.contains("&sampleCirculateDate") && data.getSampleCirculateDate()!=null) {
-					cell.setCellValue(formatter.format(data.getSampleCirculateDate()));
+					cell.setCellValue("："+formatter.format(data.getSampleCirculateDate()));
 				}
 				if (value.contains("&sampleDate") && data.getSampleDate()!=null) {
-					cell.setCellValue(formatter.format(data.getSampleDate()));
+					cell.setCellValue("："+formatter.format(data.getSampleDate()));
 				}
 				if (value.contains("&sampleWay")) {
-					cell.setCellValue(data.getSampleWay());
+					cell.setCellValue("："+data.getSampleWay());
 				}
 				if (value.contains("&specificationModel")) {
-					cell.setCellValue(data.getSpecificationModel());
+					cell.setCellValue("："+data.getSpecificationModel());
 				}
 				if (value.contains("&executeStandard")) {
-					cell.setCellValue(data.getExecuteStandard());
+					cell.setCellValue("："+data.getExecuteStandard());
 				}
 				if (value.contains("&sampleNames")) {
-					cell.setCellValue(data.getSampleNames());
+					cell.setCellValue("："+data.getSampleNames());
 				}
 				if (value.contains("&processingTechnology")) {
-					cell.setCellValue(data.getProcessingTechnology());
+					cell.setCellValue("："+data.getProcessingTechnology());
 				}
 				if (value.contains("&closedStatus")) {
-					cell.setCellValue(data.getClosedStatus());
+					cell.setCellValue("："+data.getClosedStatus());
 				}
 				if (value.contains("&sampleNumber")) {
-					cell.setCellValue(data.getSampleNumber());
+					cell.setCellValue("："+data.getSampleNumber());
 				}
 				if (value.contains("&sampleStatus")) {
-					cell.setCellValue(data.getSampleStatus());
+					cell.setCellValue("："+data.getSampleStatus());
 				}
 				if (value.contains("&sampleBasenumber")) {
-					cell.setCellValue(data.getSampleBasenumber());
+					cell.setCellValue("："+data.getSampleBasenumber());
 				}
 				if (value.contains("&saveWay")) {
-					cell.setCellValue(data.getSaveWay());
+					cell.setCellValue("："+data.getSaveWay());
 				}
 				if (value.contains("&productionUnit")) {
-					cell.setCellValue(data.getProductionUnit());
+					cell.setCellValue("："+data.getProductionUnit());
 				}
 				if (value.contains("&productionAddress")) {
-					cell.setCellValue(data.getProductionAddress());
+					cell.setCellValue("："+data.getProductionAddress());
 				}
 				if (value.contains("&productionUser")) {
-					cell.setCellValue(data.getProductionUser());
+					cell.setCellValue("："+data.getProductionUser());
 				}
 				if (value.contains("&productionPhone")) {
-					cell.setCellValue(data.getProductionPhone());
+					cell.setCellValue("："+data.getProductionPhone());
 				}
 				if (value.contains("&cost")) {
-					cell.setCellValue(data.getCost());
+					cell.setCellValue("："+data.getCost());
 				}
 				if (value.contains("&remarks")) {
-					cell.setCellValue(data.getRemarks());
+					cell.setCellValue("："+data.getRemarks());
 				}
 				if (value.contains("&dataRemarks")) {
-					cell.setCellValue(data.getDataRemarks());
+					cell.setCellValue("："+data.getDataRemarks());
 				}
 				if (value.contains("&responsiblePerson")) {
-					cell.setCellValue(data.getResponsiblePerson());
+					cell.setCellValue("："+data.getResponsiblePerson());
 				}
 				if (value.contains("&sampleHolder")) {
-					cell.setCellValue(data.getSampleHolder());
+					cell.setCellValue("："+data.getSampleHolder());
 				}
 				if (value.contains("&receiveUser")) {
-					cell.setCellValue(data.getReceiveUser());
+					cell.setCellValue("："+data.getReceiveUser());
 				}
 				if (value.contains("&receiveDate") && data.getReceiveDate()!=null) {
 					cell.setCellValue(formatter.format(data.getReceiveDate()));
 				}
 				if (value.contains("&arrangeFinishDate") && data.getArrangeFinishDate()!=null) {
-					cell.setCellValue(formatter.format(data.getArrangeFinishDate()));
+					cell.setCellValue("："+formatter.format(data.getArrangeFinishDate()));
 				}
 				if (value.contains("&finishDate") && data.getFinishDate()!=null) {
-					cell.setCellValue(formatter.format(data.getFinishDate()));
+					cell.setCellValue("："+formatter.format(data.getFinishDate()));
 				}
 				if (value.contains("&protocolId")) {
-					cell.setCellValue(data.getProtocolId());
+					cell.setCellValue("："+data.getProtocolId());
 				}
 				if (value.contains("&subpackage")) {
-					cell.setCellValue(data.getSubpackage());
+					cell.setCellValue("："+data.getSubpackage());
 				}
 				if (value.contains("&result")) {
-					cell.setCellValue(data.getResult());
+					cell.setCellValue("："+data.getResult());
 				}
 				if (value.contains("&determine")) {
-					cell.setCellValue(data.getDetermine());
+					cell.setCellValue("："+data.getDetermine());
 				}
 				if (value.contains("&approvalUser")) {
-					cell.setCellValue(data.getApprovalUser());
+					cell.setCellValue("："+data.getApprovalUser());
 				}
 				if (value.contains("&examineUser")) {
-					cell.setCellValue(data.getExamineUser());
+					cell.setCellValue("："+data.getExamineUser());
 				}
 				if (value.contains("&drawUser")) {
-					cell.setCellValue(data.getDrawUser());
+					cell.setCellValue("："+data.getDrawUser());
 				}
 				if (value.contains("&principalInspector")) {
-					cell.setCellValue(data.getPrincipalInspector());
+					cell.setCellValue("："+data.getPrincipalInspector());
 				}
 				if (value.contains("&createdAt")) {
-					cell.setCellValue(data.getCreatedAt()+"");
+					cell.setCellValue("："+data.getCreatedAt()+"");
 				}
 				if (value.contains("&principalInspector")) {
 					addPictureToExcel(workbook, "/var/lib/docs/gzjy/"+signUser.get(data.getApprovalUser()), cell.getRowIndex(), cellIndex);					 
