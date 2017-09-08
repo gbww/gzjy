@@ -8,8 +8,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -216,6 +216,7 @@ public class ReceiveSampleService {
 	public void generateExcel(HSSFWorkbook workbook, ReceiveSample data) {
 		HSSFSheet sheet = workbook.getSheetAt(0);
 		Iterator<Row> rows = sheet.rowIterator();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		while (rows.hasNext()) {			
 			Row row = rows.next();
 			Iterator<Cell> cells = row.iterator();
@@ -313,11 +314,11 @@ public class ReceiveSampleService {
 				if (value.contains("&sampleCirculate")) {
 					cell.setCellValue(data.getSampleCirculate());
 				}
-				if (value.contains("&sampleCirculateDate")) {
-					cell.setCellValue(data.getSampleCirculateDate());
+				if (value.contains("&sampleCirculateDate") && data.getSampleCirculateDate()!=null) {
+					cell.setCellValue(formatter.format(data.getSampleCirculateDate()));
 				}
-				if (value.contains("&sampleDate")) {
-					cell.setCellValue(data.getSampleDate());
+				if (value.contains("&sampleDate") && data.getSampleDate()!=null) {
+					cell.setCellValue(formatter.format(data.getSampleDate()));
 				}
 				if (value.contains("&sampleWay")) {
 					cell.setCellValue(data.getSampleWay());
@@ -379,14 +380,14 @@ public class ReceiveSampleService {
 				if (value.contains("&receiveUser")) {
 					cell.setCellValue(data.getReceiveUser());
 				}
-				if (value.contains("&receiveDate")) {
-					cell.setCellValue(data.getReceiveDate()+"");
+				if (value.contains("&receiveDate") && data.getReceiveDate()!=null) {
+					cell.setCellValue(formatter.format(data.getReceiveDate()));
 				}
-				if (value.contains("&arrangeFinishDate")) {
-					cell.setCellValue(data.getArrangeFinishDate()+"");
+				if (value.contains("&arrangeFinishDate") && data.getArrangeFinishDate()!=null) {
+					cell.setCellValue(formatter.format(data.getArrangeFinishDate()));
 				}
-				if (value.contains("&finishDate")) {
-					cell.setCellValue(data.getFinishDate()+"");
+				if (value.contains("&finishDate") && data.getFinishDate()!=null) {
+					cell.setCellValue(formatter.format(data.getFinishDate()));
 				}
 				if (value.contains("&protocolId")) {
 					cell.setCellValue(data.getProtocolId());
