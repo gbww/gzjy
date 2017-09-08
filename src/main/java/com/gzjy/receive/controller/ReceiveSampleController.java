@@ -42,7 +42,7 @@ import com.gzjy.receive.service.ReceiveSampleService;
  * @updated 2017年9月3日
  */
 @RestController
-@RequestMapping(value = "v1")
+@RequestMapping(value = "v1/ahgz")
 public class ReceiveSampleController {
 	
 	private static Logger logger = LoggerFactory.getLogger(ReceiveSampleService.class);
@@ -54,7 +54,7 @@ public class ReceiveSampleController {
 	private EpicNFSService epicNFSService;
 
 	// 添加接样基本信息
-	@RequestMapping(value = "/receiveSample", method = RequestMethod.POST)
+	@RequestMapping(value = "/sample", method = RequestMethod.POST)
 	public Response addSample(@Validated(value = { Add.class }) @RequestBody ReceiveSample receiveSample,
 			BindingResult result) {
 		if (result.hasErrors()) {
@@ -68,8 +68,8 @@ public class ReceiveSampleController {
 	}
 
 	// 变更接样中检验项基本信息（添加检验项和编辑检验项）
-	@RequestMapping(value = "/receivesampleitem/{receivesampleid}", method = RequestMethod.POST)
-	public Response addItem(@PathVariable("receivesampleid") String receiveSample,
+	@RequestMapping(value = "/sample/item/{receiveSampleId}", method = RequestMethod.POST)
+	public Response addItem(@PathVariable("receiveSampleId") String receiveSample,
 			@Validated(value = { Add.class }) @RequestBody List<ReceiveSampleItem> items, BindingResult result) {
 		if (result.hasErrors()) {
 			return Response.fail(result.getFieldError().getDefaultMessage());
@@ -85,7 +85,7 @@ public class ReceiveSampleController {
 	}
 
 	// 删除接样单（包括接样单中的检验项）
-	@RequestMapping(value = "/receivesampleitem/", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/sample/item/", method = RequestMethod.DELETE)
 	public Response deleteSample(@Validated(value = { Add.class }) @RequestBody List<String> ids,
 			BindingResult result) {
 		String record = null;
@@ -103,8 +103,8 @@ public class ReceiveSampleController {
 	}
 
 	// 删除接样中检验项基本信息（删除检验项时直接调用后台接口删除）
-	@RequestMapping(value = "/receivesampleitem/{receivesampleid}", method = RequestMethod.DELETE)
-	public Response deleteItem(@PathVariable("receivesampleid") String receiveSample, @RequestBody List<String> items,
+	@RequestMapping(value = "/sample/item/{receiveSampleId}", method = RequestMethod.DELETE)
+	public Response deleteItem(@PathVariable("receiveSampleId") String receiveSample, @RequestBody List<String> items,
 			BindingResult result) {
 		if (result.hasErrors()) {
 			return Response.fail(result.getFieldError().getDefaultMessage());
@@ -114,7 +114,7 @@ public class ReceiveSampleController {
 	}
 
 	// 更新接样基本信息
-	@RequestMapping(value = "/receiveSample", method = RequestMethod.PUT)
+	@RequestMapping(value = "/sample", method = RequestMethod.PUT)
 	public Response updateSample(@Validated(value = { Add.class }) @RequestBody ReceiveSample receiveSample,
 			BindingResult result) {
 		if (result.hasErrors()) {
@@ -128,7 +128,7 @@ public class ReceiveSampleController {
 	}
 
 	// 查询接样信息
-	@RequestMapping(value = "/receiveSample", method = RequestMethod.GET)
+	@RequestMapping(value = "/sample", method = RequestMethod.GET)
 	public Response list(@RequestParam(name = "receivesampleid", required = false) String id,
 			@RequestParam(name = "entrustedunit", required = false) String entrustedUnit,
 			@RequestParam(name = "order", required = false) String order,
@@ -150,21 +150,21 @@ public class ReceiveSampleController {
 	}
 
 	// 根据ID获取接样信息
-	@RequestMapping(value = "/receiveSample/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/sample/{id}", method = RequestMethod.GET)
 	public Response getReceiveSample(@PathVariable(name = "id") String id) {
 
 		return Response.success(receiveSampleService.getReceiveSample(id));
 	}
 
 	// 根据接样ID获得接样对应的检验项信息
-	@RequestMapping(value = "/receiveSample/sampleItems/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/sample/items/{id}", method = RequestMethod.GET)
 	public Response getItems(@PathVariable(name = "id") String id) {
 
 		return Response.success(receiveSampleService.getItemsByReceiveSampleId(id));
 	}
 
 	// 根据ID获得单个检验项信息
-	@RequestMapping(value = "/receiveSample/sampleItems/item/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/sample/items/item/{id}", method = RequestMethod.GET)
 	public Response getItem(@PathVariable(name = "id") String itemId) {
 
 		return Response.success(receiveSampleService.getItem(itemId));
@@ -177,24 +177,31 @@ public class ReceiveSampleController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value = "/receiveSample/sampleItems/excel/{id}", method = RequestMethod.GET)
-	public Response getExcel(HttpServletResponse response, @PathVariable(name = "id") String id) {
+	@RequestMapping(value = "/sample/items/excel/{id}", method = RequestMethod.GET)
+	public Response getExcel(HttpServletResponse response, @PathVariable(name = "id") String id,
+			@RequestParam(required = true) String templateFileName) {
 		EpicNFSClient client = epicNFSService.getClient("gzjy");
 		//生成临时模板excel文件
 		String tempFileName = ShortUUID.getInstance().generateShortID()+".xls";
 		//建立远程存放excel模板文件目录
 		if (!client.hasRemoteDir("temp")) {
-			client.createRemoteDir("temp");        
+			client.createRemoteDir("temp");
 		}
+		//服务器模板文件存放目录
+		String serverTemplatePath = "/var/lib/docs/gzjy/template/";
+		//根据接口参数得到服务器模板文件的实际路径
+		String serverTemplateFile = serverTemplatePath + templateFileName;
+		//建立服务器缓存模板文件
+		String tempFile = "/var/lib/docs/gzjy/temp/"+tempFileName;
 		try {
 			//将模板文件复制到缓存文件
-			receiveSampleService.copyFile("D://test1.xls", "E://test1.xls");
+			receiveSampleService.copyFile(serverTemplateFile, tempFile);
 			//获取报告数据
-			ReceiveSample receiveSample = receiveSampleService.getReceiveSample(id);		
-			InputStream input = new FileInputStream("E://test1.xls");
+			ReceiveSample receiveSample = receiveSampleService.getReceiveSample(id);
+			InputStream input = new FileInputStream(tempFile);
 			HSSFWorkbook workbook = new HSSFWorkbook(input);
 			//将数据写入流中
-			receiveSampleService.generateExcel(workbook, receiveSample);	
+			receiveSampleService.generateExcel(workbook, receiveSample);
 			response.reset();
 			response.setHeader("Content-disposition", "attachment;filename="+ URLEncoder.encode(tempFileName, "UTF-8"));
 			response.setContentType("application/vnd.ms-excel;charset=UTF-8");
@@ -204,7 +211,7 @@ public class ReceiveSampleController {
 			out.flush();
 			out.close();
 			//删除缓存模板文件
-			receiveSampleService.deleteFile("E://test1.xls");
+			receiveSampleService.deleteFile(tempFile);
 		} catch (Exception e) {
 			logger.error(e+"");
 			return Response.fail(e.getMessage());
