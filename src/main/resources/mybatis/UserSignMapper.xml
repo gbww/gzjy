@@ -17,6 +17,15 @@
     from user_sign
     where id = #{id,jdbcType=VARCHAR}
   </select>
+  
+  <select id="getSignList" resultType="hashmap" parameterType="java.util.List" >
+    select id, path from user_sign where id in
+    <foreach collection="userIdList" item="userId" index="index"
+            open="(" close=")" separator=",">
+            #{userId}
+    </foreach>
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from user_sign
     where id = #{id,jdbcType=VARCHAR}

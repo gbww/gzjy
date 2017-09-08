@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,6 +144,10 @@ public UserSign upload(MultipartFile file) throws IOException {
         }
         return sign;
         
+    }
+    
+    public List<HashMap<String, String>> getUserSignList(ArrayList<String> userIdList) {
+    	return fileMapper.getSignList(userIdList);       
     }
 
 }

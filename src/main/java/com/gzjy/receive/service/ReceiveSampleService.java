@@ -4,21 +4,30 @@
  */
 package com.gzjy.receive.service;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
+import org.apache.poi.hssf.usermodel.HSSFPatriarch;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.ClientAnchor.AnchorType;
 import org.apache.poi.ss.usermodel.Row;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +44,7 @@ import com.gzjy.receive.mapper.ReceiveSampleItemMapper;
 import com.gzjy.receive.mapper.ReceiveSampleMapper;
 import com.gzjy.receive.model.ReceiveSample;
 import com.gzjy.receive.model.ReceiveSampleItem;
+import com.gzjy.user.mapper.UserSignMapper;
 
 /**
  * @author xuewenlong@cmss.chinamobile.com
@@ -48,7 +58,9 @@ public class ReceiveSampleService {
 	private ReceiveSampleMapper receiveSampleMapper;
 	@Autowired
 	private ReceiveSampleItemMapper receiveSampleItemMapper;
-
+	@Autowired
+	private UserSignMapper userSignMapper;
+	
 	@Transactional
 	public Boolean addReceiveSample(ReceiveSample record) {
 		if (StringUtils.isBlank(record.getReceiveSampleId())) {
@@ -212,15 +224,28 @@ public class ReceiveSampleService {
 	 * 处理excel
 	 * @param workbook
 	 * @param data
+	 * @throws IOException 
 	 */
-	public void generateExcel(HSSFWorkbook workbook, ReceiveSample data) {
+	public void generateExcel(HSSFWorkbook workbook, ReceiveSample data) throws IOException {
 		HSSFSheet sheet = workbook.getSheetAt(0);
-		Iterator<Row> rows = sheet.rowIterator();
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		while (rows.hasNext()) {			
-			Row row = rows.next();
+		Iterator<Row> rows = sheet.rowIterator();	
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		ArrayList <String> userIdList = new ArrayList<String>();
+		userIdList.add(data.getExamineUser());
+		userIdList.add(data.getApprovalUser());
+		userIdList.add(data.getPrincipalInspector());
+		//通过接口查询到报告中涉及到用户电子签名的路径
+		List<HashMap<String, String>> signList = userSignMapper.getSignList(userIdList);
+		HashMap<String, String> signUser = new HashMap<String, String>();
+		for(HashMap<String, String> temp: signList) {
+			signUser.put(temp.get("id"), temp.get("path"));
+		}
+		while (rows.hasNext()) {
+			Row row = rows.next();			
 			Iterator<Cell> cells = row.iterator();
+			int cellIndex = -1;
 			while (cells.hasNext()) {
+				cellIndex +=1;
 				Cell cell = cells.next();				
 				String value = null;
 				switch (cell.getCellType()) {
@@ -416,7 +441,28 @@ public class ReceiveSampleService {
 				if (value.contains("&createdAt")) {
 					cell.setCellValue(data.getCreatedAt()+"");
 				}
+				if (value.contains("&principalInspector")) {
+					addPictureToExcel(workbook, "/var/lib/docs/gzjy/"+signUser.get(data.getApprovalUser()), cell.getRowIndex(), cellIndex);					 
+				}
+				if (value.contains("&examineUser")) {
+					addPictureToExcel(workbook, "/var/lib/docs/gzjy/sign/zhuleilei.png", cell.getRowIndex(), cellIndex);					 
+				}
+				if (value.contains("&approvalUser")) {
+					addPictureToExcel(workbook, "/var/lib/docs/gzjy/sign/zhuleilei.png", cell.getRowIndex(), cellIndex);					 
+				}
 			}
-		}		
+		}
+	}
+
+	private void addPictureToExcel(HSSFWorkbook workbook, String filePath, int rowIndex, int cellIndex) throws IOException {
+		BufferedImage bufferImg = null;
+		ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();     
+        bufferImg = ImageIO.read(new File(filePath));
+        ImageIO.write(bufferImg, "png", byteArrayOut);
+        HSSFPatriarch patriarch = workbook.getSheetAt(0).createDrawingPatriarch();
+        HSSFClientAnchor anchor = new HSSFClientAnchor(rowIndex, cellIndex,rowIndex+1, cellIndex+1, 
+        		(short)(cellIndex), rowIndex, (short) (cellIndex+1), rowIndex+1);
+        anchor.setAnchorType(AnchorType.DONT_MOVE_AND_RESIZE);
+        patriarch.createPicture(anchor, workbook.addPicture(byteArrayOut.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG)); 
 	}
 }
