@@ -250,4 +250,21 @@ public class CheckItemsController {
 			return Response.fail(e.getMessage());
 		}
 	}
+	
+	/**
+	 * 删除检验项关系表中数据
+	 * @param record
+	 * @return
+	 */
+	@RequestMapping(value = "/checkitemscatalog/item/mapping/{id}", method = RequestMethod.DELETE)
+	public Response deleteCheckItemListById(@PathVariable String id) {		
+		try {
+			checkItemsCatalogMappingService.deleteByPrimaryKey(id);
+			return Response.success("success");
+		}
+		catch (Exception e) {
+			System.out.println(e);
+			return Response.fail(e.getMessage());
+		}
+	}
 }
