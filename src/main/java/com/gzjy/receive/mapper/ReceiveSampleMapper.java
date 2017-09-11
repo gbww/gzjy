@@ -21,7 +21,7 @@ public interface ReceiveSampleMapper {
 
     int updateByPrimaryKey(ReceiveSample record);
     
-    List<ReceiveSample> selectAll(@Param("filter") Map<String, Object> filter,@Param("order")String order);
+    List<ReceiveSample> selectAll(@Param("filter") Map<String, Object> filter,@Param("status")Integer status,@Param("order")String order);
     
     
 }

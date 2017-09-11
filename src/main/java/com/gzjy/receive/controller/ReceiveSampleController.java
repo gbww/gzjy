@@ -132,6 +132,7 @@ public class ReceiveSampleController {
 	public Response list(@RequestParam(name = "receivesampleid", required = false) String id,
 			@RequestParam(name = "entrustedunit", required = false) String entrustedUnit,
 			@RequestParam(name = "order", required = false) String order,
+			@RequestParam(name = "status",defaultValue = "5") int status,
 			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
 			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 		Map<String, Object> filter = new HashMap<String, Object>();
@@ -146,7 +147,7 @@ public class ReceiveSampleController {
 			orderby = "created_at desc";
 		}
 
-		return Response.success(receiveSampleService.select(pageNum, pageSize, orderby, filter));
+		return Response.success(receiveSampleService.select(pageNum, pageSize, orderby, status, filter));
 	}
 
 	// 根据ID获取接样信息
@@ -169,6 +170,15 @@ public class ReceiveSampleController {
 
 		return Response.success(receiveSampleService.getItem(itemId));
 	}
+	// 设置报告状态
+    @RequestMapping(value = "/sample/status/{receivesampleid}", method = RequestMethod.PUT)
+    public Response setSampleStatus(@PathVariable(name = "receivesampleid") String receiveSampleId,@RequestBody Integer status) {
+
+        return Response.success(receiveSampleService.setStatus(receiveSampleId, status));
+    }
+	
+	
+	
 	
 	
 	/**

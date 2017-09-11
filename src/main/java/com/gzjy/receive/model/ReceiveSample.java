@@ -122,6 +122,8 @@ public class ReceiveSample {
     private String drawUser;
     //主检人
     private String principalInspector;
+    //报告状态(0:未进行检验项分配，1：检验项分配完成，2：检验项实验员完成实验录入，3：抽样报告完成)5作为查询时判断是否是全部查询的判断
+    private Integer status;
     //创建时间
     private Date createdAt;
 
@@ -571,6 +573,15 @@ public class ReceiveSample {
 
     public void setPrincipalInspector(String principalInspector) {
         this.principalInspector = principalInspector == null ? null : principalInspector.trim();
+    }
+    
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Date getCreatedAt() {

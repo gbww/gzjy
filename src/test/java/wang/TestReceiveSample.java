@@ -61,8 +61,8 @@ public class TestReceiveSample {
     @Test
     public void selectAll() throws Exception {
         Map<String, Object> filter=new HashMap<String, Object>();
-        filter.put("check_type", "抽检");
-        service.select(1, 10, null, filter);
+        //filter.put("check_type", "抽检");
+        service.select(1, 10, null,5, filter);
     }
     
     @Test

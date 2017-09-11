@@ -134,15 +134,14 @@ public class ReceiveSampleService {
 	}
 
 	@Transactional
-	public PageInfo<ReceiveSample> select(Integer pageNum, Integer pageSize, String order, Map<String, Object> filter) {
+	public PageInfo<ReceiveSample> select(Integer pageNum, Integer pageSize, String order, Integer status,Map<String, Object> filter) {
 
 		List<ReceiveSample> list = new ArrayList<ReceiveSample>();
 		PageInfo<ReceiveSample> pages = new PageInfo<ReceiveSample>(list);
-		;
 		pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
 			@Override
 			public void doSelect() {
-				receiveSampleMapper.selectAll(filter, order);
+				receiveSampleMapper.selectAll(filter, status,order);
 			}
 		});
 		return pages;
@@ -178,6 +177,18 @@ public class ReceiveSampleService {
 		}
 
 	}
+	public Boolean setStatus(String receiveSampleId,Integer status) {
+	    ReceiveSample record=new ReceiveSample();
+	    record.setReceiveSampleId(receiveSampleId);
+	    record.setStatus(status);
+	    int resoult=receiveSampleMapper.updateByPrimaryKeySelective(record);
+	    if(resoult==1) {
+	        return true;
+	    }
+	    else
+        return false;
+
+    }
 	
 	/**
 	 * 复制文件

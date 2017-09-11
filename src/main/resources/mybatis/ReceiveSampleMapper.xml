@@ -58,6 +58,7 @@
     <result column="examine_user" property="examineUser" jdbcType="VARCHAR" />
     <result column="draw_user" property="drawUser" jdbcType="VARCHAR" />
     <result column="principal_inspector" property="principalInspector" jdbcType="VARCHAR" />
+     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
@@ -70,7 +71,7 @@
     sample_number, sample_status, sample_basenumber, save_way, production_unit, production_address, 
     production_user, production_phone, cost, remarks, data_remarks, responsible_person, 
     sample_holder, receive_user, receive_date, arrange_finish_date, finish_date, protocol_id, 
-    subpackage, result, determine, approval_user, examine_user, draw_user, principal_inspector, 
+    subpackage, result, determine, approval_user, examine_user, draw_user, principal_inspector, status,
     created_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
@@ -89,10 +90,18 @@
     <where>
     	<foreach collection="filter.keys" item="key" separator="and">
     	    <if test="null!=filter[key]">
-    	    ${key} = #{filter[${key}]}
+    	    ${key} LIKE  #{filter[${key}]}
     	    </if>				
 		</foreach>
+		 <choose>
+        <when test="5!=status and null!=status">
+             status = #{status}
+        </when>
+        <otherwise>
+        </otherwise>
+    </choose>
     </where>
+  
     <choose>
         <when test="null!=order">
             order by ${order}
@@ -128,7 +137,7 @@
       finish_date, protocol_id, subpackage, 
       result, determine, approval_user, 
       examine_user, draw_user, principal_inspector, 
-      created_at)
+      status,created_at)
     values (#{receiveSampleId,jdbcType=CHAR}, #{reportId,jdbcType=CHAR}, #{reportPageNumber,jdbcType=INTEGER}, 
       #{sampleType,jdbcType=VARCHAR}, #{checkType,jdbcType=VARCHAR}, #{reportLayout,jdbcType=VARCHAR}, 
       #{coverLayout,jdbcType=VARCHAR}, #{entrustedUnit,jdbcType=VARCHAR}, #{entrustedUnitAddress,jdbcType=VARCHAR}, 
@@ -148,7 +157,7 @@
       #{finishDate,jdbcType=TIMESTAMP}, #{protocolId,jdbcType=VARCHAR}, #{subpackage,jdbcType=VARCHAR}, 
       #{result,jdbcType=VARCHAR}, #{determine,jdbcType=VARCHAR}, #{approvalUser,jdbcType=VARCHAR}, 
       #{examineUser,jdbcType=VARCHAR}, #{drawUser,jdbcType=VARCHAR}, #{principalInspector,jdbcType=VARCHAR}, 
-      #{createdAt,jdbcType=TIMESTAMP})
+      #{status,jdbcType=INTEGER},#{createdAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.gzjy.receive.model.ReceiveSample" >
     insert into receive_sample
@@ -320,6 +329,9 @@
       </if>
       <if test="principalInspector != null" >
         principal_inspector,
+      </if>
+      <if test="status !=null">
+      status,
       </if>
       <if test="createdAt != null" >
         created_at,
@@ -494,6 +506,9 @@
       <if test="principalInspector != null" >
         #{principalInspector,jdbcType=VARCHAR},
       </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
       <if test="createdAt != null" >
         #{createdAt,jdbcType=TIMESTAMP},
       </if>
@@ -667,6 +682,9 @@
       <if test="principalInspector != null" >
         principal_inspector = #{principalInspector,jdbcType=VARCHAR},
       </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
       <if test="createdAt != null" >
         created_at = #{createdAt,jdbcType=TIMESTAMP},
       </if>
@@ -730,6 +748,7 @@
       examine_user = #{examineUser,jdbcType=VARCHAR},
       draw_user = #{drawUser,jdbcType=VARCHAR},
       principal_inspector = #{principalInspector,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
       created_at = #{createdAt,jdbcType=TIMESTAMP}
     where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}
   </update>
