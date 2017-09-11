@@ -44,7 +44,9 @@ import com.gzjy.receive.mapper.ReceiveSampleItemMapper;
 import com.gzjy.receive.mapper.ReceiveSampleMapper;
 import com.gzjy.receive.model.ReceiveSample;
 import com.gzjy.receive.model.ReceiveSampleItem;
+import com.gzjy.user.UserService;
 import com.gzjy.user.mapper.UserSignMapper;
+import com.gzjy.user.model.User;
 
 /**
  * @author xuewenlong@cmss.chinamobile.com
@@ -58,8 +60,11 @@ public class ReceiveSampleService {
 	private ReceiveSampleMapper receiveSampleMapper;
 	@Autowired
 	private ReceiveSampleItemMapper receiveSampleItemMapper;
+	
 	@Autowired
 	private UserSignMapper userSignMapper;
+	@Autowired
+    private UserService userClient;
 	
 	@Transactional
 	public Boolean addReceiveSample(ReceiveSample record) {
@@ -146,6 +151,22 @@ public class ReceiveSampleService {
 		});
 		return pages;
 	}
+	
+	
+    public PageInfo<ReceiveSampleItem> selectCurrentUserItems(Integer pageNum, Integer pageSize, Integer status,Map<String, Object> filter) {
+        User u=userClient.getCurrentUser();
+        String name=u.getName();
+        filter.put("test_user", name);
+        List<ReceiveSampleItem> list = new ArrayList<ReceiveSampleItem>();
+        PageInfo<ReceiveSampleItem> pages = new PageInfo<ReceiveSampleItem>(list);
+        pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
+            @Override
+            public void doSelect() {
+                receiveSampleItemMapper.selectByUser(filter, status);
+            }
+        });
+        return pages;
+    }
 
 	public ReceiveSample getReceiveSample(String id) {
 
@@ -189,6 +210,7 @@ public class ReceiveSampleService {
         return false;
 
     }
+
 	
 	/**
 	 * 复制文件

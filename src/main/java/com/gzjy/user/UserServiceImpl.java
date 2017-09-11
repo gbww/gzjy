@@ -143,11 +143,8 @@ public class UserServiceImpl implements UserService {
     match(organizationId, null, user);
     if (usernameExist(user.getUsername())) throw new BizException("该用户名已经存在，请使用其他名称");
     // if (emailExist(user.getEmail())) throw new BizException("该邮箱已经存在，请使用其他邮箱");
-    // if (phoneExist(user.getPhone())) throw new BizException("该手机号已经存在，请使用其他联系方式");
+     if (nameExist(user.getName())) throw new BizException("该用户名姓名已经存在");
     String roleId = user.getRoleId();
-    User u = getCurrentUser();
-    Role role = u.getRole();
-
     user.setId(UUID.random());
     user.setRoleId(roleId);
     user.setOrganizationId(organizationId);
@@ -324,6 +321,12 @@ public class UserServiceImpl implements UserService {
   public boolean usernameExist(String username) {
     return userMapper.selectByUsername(username) == null ? false : true;
   }
+  
+  @Override
+  public boolean nameExist(String name) {
+    return userMapper.selectByName(name) == null ? false : true;
+  }
+  
 
   @Override
   public boolean emailExist(String email) {

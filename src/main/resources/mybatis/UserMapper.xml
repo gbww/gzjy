@@ -97,6 +97,18 @@
 		where
 		users.username = #{username,jdbcType=CHAR} and users.state != -1
 	</select>
+	
+	<select id="selectByName" parameterType="java.lang.String"
+		resultMap="DetailResultMap">
+		select
+		<include refid="Full_Column_List" />
+		from users
+		left join organizations on users.organization_id =
+		organizations.id
+		left join roles on users.role_id = roles.id
+		where
+		users.name = #{name,jdbcType=CHAR} and users.state != -1
+	</select>
 
 	<select id="selectByEmail" parameterType="java.lang.String"
 		resultMap="DetailResultMap">

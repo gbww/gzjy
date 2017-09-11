@@ -112,6 +112,13 @@ public interface UserService {
    * @return
    */
   boolean usernameExist(String username);
+  /**
+   * 
+   * @param name
+   * @return
+   * UserService.java
+   */
+  boolean nameExist(String name);
   
   /**
    * 判断email是否存在

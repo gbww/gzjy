@@ -117,6 +117,13 @@ public interface UserMapper {
    * @return 用户记录
    */
   User selectByUsername(String username);
+  /**
+   * 通过中文名称查询
+   * @param name
+   * @return
+   * UserMapper.java
+   */
+  User selectByName(String name);
   
   /**
    * 通过邮箱查询

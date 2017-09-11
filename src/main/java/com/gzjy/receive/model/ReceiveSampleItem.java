@@ -1,5 +1,7 @@
 package com.gzjy.receive.model;
 
+import java.util.Date;
+
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class ReceiveSampleItem {
@@ -36,6 +38,11 @@ public class ReceiveSampleItem {
     private String measuredValue;
     //检验员
     private String testUser;
+    //检验项状态
+    private Integer status;
+    //更新时间
+    private Date updatedAt;
+    
 
     public String getId() {
         return id;
@@ -156,4 +163,21 @@ public class ReceiveSampleItem {
     public void setTestUser(String testUser) {
         this.testUser = testUser == null ? null : testUser.trim();
     }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+    
 }

@@ -176,6 +176,18 @@ public class ReceiveSampleController {
 
         return Response.success(receiveSampleService.setStatus(receiveSampleId, status));
     }
+    
+ // 查询接样信息
+    @RequestMapping(value = "/sample", method = RequestMethod.GET)
+    public Response listItemByCurrentUser(          
+            @RequestParam(name = "status",defaultValue = "0") int status,
+            @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
+            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+        Map<String, Object> filter = new HashMap<String, Object>();
+
+        return Response.success(receiveSampleService.selectCurrentUserItems(pageNum, pageSize, status, filter));
+    }
+    
 	
 	
 	

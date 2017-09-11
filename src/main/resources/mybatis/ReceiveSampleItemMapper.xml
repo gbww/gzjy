@@ -17,10 +17,12 @@
     <result column="item_result" property="itemResult" jdbcType="VARCHAR" />
     <result column="measured_value" property="measuredValue" jdbcType="VARCHAR" />
     <result column="test_user" property="testUser" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+     <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, receive_sample_id, name, method, unit, standard_value, detection_limit, quantitation_limit, 
-    device, default_price, test_room, subpackage, item_result, measured_value, test_user
+    device, default_price, test_room, subpackage, item_result, measured_value, test_user,status,updated_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -28,6 +30,29 @@
     from receive_sample_item
     where id = #{id,jdbcType=CHAR}
   </select>
+   <!--  查询授予当前用户的检验项列表 -->
+   <select id="selectByUser" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from receive_sample_item
+       <where>
+    	<foreach collection="filter.keys" item="key" separator="and">
+    	    <if test="null!=filter[key]">
+    	    ${key} =  #{filter[${key}]}
+    	    </if>				
+		</foreach>
+		 <choose>
+        <when test="5!=status and null!=status">
+             status = #{status}
+        </when>
+        <otherwise>
+        </otherwise>
+    </choose>
+    </where>
+    order by updated_at desc;
+  </select>
+  
+  
   
   <select id="selectByReceiveSampleId" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -50,13 +75,14 @@
       method, unit, standard_value, 
       detection_limit, quantitation_limit, device, 
       default_price, test_room, subpackage, 
-      item_result, measured_value, test_user
+      item_result, measured_value, test_user,status,updated_at
       )
     values (#{id,jdbcType=CHAR}, #{receiveSampleId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{method,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, #{standardValue,jdbcType=VARCHAR}, 
       #{detectionLimit,jdbcType=VARCHAR}, #{quantitationLimit,jdbcType=VARCHAR}, #{device,jdbcType=VARCHAR}, 
       #{defaultPrice,jdbcType=DOUBLE}, #{testRoom,jdbcType=VARCHAR}, #{subpackage,jdbcType=VARCHAR}, 
-      #{itemResult,jdbcType=VARCHAR}, #{measuredValue,jdbcType=VARCHAR}, #{testUser,jdbcType=VARCHAR}
+      #{itemResult,jdbcType=VARCHAR}, #{measuredValue,jdbcType=VARCHAR}, #{testUser,jdbcType=VARCHAR},
+      #{status,jdbcType=INTEGER},#{updatedAt,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.gzjy.receive.model.ReceiveSampleItem" >
@@ -107,6 +133,12 @@
       <if test="testUser != null" >
         test_user,
       </if>
+      <if test="status != null">
+      status,
+      </if>
+      <if test="updatedAt != null">
+      updated_at,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -153,6 +185,12 @@
       </if>
       <if test="testUser != null" >
         #{testUser,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="updatedAt != null" >
+        #{updatedAt,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -201,6 +239,12 @@
       <if test="testUser != null" >
         test_user = #{testUser,jdbcType=VARCHAR},
       </if>
+      <if test="status != null" >
+       status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="updatedAt != null" >
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=CHAR}
   </update>
@@ -219,7 +263,9 @@
       subpackage = #{subpackage,jdbcType=VARCHAR},
       item_result = #{itemResult,jdbcType=VARCHAR},
       measured_value = #{measuredValue,jdbcType=VARCHAR},
-      test_user = #{testUser,jdbcType=VARCHAR}
+      test_user = #{testUser,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},      
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=CHAR}
   </update>
 </mapper>
