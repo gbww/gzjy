@@ -177,8 +177,8 @@ public class ReceiveSampleController {
         return Response.success(receiveSampleService.setStatus(receiveSampleId, status));
     }
     
- // 查询接样信息
-    @RequestMapping(value = "/sample", method = RequestMethod.GET)
+ // 查询当前用户检验项信息
+    @RequestMapping(value = "/sampleItem", method = RequestMethod.GET)
     public Response listItemByCurrentUser(          
             @RequestParam(name = "status",defaultValue = "0") int status,
             @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
