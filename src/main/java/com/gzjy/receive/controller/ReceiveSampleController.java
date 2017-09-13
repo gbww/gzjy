@@ -29,8 +29,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gzjy.common.Add;
+import com.gzjy.common.Delete;
 import com.gzjy.common.Response;
 import com.gzjy.common.ShortUUID;
+import com.gzjy.common.Update;
 import com.gzjy.common.util.fs.EpicNFSClient;
 import com.gzjy.common.util.fs.EpicNFSService;
 import com.gzjy.receive.model.ReceiveSample;
@@ -85,8 +87,8 @@ public class ReceiveSampleController {
 	}
 
 	// 删除接样单（包括接样单中的检验项）
-	@RequestMapping(value = "/sample/item/", method = RequestMethod.DELETE)
-	public Response deleteSample(@Validated(value = { Add.class }) @RequestBody List<String> ids,
+	@RequestMapping(value = "/sample/items", method = RequestMethod.PUT)
+	public Response deleteSample( @RequestBody List<String> ids,
 			BindingResult result) {
 		String record = null;
 		if (result.hasErrors()) {
@@ -103,7 +105,7 @@ public class ReceiveSampleController {
 	}
 
 	// 删除接样中检验项基本信息（删除检验项时直接调用后台接口删除）
-	@RequestMapping(value = "/sample/item/{receiveSampleId}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/sample/item/{receiveSampleId}", method = RequestMethod.PUT)
 	public Response deleteItem(@PathVariable("receiveSampleId") String receiveSample, @RequestBody List<String> items,
 			BindingResult result) {
 		if (result.hasErrors()) {
@@ -115,7 +117,7 @@ public class ReceiveSampleController {
 
 	// 更新接样基本信息
 	@RequestMapping(value = "/sample", method = RequestMethod.PUT)
-	public Response updateSample(@Validated(value = { Add.class }) @RequestBody ReceiveSample receiveSample,
+	public Response updateSample(@Validated(value = { Update.class }) @RequestBody ReceiveSample receiveSample,
 			BindingResult result) {
 		if (result.hasErrors()) {
 			return Response.fail(result.getFieldError().getDefaultMessage());
