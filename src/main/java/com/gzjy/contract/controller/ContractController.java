@@ -160,6 +160,7 @@ public class ContractController {
 				contractTask.setName(task.getName());
 				contractTask.setAssignee(task.getAssignee());
 				contractTask.setCreateTime(task.getCreateTime());
+				contractTask.setProcessInstanceId(task.getProcessInstanceId());
 				taskList.add(contractTask);
 			}
 			return Response.success(taskList);

@@ -8,6 +8,7 @@ public class ContractTask {
     private Date createTime;
     private String executionId;
     private String name;
+    private String processInstanceId;
 	public String getId() {
 		return id;
 	}
@@ -37,6 +38,12 @@ public class ContractTask {
 	}
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+	public String getProcessInstanceId() {
+		return processInstanceId;
+	}
+	public void setProcessInstanceId(String processInstanceId) {
+		this.processInstanceId = processInstanceId;
 	}
     
 }
