@@ -317,8 +317,7 @@ public class ReceiveSampleService {
 				}
 				if(value.indexOf("&") ==0) {
 					String key = value.substring(1);
-					if(key.contains("Date")) {
-						System.out.println("key=" +key);
+					if(key.contains("Date")) {						
 						cell.setCellValue(formatter.format(mapdata.get(key)));
 					}else {
 						cell.setCellValue(mapdata.get(key)+"");
