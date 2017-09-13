@@ -87,7 +87,7 @@ public class ReceiveSampleController {
 	}
 
 	// 删除接样单（包括接样单中的检验项）
-	@RequestMapping(value = "/sample/items", method = RequestMethod.POST)
+	@RequestMapping(value = "/sample/delete", method = RequestMethod.POST)
 	public Response deleteSample( @RequestBody List<String> ids,
 			BindingResult result) {
 		String record = null;
@@ -105,7 +105,7 @@ public class ReceiveSampleController {
 	}
 
 	// 删除接样中检验项基本信息（删除检验项时直接调用后台接口删除）
-	@RequestMapping(value = "/sample/item/{receiveSampleId}", method = RequestMethod.POST)
+	@RequestMapping(value = "/sample/items/{receiveSampleId}/delete", method = RequestMethod.POST)
 	public Response deleteItem(@PathVariable("receiveSampleId") String receiveSample, @RequestBody List<String> items,
 			BindingResult result) {
 		if (result.hasErrors()) {
@@ -179,7 +179,7 @@ public class ReceiveSampleController {
         return Response.success(receiveSampleService.setStatus(receiveSampleId, status));
     }
     
- // 查询当前用户检验项信息
+ // 查询当前用户检验项信息(检测人员关心的检验项)
     @RequestMapping(value = "/sampleItem", method = RequestMethod.GET)
     public Response listItemByCurrentUser(          
             @RequestParam(name = "status",defaultValue = "0") int status,
