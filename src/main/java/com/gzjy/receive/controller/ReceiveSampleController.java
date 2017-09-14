@@ -33,6 +33,7 @@ import com.gzjy.common.Delete;
 import com.gzjy.common.Response;
 import com.gzjy.common.ShortUUID;
 import com.gzjy.common.Update;
+import com.gzjy.common.exception.BizException;
 import com.gzjy.common.util.fs.EpicNFSClient;
 import com.gzjy.common.util.fs.EpicNFSService;
 import com.gzjy.receive.model.ReceiveSample;
@@ -111,6 +112,13 @@ public class ReceiveSampleController {
 		if (result.hasErrors()) {
 			return Response.fail(result.getFieldError().getDefaultMessage());
 		}
+		for(String id :items) {
+		    ReceiveSampleItem itemRecord=receiveSampleService.getItem(id);
+		    if(!itemRecord.getReceiveSampleId().equals(receiveSample)) {
+		        throw new BizException("传递了一个错误的检验项ID");
+		    }
+		}
+		
 
 		return Response.success(receiveSampleService.deleteReceiveSampleItems(items));
 	}

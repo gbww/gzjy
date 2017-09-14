@@ -3,9 +3,6 @@ package com.gzjy.user.controller;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gzjy.common.Add;
 import com.gzjy.common.Response;
+import com.gzjy.common.annotation.Privileges;
 import com.gzjy.common.rest.EpcRestService;
 import com.gzjy.role.model.PasswordEdit;
 import com.gzjy.user.UserService;
@@ -48,7 +46,7 @@ public class UserController {
     return Response.success(u);
   }
 //删除用户
-  //@Privileges(name = "USER-DELETE", scope = 1)
+  @Privileges(name = "USER-DELETE", scope = 1)
   @RequestMapping(value = "/organizations/{organizationId}/users/{id}", method = RequestMethod.DELETE)
   public Response delete(@PathVariable String organizationId, @PathVariable("id") String id) {
     int result = userService.delete(organizationId, id);

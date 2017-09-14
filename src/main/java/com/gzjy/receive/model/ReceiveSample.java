@@ -3,6 +3,7 @@ package com.gzjy.receive.model;
 import java.util.Date;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class ReceiveSample {
     //接样单编号
@@ -56,8 +57,10 @@ public class ReceiveSample {
    //样品流通方式
     private String sampleCirculate;
    //样品流通日期
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date sampleCirculateDate;
     //抽样时间
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date sampleDate;
    //抽样方式
     private String sampleWay;
@@ -101,10 +104,13 @@ public class ReceiveSample {
     //收样人
     private String receiveUser;
     //收样日期
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date receiveDate;
     //约定完成日期
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date arrangeFinishDate;
     //要求完成日期
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date finishDate;
     //协议编号
     private String protocolId;
@@ -121,10 +127,12 @@ public class ReceiveSample {
     //编制人
     private String drawUser;
     //主检人
+    
     private String principalInspector;
     //报告状态(0:未进行检验项分配，1：检验项分配完成，2：检验项实验员完成实验录入，3：抽样报告完成)5作为查询时判断是否是全部查询的判断
     private Integer status;
     //创建时间
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdAt;
 
     public String getReceiveSampleId() {

@@ -3,6 +3,7 @@ package com.gzjy.receive.model;
 import java.util.Date;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class ReceiveSampleItem {
     //接样检验项目的id
@@ -41,6 +42,7 @@ public class ReceiveSampleItem {
     //检验项状态(0:未完成录入，1：已经完成实验结果的录入，5：查询所有的状态结果)
     private Integer status;
     //更新时间
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updatedAt;
     
 

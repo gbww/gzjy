@@ -212,7 +212,10 @@ public class OrganizationServiceImpl implements OrganizationService {
   @Override
   @Transactional
   public int delete(String id) {
-   
+  boolean ifHasUser=userService.hasUserbasedOrganization(id);
+  if(ifHasUser) {
+      throw new BizException("部门底下存在用户，请先删除用户信息");
+  }
     int count = 0;
     roleService.deleteByOrganizationId(id);
     count = organizationMapper.deleteById(id);
