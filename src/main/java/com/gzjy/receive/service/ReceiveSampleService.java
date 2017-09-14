@@ -295,7 +295,7 @@ public class ReceiveSampleService {
 			int cellIndex = -1;
 			while (cells.hasNext()) {
 				cellIndex +=1;
-				Cell cell = cells.next();				
+				Cell cell = cells.next();
 				String value = null;
 				switch (cell.getCellType()) {
 				case HSSFCell.CELL_TYPE_NUMERIC:
