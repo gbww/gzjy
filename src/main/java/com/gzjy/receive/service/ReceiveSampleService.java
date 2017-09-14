@@ -343,12 +343,15 @@ public class ReceiveSampleService {
 	private void addPictureToExcel(HSSFWorkbook workbook, String filePath, int rowIndex, int cellIndex) throws IOException {
 		BufferedImage bufferImg = null;
 		ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();     
-        bufferImg = ImageIO.read(new File(filePath));
-        ImageIO.write(bufferImg, "png", byteArrayOut);
-        HSSFPatriarch patriarch = workbook.getSheetAt(0).createDrawingPatriarch();
-        HSSFClientAnchor anchor = new HSSFClientAnchor(rowIndex, cellIndex,rowIndex+1, cellIndex+1, 
-        		(short)(cellIndex), rowIndex, (short) (cellIndex+1), rowIndex+1);
-        anchor.setAnchorType(AnchorType.DONT_MOVE_AND_RESIZE);
-        patriarch.createPicture(anchor, workbook.addPicture(byteArrayOut.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG)); 
+		File file = new File(filePath);
+		if(file.exists()) {
+			bufferImg = ImageIO.read(file);        
+	        ImageIO.write(bufferImg, "png", byteArrayOut);
+	        HSSFPatriarch patriarch = workbook.getSheetAt(0).createDrawingPatriarch();
+	        HSSFClientAnchor anchor = new HSSFClientAnchor(rowIndex, cellIndex,rowIndex+1, cellIndex+1, 
+	        		(short)(cellIndex), rowIndex, (short) (cellIndex+1), rowIndex+1);
+	        anchor.setAnchorType(AnchorType.DONT_MOVE_AND_RESIZE);
+	        patriarch.createPicture(anchor, workbook.addPicture(byteArrayOut.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG)); 
+		}        
 	}
 }
