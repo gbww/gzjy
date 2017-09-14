@@ -29,8 +29,10 @@ import org.apache.poi.hssf.usermodel.HSSFPatriarch;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.ClientAnchor.AnchorType;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +51,7 @@ import com.gzjy.receive.model.ReceiveSample;
 import com.gzjy.receive.model.ReceiveSampleItem;
 import com.gzjy.user.UserService;
 import com.gzjy.user.mapper.UserSignMapper;
-import com.gzjy.user.model.User;
-import org.apache.commons.beanutils.BeanUtils; 
+import com.gzjy.user.model.User; 
 /**
  * @author xuewenlong@cmss.chinamobile.com
  * @updated 2017年9月3日
@@ -285,6 +286,9 @@ public class ReceiveSampleService {
 		}
 		Map<String, Object> mapdata = TransBeanToMap.transBean2Map(data);
 		int checkResultRowIndex = -1;
+		CellStyle checkResultCellStype =null;
+		short remarkRowHeight = 0;
+		short resultRowHeight = 0;
 		while (rows.hasNext()) {
 			Row row = rows.next();
 			Iterator<Cell> cells = row.iterator();
@@ -322,21 +326,81 @@ public class ReceiveSampleService {
 					}else {
 						cell.setCellValue(mapdata.get(key)+"");
 					}
+					if("&remark".equals(value)) {
+						remarkRowHeight = row.getHeight();						
+					}
+					if("&result".equals(value)) {
+						resultRowHeight = row.getHeight();						
+					}					
 				}
-				if(value.equals("###")) {
+				if(value.indexOf("##")!=-1) {
 					checkResultRowIndex = row.getRowNum();
+					cell.setCellValue(value.substring(2));
+					checkResultCellStype = cell.getCellStyle();
 					System.out.println("checkResultRowIndex="+checkResultRowIndex);
 				}		
-				if (value.contains("&principalInspector")) {
-					addPictureToExcel(workbook, "/var/lib/docs/gzjy/"+signUser.get(data.getApprovalUser()), cell.getRowIndex(), cellIndex);					 
+				if (value.contains("#principalInspector")) {
+					cell.setCellValue("");
+					addPictureToExcel(workbook, "/var/lib/docs/gzjy/"+signUser.get(data.getApprovalUser()), cell.getRowIndex()+receiveSampleItems.size(), cellIndex);					 
 				}
-				if (value.contains("&examineUser")) {
-					addPictureToExcel(workbook, "/var/lib/docs/gzjy/sign/zhuleilei.png", cell.getRowIndex(), cellIndex);					 
+				if (value.contains("#examineUser")) {
+					cell.setCellValue("");
+					addPictureToExcel(workbook, "/var/lib/docs/gzjy/sign/zhuleilei.png", cell.getRowIndex()+receiveSampleItems.size(), cellIndex);					 
 				}
-				if (value.contains("&approvalUser")) {
-					addPictureToExcel(workbook, "/var/lib/docs/gzjy/sign/zhuleilei.png", cell.getRowIndex(), cellIndex);					 
+				if (value.contains("#approvalUser")) {
+					cell.setCellValue("");
+					addPictureToExcel(workbook, "/var/lib/docs/gzjy/sign/zhuleilei.png", cell.getRowIndex()+receiveSampleItems.size(), cellIndex);					 
 				}
 			}
+		}
+		if(checkResultRowIndex!=-1 && receiveSampleItems.size()!=0) {
+			sheet.shiftRows(checkResultRowIndex+1, sheet.getLastRowNum()+1, receiveSampleItems.size());
+			for(int t=0;t<receiveSampleItems.size();t++) {
+				int newRowIndex = checkResultRowIndex+1+t;
+				sheet.createRow(newRowIndex);
+				CellRangeAddress regionOne=new CellRangeAddress(newRowIndex, newRowIndex, 3, 4);
+				sheet.addMergedRegion(regionOne);
+				CellRangeAddress regionTwo=new CellRangeAddress(newRowIndex, newRowIndex, 7, 8);
+				sheet.addMergedRegion(regionTwo);
+				sheet.getRow(checkResultRowIndex+1+receiveSampleItems.size()).setHeight(remarkRowHeight);
+				sheet.getRow(checkResultRowIndex+1+receiveSampleItems.size()+3).setHeight(resultRowHeight);
+			}
+			for(int x=0;x<receiveSampleItems.size();x++) {
+				int insertRowIndex = x+checkResultRowIndex+1;
+				ReceiveSampleItem item = receiveSampleItems.get(x);
+				Row newRow = sheet.getRow(insertRowIndex);
+				for(int y=0;y<9;y++) {
+					Cell cell = newRow.createCell(y);
+					if(checkResultCellStype!=null) {
+						cell.setCellStyle(checkResultCellStype);
+					}
+					switch(y) {
+						case 0:
+							cell.setCellValue(x+1);
+							break;
+						case 1:
+							cell.setCellValue(item.getName());
+							break;
+						case 2:
+							cell.setCellValue(item.getUnit());
+							break;
+						case 3:
+							cell.setCellValue(item.getMethod());
+							break;						
+						case 5:
+							cell.setCellValue(item.getDevice());
+							break;
+						case 6:
+							cell.setCellValue(item.getItemResult());
+							break;
+						case 7:
+							cell.setCellValue(item.getDetectionLimit());
+							break;
+						default:
+							break;
+					}						
+				}
+			}		
 		}
 	}
 
