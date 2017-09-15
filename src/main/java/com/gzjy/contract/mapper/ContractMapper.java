@@ -24,4 +24,6 @@ public interface ContractMapper {
     int updateByPrimaryKeyWithBLOBs(Contract record);
 
     int updateByPrimaryKey(Contract record);
+    
+    void updateStatusByProcessId(@Param("status")Integer status, @Param("processId")String processId);
 }

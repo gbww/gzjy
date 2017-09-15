@@ -18,6 +18,7 @@ import com.gzjy.common.ShortUUID;
 import com.gzjy.contract.model.Contract;
 import com.gzjy.contract.model.ContractComment;
 import com.gzjy.contract.model.ContractProcess;
+import com.gzjy.contract.model.ContractStatus;
 import com.gzjy.contract.model.ContractTask;
 import com.gzjy.contract.service.ContractCommentService;
 import com.gzjy.contract.service.ContractService;
@@ -41,6 +42,7 @@ public class ContractController {
 	public Response createContract(@RequestBody Contract contract) {
 		try {
 			contract.setId(ShortUUID.getInstance().generateShortID());
+			contract.setStatus(ContractStatus.READY.getValue());
 			contractService.insert(contract);
 			return Response.success("success");
 		}
@@ -161,6 +163,7 @@ public class ContractController {
 				contractTask.setAssignee(task.getAssignee());
 				contractTask.setCreateTime(task.getCreateTime());
 				contractTask.setProcessInstanceId(task.getProcessInstanceId());
+				contractTask.setExecutionId(task.getExecutionId());
 				taskList.add(contractTask);
 			}
 			return Response.success(taskList);

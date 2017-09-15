@@ -23,6 +23,7 @@ import com.gzjy.contract.mapper.ContractCommentMapper;
 import com.gzjy.contract.mapper.ContractMapper;
 import com.gzjy.contract.model.Contract;
 import com.gzjy.contract.model.ContractComment;
+import com.gzjy.contract.model.ContractStatus;
 import com.gzjy.contract.service.ContractService;
 
 @Service
@@ -79,6 +80,8 @@ public class ContractServiceImpl implements ContractService {
         Contract contract = new Contract();
         contract.setId(contractId);
         contract.setProcessId(processId);
+        //修改合同状态为审批中状态
+        contract.setStatus(ContractStatus.APPROVING.getValue());
         contractMapper.updateByPrimaryKeySelective(contract);
 	}
 

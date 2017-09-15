@@ -83,6 +83,8 @@ public class Contract {
     private String activity1;
     //备注
     private String extra;
+    //状态
+    private Integer status;
 	public String getId() {
 		return id;
 	}
@@ -322,5 +324,12 @@ public class Contract {
 	}
 	public void setExtra(String extra) {
 		this.extra = extra;
+	}
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(Integer status) {
+		this.status = status;
 	}   
+	
 }
