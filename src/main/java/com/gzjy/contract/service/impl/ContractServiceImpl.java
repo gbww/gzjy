@@ -6,18 +6,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.activiti.engine.HistoryService;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.ISelect;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.gzjy.checkitems.model.CheckItem;
 import com.gzjy.common.util.UUID;
 import com.gzjy.contract.mapper.ContractCommentMapper;
 import com.gzjy.contract.mapper.ContractMapper;
@@ -25,6 +28,7 @@ import com.gzjy.contract.model.Contract;
 import com.gzjy.contract.model.ContractComment;
 import com.gzjy.contract.model.ContractStatus;
 import com.gzjy.contract.service.ContractService;
+import com.gzjy.receive.service.ReceiveSampleService;
 
 @Service
 public class ContractServiceImpl implements ContractService {
@@ -37,6 +41,8 @@ public class ContractServiceImpl implements ContractService {
 	
 	@Autowired
 	private ProcessEngine processEngine;
+	
+	private static Logger logger = LoggerFactory.getLogger(ReceiveSampleService.class);
 	
 	@Override
 	public Contract selectByPrimaryKey(String id) {
@@ -93,6 +99,16 @@ public class ContractServiceImpl implements ContractService {
 	public List<Task> getTaskByUserId(String taskName,String userId) {
 		TaskService taskService = processEngine.getTaskService();
 		List<Task> tasks = taskService.createTaskQuery().taskAssignee(userId).taskName(taskName).list();
+		return tasks;
+	}
+	
+	/**
+	 * 根据用户ID获取当前用户在合同流程中的历史任务
+	 */
+	@Override
+	public List<HistoricTaskInstance> getHistoryTaskByUserId(String taskName,String userId) {
+		HistoryService historyService = processEngine.getHistoryService();
+		List<HistoricTaskInstance> tasks = historyService.createHistoricTaskInstanceQuery().taskAssignee(userId).taskName(taskName).list();
 		return tasks;
 	}
 	

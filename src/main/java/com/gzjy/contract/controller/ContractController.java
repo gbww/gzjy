@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +26,7 @@ import com.gzjy.contract.model.ContractStatus;
 import com.gzjy.contract.model.ContractTask;
 import com.gzjy.contract.service.ContractCommentService;
 import com.gzjy.contract.service.ContractService;
+import com.gzjy.receive.service.ReceiveSampleService;
 
 @RestController
 @RequestMapping({ "/v1/ahgz" })
@@ -33,6 +37,8 @@ public class ContractController {
 	
 	@Autowired
 	ContractCommentService contractCommentService;
+	
+	private static Logger logger = LoggerFactory.getLogger(ReceiveSampleService.class);
 	
 	/** 
 	 * 录入合同信息到数据库
@@ -49,7 +55,7 @@ public class ContractController {
 			return Response.success("success");
 		}
 		catch (Exception e) {
-			System.out.println(e);
+			logger.error(e+"");
 			return Response.fail(e.getMessage());
 		}
 	}
@@ -68,7 +74,7 @@ public class ContractController {
 			return Response.success(result);
 		}
 		catch (Exception e) {
-			System.out.println(e);
+			logger.error(e+"");
 			return Response.fail(e.getMessage());
 		}
 	}
@@ -85,7 +91,7 @@ public class ContractController {
 			return Response.success(contract);
 		}
 		catch (Exception e) {
-			System.out.println(e);
+			logger.error(e+"");
 			return Response.fail(e.getMessage());
 		}
 	}
@@ -102,7 +108,7 @@ public class ContractController {
 			return Response.success("success");
 		}
 		catch (Exception e) {
-			System.out.println(e);
+			logger.error(e+"");
 			return Response.fail(e.getMessage());
 		}
 	}
@@ -121,7 +127,7 @@ public class ContractController {
 			return Response.success("success");
 		}
 		catch (Exception e) {
-			System.out.println(e);
+			logger.error(e+"");
 			return Response.fail(e.getMessage());
 		}
 	}
@@ -136,13 +142,12 @@ public class ContractController {
 		ArrayList<String> approveUsers = contractProcess.getApproveUsers();
 		String updateContractUser = contractProcess.getUpdateContractUser();
 		String contractId = contractProcess.getContractId();		
-		try {
-			
+		try {			
 			contractService.deploymentProcess(contractId, approveUsers, updateContractUser);
 			return Response.success("success");
 		}
 		catch (Exception e) {
-			System.out.println(e);
+			logger.error(e+"");
 			return Response.fail(e.getMessage());
 		}
 	}
@@ -154,25 +159,42 @@ public class ContractController {
 	 */
 	@RequestMapping(value = "/contract/process/task", method = RequestMethod.GET)
 	public Response getContractTaskByUserId(@RequestParam(required = true) String userId,
-			@RequestParam(required = true) String taskName) {
+			@RequestParam(required = true) String taskName, @RequestParam(required = false, defaultValue="1") String isHandle) {
 		ArrayList<ContractTask> taskList = new ArrayList<ContractTask>();
 		try {
-			List<Task> tasks= contractService.getTaskByUserId(taskName, userId);
-			for (Task task :tasks) {
-				System.out.println("ID:"+task.getId()+",姓名:"+task.getName()+",接收人:"+task.getAssignee()+",开始时间:"+task.getCreateTime());
-				ContractTask contractTask = new ContractTask();
-				contractTask.setId(task.getId());
-				contractTask.setName(task.getName());
-				contractTask.setAssignee(task.getAssignee());
-				contractTask.setCreateTime(task.getCreateTime());
-				contractTask.setProcessInstanceId(task.getProcessInstanceId());
-				contractTask.setExecutionId(task.getExecutionId());
-				taskList.add(contractTask);
+			if("0".equals(isHandle)) {
+				List<Task> tasks= contractService.getTaskByUserId(taskName, userId);			
+				for (Task task :tasks) {
+					logger.info("ID:"+task.getId()+",姓名:"+task.getName()+",接收人:"+task.getAssignee()+",开始时间:"+task.getCreateTime());
+					ContractTask contractTask = new ContractTask();
+					contractTask.setId(task.getId());
+					contractTask.setName(task.getName());
+					contractTask.setAssignee(task.getAssignee());
+					contractTask.setCreateTime(task.getCreateTime());
+					contractTask.setProcessInstanceId(task.getProcessInstanceId());
+					contractTask.setExecutionId(task.getExecutionId());
+					taskList.add(contractTask);
+				}
+				return Response.success(taskList);
+			}else {
+				List<HistoricTaskInstance> tasks=contractService.getHistoryTaskByUserId(taskName, userId);
+				for(HistoricTaskInstance task:tasks) {
+					logger.info("ID:"+task.getId()+",姓名:"+task.getName()+",接收人:"+task.getAssignee()+",开始时间:"+task.getCreateTime());
+					ContractTask contractTask = new ContractTask();
+					contractTask.setId(task.getId());
+					contractTask.setName(task.getName());
+					contractTask.setAssignee(task.getAssignee());
+					contractTask.setCreateTime(task.getCreateTime());
+					contractTask.setProcessInstanceId(task.getProcessInstanceId());
+					contractTask.setExecutionId(task.getExecutionId());
+					taskList.add(contractTask);
+				}
+				return Response.success(taskList);
 			}
-			return Response.success(taskList);
+			
 		}
 		catch (Exception e) {
-			System.out.println(e);
+			logger.error(e+"");
 			return Response.fail(e.getMessage());
 		}
 	}
@@ -211,7 +233,7 @@ public class ContractController {
 			return Response.success("success");
 		}
 		catch (Exception e) {
-			System.out.println(e);
+			logger.error(e+"");
 			return Response.fail(e.getMessage());
 		}
 	}	
@@ -224,7 +246,7 @@ public class ContractController {
 			return Response.success(result);
 		}
 		catch (Exception e) {
-			System.out.println(e);
+			logger.error(e+"");
 			return Response.fail(e.getMessage());
 		}		
 	}
@@ -237,7 +259,7 @@ public class ContractController {
 			return Response.success("success");
 		}
 		catch (Exception e) {
-			System.out.println(e);
+			logger.error(e+"");
 			return Response.fail(e.getMessage());
 		}		
 	}	 

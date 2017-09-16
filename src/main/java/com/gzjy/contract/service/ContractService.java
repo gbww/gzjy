@@ -2,10 +2,11 @@ package com.gzjy.contract.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
 
 import com.github.pagehelper.PageInfo;
-import com.gzjy.checkitems.model.CheckItem;
 import com.gzjy.contract.model.Contract;
 
 public interface ContractService {
@@ -23,6 +24,8 @@ public interface ContractService {
 	void deploymentProcess(String contractId,ArrayList<String> approveUsers, String updateContractUser);
 	
 	List<Task> getTaskByUserId(String taskName, String userId);
+	
+	public List<HistoricTaskInstance> getHistoryTaskByUserId(String taskName,String userId);
 	
 	void completeApproveTask(String taskId, String contractId, String approve, String context);
 	
