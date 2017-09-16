@@ -494,7 +494,7 @@
         extra = #{extra,jdbcType=LONGVARCHAR},
       </if>
       <if test="status != null">
-        extra = #{status,jdbcType=VARCHAR},
+        status = #{status,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
