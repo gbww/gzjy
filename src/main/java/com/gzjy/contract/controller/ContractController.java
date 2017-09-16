@@ -1,6 +1,7 @@
 package com.gzjy.contract.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.activiti.engine.task.Task;
@@ -43,6 +44,7 @@ public class ContractController {
 		try {
 			contract.setId(ShortUUID.getInstance().generateShortID());
 			contract.setStatus(ContractStatus.READY.getValue());
+			contract.setCreatedAt(new Date());
 			contractService.insert(contract);
 			return Response.success("success");
 		}
@@ -114,6 +116,7 @@ public class ContractController {
 	public Response updateContract(@PathVariable String id, @RequestBody Contract contract) {
 		try {
 			contract.setId(id);
+			contract.setUpdatedAt(new Date());
 			contractService.updateByPrimaryKey(contract);
 			return Response.success("success");
 		}

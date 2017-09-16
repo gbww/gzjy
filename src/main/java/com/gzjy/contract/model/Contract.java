@@ -84,7 +84,12 @@ public class Contract {
     //备注
     private String extra;
     //状态
-    private Integer status;
+    private Integer status;    
+    //创建时间
+    private Date createdAt;
+    //更新时间
+    private Date updatedAt;
+    
 	public String getId() {
 		return id;
 	}
@@ -330,6 +335,17 @@ public class Contract {
 	}
 	public void setStatus(Integer status) {
 		this.status = status;
-	}   
-	
+	}
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
+	}	
 }

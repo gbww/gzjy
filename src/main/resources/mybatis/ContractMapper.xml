@@ -43,7 +43,9 @@
     <result column="cost" jdbcType="REAL" property="cost" />
     <result column="process_id" jdbcType="VARCHAR" property="processId" />
     <result column="activity1" jdbcType="VARCHAR" property="activity1" />  
-    <result column="status" jdbcType="VARCHAR" property="status" />    
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.gzjy.contract.model.Contract">
     <result column="extra" jdbcType="LONGVARCHAR" property="extra" />
@@ -58,7 +60,7 @@
     detect_by, is_use_standard, is_subcontracting, is_expedited, is_evaluation, product_unit, 
     inspection_unit, sampling_address, inspection_unit_address, zip_code, phone, fax, 
     contact_person, report_method, report_count, inspection_user, inspection_date, acceptor, 
-    acceptance_date, cost, process_id, activity1,status
+    acceptance_date, cost, process_id, activity1,status,created_at,updated_at
   </sql>
   <sql id="Blob_Column_List">
     extra
@@ -100,7 +102,7 @@
       detect_purpose, other_data, detect_type, detect_project, execute_standard, detect_by, 
       is_use_standard, is_subcontracting, is_expedited, is_evaluation, product_unit, inspection_unit, 
       sampling_address, inspection_unit_address, zip_code, phone, fax, contact_person, report_method, report_count, 
-      inspection_user, inspection_date, acceptor, acceptance_date, cost, activity1, process_id, extra,status)
+      inspection_user, inspection_date, acceptor, acceptance_date, cost, activity1, process_id, extra,status,created_at,updated_at)
     values (#{id,jdbcType=VARCHAR}, #{sampleId,jdbcType=VARCHAR}, #{protocolId,jdbcType=VARCHAR}, 
       #{sampleName,jdbcType=VARCHAR}, #{processTechnology,jdbcType=VARCHAR}, #{qualityLevel,jdbcType=VARCHAR}, 
       #{specificationQuantity,jdbcType=VARCHAR}, #{productDate,jdbcType=VARCHAR}, #{storageCondition,jdbcType=VARCHAR}, 
@@ -114,7 +116,8 @@
       #{contactPerson,jdbcType=VARCHAR}, #{reportMethod,jdbcType=VARCHAR}, #{reportCount,jdbcType=INTEGER}, 
       #{inspectionUser,jdbcType=VARCHAR}, #{inspectionDate,jdbcType=TIMESTAMP}, #{acceptor,jdbcType=VARCHAR}, 
       #{acceptanceDate,jdbcType=TIMESTAMP}, #{cost,jdbcType=REAL}, #{activity1,jdbcType=VARCHAR}, 
-      #{processId,jdbcType=VARCHAR}, #{extra,jdbcType=LONGVARCHAR}, #{status,jdbcType=LONGVARCHAR})
+      #{processId,jdbcType=VARCHAR}, #{extra,jdbcType=LONGVARCHAR}, #{status,jdbcType=LONGVARCHAR},
+      #{createdAt,jdbcType=TIMESTAMP},#{updatedAt,jdbcType=TIMESTAMP})
   </insert>
   
   
@@ -244,6 +247,12 @@
       <if test="status != null">
         status,
       </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at
+      </if>      
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -368,6 +377,12 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=TIMESTAMP}
       </if>
     </trim>
   </insert>
@@ -496,6 +511,12 @@
       <if test="status != null">
         status = #{status,jdbcType=VARCHAR},
       </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -542,7 +563,9 @@
       activity1 = #{activity1,jdbcType=VARCHAR},
       process_id = #{processId,jdbcType=VARCHAR},
       extra = #{extra,jdbcType=LONGVARCHAR},
-      status = #{status,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},      
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP}       
     where id = #{id,jdbcType=VARCHAR}
   </update>
   
@@ -595,6 +618,8 @@
       activity1 = #{activity1,jdbcType=VARCHAR},
       process_id = #{processId,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP} 
     where id = #{id,jdbcType=VARCHAR}
   </update>   
 

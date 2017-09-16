@@ -76,7 +76,6 @@ public class ContractServiceImpl implements ContractService {
         variables.put("result", 1);
         variables.put("update_contract_user", updateContractUser);
         variables.put("taskComplete", new TaskComplete());
-//        variables.put("taskCompleteListener", new TaskCompleteListener());
         String processId = runtimeService.startProcessInstanceByKey("ContractProcess",variables).getId();
         //流程启动成功之后将返回的流程ID回填到合同contract表中
         Contract contract = new Contract();
