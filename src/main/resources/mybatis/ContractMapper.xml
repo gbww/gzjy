@@ -548,8 +548,7 @@
   
   
   <update id="updateStatusByProcessId" >
-    update contract
-    set status = #{status,jdbcType=VARCHAR}
+    update contract set status = #{status,jdbcType=VARCHAR} 
     where process_id = #{processId,jdbcType=VARCHAR}
   </update>   
   

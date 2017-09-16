@@ -200,6 +200,10 @@ public class ContractController {
 				contractService.completeApproveTask(taskId, contractId, approve, context);
 			}else if (action.equals("update")){
 				contractService.completeUpdateTask(taskId);
+				Contract record = new Contract();
+				record.setId(contractId);
+				record.setStatus(ContractStatus.APPROVING.getValue());
+				contractService.updateByPrimaryKey(record);
 			}
 			return Response.success("success");
 		}

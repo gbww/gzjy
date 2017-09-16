@@ -3,6 +3,9 @@
   <process id="ContractProcess" name="ContractProcess" isExecutable="true">
     <startEvent id="startevent1" name="Start"></startEvent>
     <userTask id="usertask1" name="联合审批" activiti:assignee="${approve_user}">
+      <extensionElements>
+        <activiti:taskListener event="complete" delegateExpression="${taskCompleteListener}"></activiti:taskListener>
+      </extensionElements>
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${approve_users}" activiti:elementVariable="approve_user">
         <completionCondition>${taskComplete.isComplete(execution)}</completionCondition>
       </multiInstanceLoopCharacteristics>

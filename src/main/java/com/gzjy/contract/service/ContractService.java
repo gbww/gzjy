@@ -27,4 +27,6 @@ public interface ContractService {
 	void completeApproveTask(String taskId, String contractId, String approve, String context);
 	
 	void completeUpdateTask(String taskId);
+	
+	void updateStatusByProcessId(Integer status, String processId);
 }

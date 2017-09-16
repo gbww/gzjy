@@ -38,22 +38,22 @@ public class ContractServiceImpl implements ContractService {
 	@Autowired
 	private ProcessEngine processEngine;
 	
-	
+	@Override
 	public Contract selectByPrimaryKey(String id) {
 		// TODO Auto-generated method stub
 		return contractMapper.selectByPrimaryKey(id);
 	}
-
+	@Override
 	public int insert(Contract record) {
 		// TODO Auto-generated method stub
 		return contractMapper.insert(record);
 	}
-
+	@Override
 	public int deleteByPrimaryKey(String id) {
 		// TODO Auto-generated method stub
 		return contractMapper.deleteByPrimaryKey(id);
 	}
-	
+	@Override
 	public int updateByPrimaryKey(Contract record) {
 		return contractMapper.updateByPrimaryKeySelective(record);
 	}
@@ -65,6 +65,7 @@ public class ContractServiceImpl implements ContractService {
 	 * @param updateContractUser 修改合同的人
 	 * @return
 	 */
+	@Override
 	public void deploymentProcess(String contractId, ArrayList<String> approveUsers, String updateContractUser) {
 		RepositoryService repositoryService = processEngine.getRepositoryService();
         RuntimeService runtimeService = processEngine.getRuntimeService();
@@ -75,6 +76,7 @@ public class ContractServiceImpl implements ContractService {
         variables.put("result", 1);
         variables.put("update_contract_user", updateContractUser);
         variables.put("taskComplete", new TaskComplete());
+//        variables.put("taskCompleteListener", new TaskCompleteListener());
         String processId = runtimeService.startProcessInstanceByKey("ContractProcess",variables).getId();
         //流程启动成功之后将返回的流程ID回填到合同contract表中
         Contract contract = new Contract();
@@ -88,6 +90,7 @@ public class ContractServiceImpl implements ContractService {
 	/**
 	 * 根据用户ID获取当前用户在合同流程中的任务
 	 */
+	@Override
 	public List<Task> getTaskByUserId(String taskName,String userId) {
 		TaskService taskService = processEngine.getTaskService();
 		List<Task> tasks = taskService.createTaskQuery().taskAssignee(userId).taskName(taskName).list();
@@ -99,6 +102,7 @@ public class ContractServiceImpl implements ContractService {
 	 * @param task
 	 * @param approve
 	 */	
+	@Override
 	public void completeApproveTask(String taskId, String contractId,String approve, String context) {
 		TaskService taskService = processEngine.getTaskService();
 		RuntimeService runtimeService = processEngine.getRuntimeService();
@@ -126,11 +130,12 @@ public class ContractServiceImpl implements ContractService {
 	 * @param task
 	 * @param approve
 	 */	
+	@Override
 	public void completeUpdateTask(String taskId) {
 		TaskService taskService = processEngine.getTaskService();
 		taskService.complete(taskId);
 	}
-
+	@Override
 	public PageInfo<Contract> getPageList(Integer pageNum, Integer pageSize, String sampleName) {
 		List<Contract> list = new ArrayList<Contract>();
 	    PageInfo<Contract> pages = new PageInfo<Contract>(list);
@@ -141,5 +146,9 @@ public class ContractServiceImpl implements ContractService {
 	        }
 	    });
 	    return pages;
+	}
+	@Override
+	public void updateStatusByProcessId(Integer status, String processId) {
+		contractMapper.updateStatusByProcessId(status, processId);		
 	}
 }
