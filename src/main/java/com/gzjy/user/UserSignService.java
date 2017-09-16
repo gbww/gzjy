@@ -1,7 +1,6 @@
 package com.gzjy.user;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -11,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.gzjy.common.exception.BizException;
-import com.gzjy.common.util.UUID;
 import com.gzjy.common.util.fs.EpicNFSClient;
 import com.gzjy.common.util.fs.EpicNFSService;
 import com.gzjy.user.mapper.UserSignMapper;
@@ -39,6 +38,8 @@ private UserService userClient;
 
 @Autowired
 private EpicNFSService epicNFSService;
+
+
 @Transactional
 public UserSign upload(MultipartFile file) throws IOException {
     User currentUser=new User();
@@ -89,6 +90,28 @@ public UserSign upload(MultipartFile file) throws IOException {
         return sign;
     }
 
+public String getPathByCurrentUser() {
+    String path="";
+    User currentUser=new User();
+    currentUser=userClient.getCurrentUser();
+    String id=currentUser.getId();
+    UserSign signFile = fileMapper
+            .selectByPrimaryKey(id);
+    if (signFile == null) {
+        throw new BizException("文件不存在，或者已经被删除");
+    }
+    EpicNFSClient epicNFSClient = null;
+    epicNFSClient = epicNFSService.getClient("gzjy");
+    try {
+        path=epicNFSClient.getPath(signFile.getPath());
+    } catch (IOException e) {
+        throw new BizException("文件查看失败"+e.getMessage());
+    }
+    return path;
+    
+    
+}
+
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public ResponseEntity<byte[]> download(String id) throws IOException {
@@ -131,6 +154,7 @@ public UserSign upload(MultipartFile file) throws IOException {
         }
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+       
         headers.setContentDispositionFormData("attachment",
                 signFile.getName());
         return new ResponseEntity<byte[]>(outputStream.toByteArray(), headers,

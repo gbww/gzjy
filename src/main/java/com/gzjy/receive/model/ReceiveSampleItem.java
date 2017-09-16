@@ -39,7 +39,7 @@ public class ReceiveSampleItem {
     private String measuredValue;
     //检验员
     private String testUser;
-    //检验项状态(0:未完成录入，1：已经完成实验结果的录入，5：查询所有的状态结果)
+    //检验项状态(0:待分配，1：带检测，2：检测完成，5：查询所有的状态结果)
     private Integer status;
     //更新时间
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

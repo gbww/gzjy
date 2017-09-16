@@ -93,6 +93,14 @@ public interface UserMapper {
    */
   List<User> selectStatusUsersBasedOrganizationsAndRole(@Param("organizations")List<Organization> organizations, @Param("roleId")String roleId, @Param("status")Integer status, @Param("username")String username);
   
+  /**
+   * 
+   * @param RoleId  角色ID
+   * @return
+   * UserMapper.java
+   */
+  List<User>selectByRoleId(@Param("roleId")String roleId);
+  
   List<User> seletTest();
   /**
    * 更新记录

@@ -135,6 +135,12 @@ public class UserController {
   public Response users(@PathVariable String organizationId, @PathVariable String id) {
     return Response.success(userService.getUser(organizationId, id));
   }
+  
+//选取合同评审人员
+  @RequestMapping(value = "/users/reviewers", method = RequestMethod.GET)
+  public Response reviewers() {
+    return Response.success(userService.getReviewers());
+  }
 
 /*  @RequestMapping(value = "/log/users", method = RequestMethod.GET)
   public Response logusers() {

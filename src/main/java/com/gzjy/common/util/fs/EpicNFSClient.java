@@ -46,6 +46,10 @@ public class EpicNFSClient {
 
     FileUtils.writeByteArrayToFile(newFile, IOUtils.toByteArray(localInputStream));
   }
+  public String getPath(String filePath)throws IOException {
+      filePath = preDealPath(filePath);
+      return localPaht+"/"+filePath;
+  }
 
   public InputStream download(String filePath) throws IOException {
     filePath = preDealPath(filePath);

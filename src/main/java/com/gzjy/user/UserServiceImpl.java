@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
 import com.github.pagehelper.ISelect;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -401,6 +402,13 @@ public class UserServiceImpl implements UserService {
   @Override
   public User getUser(String id) {
     return userMapper.selectById(id);
+  }
+  
+  @Override
+ public List<User> getReviewers(){
+     String  roleId="f7a026cd281c41bb832dc7ce4f0468a2";
+      List<User> users=userMapper.selectByRoleId(roleId);
+      return users;
   }
   
   @Override

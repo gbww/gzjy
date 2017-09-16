@@ -202,6 +202,8 @@ public interface UserService {
    */
   User getUserByUsername(String username);
   
+  List<User> getReviewers();
+  
 
   
   String getKaptcha(HttpServletRequest request, HttpServletResponse response) throws IOException;

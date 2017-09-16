@@ -4,10 +4,12 @@ package com.gzjy.user.controller;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,9 +28,24 @@ public class SignController {
   private UserService userService;
   @Autowired
   private UserSignService signService;
+  private final ResourceLoader resourceLoader; 
+  @Autowired
+  public SignController(ResourceLoader resourceLoader) { 
+  this.resourceLoader = resourceLoader; 
+  }
   
-
-
+  @RequestMapping(value = "/user/sign/show",method = RequestMethod.GET) 
+  @ResponseBody
+  public ResponseEntity<?> showSign() { 
+      String path=signService.getPathByCurrentUser();
+      try { 
+       return ResponseEntity.ok(resourceLoader.getResource(path).toString()); 
+      } catch (Exception e) { 
+       return ResponseEntity.notFound().build(); 
+      } 
+      } 
+  
+  
 
 //获取用户电子签名
   @RequestMapping(value = "/user/sign", method = RequestMethod.GET)

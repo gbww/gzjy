@@ -15,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -75,9 +76,10 @@ public class ReceiveSampleService {
 		if (StringUtils.isBlank(record.getReceiveSampleId())) {
 			return false;
 		} else {
+		    record.setCreatedAt(new Date());
 			receiveSampleMapper.insert(record);
 		}
-
+		logger.info("添加成功");
 		return true;
 	}
 
@@ -93,10 +95,12 @@ public class ReceiveSampleService {
 			}
 			if (StringUtils.isBlank(item.getId())) {
 				item.setId(UUID.random());
+				 item.setUpdatedAt(new Date());
 				receiveSampleItemMapper.insert(item);
 			} else {
 				ReceiveSampleItem exitItem = receiveSampleItemMapper.selectByPrimaryKey(item.getId());
 				if (exitItem != null) {
+				    item.setUpdatedAt(new Date());
 					receiveSampleItemMapper.updateByPrimaryKey(item);
 				} else {
 					System.out.println("接样单中不存在此检验项ID");
