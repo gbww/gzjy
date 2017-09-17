@@ -165,7 +165,7 @@ public String getPathByCurrentUser() {
     public UserSign getUserSign(String id) {
         UserSign sign=fileMapper.selectByPrimaryKey(id);
         if(sign==null) {
-            throw new BizException("为上传电子签名");
+            return null;
         }
         return sign;
         

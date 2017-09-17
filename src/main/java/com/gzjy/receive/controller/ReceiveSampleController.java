@@ -198,8 +198,8 @@ public class ReceiveSampleController {
 		return Response.success(receiveSampleService.getItem(itemId));
 	}
 	// 设置报告状态
-    @RequestMapping(value = "/sample/status/{receivesampleid}", method = RequestMethod.PUT)
-    public Response setSampleStatus(@PathVariable(name = "receivesampleid") String receiveSampleId,@RequestBody Integer status) {
+    @RequestMapping(value = "/sample/{receivesampleid}/status/{status}", method = RequestMethod.GET)
+    public Response setSampleStatus(@PathVariable(name = "receivesampleid") String receiveSampleId,@PathVariable(name = "status") Integer status) {
 
         return Response.success(receiveSampleService.setStatus(receiveSampleId, status));
     }

@@ -47,13 +47,13 @@ public class SignController {
   
   
 
-//获取用户电子签名
-  @RequestMapping(value = "/user/sign", method = RequestMethod.GET)
+//获取用户电子签名的记录
+ /* @RequestMapping(value = "/user/sign", method = RequestMethod.GET)
   public Response get(@RequestParam(name="id") String id) {
    
     UserSign sign = signService.getUserSign(id);
     return Response.success(sign);
-  }
+  }*/
   
   /**
    * 上传电子签名
