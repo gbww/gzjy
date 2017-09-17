@@ -161,6 +161,34 @@
 		users.state != -1
 		order by users.updated_at desc
 	</select>
+	
+	
+	<select id="selectUsersBasedOrganization" resultMap="DetailResultMap">
+		select
+		<include refid="Full_Column_List" />
+		from users
+		left join organizations on users.organization_id =
+		organizations.id
+		left join roles on users.role_id = roles.id
+		where
+		users.state != -1 and
+		users.organization_id = #{organizationId,jdbcType=CHAR}
+		order by users.updated_at desc
+	</select>
+	
+<select id="selectByRoleId" resultMap="DetailResultMap">
+		select
+		<include refid="Full_Column_List" />
+		from users
+		left join organizations on users.organization_id =
+		organizations.id
+		left join roles on users.role_id = roles.id
+		where
+		users.state != -1 and
+		role_id = #{roleId,jdbcType=CHAR}
+		order by users.updated_at desc
+</select>
+	
 	<select id="seletTest" resultMap="BaseResultMap">
 	select
 		*

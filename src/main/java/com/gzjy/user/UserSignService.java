@@ -9,8 +9,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.net.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -120,7 +120,7 @@ public String getPathByCurrentUser() {
         UserSign signFile = fileMapper
                 .selectByPrimaryKey(id);
         if (signFile == null) {
-            throw new BizException("文件不存在，或者已经被删除");
+            return null;
         }
 
         EpicNFSClient epicNFSClient = null;
@@ -157,7 +157,8 @@ public String getPathByCurrentUser() {
        
         headers.setContentDispositionFormData("attachment",
                 signFile.getName());
-        return new ResponseEntity<byte[]>(outputStream.toByteArray(), headers,
+        
+        return new ResponseEntity<byte[]>(Base64.encodeBase64(outputStream.toByteArray()), headers,
                 HttpStatus.CREATED);
     }
     

@@ -84,6 +84,7 @@ public class UserController {
   public Response users() {
     return Response.success(userService.getCurrentUser());
   }
+  
 
    @RequestMapping(value = "/user/oauth/token", method = {RequestMethod.GET, RequestMethod.POST})
    public Response token(@RequestParam String username, @RequestParam String password) {
@@ -141,6 +142,13 @@ public class UserController {
   public Response reviewers() {
     return Response.success(userService.getReviewers());
   }
+  //根据部门查找部门下的用户列表
+  @RequestMapping(value = "/organizations/{organizationId}/users", method = RequestMethod.GET)
+  public Response getUsersByOrganizationId(@PathVariable("organizationId") String organizationId) {
+    return Response.success(userService.selectUsersBasedOrganization(organizationId));
+  }
+  
+  
 
 /*  @RequestMapping(value = "/log/users", method = RequestMethod.GET)
   public Response logusers() {

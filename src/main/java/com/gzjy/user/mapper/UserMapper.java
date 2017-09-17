@@ -67,6 +67,8 @@ public interface UserMapper {
    */
   List<User> selectAll();
   
+  List<User> selectUsersBasedOrganization(@Param("organizationId")String organizationId);
+  
   /**
    * 查询对应平台的用户
    * @param scopes ：1表示自服务，2表示运营，3表示运维

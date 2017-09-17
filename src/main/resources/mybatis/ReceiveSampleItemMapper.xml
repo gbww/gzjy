@@ -36,22 +36,14 @@
     <include refid="Base_Column_List" />
     from receive_sample_item
        <where>
-    	<foreach collection="filter.keys" item="key" separator="and">
-    	    <if test="null!=filter[key]">
-    	    ${key} =  #{filter[${key}]}
-    	    </if>				
-		</foreach>
-		 <choose>
-        <when test="5!=status and null!=status">
-             status = #{status}
-        </when>
-        <otherwise>
-        </otherwise>
-    </choose>
+    	<foreach collection="filters.keys" item="key" separator="and">
+        <if test="null!=filters[key]">
+    	    ${key} =  #{filters[${key}]}
+    	 </if>		    			
+		</foreach>	
     </where>
-    order by updated_at desc;
+    order by updated_at desc
   </select>
-  
   
   
   <select id="selectByReceiveSampleId" resultMap="BaseResultMap" parameterType="java.lang.String" >

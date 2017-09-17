@@ -147,18 +147,35 @@ public class ReceiveSampleController {
 			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 		Map<String, Object> filter = new HashMap<String, Object>();
 		String orderby = new String();
-		if (StringUtils.isBlank(id)) {
+		if (!StringUtils.isBlank(id)) {
 			filter.put("receive_sample_id", id);
 		}
-		if (StringUtils.isBlank(entrustedUnit)) {
+		if (!StringUtils.isBlank(entrustedUnit)) {
 			filter.put("entrusted_unit", entrustedUnit);
 		}
-		if (StringUtils.isBlank(order)) {
+		if (!StringUtils.isBlank(order)) {
 			orderby = "created_at desc";
 		}
+		if(status!=5) {
+            filter.put("status", status);
+        }
 
-		return Response.success(receiveSampleService.select(pageNum, pageSize, orderby, status, filter));
+		return Response.success(receiveSampleService.select(pageNum, pageSize, orderby, filter));
 	}
+	
+	
+	// test
+    @RequestMapping(value = "/sampletest", method = RequestMethod.GET)
+    public Response list(
+            @RequestParam(name = "entrustedunit", required = false) String entrustedUnit,
+            @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
+            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+        Map<String, Object> filter = new HashMap<String, Object>();
+        
+        filter.put("check_type", "抽检");
+
+        return Response.success(receiveSampleService.selectTest(pageNum, pageSize,  filter));
+    }
 
 	// 根据ID获取接样信息
 	@RequestMapping(value = "/sample/{id}", method = RequestMethod.GET)
@@ -194,8 +211,10 @@ public class ReceiveSampleController {
             @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
         Map<String, Object> filter = new HashMap<String, Object>();
-
-        return Response.success(receiveSampleService.selectCurrentUserItems(pageNum, pageSize, status, filter));
+        if(status!=5) {
+            filter.put("status", status);
+        }
+        return Response.success(receiveSampleService.selectCurrentUserItems(pageNum, pageSize, filter));
     }
     
 	

@@ -17,7 +17,7 @@ public interface ReceiveSampleItemMapper {
 
     ReceiveSampleItem selectByPrimaryKey(String id);
     //查询授予当前用户的检验项列表
-    List<ReceiveSampleItem> selectByUser(@Param("filter") Map<String, Object> filter,@Param("status")Integer status);
+    List<ReceiveSampleItem> selectByUser(@Param("filters") Map<String, Object> filter);
     //根据接样ID查询检验项列表
     List<ReceiveSampleItem> selectByReceiveSampleId(String receiveSampleId);
 

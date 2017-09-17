@@ -147,21 +147,39 @@ public class ReceiveSampleService {
 	}
 
 	@Transactional
-	public PageInfo<ReceiveSample> select(Integer pageNum, Integer pageSize, String order, Integer status,Map<String, Object> filter) {
+	public PageInfo<ReceiveSample> select(Integer pageNum, Integer pageSize, String order, Map<String, Object> filter) {
 
 		List<ReceiveSample> list = new ArrayList<ReceiveSample>();
 		PageInfo<ReceiveSample> pages = new PageInfo<ReceiveSample>(list);
 		pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
 			@Override
 			public void doSelect() {
-				receiveSampleMapper.selectAll(filter, status,order);
+				receiveSampleMapper.selectAll(filter, order);
 			}
 		});
 		return pages;
 	}
 	
 	
-    public PageInfo<ReceiveSampleItem> selectCurrentUserItems(Integer pageNum, Integer pageSize, Integer status,Map<String, Object> filter) {
+	/**
+	 * 
+	测试
+	 */
+	public PageInfo<ReceiveSample> selectTest(Integer pageNum, Integer pageSize, Map<String, Object> filter) {
+
+        List<ReceiveSample> list = new ArrayList<ReceiveSample>();
+        PageInfo<ReceiveSample> pages = new PageInfo<ReceiveSample>(list);
+        pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
+            @Override
+            public void doSelect() {
+                receiveSampleMapper.selectTest(filter);
+            }
+        });
+        return pages;
+    }
+	
+	
+    public PageInfo<ReceiveSampleItem> selectCurrentUserItems(Integer pageNum, Integer pageSize,Map<String, Object> filter) {
         User u=userClient.getCurrentUser();
         String name=u.getName();
         filter.put("test_user", name);
@@ -170,7 +188,7 @@ public class ReceiveSampleService {
         pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
             @Override
             public void doSelect() {
-                receiveSampleItemMapper.selectByUser(filter, status);
+                receiveSampleItemMapper.selectByUser(filter);
             }
         });
         return pages;

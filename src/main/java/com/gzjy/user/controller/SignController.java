@@ -34,7 +34,7 @@ public class SignController {
   this.resourceLoader = resourceLoader; 
   }
   
-  @RequestMapping(value = "/user/sign/show",method = RequestMethod.GET) 
+/*  @RequestMapping(value = "/user/sign/show",method = RequestMethod.GET) 
   @ResponseBody
   public ResponseEntity<?> showSign() { 
       String path=signService.getPathByCurrentUser();
@@ -43,7 +43,7 @@ public class SignController {
       } catch (Exception e) { 
        return ResponseEntity.notFound().build(); 
       } 
-      } 
+      } */
   
   
 
@@ -73,7 +73,7 @@ public class SignController {
   }
   
   /**
-   * 下载电子签名
+   * 查看电子签名
    * @param id
    * @return
    */

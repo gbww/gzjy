@@ -190,6 +190,14 @@ public interface UserService {
   User getUser(String organizationId, String id);
   
   /**
+   * 
+   * @param organizationId:根据部门ID查询部门下的所有用户
+   * @return
+   * UserService.java
+   */
+  List<User> selectUsersBasedOrganization(String organizationId);
+  
+  /**
    * 运营用户获取日志管理的用户
    * @return 用户
    */

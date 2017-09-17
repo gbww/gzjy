@@ -40,6 +40,15 @@ public class OrganizationController {
   public Response organizations(@PathVariable String id) {
     return Response.success(organizationService.getById(id));
   }
+  
+  @RequestMapping(value = "/organizations/testroom", method = RequestMethod.GET)
+  public Response testRoom() {
+    return Response.success(organizationService.selectAll("检测", null));
+  }
+  
+  
+  
+  
   @RequestMapping(value = "/organizations", method = RequestMethod.GET)
   public Response list(@RequestParam(value = "pageNum", required = false, defaultValue="0") Integer pageNum,
           @RequestParam(value = "pageSize", required = false, defaultValue="0") Integer pageSize,

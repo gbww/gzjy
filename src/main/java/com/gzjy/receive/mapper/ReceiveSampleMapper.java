@@ -20,8 +20,9 @@ public interface ReceiveSampleMapper {
     int updateByPrimaryKeySelective(ReceiveSample record);
 
     int updateByPrimaryKey(ReceiveSample record);
+    List<ReceiveSample>selectTest(@Param("filters") Map<String, Object> filter);
     
-    List<ReceiveSample> selectAll(@Param("filter") Map<String, Object> filter,@Param("status")Integer status,@Param("order")String order);
+    List<ReceiveSample> selectAll(@Param("filters") Map<String, Object> filter,@Param("orderby")String order);
     
     
 }

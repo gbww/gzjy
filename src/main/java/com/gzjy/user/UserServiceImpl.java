@@ -508,6 +508,15 @@ public class UserServiceImpl implements UserService {
     return u;
   }
 
+/* 
+ * @see com.gzjy.user.UserService#selectUsersBasedOrganization(java.lang.String)
+ */
+@Override
+public List<User> selectUsersBasedOrganization(String organizationId) {
+   
+    return  userMapper.selectUsersBasedOrganization(organizationId);
+}
+
 
 
 

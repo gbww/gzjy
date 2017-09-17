@@ -81,6 +81,20 @@
     where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}
   </select>
   
+  
+  
+  <select id="selectTest" resultMap="BaseResultMap" >
+   select 
+    <include refid="Base_Column_List" />
+    from receive_sample
+    <where>
+    <foreach collection="filters.keys" item="key" separator="and">
+    	    <if test="null!=filters[key]">
+    	    ${key} LIKE  #{filters[${key}]}
+    	    </if>				
+	</foreach>
+    </where>
+  </select>
 
   
     <select id="selectAll" resultMap="BaseResultMap" >
@@ -88,29 +102,13 @@
     <include refid="Base_Column_List" />
     from receive_sample
     <where>
-    	<foreach collection="filter.keys" item="key" separator="and">
-    	    <if test="null!=filter[key]">
-    	    ${key} LIKE  #{filter[${key}]}
+    	<foreach collection="filters.keys" item="key" separator="and">
+    	    <if test="null!=filters[key]">
+    	    ${key} LIKE  #{filters[${key}]}
     	    </if>				
 		</foreach>
-		 <choose>
-        <when test="5!=status and null!=status">
-             status = #{status}
-        </when>
-        <otherwise>
-        </otherwise>
-    </choose>
-    </where>
-  
-    <choose>
-        <when test="null!=order">
-            order by ${order}
-        </when>
-        <otherwise>
-            order by created_at desc
-        </otherwise>
-    </choose>
-   
+    </where> 
+      order by #{orderby}
   </select>
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
