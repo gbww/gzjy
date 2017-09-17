@@ -5,6 +5,7 @@ import java.util.Date;
 public class Template {
 	private String id;
 	private String name;	
+	private String type;	
 	private String description;
 	private Date createdAt;
 	public String getId() {
@@ -30,5 +31,11 @@ public class Template {
 	}
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}	
 }
