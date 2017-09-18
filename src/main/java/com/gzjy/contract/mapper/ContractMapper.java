@@ -10,6 +10,8 @@ import com.gzjy.contract.model.Contract;
 @Mapper
 public interface ContractMapper {
     int deleteByPrimaryKey(String id);
+    
+    String checkContractId(String id);
 
     List<Contract> selectAll(@Param("sampleName")String sampleName);
     

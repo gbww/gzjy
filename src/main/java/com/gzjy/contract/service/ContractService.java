@@ -19,6 +19,8 @@ public interface ContractService {
 	
 	int deleteByPrimaryKey(String id);
 	
+	String checkContractId(String id);
+	
 	int updateByPrimaryKey(Contract record);
 	
 	void deploymentProcess(String contractId,ArrayList<String> approveUsers, String updateContractUser);

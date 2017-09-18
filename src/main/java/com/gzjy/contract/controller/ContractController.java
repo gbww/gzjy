@@ -48,7 +48,6 @@ public class ContractController {
 	@RequestMapping(value = "/contract", method = RequestMethod.POST)
 	public Response createContract(@RequestBody Contract contract) {
 		try {
-			contract.setId(ShortUUID.getInstance().generateShortID());
 			contract.setStatus(ContractStatus.READY.getValue());
 			contract.setCreatedAt(new Date());
 			contractService.insert(contract);
@@ -89,6 +88,23 @@ public class ContractController {
 		try {
 			Contract contract = contractService.selectByPrimaryKey(id);
 			return Response.success(contract);
+		}
+		catch (Exception e) {
+			logger.error(e+"");
+			return Response.fail(e.getMessage());
+		}
+	}
+	
+	/**
+	 * 检测合同ID是否存在
+	 * @param id
+	 * @return true/false
+	 */
+	@RequestMapping(value = "/contract/check/{id}", method = RequestMethod.GET)
+	public Response checkContractById(@PathVariable String id) {
+		try {
+			String result = contractService.checkContractId(id);			
+			return Response.success(result!=null);
 		}
 		catch (Exception e) {
 			logger.error(e+"");
