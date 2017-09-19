@@ -161,7 +161,7 @@ public class ContractServiceImpl implements ContractService {
 	}
 
 	
-	public String checkContractId(String id) {
-		return contractMapper.checkContractId(id);
+	public String checkContractProtocolId(String ProtocolId) {
+		return contractMapper.checkContractProtocolId(ProtocolId);
 	}
 }

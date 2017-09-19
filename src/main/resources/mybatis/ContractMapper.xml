@@ -95,9 +95,9 @@
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   
-  <select id="checkContractId" parameterType="java.lang.String" resultType="java.lang.String">
-    select id from contract
-    where id = #{id,jdbcType=VARCHAR}
+  <select id="checkContractProtocolId" parameterType="java.lang.String" resultType="java.lang.String">
+    select protocol_id from contract
+    where protocol_id = #{protocolId,jdbcType=VARCHAR}
   </select>
   
   <insert id="insert" parameterType="com.gzjy.contract.model.Contract">

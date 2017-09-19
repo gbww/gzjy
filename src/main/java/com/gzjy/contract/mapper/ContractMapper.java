@@ -11,7 +11,7 @@ import com.gzjy.contract.model.Contract;
 public interface ContractMapper {
     int deleteByPrimaryKey(String id);
     
-    String checkContractId(String id);
+    String checkContractProtocolId(String id);
 
     List<Contract> selectAll(@Param("sampleName")String sampleName);
     

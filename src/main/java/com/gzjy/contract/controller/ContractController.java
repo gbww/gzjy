@@ -49,7 +49,7 @@ public class ContractController {
 	public Response createContract(@RequestBody Contract contract) {
 		try {
 			contract.setStatus(ContractStatus.READY.getValue());
-			contract.setProtocolId(ShortUUID.getInstance().generateShortID());
+			contract.setId(ShortUUID.getInstance().generateShortID());
 			contract.setCreatedAt(new Date());
 			contractService.insert(contract);
 			return Response.success("success");
@@ -97,14 +97,14 @@ public class ContractController {
 	}
 	
 	/**
-	 * 检测合同ID是否存在
+	 * 检测合同协议ID是否存在
 	 * @param id
 	 * @return true/false
 	 */
-	@RequestMapping(value = "/contract/check/{id}", method = RequestMethod.GET)
-	public Response checkContractById(@PathVariable String id) {
+	@RequestMapping(value = "/contract/check/{protocolId}", method = RequestMethod.GET)
+	public Response checkContractById(@PathVariable String protocolId) {
 		try {
-			String result = contractService.checkContractId(id);			
+			String result = contractService.checkContractProtocolId(protocolId);			
 			return Response.success(result!=null);
 		}
 		catch (Exception e) {

@@ -19,7 +19,7 @@ public interface ContractService {
 	
 	int deleteByPrimaryKey(String id);
 	
-	String checkContractId(String id);
+	String checkContractProtocolId(String ProtocolId);
 	
 	int updateByPrimaryKey(Contract record);
 	
