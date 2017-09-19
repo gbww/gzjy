@@ -49,6 +49,7 @@ public class ContractController {
 	public Response createContract(@RequestBody Contract contract) {
 		try {
 			contract.setStatus(ContractStatus.READY.getValue());
+			contract.setProtocolId(ShortUUID.getInstance().generateShortID());
 			contract.setCreatedAt(new Date());
 			contractService.insert(contract);
 			return Response.success("success");
