@@ -153,7 +153,7 @@ public class ReceiveSampleController {
 		if (!StringUtils.isBlank(entrustedUnit)) {
 			filter.put("entrusted_unit", entrustedUnit);
 		}
-		if (!StringUtils.isBlank(order)) {
+		if (StringUtils.isBlank(order)) {
 			orderby = "created_at desc";
 		}
 		if(status!=5) {
