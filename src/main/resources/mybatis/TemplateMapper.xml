@@ -29,4 +29,18 @@
 		#{createdAt,jdbcType=VARCHAR}		
 		)
 	</insert>
+	
+	<select id="selectAll" resultMap="BaseResultMap">
+		<if test="name != null">
+			<bind name="namePattern" value="'%' + name + '%'" />
+		</if>		
+		select
+		<include refid="Base_Column_List" />
+		from template
+		<where>
+			<if test="name != null">
+				name like #{namePattern}
+			</if>					
+		</where>
+	</select>
 </mapper>

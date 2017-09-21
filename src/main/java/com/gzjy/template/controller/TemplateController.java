@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.github.pagehelper.PageInfo;
+import com.gzjy.checkitems.model.CheckItem;
 import com.gzjy.common.Response;
 import com.gzjy.common.ShortUUID;
 import com.gzjy.common.util.fs.EpicNFSClient;
@@ -75,6 +77,27 @@ public class TemplateController {
 			return Response.success("success");
 		}
 		catch (Exception e) {
+			return Response.fail(e.getMessage());
+		}
+	}
+	
+	/**
+	 * 获取检验项列表
+	 * @param record
+	 * @return
+	 */
+	@RequestMapping(value = "/templates", method = RequestMethod.GET)
+	public Response getCheckItemList(
+			@RequestParam(required = false) String name,			
+		    @RequestParam(required = false,defaultValue="1") Integer pageNum,
+		    @RequestParam(required = false,defaultValue="10") Integer pageSize,
+		    @RequestParam(required = false, name = "searchValue") String search) {
+		try {	
+			PageInfo<Template> result = templateService.getPageList(pageNum, pageSize, name);
+			return Response.success(result);
+		}
+		catch (Exception e) {
+			System.out.println(e);
 			return Response.fail(e.getMessage());
 		}
 	}

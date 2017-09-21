@@ -3,9 +3,16 @@ package com.gzjy.template.service.impl;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.github.pagehelper.ISelect;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.gzjy.common.exception.BizException;
 import com.gzjy.common.util.fs.EpicNFSClient;
 import com.gzjy.common.util.fs.EpicNFSService;
@@ -51,5 +58,17 @@ public class TemplateServiceImpl implements TemplateService {
 		} catch (Exception e) {
 			throw new BizException("文件上传失败");
 		}
+	}
+	
+	public PageInfo<Template> getPageList(Integer pageNum, Integer pageSize, String name){
+		List<Template> list = new ArrayList<Template>();
+	    PageInfo<Template> pages = new PageInfo<Template>(list);
+	    pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
+	        @Override
+	        public void doSelect() {
+	        	templateMapper.selectAll(name);
+	        }
+	    });
+	    return pages;
 	}
 }
