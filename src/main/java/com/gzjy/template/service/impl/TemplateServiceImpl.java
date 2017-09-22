@@ -49,17 +49,19 @@ public class TemplateServiceImpl implements TemplateService {
 			client.createRemoteDir("template");
 		}
 		try {
-			OutputStream os = new FileOutputStream("var/lib/docs/gzjy/template/" + file.getOriginalFilename());
-			// 获取输入流 CommonsMultipartFile 中可以直接得到文件的流
-			InputStream is = file.getInputStream();
-			int temp;
-			// 一个一个字节的读取并写入
-			while ((temp = is.read()) != (-1)) {
-				os.write(temp);
-			}
-			os.flush();
-			os.close();
-			is.close();
+			client.upload(file.getInputStream(), "var/lib/docs/gzjy/template/" + file.getOriginalFilename());
+			client.close();			
+//			OutputStream os = new FileOutputStream("var/lib/docs/gzjy/template/" + file.getOriginalFilename());
+//			// 获取输入流 CommonsMultipartFile 中可以直接得到文件的流
+//			InputStream is = file.getInputStream();
+//			int temp;
+//			// 一个一个字节的读取并写入
+//			while ((temp = is.read()) != (-1)) {
+//				os.write(temp);
+//			}
+//			os.flush();
+//			os.close();
+//			is.close();
 		} catch (Exception e) {
 			logger.info("文件上传失败:"+e);
 			throw new BizException("文件上传失败");
