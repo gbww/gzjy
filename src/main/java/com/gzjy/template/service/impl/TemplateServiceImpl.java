@@ -49,7 +49,7 @@ public class TemplateServiceImpl implements TemplateService {
 			client.createRemoteDir("template");
 		}
 		try {
-			client.upload(file.getInputStream(), "var/lib/docs/gzjy/template/" + file.getOriginalFilename());
+			client.upload(file.getInputStream(), "template/" + file.getOriginalFilename());
 			client.close();
 			logger.info("文件上传成功");
 //			OutputStream os = new FileOutputStream("var/lib/docs/gzjy/template/" + file.getOriginalFilename());
