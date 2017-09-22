@@ -50,7 +50,8 @@ public class TemplateServiceImpl implements TemplateService {
 		}
 		try {
 			client.upload(file.getInputStream(), "var/lib/docs/gzjy/template/" + file.getOriginalFilename());
-			client.close();			
+			client.close();
+			logger.info("文件上传成功");
 //			OutputStream os = new FileOutputStream("var/lib/docs/gzjy/template/" + file.getOriginalFilename());
 //			// 获取输入流 CommonsMultipartFile 中可以直接得到文件的流
 //			InputStream is = file.getInputStream();
