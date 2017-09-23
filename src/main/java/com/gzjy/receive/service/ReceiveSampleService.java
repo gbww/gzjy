@@ -93,9 +93,13 @@ public class ReceiveSampleService {
 			if (StringUtils.isBlank(item.getName())) {
 				continue;
 			}
-			if (StringUtils.isBlank(item.getId())) {
+			if (StringUtils.isBlank(item.getId())) {  //添加检测项
 				item.setId(UUID.random());
 				 item.setUpdatedAt(new Date());
+				 if(item.getStatus()==null){
+				     item.setStatus(1);
+				     
+				 }
 				receiveSampleItemMapper.insert(item);
 			} else {
 				ReceiveSampleItem exitItem = receiveSampleItemMapper.selectByPrimaryKey(item.getId());
