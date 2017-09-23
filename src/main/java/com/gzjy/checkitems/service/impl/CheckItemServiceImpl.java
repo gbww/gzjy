@@ -46,4 +46,9 @@ public class CheckItemServiceImpl implements CheckItemService {
 	    });
 	    return pages;
 	}
+
+	public boolean validateCheckItem(CheckItem checkItem) {
+		int result=checkItemMapper.validateCheckItem(checkItem);
+		return result>0;
+	}
 }

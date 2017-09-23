@@ -10,15 +10,16 @@
 		<result column="unit" jdbcType="VARCHAR" property="unit" />
 		<result column="standard_value" jdbcType="VARCHAR" property="standardValue" />
 		<result column="detection_limit" jdbcType="VARCHAR" property="detectionLimit" />
-		<result column="quantitation_limit" jdbcType="VARCHAR"
-			property="quantitationLimit" />
+		<result column="quantitation_limit" jdbcType="VARCHAR" property="quantitationLimit" />
 		<result column="device" jdbcType="VARCHAR" property="device" />
 		<result column="default_price" jdbcType="DOUBLE" property="defaultPrice" />
+		<result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    	<result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
 		id, name, method, unit, standard_value, detection_limit,
-		quantitation_limit,device, default_price
+		quantitation_limit,device, default_price,created_at, updated_at
 	</sql>
 
 	<select id="selectAll" resultMap="BaseResultMap">
@@ -30,15 +31,16 @@
 		</if>
 		select
 		<include refid="Base_Column_List" />
-		from check_item
+		from check_item 
 		<where>
 			<if test="name != null">
 				name like #{namePattern}
 			</if>
 			<if test="method != null">
 				and method #{methodPattern}
-			</if>			
+			</if>
 		</where>
+		order by created_at desc
 	</select>
 
 	<select id="selectByPrimaryKey" parameterType="java.lang.String"
@@ -48,10 +50,40 @@
 		from check_item
 		where id = #{id,jdbcType=VARCHAR}
 	</select>
+	
+	<select id="validateCheckItem" parameterType="com.gzjy.checkitems.model.CheckItem" resultType="java.lang.Integer">
+		select count(1)	from check_item 
+		<where> 
+		    <if test="name != null">
+		         name = #{name}
+		    </if> 
+		    <if test="method != null">
+		         and method = #{method}
+		    </if> 
+		    <if test="unit != null">
+		         and unit = #{unit}
+		    </if> 
+		    <if test="standardValue != null">
+		         and standard_value = #{standardValue}
+		    </if> 
+		    <if test="detectionLimit != null">
+		         and detection_limit = #{detectionLimit}
+		    </if> 
+		    <if test="quantitationLimit != null">
+		         and quantitation_limit = #{quantitationLimit}
+		    </if> 
+		    <if test="device != null">
+		         and device = #{device}
+		    </if> 
+		    <if test="defaultPrice != null">
+		         and default_price = #{defaultPrice}
+		    </if>
+		</where>
+	</select>
 
 	<insert id="insert" parameterType="com.gzjy.checkitems.model.CheckItem">
 		insert into check_item(id, name, method, unit, standard_value,
-		detection_limit,quantitation_limit, device, default_price)
+		detection_limit,quantitation_limit, device, default_price,created_at, updated_at)
 		values (
 		#{id,jdbcType=VARCHAR},
 		#{name,jdbcType=VARCHAR},
@@ -61,8 +93,9 @@
 		#{detectionLimit,jdbcType=VARCHAR},
 		#{quantitationLimit,jdbcType=VARCHAR},
 		#{device,jdbcType=VARCHAR},
-		#{defaultPrice,jdbcType=DOUBLE}
-		)
+		#{defaultPrice,jdbcType=DOUBLE},
+		#{createdAt,jdbcType=TIMESTAMP},
+		#{updatedAt,jdbcType=TIMESTAMP})
 	</insert>
 
 	<update id="updateByPrimaryKeySelective" parameterType="com.gzjy.checkitems.model.CheckItem">
@@ -91,6 +124,9 @@
 			</if>
 			<if test="defaultPrice != null">
 				default_price = #{defaultPrice,jdbcType=VARCHAR},
+			</if>
+			<if test="updatedAt != null">
+				updated_at = #{updatedAt,jdbcType=VARCHAR},
 			</if>
 		</set>
 		where id = #{id,jdbcType=VARCHAR}

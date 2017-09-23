@@ -29,6 +29,8 @@ import com.gzjy.contract.model.ContractComment;
 import com.gzjy.contract.model.ContractStatus;
 import com.gzjy.contract.service.ContractService;
 import com.gzjy.receive.service.ReceiveSampleService;
+import com.gzjy.user.UserService;
+import com.gzjy.user.model.User;
 
 @Service
 public class ContractServiceImpl implements ContractService {
@@ -41,6 +43,9 @@ public class ContractServiceImpl implements ContractService {
 	
 	@Autowired
 	private ProcessEngine processEngine;
+	
+	@Autowired
+	private UserService userService;
 	
 	private static Logger logger = LoggerFactory.getLogger(ReceiveSampleService.class);
 	
@@ -120,12 +125,13 @@ public class ContractServiceImpl implements ContractService {
 			runtimeService.setVariable(task.getExecutionId(), "resultCount", result + 1);
 		}
 //		将评审意见插入到合同评审意见表中
+		User currentUser = userService.getCurrentUser();
 		taskService.complete(task.getId());
 		ContractComment contractComment = new ContractComment();
 		contractComment.setId(UUID.random());
 		contractComment.setTaskId(taskId);
-		contractComment.setUserId("11111");
-		contractComment.setUserName("zhangsna");
+		contractComment.setUserId(currentUser.getId());
+		contractComment.setUserName(currentUser.getName());
 		contractComment.setContext(context);
 		contractComment.setContractId(contractId);
 		contractComment.setCreateTime(new Date());

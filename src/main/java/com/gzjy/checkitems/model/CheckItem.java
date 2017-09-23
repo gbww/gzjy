@@ -1,5 +1,7 @@
 package com.gzjy.checkitems.model;
 
+import java.util.Date;
+
 public class CheckItem {
 	//序号
 	private String id; 
@@ -19,6 +21,11 @@ public class CheckItem {
 	private String device;
 	//默认价格
 	private double defaultPrice;
+	//创建时间
+    private Date createdAt;
+    //更新时间
+    private Date updatedAt;
+	
 	public String getId() {
 		return id;
 	}
@@ -73,4 +80,16 @@ public class CheckItem {
 	public void setDefaultPrice(double defaultPrice) {
 		this.defaultPrice = defaultPrice;
 	}
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
+	}	
 }

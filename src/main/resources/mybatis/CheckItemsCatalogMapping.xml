@@ -7,10 +7,12 @@
     <result column="catalog_id" jdbcType="VARCHAR" property="catalogId" />
     <result column="check_item_id" jdbcType="VARCHAR" property="checkItemId" />
     <result column="laboratory" jdbcType="VARCHAR" property="laboratory" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
   </resultMap>
   
   <sql id="Base_Column_List">
-    id, catalog_id, check_item_id, laboratory
+    id, catalog_id, check_item_id, laboratory,created_at, updated_at
   </sql>
   
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -28,15 +30,18 @@
     <if test="catalogId != null">
 		and catalog_id = #{catalogId,jdbcType=VARCHAR}
 	</if>
+	order by A.created_at desc
   </select>
   
   <insert id="insert" parameterType="com.gzjy.checkitems.model.CheckItemsCatalogMapping">
-		insert into check_item_catalog_mapping(id, catalog_id, check_item_id, laboratory)
+		insert into check_item_catalog_mapping(id, catalog_id, check_item_id, laboratory,created_at, updated_at)
 		values (
 		#{id,jdbcType=VARCHAR},
 		#{catalogId,jdbcType=VARCHAR},
 		#{checkItemId,jdbcType=VARCHAR},
-		#{laboratory,jdbcType=VARCHAR}		
+		#{laboratory,jdbcType=VARCHAR},
+		#{createdAt,jdbcType=TIMESTAMP},
+		#{updatedAt,jdbcType=TIMESTAMP}	
 		)
   </insert>
   
@@ -51,6 +56,9 @@
 			</if>
 			<if test="laboratory != null">
 				laboratory = #{laboratory,jdbcType=VARCHAR},
+			</if>
+			<if test="updatedAt != null">
+				updated_at = #{updatedAt,jdbcType=VARCHAR},
 			</if>			
 		</set>
 		where id = #{id,jdbcType=VARCHAR}

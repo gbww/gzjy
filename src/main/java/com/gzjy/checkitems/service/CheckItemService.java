@@ -9,4 +9,5 @@ public interface CheckItemService {
 	int updateByPrimaryKeySelective(CheckItem checkItem);
 	int deleteByPrimaryKey(String id);
 	PageInfo<CheckItem> getPageList(Integer pageNum, Integer pageSize, String name, String method);
+	boolean validateCheckItem(CheckItem checkItem);
 }

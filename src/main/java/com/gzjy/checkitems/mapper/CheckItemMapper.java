@@ -11,5 +11,6 @@ public interface CheckItemMapper {
 	int insert(CheckItem checkItem);
 	int updateByPrimaryKeySelective(CheckItem checkItem);
 	int deleteByPrimaryKey(String id);
+	int validateCheckItem(CheckItem checkItem);
 	List<CheckItem> selectAll(@Param("name")String name, @Param("method")String method);
 }

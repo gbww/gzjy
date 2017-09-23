@@ -82,12 +82,13 @@
 		</if>		
 		select
 		<include refid="Base_Column_List" />
-		from contract
+		from contract 
 		<where>
 			<if test="sampleName != null">
 				sample_name like #{sampleNamePattern}
-			</if>					
+			</if>
 		</where>
+		order by created_at desc
 	</select>
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">

@@ -1,5 +1,6 @@
 package com.gzjy.checkitems.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -130,6 +131,7 @@ public class CheckItemsController {
 	public Response createCheckItem(@RequestBody CheckItem record) {
 		try {
 			record.setId(ShortUUID.getInstance().generateShortID());
+			record.setCreatedAt(new Date());
 			checkItemService.insert(record);
 			return Response.success("success");
 		}
@@ -170,6 +172,7 @@ public class CheckItemsController {
 	public Response updateCheckItem(@RequestBody CheckItem record, @PathVariable String id) {
 		try {
 			record.setId(id);
+			record.setUpdatedAt(new Date());
 			checkItemService.updateByPrimaryKeySelective(record);
 			return Response.success("success");
 		}
@@ -195,6 +198,24 @@ public class CheckItemsController {
 			return Response.fail(e.getMessage());
 		}
 	}
+	
+	/**
+	 * 检验项的检验
+	 * @param record
+	 * @return
+	 */
+	@RequestMapping(value = "/checkitemscatalog/item/check", method = RequestMethod.POST)
+	public Response validateCheckItem(@RequestBody CheckItem checkItem) {
+		try {
+			boolean result=checkItemService.validateCheckItem(checkItem);
+			return Response.success(result);
+		}
+		catch (Exception e) {
+			System.out.println(e);
+			return Response.fail(e.getMessage());
+		}
+	}
+	
 	
 	/**
 	 * 检验项的查询
