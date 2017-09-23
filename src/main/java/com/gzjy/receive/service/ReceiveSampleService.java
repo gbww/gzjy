@@ -181,8 +181,11 @@ public class ReceiveSampleService {
 	
     public PageInfo<ReceiveSampleItem> selectCurrentUserItems(Integer pageNum, Integer pageSize,Map<String, Object> filter) {
         User u=userClient.getCurrentUser();
-        String name=u.getName();
-        filter.put("test_user", name);
+       boolean superUser= u.getRole().isSuperAdmin();
+       if(!superUser) {
+           String name=u.getName();
+           filter.put("test_user", name);
+       }    
         List<ReceiveSampleItem> list = new ArrayList<ReceiveSampleItem>();
         PageInfo<ReceiveSampleItem> pages = new PageInfo<ReceiveSampleItem>(list);
         pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {

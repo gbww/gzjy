@@ -108,7 +108,7 @@
     	    </if>				
 		</foreach>
     </where> 
-      order by #{orderby}
+      order by ${orderby}
   </select>
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
