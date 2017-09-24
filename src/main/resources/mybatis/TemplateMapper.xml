@@ -6,10 +6,11 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="VARCHAR" />      
     <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="excel_name" property="excelName" jdbcType="VARCHAR" />
     <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, name, type, description, created_at
+    id, name, type, description, excel_name, created_at
   </sql>
   
   <select id="selectByName" resultMap="BaseResultMap" parameterType="java.lang.String" >
@@ -20,12 +21,13 @@
   </select>
   
   <insert id="insert" parameterType="com.gzjy.template.model.Template">
-		insert into template(id, name, type, description, created_at)
+		insert into template(id, name, type, description, excel_name, created_at)
 		values (
 		#{id,jdbcType=VARCHAR},
 		#{name,jdbcType=VARCHAR},
 		#{type,jdbcType=VARCHAR},
 		#{description,jdbcType=VARCHAR},
+		#{excelName,jdbcType=VARCHAR},
 		#{createdAt,jdbcType=VARCHAR}		
 		)
 	</insert>

@@ -7,6 +7,7 @@ public class Template {
 	private String name;	
 	private String type;	
 	private String description;
+	private String excelName;
 	private Date createdAt;
 	public String getId() {
 		return id;
@@ -37,5 +38,11 @@ public class Template {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public String getExcelName() {
+		return excelName;
+	}
+	public void setExcelName(String excelName) {
+		this.excelName = excelName;
 	}	
 }
