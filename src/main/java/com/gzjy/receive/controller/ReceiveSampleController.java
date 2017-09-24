@@ -255,7 +255,7 @@ public class ReceiveSampleController {
 			receiveSampleService.generateExcel(workbook, receiveSample);
 			response.reset();
 			response.setHeader("Content-disposition", "attachment;filename="+ URLEncoder.encode(tempFileName, "UTF-8"));
-			response.setContentType("application/vnd.ms-excel;charset=UTF-8");
+			response.setContentType("application/octet-stream;charset=UTF-8");
 			OutputStream out = response.getOutputStream();
 			workbook.write(out);
 			input.close();
