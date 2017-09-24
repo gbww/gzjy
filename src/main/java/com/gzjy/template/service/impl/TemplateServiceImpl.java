@@ -42,7 +42,7 @@ public class TemplateServiceImpl implements TemplateService {
 		return templateMapper.insert(record);
 	}
 
-	public void uploadFile(MultipartFile file, String type) {
+	public void uploadFile(MultipartFile file, String type, String name, String description) {
 		EpicNFSClient client = epicNFSService.getClient("gzjy");
 		// 建立远程存放excel模板文件目录
 		if (!client.hasRemoteDir("template")) {
@@ -56,9 +56,10 @@ public class TemplateServiceImpl implements TemplateService {
 			logger.info("文件上传到服务器成功");
 			Template record=new Template();
 			record.setId(ShortUUID.getInstance().generateShortID());
-			record.setName(file.getOriginalFilename());
+			record.setName(name);
 			record.setExcelName(excelName);
 			record.setCreatedAt(new Date());
+			record.setDescription(description);
 			record.setType(type);
 			templateMapper.insert(record);
 		} catch (Exception e) {
