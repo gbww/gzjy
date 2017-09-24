@@ -1,8 +1,6 @@
 package com.gzjy.template.service.impl;
 
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,20 +47,9 @@ public class TemplateServiceImpl implements TemplateService {
 			client.createRemoteDir("template");
 		}
 		try {
-			client.upload(file.getInputStream(), "template/" + file.getOriginalFilename());
+			client.upload(file.getInputStream(), "template/" + URLEncoder.encode(file.getOriginalFilename(), "UTF-8"));
 			client.close();
 			logger.info("文件上传成功");
-//			OutputStream os = new FileOutputStream("var/lib/docs/gzjy/template/" + file.getOriginalFilename());
-//			// 获取输入流 CommonsMultipartFile 中可以直接得到文件的流
-//			InputStream is = file.getInputStream();
-//			int temp;
-//			// 一个一个字节的读取并写入
-//			while ((temp = is.read()) != (-1)) {
-//				os.write(temp);
-//			}
-//			os.flush();
-//			os.close();
-//			is.close();
 		} catch (Exception e) {
 			logger.info("文件上传失败:"+e);
 			throw new BizException("文件上传失败");

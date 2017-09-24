@@ -19,8 +19,7 @@ public class TaskCompleteListener implements TaskListener {
 	private static Logger logger = LoggerFactory.getLogger(ReceiveSampleService.class);
 	private static final long serialVersionUID = 1L;
 
-	public void notify(DelegateTask delegateTask) {
-		
+	public void notify(DelegateTask delegateTask) {		
 		int resultCount = (int)delegateTask.getExecution().getVariable("resultCount");
         int completeTask = (int)delegateTask.getExecution().getVariable("nrOfCompletedInstances");
         int taskCount = (int)delegateTask.getExecution().getVariable("nrOfInstances");
@@ -37,7 +36,7 @@ public class TaskCompleteListener implements TaskListener {
         		contractService.updateStatusByProcessId(ContractStatus.OVER.getValue(), processId);
         	}catch (Exception e) {
         		logger.debug(e+"");
-			}        	
+			}
         }
 	}
 }
