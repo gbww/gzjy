@@ -9,5 +9,5 @@ public interface TemplateService {
 	Template selectByName(String name);
 	int insert(Template record); 
 	void uploadFile(MultipartFile file, String type, String name, String description);
-	PageInfo<Template> getPageList(Integer pageNum, Integer pageSize, String name);
+	PageInfo<Template> getPageList(Integer pageNum, Integer pageSize, String name, String type);
 }

@@ -78,7 +78,7 @@ public class TemplateController {
 	}
 	
 	/**
-	 * 获取检验项列表
+	 * 获取模板列表
 	 * @param record
 	 * @return
 	 */
@@ -87,9 +87,9 @@ public class TemplateController {
 			@RequestParam(required = false) String name,			
 		    @RequestParam(required = false,defaultValue="1") Integer pageNum,
 		    @RequestParam(required = false,defaultValue="10") Integer pageSize,
-		    @RequestParam(required = false, name = "searchValue") String search) {
+		    @RequestParam(required = false) String type) {
 		try {	
-			PageInfo<Template> result = templateService.getPageList(pageNum, pageSize, name);
+			PageInfo<Template> result = templateService.getPageList(pageNum, pageSize, name, type);
 			return Response.success(result);
 		}
 		catch (Exception e) {

@@ -42,6 +42,9 @@
 		<where>
 			<if test="name != null">
 				name like #{namePattern}
+			</if>
+			<if test="type != null">
+				type = #{type}
 			</if>					
 		</where>
 	</select>

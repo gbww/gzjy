@@ -11,5 +11,5 @@ import com.gzjy.template.model.Template;
 public interface TemplateMapper {
 	Template selectByName(@Param("name")String name);
 	int insert(Template record);
-	List<Template> selectAll(@Param("name")String name);
+	List<Template> selectAll(@Param("name")String name,@Param("type")String type);
 }

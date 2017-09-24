@@ -68,13 +68,13 @@ public class TemplateServiceImpl implements TemplateService {
 		}
 	}
 	
-	public PageInfo<Template> getPageList(Integer pageNum, Integer pageSize, String name){
+	public PageInfo<Template> getPageList(Integer pageNum, Integer pageSize, String name, String type){
 		List<Template> list = new ArrayList<Template>();
 	    PageInfo<Template> pages = new PageInfo<Template>(list);
 	    pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
 	        @Override
 	        public void doSelect() {
-	        	templateMapper.selectAll(name);
+	        	templateMapper.selectAll(name, type);
 	        }
 	    });
 	    return pages;
