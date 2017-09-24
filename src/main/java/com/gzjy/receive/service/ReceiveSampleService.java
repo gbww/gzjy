@@ -350,7 +350,7 @@ public class ReceiveSampleService {
 				}
 				if(value.indexOf("&") ==0) {
 					String key = value.substring(1);
-					if(key.contains("Date")) {						
+					if(key.contains("Date") && mapdata.get(key)!=null) {						
 						cell.setCellValue(formatter.format(mapdata.get(key)));
 					}else {
 						cell.setCellValue(mapdata.get(key)+"");
