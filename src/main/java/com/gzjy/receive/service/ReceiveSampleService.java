@@ -353,7 +353,7 @@ public class ReceiveSampleService {
 					if(key.contains("Date") && mapdata.get(key)!=null) {						
 						cell.setCellValue(formatter.format(mapdata.get(key)));
 					}else {
-						cell.setCellValue(mapdata.get(key)+"");
+						cell.setCellValue(mapdata.get(key)!=null?(mapdata.get(key)+""):"");
 					}
 					if("&remark".equals(value)) {
 						remarkRowHeight = row.getHeight();						
