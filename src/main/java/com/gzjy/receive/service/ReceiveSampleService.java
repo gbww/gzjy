@@ -97,7 +97,7 @@ public class ReceiveSampleService {
 				item.setId(UUID.random());
 				 item.setUpdatedAt(new Date());
 				 if(item.getStatus()==null){
-				     item.setStatus(1);
+				     item.setStatus(0);
 				     
 				 }
 				receiveSampleItemMapper.insert(item);
