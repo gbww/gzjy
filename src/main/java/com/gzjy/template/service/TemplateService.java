@@ -10,5 +10,5 @@ public interface TemplateService {
 	int insert(Template record); 
 	int updateByPrimaryKeySelective(Template record);
 	void uploadFile(MultipartFile file, String type, String name, String description);
-	PageInfo<Template> getPageList(Integer pageNum, Integer pageSize, String name, String type);
+	PageInfo<Template> getPageList(Integer pageNum, Integer pageSize, String name, String type, String category);
 }

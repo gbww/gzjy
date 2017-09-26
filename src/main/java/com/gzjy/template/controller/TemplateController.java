@@ -104,9 +104,10 @@ public class TemplateController {
 			@RequestParam(required = false) String name,			
 		    @RequestParam(required = false,defaultValue="1") Integer pageNum,
 		    @RequestParam(required = false,defaultValue="10") Integer pageSize,
-		    @RequestParam(required = false) String type) {
+		    @RequestParam(required = false) String type,
+		    @RequestParam(required = false) String category) {
 		try {	
-			PageInfo<Template> result = templateService.getPageList(pageNum, pageSize, name, type);
+			PageInfo<Template> result = templateService.getPageList(pageNum, pageSize, name, type, category);
 			return Response.success(result);
 		}
 		catch (Exception e) {
