@@ -46,10 +46,10 @@
 				name like #{namePattern}
 			</if>
 			<if test="type != null">
-				type = #{type}
+				and type = #{type}
 			</if>					
 			<if test="category != null">
-				category = #{category}
+				and category = #{category}
 			</if>					
 		</where>
 	</select>
