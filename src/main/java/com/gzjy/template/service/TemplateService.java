@@ -8,6 +8,7 @@ import com.gzjy.template.model.Template;
 public interface TemplateService {
 	Template selectByName(String name);
 	int insert(Template record); 
+	int updateByPrimaryKeySelective(Template record);
 	void uploadFile(MultipartFile file, String type, String name, String description);
 	PageInfo<Template> getPageList(Integer pageNum, Integer pageSize, String name, String type);
 }

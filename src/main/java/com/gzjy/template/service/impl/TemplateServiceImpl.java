@@ -79,4 +79,10 @@ public class TemplateServiceImpl implements TemplateService {
 	    });
 	    return pages;
 	}
+
+	@Override
+	public int updateByPrimaryKeySelective(Template record) {
+		// TODO Auto-generated method stub
+		return templateMapper.updateByPrimaryKeySelective(record);
+	}
 }

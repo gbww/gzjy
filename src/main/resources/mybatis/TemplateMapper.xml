@@ -48,4 +48,20 @@
 			</if>					
 		</where>
 	</select>
+	
+	<update id="updateByPrimaryKeySelective" parameterType="com.gzjy.template.model.Template">
+		update template
+		<set>			
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR},
+			</if>			
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
 </mapper>

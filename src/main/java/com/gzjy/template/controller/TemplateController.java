@@ -20,7 +20,7 @@ import com.gzjy.template.model.Template;
 import com.gzjy.template.service.TemplateService;
 
 @RestController
-@RequestMapping(value = "v1/ahgz")
+@RequestMapping(value = "/v1/ahgz")
 public class TemplateController {
 	
 	@Autowired
@@ -59,6 +59,23 @@ public class TemplateController {
 			return Response.fail(e.getMessage());
 		}
 	}
+	
+	/**
+	 * 修改模板表数据记录
+	 * @param record
+	 * @return
+	 */
+	@RequestMapping(value = "/template", method = RequestMethod.PUT)
+	public Response updateTemplate(@RequestBody Template record) {		
+		try {			
+			templateService.updateByPrimaryKeySelective(record);
+			return Response.success("success");
+		}
+		catch (Exception e) {
+			return Response.fail(e.getMessage());
+		}
+	}
+	
 	
 	/**
 	 * 上传模板文件
