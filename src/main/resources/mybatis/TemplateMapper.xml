@@ -54,6 +54,10 @@
 		</where>
 	</select>
 	
+	<select id="selectTypeByCagegory" resultType="java.lang.String">			
+		select distinct type from template where category = #{category}
+	</select>
+	
 	<update id="updateByPrimaryKeySelective" parameterType="com.gzjy.template.model.Template">
 		update template
 		<set>			

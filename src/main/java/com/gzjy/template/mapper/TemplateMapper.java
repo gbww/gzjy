@@ -1,5 +1,6 @@
 package com.gzjy.template.mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -13,4 +14,5 @@ public interface TemplateMapper {
 	int insert(Template record);
 	int updateByPrimaryKeySelective(Template record);
 	List<Template> selectAll(@Param("name")String name,@Param("type")String type, @Param("category")String category);
+	ArrayList<String> selectTypeByCagegory(@Param("category")String category);
 }

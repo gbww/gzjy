@@ -1,5 +1,6 @@
 package com.gzjy.template.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageInfo;
-import com.gzjy.checkitems.model.CheckItem;
 import com.gzjy.common.Response;
 import com.gzjy.common.ShortUUID;
-import com.gzjy.common.util.fs.EpicNFSClient;
-import com.gzjy.common.util.fs.EpicNFSService;
 import com.gzjy.template.model.Template;
 import com.gzjy.template.service.TemplateService;
 
@@ -100,15 +98,32 @@ public class TemplateController {
 	 * @return
 	 */
 	@RequestMapping(value = "/templates", method = RequestMethod.GET)
-	public Response getCheckItemList(
+	public Response getTemplateList(
 			@RequestParam(required = false) String name,			
 		    @RequestParam(required = false,defaultValue="1") Integer pageNum,
 		    @RequestParam(required = false,defaultValue="10") Integer pageSize,
 		    @RequestParam(required = false) String type,
 		    @RequestParam(required = false) String category) {
-		try {	
+		try {
 			PageInfo<Template> result = templateService.getPageList(pageNum, pageSize, name, type, category);
 			return Response.success(result);
+		}
+		catch (Exception e) {
+			System.out.println(e);
+			return Response.fail(e.getMessage());
+		}
+	}
+	
+	/**
+	 * 获取模板列表
+	 * @param record
+	 * @return
+	 */
+	@RequestMapping(value = "/template/types", method = RequestMethod.GET)
+	public Response getTypeList(@RequestParam(required = true) String category) {
+		try {
+			ArrayList<String> data = templateService.selectTypeByCagegory(category);
+			return Response.success(data);
 		}
 		catch (Exception e) {
 			System.out.println(e);
