@@ -5,7 +5,8 @@ import java.util.Date;
 public class Template {
 	private String id;
 	private String name;	
-	private String type;	
+	private String type;
+	private String category;
 	private String description;
 	private String excelName;
 	private Date createdAt;
@@ -44,5 +45,11 @@ public class Template {
 	}
 	public void setExcelName(String excelName) {
 		this.excelName = excelName;
+	}
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
 	}	
 }
