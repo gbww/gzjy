@@ -52,7 +52,11 @@ import com.gzjy.receive.model.ReceiveSample;
 import com.gzjy.receive.model.ReceiveSampleItem;
 import com.gzjy.user.UserService;
 import com.gzjy.user.mapper.UserSignMapper;
-import com.gzjy.user.model.User; 
+import com.gzjy.user.model.User;
+import com.jacob.activeX.ActiveXComponent;
+import com.jacob.com.ComThread;
+import com.jacob.com.Dispatch;
+import com.jacob.com.Variant; 
 /**
  * @author xuewenlong@cmss.chinamobile.com
  * @updated 2017年9月3日
@@ -447,4 +451,35 @@ public class ReceiveSampleService {
 	        patriarch.createPicture(anchor, workbook.addPicture(byteArrayOut.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG)); 
 		}        
 	}
+	
+	public String ExcelToPdf(String inFilePath,String outFilePath){  
+	    ComThread.InitSTA(true);  
+	    ActiveXComponent ax=new ActiveXComponent("Excel.Application");  
+	    try{  
+	        ax.setProperty("Visible", new Variant(false));  
+	        ax.setProperty("AutomationSecurity", new Variant(3)); //禁用宏  
+	        Dispatch excels=ax.getProperty("Workbooks").toDispatch();
+	        Dispatch excel=Dispatch.invoke(excels,"Open",Dispatch.Method,new Object[]{  
+	            inFilePath,  
+	            new Variant(false),  
+	            new Variant(false)  
+	        },  
+	        new int[9]).toDispatch();  
+	        //转换格式  
+	        Dispatch.invoke(excel,"ExportAsFixedFormat",Dispatch.Method,new Object[]{  
+	            new Variant(0), //PDF格式=0  
+	            outFilePath,  
+	            new Variant(0)  //0=标准 (生成的PDF图片不会变模糊) 1=最小文件 (生成的PDF图片糊的一塌糊涂)  
+	        },new int[1]);
+	        Dispatch.call(excel, "Close",new Variant(false));
+	        if(ax!=null){  
+	            ax.invoke("Quit",new Variant[]{});  
+	            ax=null;  
+	        }
+	        ComThread.Release();  
+	        return "";  
+	    }catch(Exception es){  
+	        return es.toString();  
+	    }  
+	}  
 }
