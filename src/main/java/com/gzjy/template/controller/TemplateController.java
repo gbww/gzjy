@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -80,11 +81,11 @@ public class TemplateController {
 	 * @param file
 	 * @return
 	 */
-	@RequestMapping(value = "/template/upload", method = RequestMethod.POST)
+	@RequestMapping(value = "/template/upload", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Response uploadTemplate(@RequestParam("file") MultipartFile file, @RequestParam String type,
-			@RequestParam String name, @RequestParam String description) {
+			@RequestParam String name, @RequestParam String description, @RequestParam String category) {
 		try {			
-			templateService.uploadFile(file, type, name, description);			
+			templateService.uploadFile(file, type, name, description, category);			
 			return Response.success("success");
 		}
 		catch (Exception e) {
