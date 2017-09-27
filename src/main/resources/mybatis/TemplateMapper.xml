@@ -52,6 +52,7 @@
 				and category = #{category}
 			</if>					
 		</where>
+		order by created_at desc
 	</select>
 	
 	<select id="selectTypeByCagegory" resultType="java.lang.String">			

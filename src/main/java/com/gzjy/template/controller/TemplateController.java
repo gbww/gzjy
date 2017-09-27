@@ -81,7 +81,7 @@ public class TemplateController {
 	 * @param file
 	 * @return
 	 */
-	@RequestMapping(value = "/template/upload", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/template/upload", method = RequestMethod.POST)
 	public Response uploadTemplate(@RequestParam("file") MultipartFile file, @RequestParam String type,
 			@RequestParam String name, @RequestParam String description, @RequestParam String category) {
 		try {			
