@@ -13,6 +13,8 @@ public interface TemplateMapper {
 	Template selectByName(@Param("name")String name);
 	int insert(Template record);
 	int updateByPrimaryKeySelective(Template record);
+	int deleteByPrimaryKey(@Param("id")String id);
+	Template selectById(@Param("id")String id);
 	List<Template> selectAll(@Param("name")String name,@Param("type")String type, @Param("category")String category);
 	ArrayList<String> selectTypeByCagegory(@Param("category")String category);
 }

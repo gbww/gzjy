@@ -21,6 +21,13 @@
     where name = #{name,jdbcType=VARCHAR}
   </select>
   
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from template
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  
   <insert id="insert" parameterType="com.gzjy.template.model.Template">
 		insert into template(id, name, type, category, description, excel_name, created_at)
 		values (
@@ -77,4 +84,9 @@
 		</set>
 		where id = #{id,jdbcType=VARCHAR}
 	</update>
+	
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from template
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
 </mapper>

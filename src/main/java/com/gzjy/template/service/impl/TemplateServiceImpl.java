@@ -1,5 +1,6 @@
 package com.gzjy.template.service.impl;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -81,12 +82,23 @@ public class TemplateServiceImpl implements TemplateService {
 	}
 
 	public int updateByPrimaryKeySelective(Template record) {
-		// TODO Auto-generated method stub
 		return templateMapper.updateByPrimaryKeySelective(record);
 	}
 
 	public ArrayList<String> selectTypeByCagegory(String category) {
-		// TODO Auto-generated method stub
 		return templateMapper.selectTypeByCagegory(category);
+	}
+	
+	public int deleteByPrimaryKey(String id) throws Exception {
+		Template data = templateMapper.selectById(id);
+		String filePath = "template/"+data.getExcelName();
+		File file = new File(filePath);
+		if (file.exists() && file.isFile()) {
+			logger.info("File path:" + file.getAbsolutePath());
+			if (!file.delete()) {
+				throw new Exception("临时模板文件删除失败");
+			}
+		}
+		return templateMapper.deleteByPrimaryKey(id);
 	}
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -68,6 +69,22 @@ public class TemplateController {
 	public Response updateTemplate(@RequestBody Template record) {		
 		try {			
 			templateService.updateByPrimaryKeySelective(record);
+			return Response.success("success");
+		}
+		catch (Exception e) {
+			return Response.fail(e.getMessage());
+		}
+	}
+	
+	/**
+	 * 修改模板表数据记录
+	 * @param record
+	 * @return
+	 */
+	@RequestMapping(value = "/template/{id}", method = RequestMethod.DELETE)
+	public Response deleteTemplate(@PathVariable String id) {		
+		try {			
+			templateService.deleteByPrimaryKey(id);
 			return Response.success("success");
 		}
 		catch (Exception e) {

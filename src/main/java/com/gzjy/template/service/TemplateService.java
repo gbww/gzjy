@@ -14,4 +14,5 @@ public interface TemplateService {
 	void uploadFile(MultipartFile file, String type, String name, String description,String category);
 	PageInfo<Template> getPageList(Integer pageNum, Integer pageSize, String name, String type, String category);
 	ArrayList<String> selectTypeByCagegory(String category);
+	int deleteByPrimaryKey(String id) throws Exception ;
 }
