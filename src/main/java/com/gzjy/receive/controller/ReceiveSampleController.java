@@ -261,9 +261,12 @@ public class ReceiveSampleController {
 			input.close();
 			out.flush();
 			out.close();
+			logger.info("Begin export PDF");
+			receiveSampleService.ExcelToPdf(tempFile, "temp/zhangsan.pdf");
 			//删除缓存模板文件
+			logger.info("Begin delete temple file");
 			receiveSampleService.deleteFile(tempFile);
-			receiveSampleService.ExcelToPdf(tempFile, "/var/lib/docs/gzjy/temp/zhangsan.pdf");
+			
 		} catch (Exception e) {
 			logger.error(e+"");
 			return Response.fail(e.getMessage());

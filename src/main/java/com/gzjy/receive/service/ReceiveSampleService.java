@@ -479,6 +479,7 @@ public class ReceiveSampleService {
 	        ComThread.Release();  
 	        return "";  
 	    }catch(Exception es){  
+	    	logger.info(es+"");
 	        return es.toString();  
 	    }  
 	}  

@@ -180,6 +180,7 @@ public class ContractController {
 		ArrayList<ContractTask> taskList = new ArrayList<ContractTask>();
 		try {
 			if("0".equals(isHandle)) {
+				logger.info("查询未完成任务");
 				List<Task> tasks= contractService.getTaskByUserId(taskName, userId);			
 				for (Task task :tasks) {
 					logger.info("ID:"+task.getId()+",姓名:"+task.getName()+",接收人:"+task.getAssignee()+",开始时间:"+task.getCreateTime());
@@ -194,6 +195,7 @@ public class ContractController {
 				}
 				return Response.success(taskList);
 			}else {
+				logger.info("查询已完成任务");
 				List<HistoricTaskInstance> tasks=contractService.getHistoryTaskByUserId(taskName, userId);
 				for(HistoricTaskInstance task:tasks) {
 					logger.info("ID:"+task.getId()+",姓名:"+task.getName()+",接收人:"+task.getAssignee()+",开始时间:"+task.getCreateTime());
