@@ -270,4 +270,48 @@ public class ReceiveSampleController {
 		}
 		return Response.success("success");
 	}
+	
+	//测试
+	@RequestMapping(value = "/sample/items/excel/test/{id}", method = RequestMethod.GET)
+	public Response testExcel(HttpServletResponse response, @PathVariable(name = "id") String id,
+			@RequestParam(required = true) String templateFileName) {
+		EpicNFSClient client = epicNFSService.getClient("gzjy");
+		//生成临时模板excel文件
+		String tempFileName = ShortUUID.getInstance().generateShortID()+".xls";
+		//建立远程存放excel模板文件目录
+		if (!client.hasRemoteDir("temp")) {
+			client.createRemoteDir("temp");
+		}
+		//服务器模板文件存放目录
+		String serverTemplatePath = "/var/lib/docs/gzjy/template/";
+		//根据接口参数得到服务器模板文件的实际路径
+		String serverTemplateFile = serverTemplatePath + templateFileName;
+		//建立服务器缓存模板文件
+		String tempFile = "/var/lib/docs/gzjy/temp/"+tempFileName;
+		try {
+			//将模板文件复制到缓存文件
+			receiveSampleService.copyFile(serverTemplateFile, tempFile);
+			//获取报告数据
+			ReceiveSample receiveSample = receiveSampleService.getReceiveSample(id);
+			InputStream input = new FileInputStream(tempFile);
+			HSSFWorkbook workbook = new HSSFWorkbook(input);
+			//将数据写入流中
+			receiveSampleService.generateExcel(workbook, receiveSample);
+			response.reset();
+			response.setHeader("Content-disposition", "attachment;filename="+ URLEncoder.encode(tempFileName, "UTF-8"));
+			response.setContentType("arraybuffer;charset=UTF-8");
+			OutputStream out = response.getOutputStream();
+			workbook.write(out);
+			input.close();
+			out.flush();
+			out.close();
+			//删除缓存模板文件
+			receiveSampleService.deleteFile(tempFile);
+			receiveSampleService.ExcelToPdf(tempFile, "/var/lib/docs/gzjy/temp/zhangsan.pdf");
+		} catch (Exception e) {
+			logger.error(e+"");
+			return Response.fail(e.getMessage());
+		}
+		return Response.success("success");
+	}
 }
