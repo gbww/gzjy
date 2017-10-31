@@ -35,6 +35,7 @@ public class Privilege {
     USER("USER", new String[]{"用户", "Y"}), 
     ORGANIZATION("ORGANIZATION", new String[]{"部门", "B"}),
     ROLE("ROLE", new String[]{"角色", "J"}),
+    CONTRACT("CONTRACT", new String[]{"合同", "H"}),
     SAMPLE("SAMPLE", new String[]{"接样", "S"});
       
     private String name;

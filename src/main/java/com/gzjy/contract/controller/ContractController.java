@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.pagehelper.PageInfo;
 import com.gzjy.common.Response;
 import com.gzjy.common.ShortUUID;
+import com.gzjy.common.annotation.Privileges;
 import com.gzjy.contract.model.Contract;
 import com.gzjy.contract.model.ContractComment;
 import com.gzjy.contract.model.ContractProcess;
@@ -45,6 +46,7 @@ public class ContractController {
 	 * @param Contract实体对象
 	 * @return 
 	 */
+	@Privileges(name = "CONTRACT-ADD", scope = {1})
 	@RequestMapping(value = "/contract", method = RequestMethod.POST)
 	public Response createContract(@RequestBody Contract contract) {
 		try {
@@ -65,6 +67,7 @@ public class ContractController {
 	 * @param Contract实体对象
 	 * @return 
 	 */
+	@Privileges(name = "CONTRACT-SELECT", scope = {1})
 	@RequestMapping(value = "/contract", method = RequestMethod.GET)
 	public Response getContractList(@RequestParam(required = false) String sampleName, 			
 		    @RequestParam(required = false,defaultValue="1") Integer pageNum,
@@ -118,6 +121,7 @@ public class ContractController {
 	 * @param id
 	 * @return
 	 */
+	@Privileges(name = "CONTRACT-DELETE", scope = {1})
 	@RequestMapping(value = "/contract/{id}", method = RequestMethod.DELETE)
 	public Response delContractById(@PathVariable String id) {
 		try {
@@ -135,6 +139,7 @@ public class ContractController {
 	 * @param contract
 	 * @return
 	 */
+	@Privileges(name = "CONTRACT-UPDATE", scope = {1})
 	@RequestMapping(value = "/contract/{id}", method = RequestMethod.PUT)
 	public Response updateContract(@PathVariable String id, @RequestBody Contract contract) {
 		try {
@@ -154,6 +159,7 @@ public class ContractController {
 	 * @param id
 	 * @return
 	 */
+	@Privileges(name = "CONTRACT-STARTPROCESS", scope = {1})
 	@RequestMapping(value = "/contract/process", method = RequestMethod.POST)
 	public Response startContractProcess(@RequestBody ContractProcess contractProcess) {
 		ArrayList<String> approveUsers = contractProcess.getApproveUsers();
