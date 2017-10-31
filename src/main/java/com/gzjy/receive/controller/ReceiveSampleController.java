@@ -33,6 +33,7 @@ import com.gzjy.common.Delete;
 import com.gzjy.common.Response;
 import com.gzjy.common.ShortUUID;
 import com.gzjy.common.Update;
+import com.gzjy.common.annotation.Privileges;
 import com.gzjy.common.exception.BizException;
 import com.gzjy.common.util.fs.EpicNFSClient;
 import com.gzjy.common.util.fs.EpicNFSService;
@@ -58,6 +59,7 @@ public class ReceiveSampleController {
 
 	// 添加接样基本信息
 	@RequestMapping(value = "/sample", method = RequestMethod.POST)
+	@Privileges(name = "SAMPLE-ADD", scope = {1})
 	public Response addSample(@Validated(value = { Add.class }) @RequestBody ReceiveSample receiveSample,
 			BindingResult result) {
 		if (result.hasErrors()) {
@@ -71,6 +73,7 @@ public class ReceiveSampleController {
 	}
 
 	// 变更接样中检验项基本信息（添加检验项和编辑检验项）
+	@Privileges(name = "SAMPLE-ADDITEM", scope = {1})
 	@RequestMapping(value = "/sample/item/{receiveSampleId}", method = RequestMethod.POST)
 	public Response addItem(@PathVariable("receiveSampleId") String receiveSample,
 			@Validated(value = { Add.class }) @RequestBody List<ReceiveSampleItem> items, BindingResult result) {
@@ -88,6 +91,7 @@ public class ReceiveSampleController {
 	}
 
 	// 删除接样单（包括接样单中的检验项）
+	@Privileges(name = "SAMPLE-DELETESAMPLE", scope = {1})
 	@RequestMapping(value = "/sample/delete", method = RequestMethod.POST)
 	public Response deleteSample( @RequestBody List<String> ids,
 			BindingResult result) {
@@ -106,6 +110,7 @@ public class ReceiveSampleController {
 	}
 
 	// 删除接样中检验项基本信息（删除检验项时直接调用后台接口删除）
+	@Privileges(name = "SAMPLE-DELETEITEM", scope = {1})
 	@RequestMapping(value = "/sample/items/{receiveSampleId}/delete", method = RequestMethod.POST)
 	public Response deleteItem(@PathVariable("receiveSampleId") String receiveSample, @RequestBody List<String> items,
 			BindingResult result) {
@@ -124,6 +129,7 @@ public class ReceiveSampleController {
 	}
 
 	// 更新接样基本信息
+	@Privileges(name = "SAMPLE-UPDATESAMPLE", scope = {1})
 	@RequestMapping(value = "/sample", method = RequestMethod.PUT)
 	public Response updateSample(@Validated(value = { Update.class }) @RequestBody ReceiveSample receiveSample,
 			BindingResult result) {
@@ -139,6 +145,7 @@ public class ReceiveSampleController {
 
 	// 查询接样信息
 	@RequestMapping(value = "/sample", method = RequestMethod.GET)
+	@Privileges(name = "SAMPLE-SELECT", scope = {1})
 	public Response list(@RequestParam(name = "receivesampleid", required = false) String id,
 			@RequestParam(name = "entrustedunit", required = false) String entrustedUnit,
 			@RequestParam(name = "order", required = false) String order,
@@ -205,6 +212,7 @@ public class ReceiveSampleController {
     }
     
  // 查询当前用户检验项信息(检测人员关心的检验项)
+    @Privileges(name = "SAMPLE-SELECTITEM", scope = {1})
     @RequestMapping(value = "/sampleItem", method = RequestMethod.GET)
     public Response listItemByCurrentUser(          
             @RequestParam(name = "status",defaultValue = "0") int status,

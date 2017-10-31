@@ -34,7 +34,8 @@ public class Privilege {
   public enum CategoryWithCapitals{
     USER("USER", new String[]{"用户", "Y"}), 
     ORGANIZATION("ORGANIZATION", new String[]{"部门", "B"}),
-    ROLE("ROLE", new String[]{"角色", "J"});
+    ROLE("ROLE", new String[]{"角色", "J"}),
+    SAMPLE("SAMPLE", new String[]{"接样", "S"});
       
     private String name;
     private String[] details;

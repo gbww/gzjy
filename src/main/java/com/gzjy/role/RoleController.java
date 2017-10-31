@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.gzjy.common.Add;
 import com.gzjy.common.Response;
+import com.gzjy.common.annotation.Privileges;
 import com.gzjy.common.exception.BizException;
 import com.gzjy.common.rest.EpcRestService;
 import com.gzjy.privilege.model.Privilege;
@@ -32,6 +33,7 @@ public class RoleController {
   private EpcRestService epcRestService;
   
   @RequestMapping(value = "/roles", method = RequestMethod.POST)
+  @Privileges(name = "ROLE-ADD", scope = {1})
   public Response add(@Validated(value={Add.class}) @RequestBody CrabRole role, BindingResult result) {
     if(result.hasErrors()){
       return Response.fail(result.getFieldError().getDefaultMessage());
@@ -51,7 +53,7 @@ public class RoleController {
     int result = roleService.initPrivilegeForDefaultRole(id, privileges);
     return Response.success(result);
   }
-  
+  @Privileges(name = "ROLE-DELETE", scope = {1})
   @RequestMapping(value = "/roles/{id}", method = RequestMethod.DELETE)
   public Response delete(@PathVariable("id") String id) {
     int result = roleService.delete(id);
@@ -69,6 +71,7 @@ public class RoleController {
   }*/
   
   @RequestMapping(value = "/roles", method = RequestMethod.GET)
+  @Privileges(name = "ROLE-SELECT", scope = {1})
   public Response roles(@RequestParam(required=false) String organizationId, @RequestParam(required=false) Integer pageNum, @RequestParam(required=false) Integer pageSize) {
     if (pageNum == null || pageSize == null) {
       return Response.success(roleService.getRoles(organizationId));
@@ -85,8 +88,9 @@ public class RoleController {
   }
   
   @RequestMapping(value = "/roles/{id}", method = RequestMethod.PUT)
+  @Privileges(name = "ROLE-EDIT", scope = {1})
   public Response edit(@PathVariable String id, @RequestBody CrabRole role) {
-    Role r = roleService.update(id, role);
+    Role r = roleService.update(id, role);  
     return Response.success(r);
   }
   

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.gzjy.common.Response;
+import com.gzjy.common.annotation.Privileges;
 import com.gzjy.user.UserService;
 import com.gzjy.user.UserSignService;
 import com.gzjy.user.model.UserSign;
@@ -60,6 +61,7 @@ public class SignController {
    * @param file
    * @return
    */
+  @Privileges(name = "USER-SIGN-UPLOAD", scope = {1})
   @RequestMapping(value="/user/sign/upload", method = RequestMethod.POST)
   public Response uploadFile(@RequestParam("file") MultipartFile file) {
       //保存上传文件

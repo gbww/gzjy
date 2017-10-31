@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class ReceiveSample {
-    //接样单编号
+    //抽样单编号
     @NotEmpty
     private String receiveSampleId;
     //报告编号
@@ -21,18 +21,17 @@ public class ReceiveSample {
     private String checkType;
     //报告格式
     private String reportLayout;
-    //封面格式
+    //封面格式（废弃）
     private String coverLayout;
-    //委托单位
-    
+    //委托单位（或委托人）
     private String entrustedUnit;
     //委托单位地址
     private String entrustedUnitAddress;
-    //委托人
+    //委托人（废弃）
     private String entrustedUser;
     //委托人号码
     private String entrustedUserPhone;
-    //委托人邮箱
+    //委托人邮箱(废弃)
     private String entrustedUserEmail;
     //受检单位
     private String inspectedUnit;
@@ -42,7 +41,7 @@ public class ReceiveSample {
     private String inspectedUser;
     //受检联系人电话
     private String inspectedUserPhone;
-     //受检联系人邮箱
+     //受检联系人邮箱（废弃）
     private String inspectedUserEmail;
     //抽样地点
     private String sampleAddress;
@@ -52,7 +51,7 @@ public class ReceiveSample {
     private String sampleLink;
     //商标
     private String sampleTrademark;
-    //抽样单号
+    //抽样单号（废弃）
     private String sampleReportId;
    //样品流通方式
     private String sampleCirculate;
@@ -97,7 +96,7 @@ public class ReceiveSample {
     private String remarks;
     //数据页备注
     private String dataRemarks;
-    //市场部负责人
+    //业务负责人
     private String responsiblePerson;
     //交样人
     private String sampleHolder;

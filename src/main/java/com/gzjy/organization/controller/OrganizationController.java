@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gzjy.common.Add;
 import com.gzjy.common.Response;
 import com.gzjy.common.Update;
-
+import com.gzjy.common.annotation.Privileges;
 import com.gzjy.organization.model.Organization;
 import com.gzjy.organization.service.OrganizationService;
 
@@ -26,6 +26,7 @@ public class OrganizationController {
   @Autowired
   private OrganizationService organizationService;
   @RequestMapping(value = "/organizations", method = RequestMethod.POST)
+  @Privileges(name = "ORGANIZATION-ADD", scope = {1})
   public Response add(@Validated(value={Add.class}) @RequestBody Organization organization, BindingResult result) {
     if (result.hasErrors()) {
       return Response.fail(result.getFieldError().getDefaultMessage());
@@ -50,6 +51,7 @@ public class OrganizationController {
   
   
   @RequestMapping(value = "/organizations", method = RequestMethod.GET)
+  @Privileges(name = "ORGANIZATION-SELECT", scope = {1})
   public Response list(@RequestParam(value = "pageNum", required = false, defaultValue="0") Integer pageNum,
           @RequestParam(value = "pageSize", required = false, defaultValue="0") Integer pageSize,
           @RequestParam(value = "name", required = false, defaultValue="")String name,
@@ -64,12 +66,14 @@ public class OrganizationController {
  
 
   @RequestMapping(value = "/organizations/{id}", method = RequestMethod.DELETE)
+  @Privileges(name = "ORGANIZATION-DELETE", scope = {1})
   public Response delete(@PathVariable("id") String id) {
-    int result = organizationService.delete(id);
+    int result = organizationService.delete(id);    
     return Response.success(result);
   }
 
   @RequestMapping(value = "/organizations/{id}", method = RequestMethod.PUT)
+  @Privileges(name = "ORGANIZATION-EDIT", scope = {1})
   public Response edit( @PathVariable String id, @Validated(value = {Update.class}) @RequestBody Organization organization, 
                        BindingResult result) {
     if (result.hasErrors()) {

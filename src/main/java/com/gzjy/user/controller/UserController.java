@@ -37,6 +37,7 @@ public class UserController {
 
 //添加用户
   @RequestMapping(value = "/organizations/{organizationId}/users", method = RequestMethod.POST)
+  @Privileges(name = "USER-ADD", scope = {1})
   public Response add(@PathVariable String organizationId,
       @Validated(value = {Add.class}) @RequestBody User user, BindingResult result) {
     if (result.hasErrors()) {
@@ -46,7 +47,7 @@ public class UserController {
     return Response.success(u);
   }
 //删除用户
-  @Privileges(name = "USER-DELETE", scope = 1)
+  @Privileges(name = "USER-DELETE", scope = {1})
   @RequestMapping(value = "/organizations/{organizationId}/users/{id}", method = RequestMethod.DELETE)
   public Response delete(@PathVariable String organizationId, @PathVariable("id") String id) {
     int result = userService.delete(organizationId, id);
@@ -54,6 +55,7 @@ public class UserController {
   }
 
   @RequestMapping(value = "/organizations/{organizationId}/users/{id}", method = RequestMethod.PUT)
+  @Privileges(name = "USER-EDIT", scope = {1})
   public Response edit(@PathVariable String organizationId, @PathVariable String id,
       @RequestBody User user) {
     User u = userService.update(organizationId, id, user);
@@ -61,12 +63,14 @@ public class UserController {
   }
 
   @RequestMapping(value = "/user", method = RequestMethod.PUT)
+  @Privileges(name = "USER-EDITSELF", scope = {1})
   public Response editSelf(@RequestBody User user) {
     User u = userService.updateSelf(user);
     return Response.success(u);
   }
 
   @RequestMapping(value = "/organizations/{organizationId}/users/{id}/password", method = RequestMethod.PUT)
+  @Privileges(name = "USER-PASSWORD", scope = {1})
   public Response editPassword(@PathVariable String organizationId, @PathVariable String id,
       @RequestBody PasswordEdit passwordEdit) {
     User u = userService.updatePassword(organizationId, id, passwordEdit.getOldPassword(),
@@ -111,6 +115,7 @@ public class UserController {
   }*/
   
   @RequestMapping(value = "/users", method = RequestMethod.GET)
+  @Privileges(name = "USER-SELECT", scope = {1})
   public Response users(@RequestParam(required = false) String organizationId,
       @RequestParam(required = false) String roleId, @RequestParam(required = false) Integer status,
       @RequestParam(required = false,defaultValue="1") Integer pageNum,
