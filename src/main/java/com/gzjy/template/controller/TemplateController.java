@@ -99,10 +99,10 @@ public class TemplateController {
 	 * @return
 	 */
 	@RequestMapping(value = "/template/upload", method = RequestMethod.POST)
-	public Response uploadTemplate(@RequestParam("file") MultipartFile file, @RequestParam String type,
+	public Response uploadTemplate(@RequestParam("file") MultipartFile file, 
 			@RequestParam String name, @RequestParam String description, @RequestParam String category) {
 		try {			
-			templateService.uploadFile(file, type, name, description, category);			
+			templateService.uploadFile(file, name, description, category);			
 			return Response.success("success");
 		}
 		catch (Exception e) {

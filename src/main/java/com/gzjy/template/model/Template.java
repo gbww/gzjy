@@ -5,7 +5,6 @@ import java.util.Date;
 public class Template {
 	private String id;
 	private String name;	
-	private String type;
 	private String category;
 	private String description;
 	private String excelName;
@@ -33,13 +32,7 @@ public class Template {
 	}
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
-	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
+	}	
 	public String getExcelName() {
 		return excelName;
 	}
