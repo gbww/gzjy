@@ -253,13 +253,16 @@ public class ReceiveSampleService {
 	 * 复制文件
 	 * @param oldPath
 	 * @param newPath
+	 * @throws  
 	 */
 	public void copyFile(String oldPath, String newPath) {
+		InputStream inStream =null;
+		FileOutputStream fs = null;
 		try {
 			File oldfile = new File(oldPath);
 			if (oldfile.exists()) { // 文件存在时
-				InputStream inStream = new FileInputStream(oldPath); // 读入原文件
-				FileOutputStream fs = new FileOutputStream(newPath);
+				inStream = new FileInputStream(oldPath); // 读入原文件
+				fs = new FileOutputStream(newPath);
 				byte[] buffer = new byte[1444];
 				int bytesum = 0;
 				int byteread = 0;
@@ -273,6 +276,15 @@ public class ReceiveSampleService {
 				throw new Exception("模板文件不存在");
 		} catch (Exception e) {
 			logger.error("复制文件出错");
+		}
+		finally {
+			try {
+				inStream.close();
+				fs.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
 		}
 	}
 	
@@ -450,37 +462,6 @@ public class ReceiveSampleService {
 	        anchor.setAnchorType(AnchorType.DONT_MOVE_AND_RESIZE);
 	        patriarch.createPicture(anchor, workbook.addPicture(byteArrayOut.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG)); 
 		}        
-	}
+	}	
 	
-	public String ExcelToPdf(String inFilePath,String outFilePath){  
-	    ComThread.InitSTA(true);  
-	    ActiveXComponent ax=new ActiveXComponent("Excel.Application");  
-	    try{  
-	        ax.setProperty("Visible", new Variant(false));  
-	        ax.setProperty("AutomationSecurity", new Variant(3)); //禁用宏  
-	        Dispatch excels=ax.getProperty("Workbooks").toDispatch();
-	        Dispatch excel=Dispatch.invoke(excels,"Open",Dispatch.Method,new Object[]{  
-	            inFilePath,  
-	            new Variant(false),  
-	            new Variant(false)  
-	        },  
-	        new int[9]).toDispatch();  
-	        //转换格式  
-	        Dispatch.invoke(excel,"ExportAsFixedFormat",Dispatch.Method,new Object[]{  
-	            new Variant(0), //PDF格式=0  
-	            outFilePath,  
-	            new Variant(0)  //0=标准 (生成的PDF图片不会变模糊) 1=最小文件 (生成的PDF图片糊的一塌糊涂)  
-	        },new int[1]);
-	        Dispatch.call(excel, "Close",new Variant(false));
-	        if(ax!=null){  
-	            ax.invoke("Quit",new Variant[]{});  
-	            ax=null;  
-	        }
-	        ComThread.Release();  
-	        return "";  
-	    }catch(Exception es){  
-	    	logger.info(es+"");
-	        return es.toString();  
-	    }  
-	}  
 }

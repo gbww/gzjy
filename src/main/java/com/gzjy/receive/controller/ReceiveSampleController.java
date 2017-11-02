@@ -4,7 +4,9 @@
  */
 package com.gzjy.receive.controller;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
@@ -12,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
@@ -29,12 +32,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gzjy.common.Add;
-import com.gzjy.common.Delete;
 import com.gzjy.common.Response;
 import com.gzjy.common.ShortUUID;
 import com.gzjy.common.Update;
 import com.gzjy.common.annotation.Privileges;
 import com.gzjy.common.exception.BizException;
+import com.gzjy.common.util.ExcelToPdf;
 import com.gzjy.common.util.fs.EpicNFSClient;
 import com.gzjy.common.util.fs.EpicNFSService;
 import com.gzjy.receive.model.ReceiveSample;
@@ -48,18 +51,18 @@ import com.gzjy.receive.service.ReceiveSampleService;
 @RestController
 @RequestMapping(value = "v1/ahgz")
 public class ReceiveSampleController {
-	
+
 	private static Logger logger = LoggerFactory.getLogger(ReceiveSampleService.class);
-	
+
 	@Autowired
 	private ReceiveSampleService receiveSampleService;
-	
+
 	@Autowired
 	private EpicNFSService epicNFSService;
 
 	// 添加接样基本信息
 	@RequestMapping(value = "/sample", method = RequestMethod.POST)
-	@Privileges(name = "SAMPLE-ADD", scope = {1})
+	@Privileges(name = "SAMPLE-ADD", scope = { 1 })
 	public Response addSample(@Validated(value = { Add.class }) @RequestBody ReceiveSample receiveSample,
 			BindingResult result) {
 		if (result.hasErrors()) {
@@ -73,7 +76,7 @@ public class ReceiveSampleController {
 	}
 
 	// 变更接样中检验项基本信息（添加检验项和编辑检验项）
-	@Privileges(name = "SAMPLE-ADDITEM", scope = {1})
+	@Privileges(name = "SAMPLE-ADDITEM", scope = { 1 })
 	@RequestMapping(value = "/sample/item/{receiveSampleId}", method = RequestMethod.POST)
 	public Response addItem(@PathVariable("receiveSampleId") String receiveSample,
 			@Validated(value = { Add.class }) @RequestBody List<ReceiveSampleItem> items, BindingResult result) {
@@ -91,10 +94,9 @@ public class ReceiveSampleController {
 	}
 
 	// 删除接样单（包括接样单中的检验项）
-	@Privileges(name = "SAMPLE-DELETESAMPLE", scope = {1})
+	@Privileges(name = "SAMPLE-DELETESAMPLE", scope = { 1 })
 	@RequestMapping(value = "/sample/delete", method = RequestMethod.POST)
-	public Response deleteSample( @RequestBody List<String> ids,
-			BindingResult result) {
+	public Response deleteSample(@RequestBody List<String> ids, BindingResult result) {
 		String record = null;
 		if (result.hasErrors()) {
 			return Response.fail(result.getFieldError().getDefaultMessage());
@@ -110,26 +112,25 @@ public class ReceiveSampleController {
 	}
 
 	// 删除接样中检验项基本信息（删除检验项时直接调用后台接口删除）
-	@Privileges(name = "SAMPLE-DELETEITEM", scope = {1})
+	@Privileges(name = "SAMPLE-DELETEITEM", scope = { 1 })
 	@RequestMapping(value = "/sample/items/{receiveSampleId}/delete", method = RequestMethod.POST)
 	public Response deleteItem(@PathVariable("receiveSampleId") String receiveSample, @RequestBody List<String> items,
 			BindingResult result) {
 		if (result.hasErrors()) {
 			return Response.fail(result.getFieldError().getDefaultMessage());
 		}
-		for(String id :items) {
-		    ReceiveSampleItem itemRecord=receiveSampleService.getItem(id);
-		    if(!itemRecord.getReceiveSampleId().equals(receiveSample)) {
-		        throw new BizException("传递了一个错误的检验项ID");
-		    }
+		for (String id : items) {
+			ReceiveSampleItem itemRecord = receiveSampleService.getItem(id);
+			if (!itemRecord.getReceiveSampleId().equals(receiveSample)) {
+				throw new BizException("传递了一个错误的检验项ID");
+			}
 		}
-		
 
 		return Response.success(receiveSampleService.deleteReceiveSampleItems(items));
 	}
 
 	// 更新接样基本信息
-	@Privileges(name = "SAMPLE-UPDATESAMPLE", scope = {1})
+	@Privileges(name = "SAMPLE-UPDATESAMPLE", scope = { 1 })
 	@RequestMapping(value = "/sample", method = RequestMethod.PUT)
 	public Response updateSample(@Validated(value = { Update.class }) @RequestBody ReceiveSample receiveSample,
 			BindingResult result) {
@@ -145,11 +146,11 @@ public class ReceiveSampleController {
 
 	// 查询接样信息
 	@RequestMapping(value = "/sample", method = RequestMethod.GET)
-	@Privileges(name = "SAMPLE-SELECT", scope = {1})
+	@Privileges(name = "SAMPLE-SELECT", scope = { 1 })
 	public Response list(@RequestParam(name = "receivesampleid", required = false) String id,
 			@RequestParam(name = "entrustedunit", required = false) String entrustedUnit,
 			@RequestParam(name = "order", required = false) String order,
-			@RequestParam(name = "status",defaultValue = "5") int status,
+			@RequestParam(name = "status", defaultValue = "5") int status,
 			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
 			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 		Map<String, Object> filter = new HashMap<String, Object>();
@@ -163,26 +164,24 @@ public class ReceiveSampleController {
 		if (StringUtils.isBlank(order)) {
 			orderby = "created_at desc";
 		}
-		if(status!=5) {
-            filter.put("status", status);
-        }
+		if (status != 5) {
+			filter.put("status", status);
+		}
 
 		return Response.success(receiveSampleService.select(pageNum, pageSize, orderby, filter));
 	}
-	
-	
-	// test
-    @RequestMapping(value = "/sampletest", method = RequestMethod.GET)
-    public Response list(
-            @RequestParam(name = "entrustedunit", required = false) String entrustedUnit,
-            @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
-            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
-        Map<String, Object> filter = new HashMap<String, Object>();
-        
-        filter.put("check_type", "抽检");
 
-        return Response.success(receiveSampleService.selectTest(pageNum, pageSize,  filter));
-    }
+	// test
+	@RequestMapping(value = "/sampletest", method = RequestMethod.GET)
+	public Response list(@RequestParam(name = "entrustedunit", required = false) String entrustedUnit,
+			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
+			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+		Map<String, Object> filter = new HashMap<String, Object>();
+
+		filter.put("check_type", "抽检");
+
+		return Response.success(receiveSampleService.selectTest(pageNum, pageSize, filter));
+	}
 
 	// 根据ID获取接样信息
 	@RequestMapping(value = "/sample/{id}", method = RequestMethod.GET)
@@ -204,125 +203,106 @@ public class ReceiveSampleController {
 
 		return Response.success(receiveSampleService.getItem(itemId));
 	}
-	// 设置报告状态
-    @RequestMapping(value = "/sample/{receivesampleid}/status/{status}", method = RequestMethod.GET)
-    public Response setSampleStatus(@PathVariable(name = "receivesampleid") String receiveSampleId,@PathVariable(name = "status") Integer status) {
 
-        return Response.success(receiveSampleService.setStatus(receiveSampleId, status));
-    }
-    
- // 查询当前用户检验项信息(检测人员关心的检验项)
-    @Privileges(name = "SAMPLE-SELECTITEM", scope = {1})
-    @RequestMapping(value = "/sampleItem", method = RequestMethod.GET)
-    public Response listItemByCurrentUser(          
-            @RequestParam(name = "status",defaultValue = "0") int status,
-            @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
-            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
-        Map<String, Object> filter = new HashMap<String, Object>();
-        if(status!=5) {
-            filter.put("status", status);
-        }
-        return Response.success(receiveSampleService.selectCurrentUserItems(pageNum, pageSize, filter));
-    }
-    
-	
-	
-	
-	
-	
+	// 设置报告状态
+	@RequestMapping(value = "/sample/{receivesampleid}/status/{status}", method = RequestMethod.GET)
+	public Response setSampleStatus(@PathVariable(name = "receivesampleid") String receiveSampleId,
+			@PathVariable(name = "status") Integer status) {
+
+		return Response.success(receiveSampleService.setStatus(receiveSampleId, status));
+	}
+
+	// 查询当前用户检验项信息(检测人员关心的检验项)
+	@Privileges(name = "SAMPLE-SELECTITEM", scope = { 1 })
+	@RequestMapping(value = "/sampleItem", method = RequestMethod.GET)
+	public Response listItemByCurrentUser(@RequestParam(name = "status", defaultValue = "0") int status,
+			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
+			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+		Map<String, Object> filter = new HashMap<String, Object>();
+		if (status != 5) {
+			filter.put("status", status);
+		}
+		return Response.success(receiveSampleService.selectCurrentUserItems(pageNum, pageSize, filter));
+	}
+
 	/**
-	 * 通过模板导出excel并下载
+	 * 通过模板导出报告(excel or pdf)并下载
+	 * 
 	 * @param response
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value = "/sample/items/excel/{id}", method = RequestMethod.GET)
-	public Response getExcel(HttpServletResponse response, @PathVariable(name = "id") String id,
-			@RequestParam(required = true) String templateFileName) {
+	@RequestMapping(value = "/sample/items/report/{id}", method = RequestMethod.GET)
+	public Response getReport(HttpServletResponse response, @PathVariable(name = "id") String id,
+			@RequestParam(required = true) String templateFileName, @RequestParam(required = true) String type) {
 		EpicNFSClient client = epicNFSService.getClient("gzjy");
-		//生成临时模板excel文件
-		String tempFileName = ShortUUID.getInstance().generateShortID()+".xls";
-		//建立远程存放excel模板文件目录
+		// 生成临时模板excel文件
+		String tempFileName = ShortUUID.getInstance().generateShortID() + ".xls";
+		// 建立远程存放excel模板文件目录
 		if (!client.hasRemoteDir("temp")) {
 			client.createRemoteDir("temp");
 		}
-		//服务器模板文件存放目录
+		// 服务器模板文件存放目录
 		String serverTemplatePath = "/var/lib/docs/gzjy/template/";
-		//根据接口参数得到服务器模板文件的实际路径
+		// 根据接口参数得到服务器模板文件的实际路径
 		String serverTemplateFile = serverTemplatePath + templateFileName;
-		//建立服务器缓存模板文件
-		String tempFile = "/var/lib/docs/gzjy/temp/"+tempFileName;
+		// 建立服务器缓存模板文件
+		String tempFile = "/var/lib/docs/gzjy/temp/" + tempFileName;
+		OutputStream out = null;
+		ServletOutputStream outPdf = null;
+		FileInputStream inputStream = null;
 		try {
-			//将模板文件复制到缓存文件
+			// 将模板文件复制到缓存文件
 			receiveSampleService.copyFile(serverTemplateFile, tempFile);
-			//获取报告数据
+			// 获取报告数据
 			ReceiveSample receiveSample = receiveSampleService.getReceiveSample(id);
 			InputStream input = new FileInputStream(tempFile);
 			HSSFWorkbook workbook = new HSSFWorkbook(input);
-			//将数据写入流中
+			// 将数据写入流中
 			receiveSampleService.generateExcel(workbook, receiveSample);
 			response.reset();
-			response.setHeader("Content-disposition", "attachment;filename="+ URLEncoder.encode(tempFileName, "UTF-8"));
 			response.setContentType("application/octet-stream;charset=UTF-8");
-			OutputStream out = response.getOutputStream();
-			workbook.write(out);
-			input.close();
-			out.flush();
-			out.close();
-			logger.info("Begin export PDF");
-			receiveSampleService.ExcelToPdf(tempFile, "temp/zhangsan.pdf");
-			//删除缓存模板文件
-			logger.info("Begin delete temple file");
+			if (type.equals("excel")) {
+				response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(tempFileName, "UTF-8"));
+				out = response.getOutputStream();
+				workbook.write(out);
+				input.close();
+			} else {
+				logger.info("Begin export PDF");
+				String tempPdfName = ShortUUID.getInstance().generateShortID() + ".pdf";
+				String tempPdf = "/var/lib/docs/gzjy/temp/" + tempPdfName;
+				ExcelToPdf.xlsToPdf(tempFile, tempPdf);
+				logger.info("Begin delete temple file");
+				response.setHeader("Content-disposition","attachment;filename=" + URLEncoder.encode(tempPdfName, "UTF-8"));
+				File file = new File(tempPdf);
+				inputStream = new FileInputStream(file);
+				outPdf = response.getOutputStream();
+				int b = 0;
+				byte[] buffer = new byte[1024];
+				while ((b = inputStream.read(buffer)) != -1) {
+					outPdf.write(buffer, 0, b);
+				}				
+			}
+			// 删除缓存模板文件
 			receiveSampleService.deleteFile(tempFile);
-			
 		} catch (Exception e) {
-			logger.error(e+"");
+			logger.error(e + "");
 			return Response.fail(e.getMessage());
+		} finally {
+			try {
+				if (type.equals("excel")) {
+					out.flush();
+					out.close();
+				}else {
+					outPdf.close();
+					outPdf.flush();
+					inputStream.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return Response.success("success");
 	}
-	
-	//测试
-	@RequestMapping(value = "/sample/items/excel/test/{id}", method = RequestMethod.GET)
-	public Response testExcel(HttpServletResponse response, @PathVariable(name = "id") String id,
-			@RequestParam(required = true) String templateFileName) {
-		EpicNFSClient client = epicNFSService.getClient("gzjy");
-		//生成临时模板excel文件
-		String tempFileName = ShortUUID.getInstance().generateShortID()+".xls";
-		//建立远程存放excel模板文件目录
-		if (!client.hasRemoteDir("temp")) {
-			client.createRemoteDir("temp");
-		}
-		//服务器模板文件存放目录
-		String serverTemplatePath = "/var/lib/docs/gzjy/template/";
-		//根据接口参数得到服务器模板文件的实际路径
-		String serverTemplateFile = serverTemplatePath + templateFileName;
-		//建立服务器缓存模板文件
-		String tempFile = "/var/lib/docs/gzjy/temp/"+tempFileName;
-		try {
-			//将模板文件复制到缓存文件
-			receiveSampleService.copyFile(serverTemplateFile, tempFile);
-			//获取报告数据
-			ReceiveSample receiveSample = receiveSampleService.getReceiveSample(id);
-			InputStream input = new FileInputStream(tempFile);
-			HSSFWorkbook workbook = new HSSFWorkbook(input);
-			//将数据写入流中
-			receiveSampleService.generateExcel(workbook, receiveSample);
-			response.reset();
-			response.setHeader("Content-disposition", "attachment;filename="+ URLEncoder.encode(tempFileName, "UTF-8"));
-			response.setContentType("arraybuffer;charset=UTF-8");
-			OutputStream out = response.getOutputStream();
-			workbook.write(out);
-			input.close();
-			out.flush();
-			out.close();
-			//删除缓存模板文件
-			receiveSampleService.deleteFile(tempFile);
-			receiveSampleService.ExcelToPdf(tempFile, "/var/lib/docs/gzjy/temp/zhangsan.pdf");
-		} catch (Exception e) {
-			logger.error(e+"");
-			return Response.fail(e.getMessage());
-		}
-		return Response.success("success");
-	}
+
 }
