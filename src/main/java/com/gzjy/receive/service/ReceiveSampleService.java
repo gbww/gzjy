@@ -293,12 +293,15 @@ public class ReceiveSampleService {
 	 * @param filePath
 	 * @throws Exception
 	 */
-	public void deleteFile(String filePath) throws Exception {
+	public void deleteFile(String filePath) throws IOException {
 		File file = new File(filePath);
 		if (file.exists() && file.isFile()) {
-			if (!file.delete()) {
-				throw new Exception("临时模板文件删除失败");
-			}
+			try {
+				file.delete();
+			}catch (Exception e) {
+				logger.error("文件" + filePath +"删除失败");
+				throw new IOException("临时模板文件删除失败");
+			}			
 		}
 	}
 	

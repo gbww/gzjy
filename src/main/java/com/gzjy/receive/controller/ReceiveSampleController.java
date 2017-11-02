@@ -233,7 +233,7 @@ public class ReceiveSampleController {
 	 * @return
 	 */
 	@RequestMapping(value = "/sample/items/report/{id}", method = RequestMethod.GET)
-	public Response getReport(HttpServletResponse response, @PathVariable(name = "id") String id,
+	public OutputStream getReport(HttpServletResponse response, @PathVariable(name = "id") String id,
 			@RequestParam(required = true) String templateFileName, @RequestParam(required = true) String type) {
 		EpicNFSClient client = epicNFSService.getClient("gzjy");
 		// 生成临时模板excel文件
@@ -249,8 +249,9 @@ public class ReceiveSampleController {
 		// 建立服务器缓存模板文件
 		String tempFile = "/var/lib/docs/gzjy/temp/" + tempFileName;
 		OutputStream out = null;
-		ServletOutputStream outPdf = null;
+		OutputStream outPdf = null;
 		FileInputStream inputStream = null;
+		String tempPdf = null;
 		try {
 			// 将模板文件复制到缓存文件
 			receiveSampleService.copyFile(serverTemplateFile, tempFile);
@@ -259,50 +260,52 @@ public class ReceiveSampleController {
 			InputStream input = new FileInputStream(tempFile);
 			HSSFWorkbook workbook = new HSSFWorkbook(input);
 			// 将数据写入流中
-			receiveSampleService.generateExcel(workbook, receiveSample);
-			response.reset();
-			response.setContentType("application/octet-stream;charset=UTF-8");
+			receiveSampleService.generateExcel(workbook, receiveSample);			
 			if (type.equals("excel")) {
+				//如果是excel，则提供下载功能，需设置头信息
+				response.reset();
+				response.setContentType("application/octet-stream;charset=UTF-8");
 				response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(tempFileName, "UTF-8"));
 				out = response.getOutputStream();
 				workbook.write(out);
 				input.close();
 			} else {
+				//如果是pdf，则提供预览功能，返回base64编码的流数据
 				logger.info("Begin export PDF");
 				String tempPdfName = ShortUUID.getInstance().generateShortID() + ".pdf";
-				String tempPdf = "/var/lib/docs/gzjy/temp/" + tempPdfName;
+				tempPdf = "/var/lib/docs/gzjy/temp/" + tempPdfName;
 				ExcelToPdf.xlsToPdf(tempFile, tempPdf);
-				logger.info("Begin delete temple file");
-				response.setHeader("Content-disposition","attachment;filename=" + URLEncoder.encode(tempPdfName, "UTF-8"));
+				logger.info("Begin delete temple file");				
 				File file = new File(tempPdf);
-				inputStream = new FileInputStream(file);
+				inputStream = new FileInputStream(file);					
 				outPdf = response.getOutputStream();
+				outPdf.flush();
 				int b = 0;
 				byte[] buffer = new byte[1024];
 				while ((b = inputStream.read(buffer)) != -1) {
 					outPdf.write(buffer, 0, b);
 				}				
+				return outPdf;
 			}
 			// 删除缓存模板文件
 			receiveSampleService.deleteFile(tempFile);
-		} catch (Exception e) {
+		} catch (Exception e) {			
 			logger.error(e + "");
-			return Response.fail(e.getMessage());
 		} finally {
 			try {
-				if (type.equals("excel")) {
+				if (out!=null) {
 					out.flush();
 					out.close();
-				}else {
-					outPdf.close();
+				}else if(outPdf!=null){					
 					outPdf.flush();
-					inputStream.close();
+					outPdf.close();
+					inputStream.close();					
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		return Response.success("success");
+		return null;
 	}
-
+	
 }
