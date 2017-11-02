@@ -11,27 +11,21 @@ public class ReceiveSample {
     private String receiveSampleId;
     //报告编号
     private String reportId;
-    //报告页数
-    private Integer reportPageNumber;
+    
     //样品类别
     @NotEmpty
     private String sampleType;
     //检验类型
     @NotEmpty
     private String checkType;
-    //报告格式
-    private String reportLayout;
-    //封面格式（废弃）
-    private String coverLayout;
+  
     //委托单位（或委托人）
     private String entrustedUnit;
     //委托单位地址
     private String entrustedUnitAddress;
-    //委托人（废弃）
-    private String entrustedUser;
     //委托人号码
     private String entrustedUserPhone;
-    //委托人邮箱(废弃)
+    //委托人邮箱(暂时保存)
     private String entrustedUserEmail;
     //受检单位
     private String inspectedUnit;
@@ -41,7 +35,7 @@ public class ReceiveSample {
     private String inspectedUser;
     //受检联系人电话
     private String inspectedUserPhone;
-     //受检联系人邮箱（废弃）
+     //受检联系人邮箱（暂时保存）
     private String inspectedUserEmail;
     //抽样地点
     private String sampleAddress;
@@ -51,8 +45,6 @@ public class ReceiveSample {
     private String sampleLink;
     //商标
     private String sampleTrademark;
-    //抽样单号（废弃）
-    private String sampleReportId;
    //样品流通方式
     private String sampleCirculate;
    //样品流通日期
@@ -132,6 +124,8 @@ public class ReceiveSample {
     private Integer status;
     //创建时间
     private Date createdAt;
+    //报告状态
+    private Integer reportStatus;
 
     public String getReceiveSampleId() {
         return receiveSampleId;
@@ -147,14 +141,6 @@ public class ReceiveSample {
 
     public void setReportId(String reportId) {
         this.reportId = reportId == null ? null : reportId.trim();
-    }
-
-    public Integer getReportPageNumber() {
-        return reportPageNumber;
-    }
-
-    public void setReportPageNumber(Integer reportPageNumber) {
-        this.reportPageNumber = reportPageNumber;
     }
 
     public String getSampleType() {
@@ -173,21 +159,7 @@ public class ReceiveSample {
         this.checkType = checkType == null ? null : checkType.trim();
     }
 
-    public String getReportLayout() {
-        return reportLayout;
-    }
 
-    public void setReportLayout(String reportLayout) {
-        this.reportLayout = reportLayout == null ? null : reportLayout.trim();
-    }
-
-    public String getCoverLayout() {
-        return coverLayout;
-    }
-
-    public void setCoverLayout(String coverLayout) {
-        this.coverLayout = coverLayout == null ? null : coverLayout.trim();
-    }
 
     public String getEntrustedUnit() {
         return entrustedUnit;
@@ -205,13 +177,7 @@ public class ReceiveSample {
         this.entrustedUnitAddress = entrustedUnitAddress == null ? null : entrustedUnitAddress.trim();
     }
 
-    public String getEntrustedUser() {
-        return entrustedUser;
-    }
 
-    public void setEntrustedUser(String entrustedUser) {
-        this.entrustedUser = entrustedUser == null ? null : entrustedUser.trim();
-    }
 
     public String getEntrustedUserPhone() {
         return entrustedUserPhone;
@@ -301,13 +267,7 @@ public class ReceiveSample {
         this.sampleTrademark = sampleTrademark == null ? null : sampleTrademark.trim();
     }
 
-    public String getSampleReportId() {
-        return sampleReportId;
-    }
 
-    public void setSampleReportId(String sampleReportId) {
-        this.sampleReportId = sampleReportId == null ? null : sampleReportId.trim();
-    }
 
     public String getSampleCirculate() {
         return sampleCirculate;
@@ -596,5 +556,52 @@ public class ReceiveSample {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Integer getReportStatus() {
+        return reportStatus;
+    }
+
+    public void setReportStatus(Integer reportStatus) {
+        this.reportStatus = reportStatus;
+    }
+    @Override
+    public String toString() {
+        return "ReceiveSample [receiveSampleId=" + receiveSampleId
+                + ", reportId=" + reportId + ", sampleType=" + sampleType
+                + ", checkType=" + checkType + ", entrustedUnit="
+                + entrustedUnit + ", entrustedUnitAddress="
+                + entrustedUnitAddress + ", entrustedUserPhone="
+                + entrustedUserPhone + ", entrustedUserEmail="
+                + entrustedUserEmail + ", inspectedUnit=" + inspectedUnit
+                + ", inspectedUnitAddress=" + inspectedUnitAddress
+                + ", inspectedUser=" + inspectedUser + ", inspectedUserPhone="
+                + inspectedUserPhone + ", inspectedUserEmail="
+                + inspectedUserEmail + ", sampleAddress=" + sampleAddress
+                + ", sampleName=" + sampleName + ", sampleLink=" + sampleLink
+                + ", sampleTrademark=" + sampleTrademark + ", sampleCirculate="
+                + sampleCirculate + ", sampleCirculateDate="
+                + sampleCirculateDate + ", sampleDate=" + sampleDate
+                + ", sampleWay=" + sampleWay + ", specificationModel="
+                + specificationModel + ", executeStandard=" + executeStandard
+                + ", sampleNames=" + sampleNames + ", processingTechnology="
+                + processingTechnology + ", closedStatus=" + closedStatus
+                + ", sampleNumber=" + sampleNumber + ", sampleStatus="
+                + sampleStatus + ", sampleBasenumber=" + sampleBasenumber
+                + ", saveWay=" + saveWay + ", productionUnit=" + productionUnit
+                + ", productionAddress=" + productionAddress
+                + ", productionUser=" + productionUser + ", productionPhone="
+                + productionPhone + ", cost=" + cost + ", remarks=" + remarks
+                + ", dataRemarks=" + dataRemarks + ", responsiblePerson="
+                + responsiblePerson + ", sampleHolder=" + sampleHolder
+                + ", receiveUser=" + receiveUser + ", receiveDate="
+                + receiveDate + ", arrangeFinishDate=" + arrangeFinishDate
+                + ", finishDate=" + finishDate + ", protocolId=" + protocolId
+                + ", subpackage=" + subpackage + ", result=" + result
+                + ", determine=" + determine + ", approvalUser=" + approvalUser
+                + ", examineUser=" + examineUser + ", drawUser=" + drawUser
+                + ", principalInspector=" + principalInspector + ", status="
+                + status + ", createdAt=" + createdAt + ", reportStatus="
+                + reportStatus + "]";
     }
 }
