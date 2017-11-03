@@ -94,8 +94,8 @@ public class ReceiveSampleController {
 	}
 	
 	
-	@Privileges(name = "SAMPLE-UPDATEITEMRESOULT", scope = {1})
-    @RequestMapping(value = "/sample/item/resoult", method = RequestMethod.POST)
+	@Privileges(name = "SAMPLE-UPDATEITEMRESULT", scope = {1})
+    @RequestMapping(value = "/sample/item/result", method = RequestMethod.POST)
     public Response updateItemResoult(@Validated(value = { Update.class }) @RequestBody List<ReceiveSampleItem> items, BindingResult result) {
         if (result.hasErrors()) {
             return Response.fail(result.getFieldError().getDefaultMessage());

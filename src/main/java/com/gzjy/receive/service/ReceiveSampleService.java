@@ -88,7 +88,7 @@ public class ReceiveSampleService {
 	}
 	@Transactional
 	public Boolean updateSampleItemsResoult(List<ReceiveSampleItem> items) {
-	    Boolean resoult=true;
+	    Boolean result=true;
 	    if (items.size() == 0) {
             return false;
         }
@@ -101,10 +101,10 @@ public class ReceiveSampleService {
             } else {
                 System.out.println("接样单中不存在此检验项ID");
                 logger.error("接样单中不存在此检验项ID");
-                resoult=false;
+                result=false;
             }
 	    }
-	    return resoult;
+	    return result;
 	}
 
 	@Transactional
