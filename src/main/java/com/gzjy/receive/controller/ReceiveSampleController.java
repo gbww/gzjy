@@ -90,8 +90,25 @@ public class ReceiveSampleController {
 		}
 		boolean flag = receiveSampleService.addReceiveSampleItems(items);
 
-		return Response.success("添加成功：" + flag);
+		return Response.success("操作成功：" + flag);
 	}
+	
+	
+	@Privileges(name = "SAMPLE-UPDATEITEMRESOULT", scope = {1})
+    @RequestMapping(value = "/sample/item/resoult", method = RequestMethod.POST)
+    public Response updateItemResoult(@Validated(value = { Update.class }) @RequestBody List<ReceiveSampleItem> items, BindingResult result) {
+        if (result.hasErrors()) {
+            return Response.fail(result.getFieldError().getDefaultMessage());
+        }
+        for (ReceiveSampleItem item : items) {
+           
+        }
+        boolean flag = receiveSampleService.updateSampleItemsResoult(items);
+
+        return Response.success("操作成功：" + flag);
+    }
+	
+	
 
 	// 删除接样单（包括接样单中的检验项）
 	@Privileges(name = "SAMPLE-DELETESAMPLE", scope = { 1 })
@@ -204,26 +221,32 @@ public class ReceiveSampleController {
 		return Response.success(receiveSampleService.getItem(itemId));
 	}
 
-	// 设置报告状态
-	@RequestMapping(value = "/sample/{receivesampleid}/status/{status}", method = RequestMethod.GET)
-	public Response setSampleStatus(@PathVariable(name = "receivesampleid") String receiveSampleId,
-			@PathVariable(name = "status") Integer status) {
+	// 设置接样单的状态
+    @RequestMapping(value = "/sample/{receivesampleid}/status/{status}", method = RequestMethod.GET)
+    public Response setSampleStatus(@PathVariable(name = "receivesampleid") String receiveSampleId,@PathVariable(name = "status") Integer status) {
 
-		return Response.success(receiveSampleService.setStatus(receiveSampleId, status));
-	}
-
-	// 查询当前用户检验项信息(检测人员关心的检验项)
-	@Privileges(name = "SAMPLE-SELECTITEM", scope = { 1 })
-	@RequestMapping(value = "/sampleItem", method = RequestMethod.GET)
-	public Response listItemByCurrentUser(@RequestParam(name = "status", defaultValue = "0") int status,
-			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
-			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
-		Map<String, Object> filter = new HashMap<String, Object>();
-		if (status != 5) {
-			filter.put("status", status);
-		}
-		return Response.success(receiveSampleService.selectCurrentUserItems(pageNum, pageSize, filter));
-	}
+        return Response.success(receiveSampleService.setStatus(receiveSampleId, status));
+    }
+    
+ // 查询当前用户检验项信息(检测人员关心的检验项)
+    @Privileges(name = "SAMPLE-SELECTITEM", scope = {1})
+    @RequestMapping(value = "/sampleItem", method = RequestMethod.GET)
+    public Response listItemByCurrentUser(          
+            @RequestParam(name = "status",defaultValue = "0") int status,
+            @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
+            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+        Map<String, Object> filter = new HashMap<String, Object>();
+        if(status!=5) {
+            filter.put("status", status);
+        }
+        return Response.success(receiveSampleService.selectCurrentUserItems(pageNum, pageSize, filter));
+    }
+    
+	
+	
+	
+	
+	
 
 	/**
 	 * 通过模板导出报告(excel or pdf)并下载

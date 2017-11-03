@@ -2,20 +2,26 @@ package com.gzjy.receive.model;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.gzjy.common.Add;
+import com.gzjy.common.Update;
+
 public class ReceiveSampleItem {
     //接样检验项目的id
+    @NotEmpty(message="检验项目的id不能为空", groups={Update.class})
     private String id;
-    //接样编号
-    @NotEmpty
+    //抽样编号
+    @NotNull(message="抽样编号不能为空", groups={Add.class})
     private String receiveSampleId;
     //项目名称
-    @NotEmpty
+    @NotNull(message="项目名称不能为空", groups={Add.class})
     private String name;
     //检测方法
-    @NotEmpty
+    @NotNull(message="检测方法", groups={Add.class})
     private String method;
     //单位
     private String unit;

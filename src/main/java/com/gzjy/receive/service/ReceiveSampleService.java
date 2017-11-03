@@ -86,6 +86,26 @@ public class ReceiveSampleService {
 		logger.info("添加成功");
 		return true;
 	}
+	@Transactional
+	public Boolean updateSampleItemsResoult(List<ReceiveSampleItem> items) {
+	    Boolean resoult=true;
+	    if (items.size() == 0) {
+            return false;
+        }
+
+	    for(ReceiveSampleItem item:items) {
+	        ReceiveSampleItem exitItem = receiveSampleItemMapper.selectByPrimaryKey(item.getId());
+            if (exitItem != null) {
+                item.setUpdatedAt(new Date());
+                receiveSampleItemMapper.updateByPrimaryKey(item);
+            } else {
+                System.out.println("接样单中不存在此检验项ID");
+                logger.error("接样单中不存在此检验项ID");
+                resoult=false;
+            }
+	    }
+	    return resoult;
+	}
 
 	@Transactional
 	public Boolean addReceiveSampleItems(List<ReceiveSampleItem> items) {
