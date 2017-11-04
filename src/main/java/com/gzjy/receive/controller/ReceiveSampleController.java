@@ -92,23 +92,21 @@ public class ReceiveSampleController {
 
 		return Response.success("操作成功：" + flag);
 	}
-	
-	
-	@Privileges(name = "SAMPLE-UPDATEITEMRESULT", scope = {1})
-    @RequestMapping(value = "/sample/item/result", method = RequestMethod.POST)
-    public Response updateItemResoult(@Validated(value = { Update.class }) @RequestBody List<ReceiveSampleItem> items, BindingResult result) {
-        if (result.hasErrors()) {
-            return Response.fail(result.getFieldError().getDefaultMessage());
-        }
-        for (ReceiveSampleItem item : items) {
-           
-        }
-        boolean flag = receiveSampleService.updateSampleItemsResoult(items);
 
-        return Response.success("操作成功：" + flag);
-    }
-	
-	
+	@Privileges(name = "SAMPLE-UPDATEITEMRESULT", scope = { 1 })
+	@RequestMapping(value = "/sample/item/result", method = RequestMethod.POST)
+	public Response updateItemResoult(@Validated(value = { Update.class }) @RequestBody List<ReceiveSampleItem> items,
+			BindingResult result) {
+		if (result.hasErrors()) {
+			return Response.fail(result.getFieldError().getDefaultMessage());
+		}
+		for (ReceiveSampleItem item : items) {
+
+		}
+		boolean flag = receiveSampleService.updateSampleItemsResoult(items);
+
+		return Response.success("操作成功：" + flag);
+	}
 
 	// 删除接样单（包括接样单中的检验项）
 	@Privileges(name = "SAMPLE-DELETESAMPLE", scope = { 1 })
@@ -222,31 +220,25 @@ public class ReceiveSampleController {
 	}
 
 	// 设置接样单的状态
-    @RequestMapping(value = "/sample/{receivesampleid}/status/{status}", method = RequestMethod.GET)
-    public Response setSampleStatus(@PathVariable(name = "receivesampleid") String receiveSampleId,@PathVariable(name = "status") Integer status) {
+	@RequestMapping(value = "/sample/{receivesampleid}/status/{status}", method = RequestMethod.GET)
+	public Response setSampleStatus(@PathVariable(name = "receivesampleid") String receiveSampleId,
+			@PathVariable(name = "status") Integer status) {
 
-        return Response.success(receiveSampleService.setStatus(receiveSampleId, status));
-    }
-    
- // 查询当前用户检验项信息(检测人员关心的检验项)
-    @Privileges(name = "SAMPLE-SELECTITEM", scope = {1})
-    @RequestMapping(value = "/sampleItem", method = RequestMethod.GET)
-    public Response listItemByCurrentUser(          
-            @RequestParam(name = "status",defaultValue = "0") int status,
-            @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
-            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
-        Map<String, Object> filter = new HashMap<String, Object>();
-        if(status!=5) {
-            filter.put("status", status);
-        }
-        return Response.success(receiveSampleService.selectCurrentUserItems(pageNum, pageSize, filter));
-    }
-    
-	
-	
-	
-	
-	
+		return Response.success(receiveSampleService.setStatus(receiveSampleId, status));
+	}
+
+	// 查询当前用户检验项信息(检测人员关心的检验项)
+	@Privileges(name = "SAMPLE-SELECTITEM", scope = { 1 })
+	@RequestMapping(value = "/sampleItem", method = RequestMethod.GET)
+	public Response listItemByCurrentUser(@RequestParam(name = "status", defaultValue = "0") int status,
+			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
+			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+		Map<String, Object> filter = new HashMap<String, Object>();
+		if (status != 5) {
+			filter.put("status", status);
+		}
+		return Response.success(receiveSampleService.selectCurrentUserItems(pageNum, pageSize, filter));
+	}
 
 	/**
 	 * 通过模板导出报告(excel or pdf)并下载
@@ -256,7 +248,7 @@ public class ReceiveSampleController {
 	 * @return
 	 */
 	@RequestMapping(value = "/sample/items/report/{id}", method = RequestMethod.GET)
-	public OutputStream getReport(HttpServletResponse response, @PathVariable(name = "id") String id,
+	public Response getReport(HttpServletResponse response, @PathVariable(name = "id") String id,
 			@RequestParam(required = true) String templateFileName, @RequestParam(required = true) String type) {
 		EpicNFSClient client = epicNFSService.getClient("gzjy");
 		// 生成临时模板excel文件
@@ -271,9 +263,7 @@ public class ReceiveSampleController {
 		String serverTemplateFile = serverTemplatePath + templateFileName;
 		// 建立服务器缓存模板文件
 		String tempFile = "/var/lib/docs/gzjy/temp/" + tempFileName;
-		OutputStream out = null;
-		OutputStream outPdf = null;
-		FileInputStream inputStream = null;
+		OutputStream out = null;		
 		String tempPdf = null;
 		try {
 			// 将模板文件复制到缓存文件
@@ -283,52 +273,35 @@ public class ReceiveSampleController {
 			InputStream input = new FileInputStream(tempFile);
 			HSSFWorkbook workbook = new HSSFWorkbook(input);
 			// 将数据写入流中
-			receiveSampleService.generateExcel(workbook, receiveSample);			
+			receiveSampleService.generateExcel(workbook, receiveSample);
 			if (type.equals("excel")) {
-				//如果是excel，则提供下载功能，需设置头信息
+				// 如果是excel，则提供下载功能，需设置头信息
 				response.reset();
 				response.setContentType("application/octet-stream;charset=UTF-8");
-				response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(tempFileName, "UTF-8"));
+				response.setHeader("Content-disposition",
+						"attachment;filename=" + URLEncoder.encode(tempFileName, "UTF-8"));
 				out = response.getOutputStream();
 				workbook.write(out);
 				input.close();
 			} else {
-				//如果是pdf，则提供预览功能，返回base64编码的流数据
 				logger.info("Begin export PDF");
 				String tempPdfName = ShortUUID.getInstance().generateShortID() + ".pdf";
 				tempPdf = "/var/lib/docs/gzjy/temp/" + tempPdfName;
 				ExcelToPdf.xlsToPdf(tempFile, tempPdf);
-				logger.info("Begin delete temple file");				
-				File file = new File(tempPdf);
-				inputStream = new FileInputStream(file);					
-				outPdf = response.getOutputStream();
-				outPdf.flush();
-				int b = 0;
-				byte[] buffer = new byte[1024];
-				while ((b = inputStream.read(buffer)) != -1) {
-					outPdf.write(buffer, 0, b);
-				}				
-				return outPdf;
+				return Response.success(tempPdf);
 			}
 			// 删除缓存模板文件
 			receiveSampleService.deleteFile(tempFile);
-		} catch (Exception e) {			
+		} catch (Exception e) {
 			logger.error(e + "");
 		} finally {
 			try {
-				if (out!=null) {
-					out.flush();
-					out.close();
-				}else if(outPdf!=null){					
-					outPdf.flush();
-					outPdf.close();
-					inputStream.close();					
-				}
+				out.flush();
+				out.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		return null;
 	}
-	
 }
