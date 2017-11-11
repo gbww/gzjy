@@ -296,8 +296,11 @@ public class ReceiveSampleController {
 			logger.error(e + "");
 		} finally {
 			try {
-				out.flush();
-				out.close();
+				if(out!=null) {
+					out.flush();
+					out.close();
+				}
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
