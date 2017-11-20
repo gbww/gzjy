@@ -1,6 +1,7 @@
 package com.gzjy.common.util;
 
 import java.io.File;
+import java.io.IOException;
 
 /*import org.artofsolving.jodconverter.OfficeDocumentConverter;
 import org.artofsolving.jodconverter.office.DefaultOfficeManagerConfiguration;
@@ -53,31 +54,17 @@ public class ExcelToPdf {
 
 	/**
 	 * Linux环境下
-	 * 
+	 * 前提条件：Linux系统装好了libreoffice
 	 * @param inFilePath
 	 * @param outFilePath
 	 */
-	/*public static void xlsToPdfForLinux(String inFilePath, String outFilePath) {
-		OfficeManager officeManager = null;
-		OfficeDocumentConverter converter = null;
-		DefaultOfficeManagerConfiguration config = new DefaultOfficeManagerConfiguration();
-		config.setOfficeHome("/opt/openoffice4");
-		officeManager = config.buildOfficeManager();
-		officeManager.start();
-		converter = new OfficeDocumentConverter(officeManager);
-		File inputFile = new File(inFilePath);
-		File outputFile = new File(outFilePath);
-		if (inputFile.exists()) {
-			if (!outputFile.getParentFile().exists() && !outputFile.getParentFile().mkdirs()) {
-				System.out.println("File path \"" + inFilePath + "\" not exists");
-			}
-			if (!outputFile.exists()) {
-				converter.convert(inputFile, outputFile);
-			}
-		} else {
-			System.out.println("File \"" + inFilePath + "not exists");
-		}
-		converter = null;
-		officeManager.stop();
-	}*/
+	public static void xlsToPdfForLinux(String inFilePath, String outFilePath) {
+		
+		String command = "/opt/libreoffice5.4/program/soffice --headless --convert-to pdf " + inFilePath +"" +outFilePath;
+        try{
+            Runtime.getRuntime().exec(command);            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	}
 }
