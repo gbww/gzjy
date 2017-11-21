@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -175,14 +176,16 @@ public class ReceiveSampleService {
 	}
 
 	@Transactional
-	public PageInfo<ReceiveSample> select(Integer pageNum, Integer pageSize, String order, Map<String, Object> filter) {
+	public PageInfo<ReceiveSample> select(Integer pageNum, Integer pageSize, String order, Map<String, Object> filter,Date timeStart,Date timeEnd) {
 
 		List<ReceiveSample> list = new ArrayList<ReceiveSample>();
 		PageInfo<ReceiveSample> pages = new PageInfo<ReceiveSample>(list);
+		Timestamp start = timeStart == null ? null : new Timestamp(timeStart.getTime());
+        Timestamp end = timeEnd == null ? null : new Timestamp(timeEnd.getTime());
 		pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
 			@Override
 			public void doSelect() {
-				receiveSampleMapper.selectAll(filter, order);
+				receiveSampleMapper.selectAll(filter, order,start,end);
 			}
 		});
 		return pages;

@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -164,26 +166,53 @@ public class ReceiveSampleController {
 	@Privileges(name = "SAMPLE-SELECT", scope = { 1 })
 	public Response list(@RequestParam(name = "receivesampleid", required = false) String id,
 			@RequestParam(name = "entrustedunit", required = false) String entrustedUnit,
+			@RequestParam(name = "sampletype", required = false) String sampleType,
+			@RequestParam(name = "checktype", required = false) String checkType,
 			@RequestParam(name = "order", required = false) String order,
 			@RequestParam(name = "status", defaultValue = "5") int status,
 			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
-			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+			@RequestParam(value = "startTime", required = false) String startTime,
+            @RequestParam(value = "endTime", required = false) String endTime) {
 		Map<String, Object> filter = new HashMap<String, Object>();
 		String orderby = new String();
+		if (StringUtils.isBlank(startTime)) {
+		    startTime=null;
+        }
+		if (StringUtils.isBlank(endTime)) {
+		    endTime=null;
+        }
 		if (!StringUtils.isBlank(id)) {
 			filter.put("receive_sample_id", id);
 		}
 		if (!StringUtils.isBlank(entrustedUnit)) {
 			filter.put("entrusted_unit", entrustedUnit);
 		}
+		if (!StringUtils.isBlank(sampleType)) {
+            filter.put("sample_type", sampleType);
+        }
+		if (!StringUtils.isBlank(checkType)) {
+            filter.put("check_type", checkType);
+        }
 		if (StringUtils.isBlank(order)) {
 			orderby = "created_at desc";
 		}
 		if (status != 5) {
 			filter.put("status", status);
 		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date start = null;
+        Date end = null;
+        
+        try {
+            start = startTime == null ? null : sdf.parse(startTime);
+            end = endTime == null ? null : sdf.parse(endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BizException("输入的时间格式不合法！");
+        }
 
-		return Response.success(receiveSampleService.select(pageNum, pageSize, orderby, filter));
+		return Response.success(receiveSampleService.select(pageNum, pageSize, orderby, filter,start,end));
 	}
 
 	// test
