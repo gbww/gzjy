@@ -95,22 +95,22 @@ public class RoleServiceImpl implements RoleService {
   @Override
   @Transactional
   public int assignPrivilegeForRole(String id, List<String> privileges) {
-    if (!allowManipulateRole(id)) {
+    /*if (!allowManipulateRole(id)) {
       throw new BizException("没有权限为该角色分配权限");
-    }
+    }*/
     Role role = check(id);
     if (role.getDefaults()) {
       throw new BizException("无法为默认角色重新分配权限");
     }
-    if (role.getOrganizationId().equals("-1")
+   /* if (role.getOrganizationId().equals("-1")
         && !userService.getCurrentUser().getRole().isSuperAdmin()) { // 非超级管理员不能修改全局角色
       throw new BizException("当前用户没有权限为该角色重新分配权限");
-    }
+    }*/
     // FIXME 完善分配权限（检查权限是否存在，是否允许分配指定权限）
     return rolePrivilegeService.assignPrivilegeForRole(id, privileges);
   }
 
-  @Privileges
+ 
   @Override
   public int initPrivilegeForDefaultRole(String id, List<String> privileges) {
     check(id);
@@ -146,17 +146,17 @@ public class RoleServiceImpl implements RoleService {
   @Override
   @Transactional
   public int delete(String id) {
-    if (!allowManipulateRole(id)) {
+  /*  if (!allowManipulateRole(id)) {
       throw new BizException("没有权限删除该角色");
-    }
+    }*/
     Role role = check(id); // 获取对应id的角色
     if (role.getDefaults()) {
       throw new BizException("不能删除默认角色");
     }
-    if (role.getOrganizationId().equals("-1")
+    /*if (role.getOrganizationId().equals("-1")
         && !userService.getCurrentUser().getRole().isSuperAdmin()) { // 非超级管理员不能删除全局角色
       throw new BizException("没有权限删除该角色");
-    }
+    }*/
 
     if (userService.hasUserBasedRole(id)) {
       throw new BizException("请确保该角色没有任何关联用户");
@@ -179,9 +179,9 @@ public class RoleServiceImpl implements RoleService {
   @Override
   @Transactional
   public Role update(String id, CrabRole role) {
-    if (!allowManipulateRole(id)) {
+  /*  if (!allowManipulateRole(id)) {
       throw new BizException("没有权限更新该角色");
-    }
+    }*/
 
     CrabRole r = (CrabRole) check(id); // 取得指定id的原纪录
     if (r.getDefaults()) {
