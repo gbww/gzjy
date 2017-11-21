@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzjy.log.mapper.LogMapper">
+
+
+	<resultMap id="BaseResultMap" type="com.gzjy.log.model.LogModel">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="operate_user_id" jdbcType="VARCHAR" property="operateUserId" />
+		<result column="operate_user" jdbcType="VARCHAR" property="operateUser" />
+		<result column="operation" jdbcType="VARCHAR" property="operation" />
+		<result column="login_ip" jdbcType="VARCHAR" property="loginIp" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="extra" jdbcType="VARCHAR" property="extra" />		
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, operate_user_id, operate_user, operation, login_ip, create_time,extra 		
+	</sql>
+
+
+	<insert id="insert" parameterType="com.gzjy.log.model.LogModel">
+		insert into log(id, operate_user_id, operate_user, operation, login_ip, create_time,extra)
+		values (
+		#{id,jdbcType=VARCHAR},
+		#{operateUserId,jdbcType=VARCHAR},
+		#{operateUser,jdbcType=VARCHAR},
+		#{operation,jdbcType=VARCHAR},
+		#{loginIp,jdbcType=VARCHAR},		
+		#{createTime,jdbcType=TIMESTAMP},
+		#{extra,jdbcType=VARCHAR})
+	</insert>
+
+</mapper>
