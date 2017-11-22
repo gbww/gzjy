@@ -1,5 +1,6 @@
 package com.gzjy.log.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -52,6 +53,17 @@ public class LogController {
 		try {
 			List <LogModel> result = logService.selectAll(record);
 			return Response.success(result);
+		}
+		catch (Exception e) {
+			return Response.fail(e.getMessage());
+		}
+	}
+	
+	@RequestMapping(value = "/log", method = RequestMethod.DELETE)
+	public Response deleteLog() {
+		try {
+			logService.deleteByCreateTime(new Date());
+			return Response.success("success");
 		}
 		catch (Exception e) {
 			return Response.fail(e.getMessage());

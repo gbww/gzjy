@@ -48,8 +48,10 @@
 		order by create_time desc
 	</select>
 
-	<!-- <delete id="deleteByCreateTime" parameterType="java.sql.Timestamp">
-		delete from log where create_time < #{createTime}
-	</delete> -->
+	<delete id="deleteByCreateTime" parameterType="java.lang.String">
+		delete from log 
+		where create_time &lt; #{createTime, jdbcType=VARCHAR} 
+	</delete>
+	
 	
 </mapper>

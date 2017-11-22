@@ -14,5 +14,5 @@ public interface LogMapper {
     
     List<LogModel> selectAll(LogModel record);
    
-//    int deleteByCreateTime(@Param("createTime")String createTime);
+    int deleteByCreateTime(@Param("createTime")String createTime);
 }

@@ -1,5 +1,7 @@
 package com.gzjy.log.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +25,9 @@ public class LogServiceImpl implements LogService {
 		return logMapper.selectAll(logModel);
 	}
 
-	public int deleteByCreateTime(String createTime) {		
-		return 0;
-//		return logMapper.deleteByCreateTime(createTime);
+	public int deleteByCreateTime(Date createTime) {	
+		SimpleDateFormat f=new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
+		return logMapper.deleteByCreateTime(f.format(createTime));
 	}
 
 }
