@@ -7,27 +7,49 @@
 		<id column="id" jdbcType="VARCHAR" property="id" />
 		<result column="operate_user_id" jdbcType="VARCHAR" property="operateUserId" />
 		<result column="operate_user" jdbcType="VARCHAR" property="operateUser" />
-		<result column="operation" jdbcType="VARCHAR" property="operation" />
-		<result column="login_ip" jdbcType="VARCHAR" property="loginIp" />
+		<result column="operation" jdbcType="VARCHAR" property="operation" />		
+		<result column="target" jdbcType="VARCHAR" property="target" />
 		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
 		<result column="extra" jdbcType="VARCHAR" property="extra" />		
 	</resultMap>
 
 	<sql id="Base_Column_List">
-		id, operate_user_id, operate_user, operation, login_ip, create_time,extra 		
+		id, operate_user_id, operate_user, operation, target, create_time,extra 		
 	</sql>
 
 
 	<insert id="insert" parameterType="com.gzjy.log.model.LogModel">
-		insert into log(id, operate_user_id, operate_user, operation, login_ip, create_time,extra)
+		insert into log(id, operate_user_id, operate_user, operation, target, create_time,extra)
 		values (
 		#{id,jdbcType=VARCHAR},
 		#{operateUserId,jdbcType=VARCHAR},
 		#{operateUser,jdbcType=VARCHAR},
-		#{operation,jdbcType=VARCHAR},
-		#{loginIp,jdbcType=VARCHAR},		
+		#{operation,jdbcType=VARCHAR},		
+		#{target,jdbcType=VARCHAR},	
 		#{createTime,jdbcType=TIMESTAMP},
 		#{extra,jdbcType=VARCHAR})
 	</insert>
+	
+	<select id="selectAll" resultMap="BaseResultMap">		
+		select
+		<include refid="Base_Column_List" />
+		from log 
+		<where>
+			<if test="operateUserId != null">
+				and operate_user_id = #{operateUserId}
+			</if>
+			<if test="operateUser != null">
+				and operate_user = #{operateUser}
+			</if>
+			<if test="operation != null">
+				and operation = #{operation}
+			</if>
+		</where>
+		order by create_time desc
+	</select>
 
+	<!-- <delete id="deleteByCreateTime" parameterType="java.sql.Timestamp">
+		delete from log where create_time < #{createTime}
+	</delete> -->
+	
 </mapper>

@@ -8,10 +8,11 @@ public class LogModel {
 	private String id;
 	private String operateUserId;
 	private String operateUser;
-	private String operation;
-	private String loginIp;
+	private String operation;	
+	private String target;
 	private Date createTime;
 	private String extra;
+	
 	public String getId() {
 		return id;
 	}
@@ -35,13 +36,7 @@ public class LogModel {
 	}
 	public void setOperation(String operation) {
 		this.operation = operation;
-	}
-	public String getLoginIp() {
-		return loginIp;
-	}
-	public void setLoginIp(String loginIp) {
-		this.loginIp = loginIp;
-	}
+	}	
 	public Date getCreateTime() {
 		return createTime;
 	}
@@ -53,6 +48,12 @@ public class LogModel {
 	}
 	public void setExtra(String extra) {
 		this.extra = extra;
+	}
+	public String getTarget() {
+		return target;
+	}
+	public void setTarget(String target) {
+		this.target = target;
 	}
 	
 }
