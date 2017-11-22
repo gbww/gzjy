@@ -49,6 +49,7 @@ public class RoleController {
   }*/
   
   @RequestMapping(value = "/roles/{id}/action/privileges/init", method = RequestMethod.PUT)
+  @Privileges(name = "ROLE-EDIT", scope = {1})
   public Response initPrivileges(@PathVariable String id, @RequestBody List<String> privileges) {
     int result = roleService.initPrivilegeForDefaultRole(id, privileges);
     return Response.success(result);
@@ -88,7 +89,7 @@ public class RoleController {
   }
   
   @RequestMapping(value = "/roles/{id}", method = RequestMethod.PUT)
-  @Privileges(name = "ROLE-EDIT", scope = {1})
+  
   public Response edit(@PathVariable String id, @RequestBody CrabRole role) {
     Role r = roleService.update(id, role);  
     return Response.success(r);
