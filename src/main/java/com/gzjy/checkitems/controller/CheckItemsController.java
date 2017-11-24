@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageInfo;
 import com.gzjy.checkitems.model.CheckItem;
@@ -312,6 +313,22 @@ public class CheckItemsController {
 		}
 		catch (Exception e) {
 			System.out.println(e);
+			return Response.fail(e.getMessage());
+		}
+	}
+	
+	/**
+	 * 上传模板文件
+	 * @param file
+	 * @return
+	 */
+	@RequestMapping(value = "/checkitemscatalog/import", method = RequestMethod.POST)
+	public Response multiImport(@RequestParam("file") MultipartFile file) {
+		try {
+			checkItemsCatalogService.importFile(file);
+			return Response.success("success");
+		}
+		catch (Exception e) {
 			return Response.fail(e.getMessage());
 		}
 	}
