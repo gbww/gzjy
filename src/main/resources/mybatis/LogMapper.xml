@@ -46,7 +46,7 @@
 			</if>
 		</where>
 		order by create_time desc
-	</select>
+	</select>	
 
 	<delete id="deleteByCreateTime" parameterType="java.lang.String">
 		delete from log 

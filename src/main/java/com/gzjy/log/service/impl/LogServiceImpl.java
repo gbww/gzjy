@@ -1,13 +1,18 @@
 package com.gzjy.log.service.impl;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.github.pagehelper.ISelect;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.gzjy.common.util.UUID;
+import com.gzjy.contract.model.Contract;
 import com.gzjy.log.mapper.LogMapper;
 import com.gzjy.log.model.LogModel;
 import com.gzjy.log.service.LogService;
@@ -47,6 +52,19 @@ public class LogServiceImpl implements LogService {
 		logModel.setCreateTime(new Date());
 		logModel.setExtra(extra);
 		logMapper.insert(logModel);
+	}
+
+	public PageInfo<LogModel> getPageList(Integer pageNum, Integer pageSize, String operateUserId,
+			String operateUserName, String target, String operation) {
+		List<LogModel> list = new ArrayList<LogModel>();
+	    PageInfo<LogModel> pages = new PageInfo<LogModel>(list);
+	    pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
+	        @Override
+	        public void doSelect() {
+	        	logMapper.selectAll(operateUserId,operateUserName, target, operation);
+	        }
+	    });
+	    return pages;
 	}
 
 }
