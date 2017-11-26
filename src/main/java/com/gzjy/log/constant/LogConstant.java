@@ -23,7 +23,7 @@ public enum LogConstant {
 	
 	CONTRACT_UPDATE("24"),
 	//合同审批
-	CONTRACT_APPROVE("24");
+	CONTRACT_APPROVE("25");
 	
 
     private final String value;
