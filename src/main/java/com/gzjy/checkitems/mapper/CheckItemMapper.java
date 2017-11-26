@@ -9,6 +9,7 @@ import com.gzjy.checkitems.model.CheckItem;
 public interface CheckItemMapper {
 	CheckItem selectByPrimaryKey(String id);
 	int insert(CheckItem checkItem);
+	int importData(List<CheckItem> data);
 	int updateByPrimaryKeySelective(CheckItem checkItem);
 	int deleteByPrimaryKey(String id);
 	int validateCheckItem(CheckItem checkItem);

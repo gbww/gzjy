@@ -325,7 +325,7 @@ public class CheckItemsController {
 	@RequestMapping(value = "/checkitemscatalog/import", method = RequestMethod.POST)
 	public Response multiImport(@RequestParam("file") MultipartFile file) {
 		try {
-			checkItemsCatalogService.importFile(file);
+			checkItemService.importFile(file);
 			return Response.success("success");
 		}
 		catch (Exception e) {

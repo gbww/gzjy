@@ -11,6 +11,5 @@ public interface CheckItemsCatalogService {
 	int createCheckItemsCatalog(CheckItemsCatalog record);	
 	List<CheckItemsCatalog> selectByParentId(String parentId);
 	int updateByPrimaryKeySelective(CheckItemsCatalog record);	
-	void deleteCheckItemsCatalog(String id);
-	void importFile(MultipartFile file);
+	void deleteCheckItemsCatalog(String id);	
 }

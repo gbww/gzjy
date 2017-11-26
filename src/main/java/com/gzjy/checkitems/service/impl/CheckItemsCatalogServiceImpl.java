@@ -26,8 +26,7 @@ import com.gzjy.common.util.fs.EpicNFSService;
 @Service
 public class CheckItemsCatalogServiceImpl implements CheckItemsCatalogService {
 	
-	@Autowired
-	private EpicNFSService epicNFSService;
+	
 	
 	@Autowired
 	private CheckItemsCatalogMapper checkItemsCatalogMapper;
@@ -61,33 +60,6 @@ public class CheckItemsCatalogServiceImpl implements CheckItemsCatalogService {
 			}
 		}
 		checkItemsCatalogMapper.deleteByPrimaryKey(id);
-	}
-
+	}	
 	
-	public void importFile(MultipartFile file) {
-		EpicNFSClient client = epicNFSService.getClient("gzjy");
-		// 建立远程存放excel模板文件目录
-		if (!client.hasRemoteDir("template")) {
-			client.createRemoteDir("template");
-		}
-		//存放在服务器的模板文件是随机生成的，避免重复
-		String excelName = ShortUUID.getInstance().generateShortID()+".xls";
-		Workbook wb = null;
-		try {
-			client.upload(file.getInputStream(), "template/" + excelName);
-			client.close();	
-			logger.info("文件上传到服务器成功");
-			InputStream inputStream = new FileInputStream("/var/lib/docs/gzjy/template/"+excelName);
-			wb = new HSSFWorkbook(inputStream);
-			Sheet sheet = wb.getSheetAt(0);
-			for(int rowNum=0; rowNum< sheet.getLastRowNum(); rowNum++) {
-				Row row = sheet.getRow(rowNum);
-			}
-			wb.close();
-	        
-		} catch (Exception e) {
-			logger.info("文件上传失败:"+e);
-			throw new BizException("文件上传失败");
-		}
-	}
 }
