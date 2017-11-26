@@ -20,7 +20,7 @@ public class TaskComplete implements Serializable{
         //设置该变量防止该流程执行多次导致的流程方向出错问题
         execution.setVariable("result", 1);
         //有一個人反对
-        if(completeTask > resultCount) {
+        if(completeTask > resultCount && taskCount!=completeTask) {
         	execution.setVariable("resultCount", 0);
         	execution.setVariable("result", 0);
         	logger.debug("有一個人反对");

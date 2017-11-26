@@ -124,6 +124,7 @@ public class ContractServiceImpl implements ContractService {
 			int result = (int)runtimeService.getVariable(task.getExecutionId(), "resultCount");
 			runtimeService.setVariable(task.getExecutionId(), "resultCount", result + 1);
 		}
+		taskService.complete(taskId);
 //		将评审意见插入到合同评审意见表中
 		User currentUser = userService.getCurrentUser();
 		taskService.complete(task.getId());

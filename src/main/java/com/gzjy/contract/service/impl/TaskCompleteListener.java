@@ -30,13 +30,15 @@ public class TaskCompleteListener implements TaskListener {
         	logger.debug("updateStatusByProcessId status=" + ContractStatus.UPDATING.getValue());
         	contractService.updateStatusByProcessId(ContractStatus.UPDATING.getValue(), processId);
         }
-        if(taskCount == completeTask+1) {
+        if(taskCount == completeTask+1 && resultCount ==taskCount) {
         	logger.debug("updateStatusByProcessId status=" + ContractStatus.OVER.getValue() + "|processId="+processId);
         	try {
         		contractService.updateStatusByProcessId(ContractStatus.OVER.getValue(), processId);
         	}catch (Exception e) {
         		logger.debug(e+"");
 			}
+        }else {
+        	delegateTask.getExecution().setVariable("result", 0);
         }
 	}
 }
