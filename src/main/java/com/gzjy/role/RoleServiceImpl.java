@@ -113,8 +113,11 @@ public class RoleServiceImpl implements RoleService {
  
   @Override
   public int initPrivilegeForDefaultRole(String id, List<String> privileges) {
-    check(id);
+      Role role=check(id);
     // FIXME 完善分配权限（检查权限是否存在，是否允许分配指定权限）
+    if (role.getDefaults()) {
+        throw new BizException("不能修改默认角色");
+      }
     return rolePrivilegeService.assignPrivilegeForRole(id, privileges);
   }
 

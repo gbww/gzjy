@@ -120,11 +120,11 @@ public class ReceiveSample {
     //主检人
     
     private String principalInspector;
-    //报告状态(0:未完成，1：完成)5作为查询时判断是否是全部查询的判断
+    //接样状态(0:未完成，1：完成)5作为查询时判断是否是全部查询的判断
     private Integer status;
     //创建时间
     private Date createdAt;
-    //报告状态
+    //报告状态（0:待编辑，1：待审核、2待批准、3、完成）
     private Integer reportStatus;
 
     public String getReceiveSampleId() {

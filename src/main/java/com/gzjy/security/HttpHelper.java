@@ -31,7 +31,7 @@ import com.gzjy.common.rest.common.SSLClientFactory;
  * connections, leaving application code to provide URLs (with possible template variables) and
  * extract results
  * 
- * @author yangxiaoming@cmss.chinamobile.com
+ * @author 
  *
  */
 public class HttpHelper {
