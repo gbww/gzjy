@@ -9,6 +9,8 @@ public interface LogService {
 	
 	public void insertLog(LogModel logModel);
 	
+	public void insertLog(String operation,String target, String extra);
+	
 	public List<LogModel> selectAll(LogModel logModel);
 	
 	public int deleteByCreateTime(Date createTime);

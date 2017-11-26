@@ -17,7 +17,14 @@ public enum LogConstant {
     //合同录入
 	CONTRACT_INPUT("21"),
 	//合同评审
-	CONTRACT_REVIEW("22");
+	CONTRACT_REVIEW("22"),
+	
+	CONTRACT_DELETE("23"),
+	
+	CONTRACT_UPDATE("24"),
+	//合同审批
+	CONTRACT_APPROVE("24");
+	
 
     private final String value;
 

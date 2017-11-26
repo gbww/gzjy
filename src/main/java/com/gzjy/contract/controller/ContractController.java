@@ -20,6 +20,7 @@ import com.github.pagehelper.PageInfo;
 import com.gzjy.common.Response;
 import com.gzjy.common.ShortUUID;
 import com.gzjy.common.annotation.Privileges;
+import com.gzjy.common.util.UUID;
 import com.gzjy.contract.model.Contract;
 import com.gzjy.contract.model.ContractComment;
 import com.gzjy.contract.model.ContractProcess;
@@ -27,7 +28,11 @@ import com.gzjy.contract.model.ContractStatus;
 import com.gzjy.contract.model.ContractTask;
 import com.gzjy.contract.service.ContractCommentService;
 import com.gzjy.contract.service.ContractService;
+import com.gzjy.log.constant.LogConstant;
+import com.gzjy.log.service.LogService;
 import com.gzjy.receive.service.ReceiveSampleService;
+import com.gzjy.user.UserService;
+import com.gzjy.user.model.User;
 
 @RestController
 @RequestMapping({ "/v1/ahgz" })
@@ -38,6 +43,10 @@ public class ContractController {
 	
 	@Autowired
 	ContractCommentService contractCommentService;
+	
+	@Autowired
+	LogService logService;
+	
 	
 	private static Logger logger = LoggerFactory.getLogger(ReceiveSampleService.class);
 	
@@ -51,15 +60,17 @@ public class ContractController {
 	public Response createContract(@RequestBody Contract contract) {
 		try {
 			contract.setStatus(ContractStatus.READY.getValue());
-			contract.setId(ShortUUID.getInstance().generateShortID());
+			String contractId = ShortUUID.getInstance().generateShortID();
+			contract.setId(contractId);
 			contract.setCreatedAt(new Date());
 			contractService.insert(contract);
+			logService.insertLog(LogConstant.CONTRACT_INPUT.getValue(), contractId, null);
 			return Response.success("success");
 		}
 		catch (Exception e) {
 			logger.error(e+"");
 			return Response.fail(e.getMessage());
-		}
+		}		
 	}
 	
 	/** 
@@ -126,6 +137,7 @@ public class ContractController {
 	public Response delContractById(@PathVariable String id) {
 		try {
 			contractService.deleteByPrimaryKey(id);
+			logService.insertLog(LogConstant.CONTRACT_DELETE.getValue(), id, null);
 			return Response.success("success");
 		}
 		catch (Exception e) {
@@ -146,6 +158,7 @@ public class ContractController {
 			contract.setId(id);
 			contract.setUpdatedAt(new Date());
 			contractService.updateByPrimaryKey(contract);
+			logService.insertLog(LogConstant.CONTRACT_UPDATE.getValue(), id, null);
 			return Response.success("success");
 		}
 		catch (Exception e) {
@@ -167,6 +180,7 @@ public class ContractController {
 		String contractId = contractProcess.getContractId();		
 		try {			
 			contractService.deploymentProcess(contractId, approveUsers, updateContractUser);
+			logService.insertLog(LogConstant.CONTRACT_REVIEW.getValue(), contractId, null);
 			return Response.success("success");
 		}
 		catch (Exception e) {
@@ -235,9 +249,11 @@ public class ContractController {
 			@RequestParam(required = false)String context,
 			@RequestParam(required = true) String action,
 			@RequestParam(required = false) String contractId) {
+			String extra=null;
 		try {
 			//如果是审批操作
 			if (action.equals("approve")){
+				extra=approve.equals("true")?"批准该流程":"驳回该流程" ;
 				//必须带上行为true/false
 				if(approve==null || !(approve.equals("true") || approve.equals("false"))) {
 					return Response.fail("Param approve must be true or false");
@@ -249,12 +265,14 @@ public class ContractController {
 					return Response.fail("Param  context must not null");
 				contractService.completeApproveTask(taskId, contractId, approve, context);
 			}else if (action.equals("update")){
+				extra="修改该合同流程" ;
 				contractService.completeUpdateTask(taskId);
 				Contract record = new Contract();
 				record.setId(contractId);
 				record.setStatus(ContractStatus.APPROVING.getValue());
 				contractService.updateByPrimaryKey(record);
 			}
+			logService.insertLog(LogConstant.CONTRACT_APPROVE.getValue(), contractId, extra);
 			return Response.success("success");
 		}
 		catch (Exception e) {
