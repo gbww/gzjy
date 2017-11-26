@@ -27,6 +27,8 @@ public class GzClient {
 
     private Integer isFocus;
 
+    private Integer deleted;
+
     public Integer getClientNum() {
         return clientNum;
     }
@@ -121,5 +123,13 @@ public class GzClient {
 
     public void setIsFocus(Integer isFocus) {
         this.isFocus = isFocus;
+    }
+
+    public Integer getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Integer deleted) {
+        this.deleted = deleted;
     }
 }

@@ -1,38 +1,41 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gzjy.client.mapper.GzClientMapper">
-	<resultMap id="BaseResultMap" type="com.gzjy.client.model.GzClient">
-		<id column="client_num" property="clientNum" jdbcType="INTEGER" />
-		<result column="salesman" property="salesman" jdbcType="VARCHAR" />
-		<result column="area" property="area" jdbcType="VARCHAR" />
-		<result column="client_name" property="clientName" jdbcType="VARCHAR" />
-		<result column="invoice_title" property="invoiceTitle"
-			jdbcType="VARCHAR" />
-		<result column="bank_name" property="bankName" jdbcType="VARCHAR" />
-		<result column="bank_account" property="bankAccount" jdbcType="VARCHAR" />
-		<result column="client_address" property="clientAddress"
-			jdbcType="VARCHAR" />
-		<result column="remark" property="remark" jdbcType="VARCHAR" />
-		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
-		<result column="is_share" property="isShare" jdbcType="INTEGER" />
-		<result column="is_focus" property="isFocus" jdbcType="INTEGER" />
-	</resultMap>
-	<sql id="Base_Column_List">
-		client_num, salesman, area, client_name, invoice_title, bank_name, bank_account,
-		client_address, remark, created_at, is_share, is_focus
-	</sql>
-	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
-		parameterType="java.lang.Integer">
-		select
-		<include refid="Base_Column_List" />
-		from gz_client
-		where client_num = #{clientNum,jdbcType=INTEGER}
-	</select>
-	<select id="selectAll" resultMap="BaseResultMap">
+  <resultMap id="BaseResultMap" type="com.gzjy.client.model.GzClient">
+    <id column="client_num" jdbcType="INTEGER" property="clientNum" />
+    <result column="salesman" jdbcType="VARCHAR" property="salesman" />
+    <result column="area" jdbcType="VARCHAR" property="area" />
+    <result column="client_name" jdbcType="VARCHAR" property="clientName" />
+    <result column="invoice_title" jdbcType="VARCHAR" property="invoiceTitle" />
+    <result column="bank_name" jdbcType="VARCHAR" property="bankName" />
+    <result column="bank_account" jdbcType="VARCHAR" property="bankAccount" />
+    <result column="client_address" jdbcType="VARCHAR" property="clientAddress" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="is_share" jdbcType="INTEGER" property="isShare" />
+    <result column="is_focus" jdbcType="INTEGER" property="isFocus" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    client_num, salesman, area, client_name, invoice_title, bank_name, bank_account, 
+    client_address, remark, created_at, is_share, is_focus, deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from gz_client
+    <where>
+    deleted=0 and
+    client_num = #{clientNum,jdbcType=INTEGER}
+    </where> 
+  </select>
+  
+  	<select id="selectAll" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
 		from gz_client
 		<where>
+		 deleted=0 and
 			<foreach collection="filters.keys" item="key" separator="and">
 				<if test="null!=filters[key]">
 					${key} LIKE CONCAT('%',#{filters[${key}]},'%' )
@@ -42,156 +45,164 @@
 		</where>
 		order by ${orderby}
 	</select>
-
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-		delete from gz_client
-		where client_num = #{clientNum,jdbcType=INTEGER}
-	</delete>
-	<insert id="insert" parameterType="com.gzjy.client.model.GzClient">
-		insert into gz_client (client_num, salesman, area,
-		client_name, invoice_title, bank_name,
-		bank_account, client_address, remark,
-		created_at, is_share, is_focus
-		)
-		values (#{clientNum,jdbcType=INTEGER}, #{salesman,jdbcType=VARCHAR},
-		#{area,jdbcType=VARCHAR},
-		#{clientName,jdbcType=VARCHAR}, #{invoiceTitle,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR},
-		#{bankAccount,jdbcType=VARCHAR}, #{clientAddress,jdbcType=VARCHAR},
-		#{remark,jdbcType=VARCHAR},
-		#{createdAt,jdbcType=TIMESTAMP}, #{isShare,jdbcType=INTEGER}, #{isFocus,jdbcType=INTEGER}
-		)
-	</insert>
-	<insert id="insertSelective" parameterType="com.gzjy.client.model.GzClient">
-		insert into gz_client
-		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="clientNum != null">
-				client_num,
-			</if>
-			<if test="salesman != null">
-				salesman,
-			</if>
-			<if test="area != null">
-				area,
-			</if>
-			<if test="clientName != null">
-				client_name,
-			</if>
-			<if test="invoiceTitle != null">
-				invoice_title,
-			</if>
-			<if test="bankName != null">
-				bank_name,
-			</if>
-			<if test="bankAccount != null">
-				bank_account,
-			</if>
-			<if test="clientAddress != null">
-				client_address,
-			</if>
-			<if test="remark != null">
-				remark,
-			</if>
-			<if test="createdAt != null">
-				created_at,
-			</if>
-			<if test="isShare != null">
-				is_share,
-			</if>
-			<if test="isFocus != null">
-				is_focus,
-			</if>
-		</trim>
-		<trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="clientNum != null">
-				#{clientNum,jdbcType=INTEGER},
-			</if>
-			<if test="salesman != null">
-				#{salesman,jdbcType=VARCHAR},
-			</if>
-			<if test="area != null">
-				#{area,jdbcType=VARCHAR},
-			</if>
-			<if test="clientName != null">
-				#{clientName,jdbcType=VARCHAR},
-			</if>
-			<if test="invoiceTitle != null">
-				#{invoiceTitle,jdbcType=VARCHAR},
-			</if>
-			<if test="bankName != null">
-				#{bankName,jdbcType=VARCHAR},
-			</if>
-			<if test="bankAccount != null">
-				#{bankAccount,jdbcType=VARCHAR},
-			</if>
-			<if test="clientAddress != null">
-				#{clientAddress,jdbcType=VARCHAR},
-			</if>
-			<if test="remark != null">
-				#{remark,jdbcType=VARCHAR},
-			</if>
-			<if test="createdAt != null">
-				#{createdAt,jdbcType=TIMESTAMP},
-			</if>
-			<if test="isShare != null">
-				#{isShare,jdbcType=INTEGER},
-			</if>
-			<if test="isFocus != null">
-				#{isFocus,jdbcType=INTEGER},
-			</if>
-		</trim>
-	</insert>
-	<update id="updateByPrimaryKeySelective" parameterType="com.gzjy.client.model.GzClient">
-		update gz_client
-		<set>
-			<if test="salesman != null">
-				salesman = #{salesman,jdbcType=VARCHAR},
-			</if>
-			<if test="area != null">
-				area = #{area,jdbcType=VARCHAR},
-			</if>
-			<if test="clientName != null">
-				client_name = #{clientName,jdbcType=VARCHAR},
-			</if>
-			<if test="invoiceTitle != null">
-				invoice_title = #{invoiceTitle,jdbcType=VARCHAR},
-			</if>
-			<if test="bankName != null">
-				bank_name = #{bankName,jdbcType=VARCHAR},
-			</if>
-			<if test="bankAccount != null">
-				bank_account = #{bankAccount,jdbcType=VARCHAR},
-			</if>
-			<if test="clientAddress != null">
-				client_address = #{clientAddress,jdbcType=VARCHAR},
-			</if>
-			<if test="remark != null">
-				remark = #{remark,jdbcType=VARCHAR},
-			</if>
-			<if test="createdAt != null">
-				created_at = #{createdAt,jdbcType=TIMESTAMP},
-			</if>
-			<if test="isShare != null">
-				is_share = #{isShare,jdbcType=INTEGER},
-			</if>
-			<if test="isFocus != null">
-				is_focus = #{isFocus,jdbcType=INTEGER},
-			</if>
-		</set>
-		where client_num = #{clientNum,jdbcType=INTEGER}
-	</update>
-	<update id="updateByPrimaryKey" parameterType="com.gzjy.client.model.GzClient">
-		update gz_client
-		set salesman = #{salesman,jdbcType=VARCHAR},
-		area = #{area,jdbcType=VARCHAR},
-		client_name = #{clientName,jdbcType=VARCHAR},
-		invoice_title = #{invoiceTitle,jdbcType=VARCHAR},
-		bank_name = #{bankName,jdbcType=VARCHAR},
-		bank_account = #{bankAccount,jdbcType=VARCHAR},
-		client_address = #{clientAddress,jdbcType=VARCHAR},
-		remark = #{remark,jdbcType=VARCHAR},
-		created_at = #{createdAt,jdbcType=TIMESTAMP},
-		is_share = #{isShare,jdbcType=INTEGER},
-		is_focus = #{isFocus,jdbcType=INTEGER}
-		where client_num = #{clientNum,jdbcType=INTEGER}
-	</update>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from gz_client
+    where client_num = #{clientNum,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gzjy.client.model.GzClient">
+    insert into gz_client (client_num, salesman, area, 
+      client_name, invoice_title, bank_name, 
+      bank_account, client_address, remark, 
+      created_at, is_share, is_focus, 
+      deleted)
+    values (#{clientNum,jdbcType=INTEGER}, #{salesman,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, 
+      #{clientName,jdbcType=VARCHAR}, #{invoiceTitle,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, 
+      #{bankAccount,jdbcType=VARCHAR}, #{clientAddress,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{createdAt,jdbcType=TIMESTAMP}, #{isShare,jdbcType=INTEGER}, #{isFocus,jdbcType=INTEGER}, 
+      #{deleted,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gzjy.client.model.GzClient">
+    insert into gz_client
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="clientNum != null">
+        client_num,
+      </if>
+      <if test="salesman != null">
+        salesman,
+      </if>
+      <if test="area != null">
+        area,
+      </if>
+      <if test="clientName != null">
+        client_name,
+      </if>
+      <if test="invoiceTitle != null">
+        invoice_title,
+      </if>
+      <if test="bankName != null">
+        bank_name,
+      </if>
+      <if test="bankAccount != null">
+        bank_account,
+      </if>
+      <if test="clientAddress != null">
+        client_address,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="isShare != null">
+        is_share,
+      </if>
+      <if test="isFocus != null">
+        is_focus,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="clientNum != null">
+        #{clientNum,jdbcType=INTEGER},
+      </if>
+      <if test="salesman != null">
+        #{salesman,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null">
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="clientName != null">
+        #{clientName,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceTitle != null">
+        #{invoiceTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null">
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null">
+        #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="clientAddress != null">
+        #{clientAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isShare != null">
+        #{isShare,jdbcType=INTEGER},
+      </if>
+      <if test="isFocus != null">
+        #{isFocus,jdbcType=INTEGER},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gzjy.client.model.GzClient">
+    update gz_client
+    <set>
+      <if test="salesman != null">
+        salesman = #{salesman,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null">
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="clientName != null">
+        client_name = #{clientName,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceTitle != null">
+        invoice_title = #{invoiceTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null">
+        bank_name = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null">
+        bank_account = #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="clientAddress != null">
+        client_address = #{clientAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isShare != null">
+        is_share = #{isShare,jdbcType=INTEGER},
+      </if>
+      <if test="isFocus != null">
+        is_focus = #{isFocus,jdbcType=INTEGER},
+      </if>
+      <if test="deleted != null">
+        deleted = #{deleted,jdbcType=INTEGER},
+      </if>
+    </set>
+    where client_num = #{clientNum,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gzjy.client.model.GzClient">
+    update gz_client
+    set salesman = #{salesman,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR},
+      client_name = #{clientName,jdbcType=VARCHAR},
+      invoice_title = #{invoiceTitle,jdbcType=VARCHAR},
+      bank_name = #{bankName,jdbcType=VARCHAR},
+      bank_account = #{bankAccount,jdbcType=VARCHAR},
+      client_address = #{clientAddress,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      is_share = #{isShare,jdbcType=INTEGER},
+      is_focus = #{isFocus,jdbcType=INTEGER},
+      deleted = #{deleted,jdbcType=INTEGER}
+    where client_num = #{clientNum,jdbcType=INTEGER}
+  </update>	
 </mapper>
