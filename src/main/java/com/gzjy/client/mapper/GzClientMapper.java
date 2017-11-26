@@ -12,6 +12,8 @@ import com.gzjy.client.model.GzClient;
 @Mapper
 public interface GzClientMapper {
     int deleteByPrimaryKey(Integer clientNum);
+    
+    int deleteLogicByPrimaryKey(Integer clientNum);
 
     int insert(GzClient record);
 

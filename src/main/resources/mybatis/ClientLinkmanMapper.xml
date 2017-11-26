@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gzjy.client.mapper.ClientLinkmanMapper" >
+  <resultMap id="BaseResultMap" type="com.gzjy.client.model.ClientLinkman" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="client_num" property="clientNum" jdbcType="INTEGER" />
+    <result column="linkman_name" property="linkmanName" jdbcType="VARCHAR" />
+    <result column="linkman_position" property="linkmanPosition" jdbcType="VARCHAR" />
+    <result column="linkman_telephone" property="linkmanTelephone" jdbcType="VARCHAR" />
+    <result column="linkman_email" property="linkmanEmail" jdbcType="VARCHAR" />
+    <result column="linkman_remark" property="linkmanRemark" jdbcType="VARCHAR" />
+    <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, client_num, linkman_name, linkman_position, linkman_telephone, linkman_email, 
+    linkman_remark, created_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from client_linkman
+    where id = #{id,jdbcType=CHAR}
+  </select>
+<select id="selectByClientNum" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from client_linkman
+		<where>
+		client_num=#{clientNum,jdbcType=INTEGER}
+		and
+			<foreach collection="filters.keys" item="key" separator="and">
+				<if test="null!=filters[key]">
+					${key} LIKE CONCAT('%',#{filters[${key}]},'%' )
+				</if>
+			</foreach>
+
+		</where>
+		order by ${orderby}
+	</select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from client_linkman
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzjy.client.model.ClientLinkman" >
+    insert into client_linkman (id, client_num, linkman_name, 
+      linkman_position, linkman_telephone, linkman_email, 
+      linkman_remark, created_at)
+    values (#{id,jdbcType=CHAR}, #{clientNum,jdbcType=INTEGER}, #{linkmanName,jdbcType=VARCHAR}, 
+      #{linkmanPosition,jdbcType=VARCHAR}, #{linkmanTelephone,jdbcType=VARCHAR}, #{linkmanEmail,jdbcType=VARCHAR}, 
+      #{linkmanRemark,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gzjy.client.model.ClientLinkman" >
+    insert into client_linkman
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="clientNum != null" >
+        client_num,
+      </if>
+      <if test="linkmanName != null" >
+        linkman_name,
+      </if>
+      <if test="linkmanPosition != null" >
+        linkman_position,
+      </if>
+      <if test="linkmanTelephone != null" >
+        linkman_telephone,
+      </if>
+      <if test="linkmanEmail != null" >
+        linkman_email,
+      </if>
+      <if test="linkmanRemark != null" >
+        linkman_remark,
+      </if>
+      <if test="createdAt != null" >
+        created_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="clientNum != null" >
+        #{clientNum,jdbcType=INTEGER},
+      </if>
+      <if test="linkmanName != null" >
+        #{linkmanName,jdbcType=VARCHAR},
+      </if>
+      <if test="linkmanPosition != null" >
+        #{linkmanPosition,jdbcType=VARCHAR},
+      </if>
+      <if test="linkmanTelephone != null" >
+        #{linkmanTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="linkmanEmail != null" >
+        #{linkmanEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="linkmanRemark != null" >
+        #{linkmanRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null" >
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gzjy.client.model.ClientLinkman" >
+    update client_linkman
+    <set >
+      <if test="clientNum != null" >
+        client_num = #{clientNum,jdbcType=INTEGER},
+      </if>
+      <if test="linkmanName != null" >
+        linkman_name = #{linkmanName,jdbcType=VARCHAR},
+      </if>
+      <if test="linkmanPosition != null" >
+        linkman_position = #{linkmanPosition,jdbcType=VARCHAR},
+      </if>
+      <if test="linkmanTelephone != null" >
+        linkman_telephone = #{linkmanTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="linkmanEmail != null" >
+        linkman_email = #{linkmanEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="linkmanRemark != null" >
+        linkman_remark = #{linkmanRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null" >
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gzjy.client.model.ClientLinkman" >
+    update client_linkman
+    set client_num = #{clientNum,jdbcType=INTEGER},
+      linkman_name = #{linkmanName,jdbcType=VARCHAR},
+      linkman_position = #{linkmanPosition,jdbcType=VARCHAR},
+      linkman_telephone = #{linkmanTelephone,jdbcType=VARCHAR},
+      linkman_email = #{linkmanEmail,jdbcType=VARCHAR},
+      linkman_remark = #{linkmanRemark,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

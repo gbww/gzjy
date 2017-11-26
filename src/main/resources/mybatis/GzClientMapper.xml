@@ -205,4 +205,14 @@
       deleted = #{deleted,jdbcType=INTEGER}
     where client_num = #{clientNum,jdbcType=INTEGER}
   </update>	
+ 
+    <update id="deleteLogicByPrimaryKey" parameterType="com.gzjy.client.model.GzClient">
+    update gz_client
+    set  deleted = 1
+    where client_num = #{clientNum,jdbcType=INTEGER}
+  </update>
+  
+  
+  
+  
 </mapper>

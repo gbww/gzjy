@@ -47,7 +47,7 @@ public class ClientService {
     public int delete(Integer id) {
         int result=0;
         try {
-            result = clientMapper.deleteByPrimaryKey(id);
+            result = clientMapper.deleteLogicByPrimaryKey(id);
         } catch (Exception e) {
             logger.error("删除客户失败");
             e.printStackTrace();

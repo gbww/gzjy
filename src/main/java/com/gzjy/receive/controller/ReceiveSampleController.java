@@ -260,13 +260,17 @@ public class ReceiveSampleController {
 	@Privileges(name = "SAMPLE-SELECTITEM", scope = { 1 })
 	@RequestMapping(value = "/sampleItem", method = RequestMethod.GET)
 	public Response listItemByCurrentUser(@RequestParam(name = "status", defaultValue = "0") int status,
+	        @RequestParam(name = "order", required = false) String order,
 			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
 			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 		Map<String, Object> filter = new HashMap<String, Object>();
 		if (status != 5) {
 			filter.put("status", status);
 		}
-		return Response.success(receiveSampleService.selectCurrentUserItems(pageNum, pageSize, filter));
+		if(StringUtils.isBlank(order)) {
+		    order="updated_at desc";
+		}
+		return Response.success(receiveSampleService.selectCurrentUserItems(pageNum, pageSize, order, filter));
 	}
 
 	/**
