@@ -316,7 +316,12 @@ public class ReceiveSampleController {
 				logger.info("Begin export PDF");
 				String tempPdfName = ShortUUID.getInstance().generateShortID() + ".pdf";
 				tempPdf = "/var/lib/docs/gzjy/temp/" + tempPdfName;
-				ExcelToPdf.xlsToPdf(tempFile, tempPdf);
+				String os = System.getProperty("os.name");  
+				if(os.toLowerCase().startsWith("win")){  
+					ExcelToPdf.xlsToPdf(tempFile, tempPdf);
+				}else {
+					ExcelToPdf.xlsToPdfForLinux(tempFile, tempPdf);
+				}
 				return Response.success(tempPdf);
 			}
 			// 删除缓存模板文件
