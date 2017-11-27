@@ -55,13 +55,13 @@ public class LogServiceImpl implements LogService {
 	}
 
 	public PageInfo<LogModel> getPageList(Integer pageNum, Integer pageSize, String operateUserId,
-			String operateUserName, String target, String operation) {
+			String operateUser, String target, String operation) {
 		List<LogModel> list = new ArrayList<LogModel>();
 	    PageInfo<LogModel> pages = new PageInfo<LogModel>(list);
 	    pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
 	        @Override
 	        public void doSelect() {
-	        	logMapper.selectAll(operateUserId,operateUserName, target, operation);
+	        	logMapper.selectAll(operateUserId,operateUser, target, operation);
 	        }
 	    });
 	    return pages;

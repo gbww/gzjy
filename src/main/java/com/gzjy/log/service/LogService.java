@@ -18,6 +18,6 @@ public interface LogService {
 	public int deleteByCreateTime(Date createTime);
 	
 	PageInfo<LogModel> getPageList(Integer pageNum, Integer pageSize, String operateUserId, 
-			String operateUserName, String target, String operation);
+			String operateUser, String target, String operation);
 	
 }

@@ -18,6 +18,6 @@ public interface LogMapper {
     int deleteByCreateTime(@Param("createTime")String createTime);
     
     List<LogModel> selectAll(@Param("operateUserId")String operateUserId,
-    		@Param("operateUserName")String operateUserName, 
+    		@Param("operateUser")String operateUser, 
     		@Param("target")String target, @Param("operation")String operation);
 }
