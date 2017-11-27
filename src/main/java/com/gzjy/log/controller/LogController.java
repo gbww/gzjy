@@ -1,6 +1,5 @@
 package com.gzjy.log.controller;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.pagehelper.PageInfo;
 import com.gzjy.common.Response;
 import com.gzjy.common.ShortUUID;
 import com.gzjy.log.constant.LogConstant;
@@ -52,6 +52,18 @@ public class LogController {
 		record.setCreateTime(new Date());
 		try {
 			List <LogModel> result = logService.selectAll(record);
+			return Response.success(result);
+		}
+		catch (Exception e) {
+			return Response.fail(e.getMessage());
+		}
+	}
+	
+	
+	@RequestMapping(value = "/log/page", method = RequestMethod.GET)
+	public Response getLogPageList() {
+		try {
+			PageInfo <LogModel> result = logService.getPageList(1, 10, "", "", "", "");
 			return Response.success(result);
 		}
 		catch (Exception e) {
