@@ -42,7 +42,7 @@
     	 </if>		    			
 		</foreach>	
     </where>
-    order by updated_at desc
+    order by ${orderby}
   </select>
   
   

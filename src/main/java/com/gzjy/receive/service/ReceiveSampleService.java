@@ -210,7 +210,7 @@ public class ReceiveSampleService {
     }
 	
 	
-    public PageInfo<ReceiveSampleItem> selectCurrentUserItems(Integer pageNum, Integer pageSize,Map<String, Object> filter) {
+    public PageInfo<ReceiveSampleItem> selectCurrentUserItems(Integer pageNum, Integer pageSize,String order,Map<String, Object> filter) {
         User u=userClient.getCurrentUser();
        boolean superUser= u.getRole().isSuperAdmin();
        if(!superUser) {
@@ -222,7 +222,7 @@ public class ReceiveSampleService {
         pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
             @Override
             public void doSelect() {
-                receiveSampleItemMapper.selectByUser(filter);
+                receiveSampleItemMapper.selectByUser(filter,order);
             }
         });
         return pages;
