@@ -20,7 +20,6 @@ import com.github.pagehelper.PageInfo;
 import com.gzjy.common.Response;
 import com.gzjy.common.ShortUUID;
 import com.gzjy.common.annotation.Privileges;
-import com.gzjy.common.util.UUID;
 import com.gzjy.contract.model.Contract;
 import com.gzjy.contract.model.ContractComment;
 import com.gzjy.contract.model.ContractProcess;
@@ -46,6 +45,9 @@ public class ContractController {
 	
 	@Autowired
 	LogService logService;
+	
+	@Autowired
+	UserService userService;
 	
 	
 	private static Logger logger = LoggerFactory.getLogger(ReceiveSampleService.class);
@@ -154,10 +156,19 @@ public class ContractController {
 	@Privileges(name = "CONTRACT-UPDATE", scope = {1})
 	@RequestMapping(value = "/contract/{id}", method = RequestMethod.PUT)
 	public Response updateContract(@PathVariable String id, @RequestBody Contract contract) {
-		try {
+		try {			
+			Contract temp = contractService.selectByPrimaryKey(id);
 			contract.setId(id);
 			contract.setUpdatedAt(new Date());
+			//修改数据库表数据
 			contractService.updateByPrimaryKey(contract);
+			if(temp.getStatus() == ContractStatus.UPDATING.getValue()) {
+				Task task = contractService.getUpdateTaskByProcessId(temp.getProcessId());
+				User user = userService.getCurrentUser();
+				if(user.getId().equals(task.getAssignee())) {
+					contractService.completeUpdateTask(task.getId());
+				}
+			}
 			logService.insertLog(LogConstant.CONTRACT_UPDATE.getValue(), id, null);
 			return Response.success("success");
 		}
@@ -201,7 +212,7 @@ public class ContractController {
 		try {
 			if("0".equals(isHandle)) {
 				logger.info("查询未完成任务");
-				List<Task> tasks= contractService.getTaskByUserId(taskName, userId);			
+				List<Task> tasks= contractService.getTaskByUserId();			
 				for (Task task :tasks) {
 					logger.info("ID:"+task.getId()+",姓名:"+task.getName()+",接收人:"+task.getAssignee()+",开始时间:"+task.getCreateTime());
 					ContractTask contractTask = new ContractTask();
@@ -216,7 +227,7 @@ public class ContractController {
 				return Response.success(taskList);
 			}else {
 				logger.info("查询已完成任务");
-				List<HistoricTaskInstance> tasks=contractService.getHistoryTaskByUserId(taskName, userId);
+				List<HistoricTaskInstance> tasks=contractService.getHistoryTaskByUserId();
 				for(HistoricTaskInstance task:tasks) {
 					logger.info("ID:"+task.getId()+",姓名:"+task.getName()+",接收人:"+task.getAssignee()+",开始时间:"+task.getCreateTime());
 					ContractTask contractTask = new ContractTask();

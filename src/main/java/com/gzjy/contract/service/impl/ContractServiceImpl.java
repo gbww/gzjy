@@ -95,19 +95,27 @@ public class ContractServiceImpl implements ContractService {
 	/**
 	 * 根据用户ID获取当前用户在合同流程中的任务
 	 */
-	public List<Task> getTaskByUserId(String taskName,String userId) {
+	public List<Task> getTaskByUserId() {
+		String userId= userService.getCurrentUser().getId();
 		TaskService taskService = processEngine.getTaskService();
-		List<Task> tasks = taskService.createTaskQuery().taskAssignee(userId).taskName(taskName).list();
+		List<Task> tasks = taskService.createTaskQuery().taskAssignee(userId).list();
 		return tasks;
 	}
 	
 	/**
 	 * 根据用户ID获取当前用户在合同流程中的历史任务
 	 */
-	public List<HistoricTaskInstance> getHistoryTaskByUserId(String taskName,String userId) {
+	public List<HistoricTaskInstance> getHistoryTaskByUserId() {
+		String userId= userService.getCurrentUser().getId();		
 		HistoryService historyService = processEngine.getHistoryService();
-		List<HistoricTaskInstance> tasks = historyService.createHistoricTaskInstanceQuery().taskAssignee(userId).taskName(taskName).list();
+		List<HistoricTaskInstance> tasks = historyService.createHistoricTaskInstanceQuery().taskAssignee(userId).list();
 		return tasks;
+	}
+	
+	public Task getUpdateTaskByProcessId(String processId) {
+		TaskService taskService = processEngine.getTaskService();
+		List<Task> tasks=taskService.createTaskQuery().executionId(processId).taskName("修改合同").list();
+		return tasks.get(0);
 	}
 	
 	/**
@@ -171,4 +179,5 @@ public class ContractServiceImpl implements ContractService {
 	public String checkContractProtocolId(String ProtocolId) {
 		return contractMapper.checkContractProtocolId(ProtocolId);
 	}
+	
 }

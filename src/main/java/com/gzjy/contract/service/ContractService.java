@@ -25,13 +25,15 @@ public interface ContractService {
 	
 	void deploymentProcess(String contractId,ArrayList<String> approveUsers, String updateContractUser);
 	
-	List<Task> getTaskByUserId(String taskName, String userId);
+	List<Task> getTaskByUserId();
 	
-	public List<HistoricTaskInstance> getHistoryTaskByUserId(String taskName,String userId);
+	public List<HistoricTaskInstance> getHistoryTaskByUserId();
 	
 	void completeApproveTask(String taskId, String contractId, String approve, String context);
 	
 	void completeUpdateTask(String taskId);
 	
 	void updateStatusByProcessId(Integer status, String processId);
+	
+	Task getUpdateTaskByProcessId(String processId);
 }
