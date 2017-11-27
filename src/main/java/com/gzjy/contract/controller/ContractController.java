@@ -207,8 +207,7 @@ public class ContractController {
 	 * @return
 	 */
 	@RequestMapping(value = "/contract/process/task", method = RequestMethod.GET)
-	public Response getContractTaskByUserId(@RequestParam(required = true) String userId,
-			@RequestParam(required = true) String taskName, @RequestParam(required = false, defaultValue="1") String isHandle) {
+	public Response getContractTaskByUserId(@RequestParam(required = false, defaultValue="1") String isHandle) {
 		ArrayList<ContractTask> taskList = new ArrayList<ContractTask>();
 		try {
 			if("0".equals(isHandle)) {
