@@ -157,18 +157,19 @@ public class ContractController {
 	@RequestMapping(value = "/contract/{id}", method = RequestMethod.PUT)
 	public Response updateContract(@PathVariable String id, @RequestBody Contract contract) {
 		try {			
-			Contract temp = contractService.selectByPrimaryKey(id);
-			contract.setId(id);
-			contract.setUpdatedAt(new Date());
-			//修改数据库表数据
-			contractService.updateByPrimaryKey(contract);
+			Contract temp = contractService.selectByPrimaryKey(id);				
 			if(temp.getStatus() == ContractStatus.UPDATING.getValue()) {
 				Task task = contractService.getUpdateTaskByProcessId(temp.getProcessId());
 				User user = userService.getCurrentUser();
 				if(user.getId().equals(task.getAssignee())) {
 					contractService.completeUpdateTask(task.getId());
+					contract.setStatus(ContractStatus.APPROVING.getValue());
 				}
 			}
+			//修改数据库表数据
+			contract.setId(id);
+			contract.setUpdatedAt(new Date());		
+			contractService.updateByPrimaryKey(contract);
 			logService.insertLog(LogConstant.CONTRACT_UPDATE.getValue(), id, null);
 			return Response.success("success");
 		}
