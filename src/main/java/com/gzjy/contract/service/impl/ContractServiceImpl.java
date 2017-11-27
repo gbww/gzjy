@@ -134,8 +134,7 @@ public class ContractServiceImpl implements ContractService {
 		}
 		taskService.complete(taskId);
 //		将评审意见插入到合同评审意见表中
-		User currentUser = userService.getCurrentUser();
-		taskService.complete(task.getId());
+		User currentUser = userService.getCurrentUser();		
 		ContractComment contractComment = new ContractComment();
 		contractComment.setId(UUID.random());
 		contractComment.setTaskId(taskId);
