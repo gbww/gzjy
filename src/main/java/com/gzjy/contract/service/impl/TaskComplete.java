@@ -15,15 +15,15 @@ public class TaskComplete implements Serializable{
 		int resultCount = (int)execution.getVariable("resultCount");
         int completeTask = (int)execution.getVariable("nrOfCompletedInstances");
         int taskCount = (int)execution.getVariable("nrOfInstances");
-        logger.info("############### completeTask invoked ###############");
-        logger.info("resultCount="+resultCount +" | completeTask="+completeTask+" | taskCount="+taskCount);
+        System.out.println("############### completeTask invoked ###############");
+        System.out.println("resultCount="+resultCount +" | completeTask="+completeTask+" | taskCount="+taskCount);
         //设置该变量防止该流程执行多次导致的流程方向出错问题
         execution.setVariable("result", 1);
         //有一個人反对
         if(completeTask > resultCount && taskCount!=completeTask) {
         	execution.setVariable("resultCount", 0);
         	execution.setVariable("result", 0);
-        	logger.info("有一個人反对");
+        	System.out.println("有一個人反对");
         	return true;
         }
         return false;

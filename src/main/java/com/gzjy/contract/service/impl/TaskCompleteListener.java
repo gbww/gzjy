@@ -23,21 +23,24 @@ public class TaskCompleteListener implements TaskListener {
 		int resultCount = (int)delegateTask.getExecution().getVariable("resultCount");
         int completeTask = (int)delegateTask.getExecution().getVariable("nrOfCompletedInstances");
         int taskCount = (int)delegateTask.getExecution().getVariable("nrOfInstances");
-        logger.info("##############Task Complete Listener##############");
-        logger.info("resultCount="+resultCount + "| completeTask="+completeTask+ "| taskCount="+taskCount);
+        System.out.println("##############Task Complete Listener##############");
+        System.out.println("resultCount="+resultCount + "| completeTask="+completeTask+ "| taskCount="+taskCount);
         String processId = delegateTask.getExecution().getProcessInstanceId();
         if(completeTask+1 > resultCount) {
-        	logger.info("updateStatusByProcessId status=" + ContractStatus.UPDATING.getValue());
+        	System.out.println("updateStatusByProcessId status=" + ContractStatus.UPDATING.getValue());
         	contractService.updateStatusByProcessId(ContractStatus.UPDATING.getValue(), processId);
         }
-        if(taskCount == completeTask+1 && resultCount ==taskCount) {
-        	logger.info("updateStatusByProcessId status=" + ContractStatus.OVER.getValue() + "|processId="+processId);
+        if((taskCount == completeTask+1) && (resultCount ==taskCount)) {
+        	System.out.println("(taskCount == completeTask+1) && (resultCount ==taskCount)");
+        	System.out.println("updateStatusByProcessId status=" + ContractStatus.OVER.getValue() + "|processId="+processId);
         	try {
         		contractService.updateStatusByProcessId(ContractStatus.OVER.getValue(), processId);
+        		delegateTask.getExecution().setVariable("result", 1);
         	}catch (Exception e) {
-        		logger.info(e+"");
+        		System.out.println(e+"");
 			}
         }else {
+        	System.out.println("Set result = 0");
         	delegateTask.getExecution().setVariable("result", 0);
         }
 	}

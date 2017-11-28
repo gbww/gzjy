@@ -108,7 +108,7 @@ public class ContractServiceImpl implements ContractService {
 	public List<HistoricTaskInstance> getHistoryTaskByUserId() {
 		String userId= userService.getCurrentUser().getId();		
 		HistoryService historyService = processEngine.getHistoryService();
-		List<HistoricTaskInstance> tasks = historyService.createHistoricTaskInstanceQuery().finished().taskAssignee(userId).list();
+		List<HistoricTaskInstance> tasks = historyService.createHistoricTaskInstanceQuery().taskAssignee(userId).list();
 		logger.info("历史任务:"+tasks.size() + " userId:"+userId);
 		return tasks;
 	}
@@ -153,8 +153,11 @@ public class ContractServiceImpl implements ContractService {
 	 * @param approve
 	 */	
 
-	public void completeUpdateTask(String taskId) {
+	public void completeUpdateTask(String taskId) {		
+		RuntimeService runtimeService = processEngine.getRuntimeService();
 		TaskService taskService = processEngine.getTaskService();
+		Task task = (Task) taskService.createTaskQuery().taskId(taskId).list().get(0);
+		runtimeService.setVariable(task.getExecutionId(), "resultCount", 0);
 		taskService.complete(taskId);
 	}
 	
