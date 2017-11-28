@@ -103,4 +103,15 @@ public class CheckItemServiceImpl implements CheckItemService {
 			throw new BizException("文件上传失败");
 		}
 	}
+	
+	public void removeRepeatData() {
+		List<String> idList = checkItemMapper.selectDistinctIds();
+		if(idList!=null && idList.size()>0) {
+			String ids = "";
+			for(String id: idList) {
+				ids = ids +id +",";
+			}
+			checkItemMapper.deleteByIds(ids);
+		}		
+	}
 }
