@@ -23,19 +23,19 @@ public class TaskCompleteListener implements TaskListener {
 		int resultCount = (int)delegateTask.getExecution().getVariable("resultCount");
         int completeTask = (int)delegateTask.getExecution().getVariable("nrOfCompletedInstances");
         int taskCount = (int)delegateTask.getExecution().getVariable("nrOfInstances");
-        logger.debug("##############Task Complete Listener##############");
-        logger.debug("resultCount="+resultCount + "| completeTask="+completeTask+ "| taskCount="+taskCount);
+        logger.info("##############Task Complete Listener##############");
+        logger.info("resultCount="+resultCount + "| completeTask="+completeTask+ "| taskCount="+taskCount);
         String processId = delegateTask.getExecution().getProcessInstanceId();
         if(completeTask+1 > resultCount) {
-        	logger.debug("updateStatusByProcessId status=" + ContractStatus.UPDATING.getValue());
+        	logger.info("updateStatusByProcessId status=" + ContractStatus.UPDATING.getValue());
         	contractService.updateStatusByProcessId(ContractStatus.UPDATING.getValue(), processId);
         }
         if(taskCount == completeTask+1 && resultCount ==taskCount) {
-        	logger.debug("updateStatusByProcessId status=" + ContractStatus.OVER.getValue() + "|processId="+processId);
+        	logger.info("updateStatusByProcessId status=" + ContractStatus.OVER.getValue() + "|processId="+processId);
         	try {
         		contractService.updateStatusByProcessId(ContractStatus.OVER.getValue(), processId);
         	}catch (Exception e) {
-        		logger.debug(e+"");
+        		logger.info(e+"");
 			}
         }else {
         	delegateTask.getExecution().setVariable("result", 0);
