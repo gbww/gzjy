@@ -161,8 +161,11 @@
 		SELECT max(id)	FROM check_item GROUP BY name,method,unit,standard_value,detection_limit,quantitation_limit, device, default_price
 	</select>
 
-	<delete id="deleteByIds" parameterType="java.lang.String">
-		delete from	check_item	where id not in #{idList,jdbcType=VARCHAR}
+	<delete id="deleteByIds">
+		delete from	check_item	where id not in 
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+		  	#{item}
+		</foreach>  
 	</delete>
 
 </mapper>

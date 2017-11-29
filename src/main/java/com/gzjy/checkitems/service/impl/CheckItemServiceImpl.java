@@ -106,12 +106,8 @@ public class CheckItemServiceImpl implements CheckItemService {
 	
 	public void removeRepeatData() {
 		List<String> idList = checkItemMapper.selectDistinctIds();
-		if(idList!=null && idList.size()>0) {
-			String ids = "";
-			for(String id: idList) {
-				ids = ids +id +",";
-			}
-			checkItemMapper.deleteByIds(ids);
+		if(idList!=null && idList.size()>0) {			
+			checkItemMapper.deleteByIds(idList);
 		}		
 	}
 }

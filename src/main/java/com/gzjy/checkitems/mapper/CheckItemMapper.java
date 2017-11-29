@@ -15,5 +15,5 @@ public interface CheckItemMapper {
 	int validateCheckItem(CheckItem checkItem);
 	List<CheckItem> selectAll(@Param("name")String name, @Param("method")String method);
 	List<String> selectDistinctIds();
-	int deleteByIds(@Param("idList")String idList);
+	int deleteByIds(@Param("idList")List<String> idList);
 }
