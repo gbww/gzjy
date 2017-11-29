@@ -175,7 +175,7 @@ public class ReceiveSampleController {
 			@RequestParam(value = "startTime", required = false) String startTime,
             @RequestParam(value = "endTime", required = false) String endTime) {
 		Map<String, Object> filter = new HashMap<String, Object>();
-		String orderby = new String();
+		
 		if (StringUtils.isBlank(startTime)) {
 		    startTime=null;
         }
@@ -195,7 +195,7 @@ public class ReceiveSampleController {
             filter.put("check_type", checkType);
         }
 		if (StringUtils.isBlank(order)) {
-			orderby = "created_at desc";
+		    order = "created_at desc";
 		}
 		if (status != 5) {
 			filter.put("status", status);
@@ -212,7 +212,7 @@ public class ReceiveSampleController {
             throw new BizException("输入的时间格式不合法！");
         }
 
-		return Response.success(receiveSampleService.select(pageNum, pageSize, orderby, filter,start,end));
+		return Response.success(receiveSampleService.select(pageNum, pageSize, order, filter,start,end));
 	}
 
 	// test
