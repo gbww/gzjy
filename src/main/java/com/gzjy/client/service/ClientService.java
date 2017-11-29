@@ -35,7 +35,7 @@ public class ClientService {
     @Transactional
     public GzClient add(GzClient record) {
         try {
-            clientMapper.insert(record);
+            clientMapper.insertSelective(record);
             
         } catch (Exception e) {
             logger.error("插入客户失败");

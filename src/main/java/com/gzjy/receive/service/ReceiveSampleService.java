@@ -82,7 +82,7 @@ public class ReceiveSampleService {
 			return false;
 		} else {
 		    record.setCreatedAt(new Date());
-			receiveSampleMapper.insert(record);
+			receiveSampleMapper.insertSelective(record);
 		}
 		logger.info("添加成功");
 		return true;

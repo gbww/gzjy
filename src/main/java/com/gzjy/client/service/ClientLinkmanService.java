@@ -25,7 +25,7 @@ public class ClientLinkmanService {
     @Transactional
     public ClientLinkman add(ClientLinkman record) {
         try {
-            linkmanMapper.insert(record);
+            linkmanMapper.insertSelective(record);
             
         } catch (Exception e) {
             logger.error("插入联系人失败");
