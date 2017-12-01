@@ -27,6 +27,7 @@ import com.gzjy.common.ShortUUID;
 import com.gzjy.common.exception.BizException;
 import com.gzjy.common.util.fs.EpicNFSClient;
 import com.gzjy.common.util.fs.EpicNFSService;
+import com.gzjy.organization.mapper.OrganizationMapper;
 
 @Service
 public class CheckItemServiceImpl implements CheckItemService {
@@ -36,6 +37,9 @@ public class CheckItemServiceImpl implements CheckItemService {
 	
 	@Autowired
 	private CheckItemMapper checkItemMapper;
+	
+	@Autowired
+	private OrganizationMapper organizationMapper;
 	
 	private static Logger logger = LoggerFactory.getLogger(CheckItemServiceImpl.class);
 
@@ -100,7 +104,8 @@ public class CheckItemServiceImpl implements CheckItemService {
 				throw new BizException("文件少于8列，格式不对");
 			}
 			List<CheckItem> dataList = new ArrayList<CheckItem>();
-			for(int rowNum=0; rowNum< sheet.getLastRowNum(); rowNum++) {				
+//			organizationMapper.
+			for(int rowNum=0; rowNum< sheet.getLastRowNum()+1; rowNum++) {				
 				Row row = sheet.getRow(rowNum);
 				CheckItem item = new CheckItem();
 				item.setId(ShortUUID.getInstance().generateShortID());
