@@ -322,7 +322,7 @@ public class CheckItemsController {
 	 * @param file
 	 * @return
 	 */
-	@RequestMapping(value = "/checkitemscatalog/import", method = RequestMethod.POST)
+	@RequestMapping(value = "/checkitems/import", method = RequestMethod.POST)
 	public Response multiImport(@RequestParam("file") MultipartFile file) {
 		try {
 			checkItemService.importFile(file);

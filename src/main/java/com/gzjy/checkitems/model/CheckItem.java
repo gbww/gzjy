@@ -26,6 +26,7 @@ public class CheckItem {
     //更新时间
     private Date updatedAt;
 	
+    private String orgnazationId;
 	public String getId() {
 		return id;
 	}
@@ -91,5 +92,12 @@ public class CheckItem {
 	}
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+	public String getOrgnazationId() {
+		return orgnazationId;
+	}
+	public void setOrgnazationId(String orgnazationId) {
+		this.orgnazationId = orgnazationId;
 	}	
+	
 }
