@@ -79,7 +79,7 @@ public class CheckItemServiceImpl implements CheckItemService {
 		if (!client.hasRemoteDir("temp")) {
 			client.createRemoteDir("temp");
 		}
-		String fileSuffix = file.getOriginalFilename().endsWith("xlsx")?".xlsx":"xls";
+		String fileSuffix = file.getOriginalFilename().endsWith("xlsx")?".xlsx":".xls";
 		//存放在服务器的模板文件是随机生成的，避免重复
 		String excelName = ShortUUID.getInstance().generateShortID()+fileSuffix;
 		Workbook wb = null;

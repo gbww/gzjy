@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +50,9 @@ public class TemplateServiceImpl implements TemplateService {
 		if (!client.hasRemoteDir("template")) {
 			client.createRemoteDir("template");
 		}
+		String fileSuffix = file.getOriginalFilename().endsWith("xlsx")?".xlsx":".xls";		
 		//存放在服务器的模板文件是随机生成的，避免重复
-		String excelName = ShortUUID.getInstance().generateShortID()+".xls";
+		String excelName = ShortUUID.getInstance().generateShortID()+fileSuffix;
 		try {
 			client.upload(file.getInputStream(), "template/" + excelName);
 			client.close();	

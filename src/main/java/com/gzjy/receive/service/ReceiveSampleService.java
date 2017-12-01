@@ -27,13 +27,14 @@ import javax.imageio.ImageIO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
-import org.apache.poi.hssf.usermodel.HSSFPatriarch;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.ClientAnchor.AnchorType;
+import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,11 +54,7 @@ import com.gzjy.receive.model.ReceiveSample;
 import com.gzjy.receive.model.ReceiveSampleItem;
 import com.gzjy.user.UserService;
 import com.gzjy.user.mapper.UserSignMapper;
-import com.gzjy.user.model.User;
-import com.jacob.activeX.ActiveXComponent;
-import com.jacob.com.ComThread;
-import com.jacob.com.Dispatch;
-import com.jacob.com.Variant; 
+import com.gzjy.user.model.User; 
 /**
  * @author xuewenlong@cmss.chinamobile.com
  * @updated 2017年9月3日
@@ -337,12 +334,12 @@ public class ReceiveSampleService {
 	 * @throws IllegalAccessException 
 	 * @throws ParseException 
 	 */
-	public void generateExcel(HSSFWorkbook workbook, ReceiveSample data) throws IOException, IllegalAccessException, InvocationTargetException, ParseException {
+	public void generateExcel(Workbook workbook, ReceiveSample data) throws IOException, IllegalAccessException, InvocationTargetException, ParseException {
 		List<ReceiveSampleItem> receiveSampleItems =null;
 		if(data.getReceiveSampleId()!=null) {
 			receiveSampleItems = getItemsByReceiveSampleId(data.getReceiveSampleId());
 		}
-		HSSFSheet sheet = workbook.getSheetAt(0);
+		Sheet sheet = workbook.getSheetAt(0);
 		Iterator<Row> rows = sheet.rowIterator();
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		ArrayList <String> userIdList = new ArrayList<String>();
@@ -475,14 +472,14 @@ public class ReceiveSampleService {
 		}
 	}
 
-	private void addPictureToExcel(HSSFWorkbook workbook, String filePath, int rowIndex, int cellIndex) throws IOException {
+	private void addPictureToExcel(Workbook workbook, String filePath, int rowIndex, int cellIndex) throws IOException {
 		BufferedImage bufferImg = null;
 		ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();     
 		File file = new File(filePath);
 		if(file.exists()) {
 			bufferImg = ImageIO.read(file);        
 	        ImageIO.write(bufferImg, "png", byteArrayOut);
-	        HSSFPatriarch patriarch = workbook.getSheetAt(0).createDrawingPatriarch();
+	        Drawing  patriarch = workbook.getSheetAt(0).createDrawingPatriarch();
 	        HSSFClientAnchor anchor = new HSSFClientAnchor(rowIndex, cellIndex,rowIndex+1, cellIndex+1, 
 	        		(short)(cellIndex), rowIndex, (short) (cellIndex+1), rowIndex+1);
 	        anchor.setAnchorType(AnchorType.DONT_MOVE_AND_RESIZE);

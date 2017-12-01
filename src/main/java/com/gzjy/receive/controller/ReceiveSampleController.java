@@ -4,7 +4,6 @@
  */
 package com.gzjy.receive.controller;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,11 +15,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -285,7 +285,8 @@ public class ReceiveSampleController {
 			@RequestParam(required = true) String templateFileName, @RequestParam(required = true) String type) {
 		EpicNFSClient client = epicNFSService.getClient("gzjy");
 		// 生成临时模板excel文件
-		String tempFileName = ShortUUID.getInstance().generateShortID() + ".xls";
+		String fileSuffix = templateFileName.endsWith("xlsx")?".xlsx":".xls";
+		String tempFileName = ShortUUID.getInstance().generateShortID() + fileSuffix;
 		// 建立远程存放excel模板文件目录
 		if (!client.hasRemoteDir("temp")) {
 			client.createRemoteDir("temp");
@@ -298,15 +299,21 @@ public class ReceiveSampleController {
 		String tempFile = "/var/lib/docs/gzjy/temp/" + tempFileName;
 		OutputStream out = null;		
 		String tempPdf = null;
+		Workbook wb = null;
 		try {
 			// 将模板文件复制到缓存文件
 			receiveSampleService.copyFile(serverTemplateFile, tempFile);
 			// 获取报告数据
 			ReceiveSample receiveSample = receiveSampleService.getReceiveSample(id);
 			InputStream input = new FileInputStream(tempFile);
-			HSSFWorkbook workbook = new HSSFWorkbook(input);
+			if(fileSuffix.equals(".xlsx")) {
+				wb = new XSSFWorkbook(input);
+			}
+			else {
+				wb = new HSSFWorkbook(input);
+			}
 			// 将数据写入流中
-			receiveSampleService.generateExcel(workbook, receiveSample);
+			receiveSampleService.generateExcel(wb, receiveSample);
 			if (type.equals("excel")) {
 				// 如果是excel，则提供下载功能，需设置头信息
 				response.reset();
@@ -314,7 +321,7 @@ public class ReceiveSampleController {
 				response.setHeader("Content-disposition",
 						"attachment;filename=" + URLEncoder.encode(tempFileName, "UTF-8"));
 				out = response.getOutputStream();
-				workbook.write(out);
+				wb.write(out);
 				input.close();
 			} else {
 				logger.info("Begin export PDF");
