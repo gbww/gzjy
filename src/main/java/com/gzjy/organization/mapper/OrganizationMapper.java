@@ -21,4 +21,6 @@ public interface OrganizationMapper {
     int updateByPrimaryKeySelective(Organization record);
 
     int updateByPrimaryKey(Organization record);
+    
+    List<Organization> selectAll();
 }

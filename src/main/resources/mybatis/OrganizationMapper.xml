@@ -58,6 +58,14 @@
       order by ${orderByClause}
     </if>
   </select>
+  
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select distinct    
+    <include refid="Base_Column_List" />
+    from organizations    
+  </select>
+  
+  
   <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />

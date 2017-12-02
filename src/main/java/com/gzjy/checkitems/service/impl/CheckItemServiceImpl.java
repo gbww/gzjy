@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -28,6 +29,8 @@ import com.gzjy.common.exception.BizException;
 import com.gzjy.common.util.fs.EpicNFSClient;
 import com.gzjy.common.util.fs.EpicNFSService;
 import com.gzjy.organization.mapper.OrganizationMapper;
+import com.gzjy.organization.model.Organization;
+import com.gzjy.organization.model.OrganizationExample;
 
 @Service
 public class CheckItemServiceImpl implements CheckItemService {
@@ -103,8 +106,12 @@ public class CheckItemServiceImpl implements CheckItemService {
 			if(sheet.getRow(0).getPhysicalNumberOfCells()<8) {
 				throw new BizException("文件少于8列，格式不对");
 			}
-			List<CheckItem> dataList = new ArrayList<CheckItem>();
-//			organizationMapper.
+			List<CheckItem> dataList = new ArrayList<CheckItem>();			
+			List<Organization> result = organizationMapper.selectAll();
+			HashMap<String, String> OrganizationMap = new HashMap<String, String>();
+			for(Organization o : result) {
+				OrganizationMap.put(o.getName(), o.getId());
+			}
 			for(int rowNum=0; rowNum< sheet.getLastRowNum()+1; rowNum++) {				
 				Row row = sheet.getRow(rowNum);
 				CheckItem item = new CheckItem();
@@ -118,7 +125,7 @@ public class CheckItemServiceImpl implements CheckItemService {
 				item.setDevice(row.getCell(6)+"");
 				item.setDefaultPrice(Double.parseDouble(row.getCell(7)+""));
 				item.setCreatedAt(new Date());
-				item.setOrgnazationId(row.getCell(8)+"");
+				item.setOrgnazationId(OrganizationMap.get(row.getCell(8)+""));
 				dataList.add(item);
 			}
 			checkItemMapper.importData(dataList);
