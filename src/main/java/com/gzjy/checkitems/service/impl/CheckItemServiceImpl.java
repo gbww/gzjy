@@ -125,7 +125,7 @@ public class CheckItemServiceImpl implements CheckItemService {
 				item.setDevice(row.getCell(6)+"");
 				item.setDefaultPrice(Double.parseDouble(row.getCell(7)+""));
 				item.setCreatedAt(new Date());
-				item.setOrgnazationId(OrganizationMap.get(row.getCell(8)+""));
+				item.setOrgnazationId(OrganizationMap.get((row.getCell(8)+"").trim()));
 				dataList.add(item);
 			}
 			checkItemMapper.importData(dataList);
