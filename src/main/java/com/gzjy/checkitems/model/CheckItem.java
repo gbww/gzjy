@@ -24,9 +24,8 @@ public class CheckItem {
 	//创建时间
     private Date createdAt;
     //更新时间
-    private Date updatedAt;
-	
-    private String orgnazationId;
+    private Date updatedAt;	
+    
 	public String getId() {
 		return id;
 	}
@@ -93,11 +92,5 @@ public class CheckItem {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	public String getOrgnazationId() {
-		return orgnazationId;
-	}
-	public void setOrgnazationId(String orgnazationId) {
-		this.orgnazationId = orgnazationId;
-	}	
 	
 }

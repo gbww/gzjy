@@ -1,10 +1,10 @@
 package com.gzjy.checkitems.service.impl;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -26,11 +26,9 @@ import com.gzjy.checkitems.model.CheckItem;
 import com.gzjy.checkitems.service.CheckItemService;
 import com.gzjy.common.ShortUUID;
 import com.gzjy.common.exception.BizException;
+import com.gzjy.common.util.FileOperate;
 import com.gzjy.common.util.fs.EpicNFSClient;
 import com.gzjy.common.util.fs.EpicNFSService;
-import com.gzjy.organization.mapper.OrganizationMapper;
-import com.gzjy.organization.model.Organization;
-import com.gzjy.organization.model.OrganizationExample;
 
 @Service
 public class CheckItemServiceImpl implements CheckItemService {
@@ -39,10 +37,7 @@ public class CheckItemServiceImpl implements CheckItemService {
 	private EpicNFSService epicNFSService;
 	
 	@Autowired
-	private CheckItemMapper checkItemMapper;
-	
-	@Autowired
-	private OrganizationMapper organizationMapper;
+	private CheckItemMapper checkItemMapper;	
 	
 	private static Logger logger = LoggerFactory.getLogger(CheckItemServiceImpl.class);
 
@@ -90,11 +85,12 @@ public class CheckItemServiceImpl implements CheckItemService {
 		//存放在服务器的模板文件是随机生成的，避免重复
 		String excelName = ShortUUID.getInstance().generateShortID()+fileSuffix;
 		Workbook wb = null;
+		String fileName = null;
 		try {
 			client.upload(file.getInputStream(), "temp/" + excelName);
 			client.close();	
 			logger.info("文件上传到服务器成功");
-			String fileName = "/var/lib/docs/gzjy/temp/"+excelName;
+			fileName = "/var/lib/docs/gzjy/temp/"+excelName;
 			InputStream inputStream = new FileInputStream(fileName);
 			if(fileSuffix.equals(".xlsx")) {
 				wb = new XSSFWorkbook(inputStream);
@@ -103,15 +99,10 @@ public class CheckItemServiceImpl implements CheckItemService {
 				wb = new HSSFWorkbook(inputStream);
 			}
 			Sheet sheet = wb.getSheetAt(0);	
-			if(sheet.getRow(0).getPhysicalNumberOfCells()<8) {
-				throw new BizException("文件少于8列，格式不对");
+			if(sheet.getRow(0).getPhysicalNumberOfCells()<7) {
+				throw new BizException("文件少于7列，格式不对");
 			}
 			List<CheckItem> dataList = new ArrayList<CheckItem>();			
-			List<Organization> result = organizationMapper.selectAll();
-			HashMap<String, String> OrganizationMap = new HashMap<String, String>();
-			for(Organization o : result) {
-				OrganizationMap.put(o.getName(), o.getId());
-			}
 			for(int rowNum=0; rowNum< sheet.getLastRowNum()+1; rowNum++) {				
 				Row row = sheet.getRow(rowNum);
 				CheckItem item = new CheckItem();
@@ -124,8 +115,7 @@ public class CheckItemServiceImpl implements CheckItemService {
 				item.setQuantitationLimit(row.getCell(5)+"");
 				item.setDevice(row.getCell(6)+"");
 				item.setDefaultPrice(Double.parseDouble(row.getCell(7)+""));
-				item.setCreatedAt(new Date());
-				item.setOrgnazationId(OrganizationMap.get((row.getCell(8)+"").trim()));
+				item.setCreatedAt(new Date());				
 				dataList.add(item);
 			}
 			checkItemMapper.importData(dataList);
@@ -136,6 +126,11 @@ public class CheckItemServiceImpl implements CheckItemService {
 			throw new BizException("文件导入失败");
 		}finally {
 			//删除文件
+			try {
+				FileOperate.deleteFile(fileName);
+			} catch (IOException e) {				
+				e.printStackTrace();
+			}
 		}
 	}
 	

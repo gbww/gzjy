@@ -15,13 +15,12 @@
 		<result column="device" jdbcType="VARCHAR" property="device" />
 		<result column="default_price" jdbcType="DOUBLE" property="defaultPrice" />
 		<result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
-		<result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
-		<result column="orgnazation_id" jdbcType="VARCHAR" property="orgnazationId" />
+		<result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />		
 	</resultMap>
 
 	<sql id="Base_Column_List">
 		id, name, method, unit, standard_value, detection_limit,
-		quantitation_limit,device, default_price,created_at, updated_at, orgnazation_id
+		quantitation_limit,device, default_price,created_at, updated_at
 	</sql>
 
 	<select id="selectAll" resultMap="BaseResultMap">
@@ -88,7 +87,7 @@
 		insert into check_item(id,
 		name, method, unit, standard_value,
 		detection_limit,quantitation_limit, device, default_price,created_at,
-		updated_at, orgnazation_id)
+		updated_at)
 		values (
 		#{id,jdbcType=VARCHAR},
 		#{name,jdbcType=VARCHAR},
@@ -100,21 +99,20 @@
 		#{device,jdbcType=VARCHAR},
 		#{defaultPrice,jdbcType=DOUBLE},
 		#{createdAt,jdbcType=TIMESTAMP},
-		#{updatedAt,jdbcType=TIMESTAMP},
-		#{orgnazationId,jdbcType=TIMESTAMP})
+		#{updatedAt,jdbcType=TIMESTAMP})
 	</insert>
 
 
 	<insert id="importData" parameterType="java.util.List">
 		insert into check_item (id, name, method, unit, standard_value,
 		detection_limit,
-		quantitation_limit, device, default_price,created_at, orgnazation_id)
+		quantitation_limit, device, default_price,created_at)
 		values
 		<foreach collection="list" item="item" index="index"
 			separator=",">
 			(#{item.id},#{item.name},#{item.method},#{item.unit},#{item.standardValue},
 			#{item.detectionLimit},#{item.quantitationLimit},#{item.device},#{item.defaultPrice},
-			#{item.createdAt}, #{item.orgnazationId})
+			#{item.createdAt})
 		</foreach>
 	</insert>
 
@@ -149,10 +147,7 @@
 			</if>
 			<if test="updatedAt != null">
 				updated_at = #{updatedAt,jdbcType=VARCHAR},
-			</if>
-			<if test="orgnazationId != null">
-				orgnazation_id = #{orgnazationId,jdbcType=VARCHAR},
-			</if>
+			</if>			
 		</set>
 		where id = #{id,jdbcType=VARCHAR}
 	</update>
@@ -165,7 +160,7 @@
 
 	<select id="selectDistinctIds" resultType="string">
 		SELECT max(id)	FROM check_item GROUP BY name,method,unit,standard_value,detection_limit,
-		quantitation_limit, device, default_price, orgnazation_id
+		quantitation_limit, device, default_price
 	</select>
 
 	<delete id="deleteByIds">

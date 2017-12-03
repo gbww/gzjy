@@ -40,6 +40,7 @@ import com.gzjy.common.Update;
 import com.gzjy.common.annotation.Privileges;
 import com.gzjy.common.exception.BizException;
 import com.gzjy.common.util.ExcelToPdf;
+import com.gzjy.common.util.FileOperate;
 import com.gzjy.common.util.fs.EpicNFSClient;
 import com.gzjy.common.util.fs.EpicNFSService;
 import com.gzjy.receive.model.ReceiveSample;
@@ -302,7 +303,7 @@ public class ReceiveSampleController {
 		Workbook wb = null;
 		try {
 			// 将模板文件复制到缓存文件
-			receiveSampleService.copyFile(serverTemplateFile, tempFile);
+			FileOperate.copyFile(serverTemplateFile, tempFile);
 			// 获取报告数据
 			ReceiveSample receiveSample = receiveSampleService.getReceiveSample(id);
 			InputStream input = new FileInputStream(tempFile);
@@ -336,7 +337,7 @@ public class ReceiveSampleController {
 				return Response.success(tempPdf);
 			}
 			// 删除缓存模板文件
-			receiveSampleService.deleteFile(tempFile);
+			FileOperate.deleteFile(tempFile);
 		} catch (Exception e) {
 			logger.error(e + "");
 		} finally {
