@@ -87,6 +87,7 @@ public class ClientController {
             @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
         Map<String, Object> filter = new HashMap<String, Object>();
+        //filter.put("client_name", "文");
         String orderby = new String();   
         if (StringUtils.isBlank(order)) {
             orderby = "created_at desc";

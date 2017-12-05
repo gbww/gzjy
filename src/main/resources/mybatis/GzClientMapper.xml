@@ -35,13 +35,12 @@
 		<include refid="Base_Column_List" />
 		from gz_client
 		<where>
-		 deleted=0 and
 			<foreach collection="filters.keys" item="key" separator="and">
 				<if test="null!=filters[key]">
 					${key} LIKE CONCAT('%',#{filters[${key}]},'%' )
 				</if>
 			</foreach>
-
+             and deleted=0 
 		</where>
 		order by ${orderby}
 	</select>

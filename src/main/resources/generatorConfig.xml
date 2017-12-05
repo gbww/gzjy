@@ -23,7 +23,7 @@
         <javaClientGenerator targetPackage="com.gzjy.client.mapper"
                              targetProject="E:\project\gzjy-app\src\main\java"
                              type="XMLMAPPER"/>
-           <table schema="ahgz_lims" tableName="client_linkman" domainObjectName="ClientLinkman"	
+           <table schema="ahgz_lims" tableName="scheduler_report" domainObjectName="SchedulerReport"	
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false"
                enableSelectByExample="false"/> 
