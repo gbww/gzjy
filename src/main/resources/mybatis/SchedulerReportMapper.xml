@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gzjy.client.mapper.SchedulerReportMapper" >
+  <resultMap id="BaseResultMap" type="com.gzjy.client.model.SchedulerReport" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="client_scheduler_id" property="clientSchedulerId" jdbcType="CHAR" />
+    <result column="report_content" property="reportContent" jdbcType="VARCHAR" />
+    <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, client_scheduler_id, report_content, created_at, remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from scheduler_report
+    where id = #{id,jdbcType=CHAR}
+  </select>
+    <select id="selectBySchedulerId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from scheduler_report
+		<where>
+		client_scheduler_id=#{schedulerId,jdbcType=CHAR}
+		and
+			<foreach collection="filters.keys" item="key" separator="and">
+				<if test="null!=filters[key]">
+					${key} LIKE CONCAT('%',#{filters[${key}]},'%' )
+				</if>
+			</foreach>
+
+		</where>
+		order by ${orderby}
+	</select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from scheduler_report
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  
+  <delete id="deleteBySchedulerId" parameterType="java.lang.String" >
+    delete from scheduler_report
+    where client_scheduler_id = #{schedulerId,jdbcType=CHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.gzjy.client.model.SchedulerReport" >
+    insert into scheduler_report (id, client_scheduler_id, report_content, 
+      created_at, remark)
+    values (#{id,jdbcType=CHAR}, #{clientSchedulerId,jdbcType=CHAR}, #{reportContent,jdbcType=VARCHAR}, 
+      #{createdAt,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gzjy.client.model.SchedulerReport" >
+    insert into scheduler_report
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="clientSchedulerId != null" >
+        client_scheduler_id,
+      </if>
+      <if test="reportContent != null" >
+        report_content,
+      </if>
+      <if test="createdAt != null" >
+        created_at,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="clientSchedulerId != null" >
+        #{clientSchedulerId,jdbcType=CHAR},
+      </if>
+      <if test="reportContent != null" >
+        #{reportContent,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null" >
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gzjy.client.model.SchedulerReport" >
+    update scheduler_report
+    <set >
+      <if test="clientSchedulerId != null" >
+        client_scheduler_id = #{clientSchedulerId,jdbcType=CHAR},
+      </if>
+      <if test="reportContent != null" >
+        report_content = #{reportContent,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null" >
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gzjy.client.model.SchedulerReport" >
+    update scheduler_report
+    set client_scheduler_id = #{clientSchedulerId,jdbcType=CHAR},
+      report_content = #{reportContent,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

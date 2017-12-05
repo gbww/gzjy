@@ -5,9 +5,9 @@ import java.util.Date;
 public class ClientLinkman {
     private String id;
 
-    private Integer clientNum;
+    private Integer clientNum;   //客户编号
 
-    private String linkmanName;
+    private String linkmanName;   //联系人名称
 
     private String linkmanPosition;
 

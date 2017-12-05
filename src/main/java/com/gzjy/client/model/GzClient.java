@@ -3,31 +3,31 @@ package com.gzjy.client.model;
 import java.util.Date;
 
 public class GzClient {
-    private Integer clientNum;
+    private Integer clientNum;  //客户编号，自增
 
-    private String salesman;
+    private String salesman;   //业务负责人
 
-    private String area;
+    private String area;       //区域
 
-    private String clientName;
+    private String clientName;   //客户名称
 
-    private String invoiceTitle;
+    private String invoiceTitle;   //纳税人识别号
 
-    private String bankName;
+    private String bankName;       //开户行
 
-    private String bankAccount;
+    private String bankAccount;    //银行账号
 
-    private String clientAddress;
+    private String clientAddress;   //地址
 
-    private String remark;
+    private String remark;          //备注
 
-    private Date createdAt;
+    private Date createdAt;         //时间
 
-    private Integer isShare;
+    private Integer isShare;        //共享标识（0：不共享，1：共享）
 
-    private Integer isFocus;
+    private Integer isFocus;        //关注标识（0：不关注，1：关注）
 
-    private Integer deleted;
+    private Integer deleted;        //0:未删除，1：删除
 
     public Integer getClientNum() {
         return clientNum;

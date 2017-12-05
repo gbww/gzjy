@@ -4,6 +4,7 @@
  */
 package com.gzjy.client.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,16 +16,27 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gzjy.client.mapper.ClientLinkmanMapper;
 import com.gzjy.client.model.ClientLinkman;
+import com.gzjy.common.exception.BizException;
+import com.gzjy.common.util.UUID;
 
 @Service
 public class ClientLinkmanService {
     @Autowired
     private ClientLinkmanMapper linkmanMapper;
+    @Autowired
+    private ClientService clientService;
     private static Logger logger = LoggerFactory.getLogger(ClientLinkmanService.class);
+    
     
     @Transactional
     public ClientLinkman add(ClientLinkman record) {
+        Boolean flag=clientService.checkClient(record.getClientNum());
+        if(!flag) {
+            throw new BizException("客户信息不存在");
+        }
         try {
+            record.setId(UUID.random());
+            record.setCreatedAt(new Date());
             linkmanMapper.insertSelective(record);
             
         } catch (Exception e) {
@@ -46,7 +58,13 @@ public class ClientLinkmanService {
     }
     @Transactional
     public ClientLinkman update(ClientLinkman record) {
+        Boolean flag=clientService.checkClient(record.getClientNum());
+       
+        if(!flag) {
+            throw new BizException("客户信息不存在");
+        }
         try {
+            record.setCreatedAt(new Date());
             linkmanMapper.updateByPrimaryKeySelective(record);
         } catch (Exception e) {
             logger.error("更新联系人失败");
