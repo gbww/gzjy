@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzjy.log.mapper.LogTagMapper">
+
+
+	<resultMap id="BaseResultMap" type="com.gzjy.log.model.LogTag">
+		<id column="id" jdbcType="VARCHAR" property="id" />		
+		<result column="operation" jdbcType="VARCHAR" property="operation" />		
+		<result column="tag" jdbcType="VARCHAR" property="tag" />			
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, operation, tag 		
+	</sql>
+
+
+	<insert id="insert" parameterType="com.gzjy.log.model.LogModel">
+		insert into log_tag(id, operation, tag)
+		values (
+		#{id,jdbcType=VARCHAR},
+		#{operation,jdbcType=VARCHAR},
+		#{tag,jdbcType=VARCHAR})
+	</insert>
+	
+	<select id="selectAll" resultMap="BaseResultMap">		
+		select
+		<include refid="Base_Column_List" />
+		from log_tag		
+	</select>
+	
+	
+</mapper>
