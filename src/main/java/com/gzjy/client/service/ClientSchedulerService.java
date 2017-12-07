@@ -100,5 +100,10 @@ public class ClientSchedulerService {
 
         return schedulerMapper.selectByClientNum(clientNum, filter, order);
     }
+    
+    public List<ClientScheduler> selectAll(Map<String, Object> filter) {
+
+        return schedulerMapper.selectAll(filter);
+    }
 
 }

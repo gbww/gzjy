@@ -26,13 +26,12 @@
 		<include refid="Base_Column_List" />
 		from client_linkman
 		<where>
-		client_num=#{clientNum,jdbcType=INTEGER}
-		and
 			<foreach collection="filters.keys" item="key" separator="and">
 				<if test="null!=filters[key]">
 					${key} LIKE CONCAT('%',#{filters[${key}]},'%' )
 				</if>
 			</foreach>
+			and  client_num=#{clientNum,jdbcType=INTEGER}
 
 		</where>
 		order by ${orderby}

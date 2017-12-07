@@ -20,5 +20,8 @@ public interface ClientSchedulerMapper {
     int updateByPrimaryKeySelective(ClientScheduler record);
 
     int updateByPrimaryKey(ClientScheduler record);
+    
     List<ClientScheduler> selectByClientNum(@Param("clientNum")Integer clientNum,@Param("filters") Map<String, Object> filter,@Param("orderby")String order);
+    
+    List<ClientScheduler> selectAll(@Param("filters") Map<String, Object> filter);
 }

@@ -22,14 +22,13 @@
 		<include refid="Base_Column_List" />
 		from scheduler_report
 		<where>
-		client_scheduler_id=#{schedulerId,jdbcType=CHAR}
-		and
 			<foreach collection="filters.keys" item="key" separator="and">
 				<if test="null!=filters[key]">
 					${key} LIKE CONCAT('%',#{filters[${key}]},'%' )
 				</if>
 			</foreach>
-
+         and   client_scheduler_id=#{schedulerId,jdbcType=CHAR}
+		
 		</where>
 		order by ${orderby}
 	</select>

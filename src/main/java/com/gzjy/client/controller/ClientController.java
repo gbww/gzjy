@@ -88,11 +88,11 @@ public class ClientController {
             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
         Map<String, Object> filter = new HashMap<String, Object>();
         //filter.put("client_name", "文");
-        String orderby = new String();   
+       
         if (StringUtils.isBlank(order)) {
-            orderby = "created_at desc";
+            order = "created_at desc";
         }
-        PageInfo<GzClient> pages=clientManagerService.select(pageNum, pageSize, orderby, filter);
+        PageInfo<GzClient> pages=clientManagerService.select(pageNum, pageSize, order, filter);
         return Response.success(pages);
       
     }

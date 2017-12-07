@@ -32,12 +32,26 @@
 		<include refid="Base_Column_List" />
 		from client_scheduler
 		<where>
-		client_num=#{clientNum,jdbcType=INTEGER}
-		and
+		
 			<foreach collection="filters.keys" item="key" separator="and">
 				<if test="null!=filters[key]">
 					${key} LIKE CONCAT('%',#{filters[${key}]},'%' )
 				</if>
+			</foreach>
+          and   client_num=#{clientNum,jdbcType=INTEGER}	
+		</where>
+		order by ${orderby}
+	</select>
+	
+	  <select id="selectAll" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from client_scheduler
+		<where>
+			<foreach collection="filters.keys" item="key" separator="and">
+				<if test="null!=filters[key]">
+					${key} =  #{filters[${key}]}
+				</if>	
 			</foreach>
 
 		</where>

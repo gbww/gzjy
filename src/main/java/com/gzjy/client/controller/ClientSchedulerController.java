@@ -18,8 +18,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gzjy.client.model.ClientLinkman;
 import com.gzjy.client.model.ClientScheduler;
+import com.gzjy.client.model.SchedulerRemind;
+import com.gzjy.client.model.SchedulerRepetition;
 import com.gzjy.client.service.ClientSchedulerService;
 import com.gzjy.common.Add;
 import com.gzjy.common.Response;
@@ -91,6 +92,30 @@ public class ClientSchedulerController {
         return Response.success(records);
       
     }
+    
+     @RequestMapping(value = "/repetition", method = RequestMethod.GET)   
+    public Response getSchedulerRepetition( ) {       
+        Map<String, String> result = new HashMap<String, String>();       
+        for (SchedulerRepetition node : SchedulerRepetition.values()) {           
+            result.put(String.valueOf(node.getCode()), node.getName());
+        }
+        return Response.success(result);
+      
+    }
+     
+     
+     @RequestMapping(value = "/remind", method = RequestMethod.GET)   
+     public Response getSchedulerRemind( ) {       
+         Map<String, String> result = new HashMap<String, String>();       
+         for (SchedulerRemind node : SchedulerRemind.values()) {           
+             result.put(String.valueOf(node.getCode()), node.getName());
+         }
+         return Response.success(result);
+       
+     }
+    
+    
+    
     
  
 
