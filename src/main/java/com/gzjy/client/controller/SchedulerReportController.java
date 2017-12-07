@@ -80,11 +80,11 @@ public class SchedulerReportController {
     
     @RequestMapping(value = "/select", method = RequestMethod.GET)
     
-    public Response list( @RequestParam(name = "order", required = false) String order,
+    public Response list( @RequestParam(name = "order", required = false) String orderby,
             @RequestParam(name = "schedulerId", required = true) String schedulerId) {
         Map<String, Object> filter = new HashMap<String, Object>();
-        String orderby = new String();   
-        if (StringUtils.isBlank(order)) {
+       
+        if (StringUtils.isBlank(orderby)) {
             orderby = "created_at desc";
         }
         List<SchedulerReport> records=schedulerReportService.selectBySchedulerId(schedulerId, orderby, filter);

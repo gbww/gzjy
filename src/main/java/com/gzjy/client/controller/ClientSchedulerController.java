@@ -81,11 +81,10 @@ public class ClientSchedulerController {
     
     @RequestMapping(value = "/select", method = RequestMethod.GET)
     
-    public Response list( @RequestParam(name = "order", required = false) String order,
+    public Response list( @RequestParam(name = "order", required = false) String orderby,
             @RequestParam(name = "clientNum", required = true) Integer clientNum) {
-        Map<String, Object> filter = new HashMap<String, Object>();
-        String orderby = new String();   
-        if (StringUtils.isBlank(order)) {
+        Map<String, Object> filter = new HashMap<String, Object>(); 
+        if (StringUtils.isBlank(orderby)) {
             orderby = "created_at desc";
         }
         List<ClientScheduler> records=clientSchedulerService.selectByclientNum(clientNum, orderby, filter);
