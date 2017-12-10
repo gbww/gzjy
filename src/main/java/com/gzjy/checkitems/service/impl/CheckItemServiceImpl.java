@@ -99,8 +99,8 @@ public class CheckItemServiceImpl implements CheckItemService {
 				wb = new HSSFWorkbook(inputStream);
 			}
 			Sheet sheet = wb.getSheetAt(0);	
-			if(sheet.getRow(0).getPhysicalNumberOfCells()<7) {
-				throw new BizException("文件少于7列，格式不对");
+			if(sheet.getRow(0).getPhysicalNumberOfCells()<8) {
+				throw new BizException("文件少于8列，格式不对");
 			}
 			List<CheckItem> dataList = new ArrayList<CheckItem>();			
 			for(int rowNum=0; rowNum< sheet.getLastRowNum()+1; rowNum++) {				
@@ -115,15 +115,16 @@ public class CheckItemServiceImpl implements CheckItemService {
 				item.setQuantitationLimit(row.getCell(5)+"");
 				item.setDevice(row.getCell(6)+"");
 				item.setDefaultPrice(Double.parseDouble(row.getCell(7)+""));
-				item.setCreatedAt(new Date());				
+				item.setCreatedAt(new Date());	
+				item.setDepartment(row.getCell(8)+"");
 				dataList.add(item);
 			}
 			checkItemMapper.importData(dataList);
 			removeRepeatData();
 			wb.close();
 		} catch (Exception e) {
-			logger.info("文件导入失败:"+e);
-			throw new BizException("文件导入失败");
+			logger.info("文件导入异常:"+e);
+			throw new BizException("文件导入异常"+e);
 		}finally {
 			//删除文件
 			try {

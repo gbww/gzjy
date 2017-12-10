@@ -25,6 +25,8 @@ public class CheckItem {
     private Date createdAt;
     //更新时间
     private Date updatedAt;	
+    //默认分配的部门
+    private String department;
     
 	public String getId() {
 		return id;
@@ -92,5 +94,10 @@ public class CheckItem {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	
+	public String getDepartment() {
+		return department;
+	}
+	public void setDepartment(String department) {
+		this.department = department;
+	}	
 }

@@ -66,7 +66,7 @@ public class ContractController {
 			contract.setId(contractId);
 			contract.setCreatedAt(new Date());
 			contractService.insert(contract);
-			logService.insertLog(LogConstant.CONTRACT_INPUT.getValue(), contractId, null);
+			logService.insertLog(LogConstant.CONTRACT_INPUT.getCode(), contractId, null);
 			return Response.success("success");
 		}
 		catch (Exception e) {
@@ -139,7 +139,7 @@ public class ContractController {
 	public Response delContractById(@PathVariable String id) {
 		try {
 			contractService.deleteByPrimaryKey(id);
-			logService.insertLog(LogConstant.CONTRACT_DELETE.getValue(), id, null);
+			logService.insertLog(LogConstant.CONTRACT_DELETE.getCode(), id, null);
 			return Response.success("success");
 		}
 		catch (Exception e) {
@@ -170,7 +170,7 @@ public class ContractController {
 			contract.setId(id);
 			contract.setUpdatedAt(new Date());		
 			contractService.updateByPrimaryKey(contract);
-			logService.insertLog(LogConstant.CONTRACT_UPDATE.getValue(), id, null);
+			logService.insertLog(LogConstant.CONTRACT_UPDATE.getCode(), id, null);
 			return Response.success("success");
 		}
 		catch (Exception e) {
@@ -192,7 +192,7 @@ public class ContractController {
 		String contractId = contractProcess.getContractId();		
 		try {			
 			contractService.deploymentProcess(contractId, approveUsers, updateContractUser);
-			logService.insertLog(LogConstant.CONTRACT_REVIEW.getValue(), contractId, null);
+			logService.insertLog(LogConstant.CONTRACT_REVIEW.getCode(), contractId, null);
 			return Response.success("success");
 		}
 		catch (Exception e) {
@@ -283,7 +283,7 @@ public class ContractController {
 				record.setStatus(ContractStatus.APPROVING.getValue());
 				contractService.updateByPrimaryKey(record);
 			}
-			logService.insertLog(LogConstant.CONTRACT_APPROVE.getValue(), contractId, extra);
+			logService.insertLog(LogConstant.CONTRACT_APPROVE.getCode(), contractId, extra);
 			return Response.success("success");
 		}
 		catch (Exception e) {

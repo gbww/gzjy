@@ -15,12 +15,13 @@
 		<result column="device" jdbcType="VARCHAR" property="device" />
 		<result column="default_price" jdbcType="DOUBLE" property="defaultPrice" />
 		<result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
-		<result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />		
+		<result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+		<result column="department" jdbcType="VARCHAR" property="department" />				
 	</resultMap>
 
 	<sql id="Base_Column_List">
 		id, name, method, unit, standard_value, detection_limit,
-		quantitation_limit,device, default_price,created_at, updated_at
+		quantitation_limit,device, default_price,created_at, updated_at,department
 	</sql>
 
 	<select id="selectAll" resultMap="BaseResultMap">
@@ -52,42 +53,11 @@
 		where id = #{id,jdbcType=VARCHAR}
 	</select>
 
-	<select id="validateCheckItem" parameterType="com.gzjy.checkitems.model.CheckItem"
-		resultType="java.lang.Integer">
-		select count(1) from check_item
-		<where>
-			<if test="name != null">
-				name = #{name}
-			</if>
-			<if test="method != null">
-				and method = #{method}
-			</if>
-			<if test="unit != null">
-				and unit = #{unit}
-			</if>
-			<if test="standardValue != null">
-				and standard_value = #{standardValue}
-			</if>
-			<if test="detectionLimit != null">
-				and detection_limit = #{detectionLimit}
-			</if>
-			<if test="quantitationLimit != null">
-				and quantitation_limit = #{quantitationLimit}
-			</if>
-			<if test="device != null">
-				and device = #{device}
-			</if>
-			<if test="defaultPrice != null">
-				and default_price = #{defaultPrice}
-			</if>
-		</where>
-	</select>
-
 	<insert id="insert" parameterType="com.gzjy.checkitems.model.CheckItem">
 		insert into check_item(id,
 		name, method, unit, standard_value,
 		detection_limit,quantitation_limit, device, default_price,created_at,
-		updated_at)
+		updated_at, department)
 		values (
 		#{id,jdbcType=VARCHAR},
 		#{name,jdbcType=VARCHAR},
@@ -99,20 +69,21 @@
 		#{device,jdbcType=VARCHAR},
 		#{defaultPrice,jdbcType=DOUBLE},
 		#{createdAt,jdbcType=TIMESTAMP},
-		#{updatedAt,jdbcType=TIMESTAMP})
+		#{updatedAt,jdbcType=TIMESTAMP},
+		#{department,jdbcType=VARCHAR})
 	</insert>
 
 
 	<insert id="importData" parameterType="java.util.List">
 		insert into check_item (id, name, method, unit, standard_value,
 		detection_limit,
-		quantitation_limit, device, default_price,created_at)
+		quantitation_limit, device, default_price,created_at, department)
 		values
 		<foreach collection="list" item="item" index="index"
 			separator=",">
 			(#{item.id},#{item.name},#{item.method},#{item.unit},#{item.standardValue},
 			#{item.detectionLimit},#{item.quantitationLimit},#{item.device},#{item.defaultPrice},
-			#{item.createdAt})
+			#{item.createdAt}, #{item.department})
 		</foreach>
 	</insert>
 
@@ -147,7 +118,10 @@
 			</if>
 			<if test="updatedAt != null">
 				updated_at = #{updatedAt,jdbcType=VARCHAR},
-			</if>			
+			</if>	
+			<if test="department != null">
+				department = #{department,jdbcType=VARCHAR},
+			</if>		
 		</set>
 		where id = #{id,jdbcType=VARCHAR}
 	</update>
@@ -160,7 +134,7 @@
 
 	<select id="selectDistinctIds" resultType="string">
 		SELECT max(id)	FROM check_item GROUP BY name,method,unit,standard_value,detection_limit,
-		quantitation_limit, device, default_price
+		quantitation_limit, device, default_price, department
 	</select>
 
 	<delete id="deleteByIds">
