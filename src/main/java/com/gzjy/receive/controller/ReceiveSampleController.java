@@ -353,4 +353,17 @@ public class ReceiveSampleController {
 		}
 		return null;
 	}
+	
+	/**	 
+	 * 
+	 * @param response
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "/sample/export", method = RequestMethod.GET)
+	public Response exportExcel(HttpServletResponse response, @RequestParam(required = false) String templateFileName) {
+		ReceiveSample receiveSample =new ReceiveSample();
+		List<HashMap<String, String>> data = receiveSampleService.selectAllItem(receiveSample);
+		return Response.success(data);
+	}
 }

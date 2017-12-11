@@ -435,4 +435,7 @@ public class ReceiveSampleService {
 		}        
 	}	
 	
+	public List<HashMap<String, String>>selectAllItem(ReceiveSample record){
+		return receiveSampleMapper.selectAllItem(record);
+	}
 }

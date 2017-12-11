@@ -761,4 +761,8 @@
 		created_at = #{createdAt,jdbcType=TIMESTAMP}
 		where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}
 	</update>
+	
+	<select id="selectAllItem" parameterType="com.gzjy.receive.model.ReceiveSample" resultType="hashmap">
+		select A.*,B.* from receive_sample A, receive_sample_item B where A.receive_sample_id = B.receive_sample_id		
+	</select>
 </mapper>

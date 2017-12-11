@@ -1,6 +1,7 @@
 package com.gzjy.receive.mapper;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,4 +27,6 @@ public interface ReceiveSampleMapper {
     
     List<ReceiveSample> selectAll(@Param("filters") Map<String, Object> filter,@Param("orderby")String order,@Param("timeStart") Timestamp timeStart, 
             @Param("timeEnd") Timestamp timeEnd);
+    
+    List<HashMap<String, String>>selectAllItem(ReceiveSample record);
 }
