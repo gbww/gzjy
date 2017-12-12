@@ -166,7 +166,12 @@ public class ReceiveSampleController {
 	@RequestMapping(value = "/sample", method = RequestMethod.GET)
 	@Privileges(name = "SAMPLE-SELECT", scope = { 1 })
 	public Response list(@RequestParam(name = "receivesampleid", required = false) String id,
+	        @RequestParam(name = "reportId", required = false) String reportId,
 			@RequestParam(name = "entrustedunit", required = false) String entrustedUnit,
+			@RequestParam(name = "inspectedUnit", required = false) String inspectedUnit,
+			@RequestParam(name = "sampleName", required = false) String sampleName,
+			@RequestParam(name = "executeStandard", required = false) String executeStandard,
+			@RequestParam(name = "productionUnit", required = false) String productionUnit,
 			@RequestParam(name = "sampletype", required = false) String sampleType,
 			@RequestParam(name = "checktype", required = false) String checkType,
 			@RequestParam(name = "order", required = false) String order,
@@ -182,6 +187,21 @@ public class ReceiveSampleController {
         }
 		if (StringUtils.isBlank(endTime)) {
 		    endTime=null;
+        }
+		if(!StringUtils.isBlank(reportId)) {
+		    filter.put("report_id", reportId);
+		}
+		if(!StringUtils.isBlank(inspectedUnit)) {
+            filter.put("inspected_unit", inspectedUnit);
+        }
+		if(!StringUtils.isBlank(sampleName)) {
+            filter.put("sample_name", sampleName);
+        }
+		if(!StringUtils.isBlank(executeStandard)) {
+            filter.put("execute_standard", executeStandard);
+        }
+		if(!StringUtils.isBlank(productionUnit)) {
+            filter.put("production_unit", productionUnit);
         }
 		if (!StringUtils.isBlank(id)) {
 			filter.put("receive_sample_id", id);

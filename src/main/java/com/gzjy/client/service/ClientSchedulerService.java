@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,6 +85,27 @@ public class ClientSchedulerService {
             e.printStackTrace();
         }
         return record;
+    }
+    
+    
+    @Transactional
+    public Boolean setEffective(int effective,String schedulerId) {
+        if(StringUtils.isBlank(schedulerId)) {
+            logger.error("日程Id不存在");
+            return false;
+        }
+        ClientScheduler record=new ClientScheduler();
+        record.setId(schedulerId);
+        record.setEffective(effective);
+        record.setCreatedAt(new Date());
+        try {            
+            schedulerMapper.updateByPrimaryKeySelective(record);
+        } catch (Exception e) {
+            logger.error("更新日程失败");
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     public Boolean checkScheduler(String schedulerId) {

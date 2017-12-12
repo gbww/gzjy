@@ -8,9 +8,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class ReceiveSample {
     //抽样单编号
     @NotEmpty
-    private String receiveSampleId;
+    private String receiveSampleId;  //查询
     //报告编号
-    private String reportId;
+    private String reportId;   //查询
     
     //样品类别
     @NotEmpty
@@ -20,7 +20,7 @@ public class ReceiveSample {
     private String checkType;
   
     //委托单位（或委托人）
-    private String entrustedUnit;
+    private String entrustedUnit;   //查询
     //委托单位地址
     private String entrustedUnitAddress;
     //委托人号码
@@ -28,7 +28,7 @@ public class ReceiveSample {
     //委托人邮箱(暂时保存)
     private String entrustedUserEmail;
     //受检单位
-    private String inspectedUnit;
+    private String inspectedUnit;   //查询
     //受检单位地址
     private String inspectedUnitAddress;
     //受检联系人
@@ -40,7 +40,7 @@ public class ReceiveSample {
     //抽样地点
     private String sampleAddress;
     //抽样名称
-    private String sampleName;
+    private String sampleName;  //查询
     //抽样环节
     private String sampleLink;
     //商标
@@ -59,7 +59,7 @@ public class ReceiveSample {
     private String specificationModel;
      //执行标准
     @NotEmpty
-    private String executeStandard;
+    private String executeStandard;   //查询
     //抽样人或单位
     private String sampleNames;
     //等级或加工工艺
@@ -75,7 +75,7 @@ public class ReceiveSample {
     //保存条件
     private String saveWay;
     //生产单位
-    private String productionUnit;
+    private String productionUnit;  //查询
     //生成单位地址
     private String productionAddress;
     //生成单位联系人
