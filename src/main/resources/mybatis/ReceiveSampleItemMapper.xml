@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.gzjy.receive.model.ReceiveSampleItem" >
     <id column="id" property="id" jdbcType="CHAR" />
     <result column="receive_sample_id" property="receiveSampleId" jdbcType="VARCHAR" />
+    <result column="report_id" property="reportId" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="method" property="method" jdbcType="VARCHAR" />
     <result column="unit" property="unit" jdbcType="VARCHAR" />
@@ -18,11 +19,12 @@
     <result column="measured_value" property="measuredValue" jdbcType="VARCHAR" />
     <result column="test_user" property="testUser" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="INTEGER" />
-     <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+    <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, receive_sample_id, name, method, unit, standard_value, detection_limit, quantitation_limit, 
-    device, default_price, test_room, subpackage, item_result, measured_value, test_user,status,updated_at
+    id, receive_sample_id, report_id, name, method, unit, standard_value, detection_limit, 
+    quantitation_limit, device, default_price, test_room, subpackage, item_result, measured_value, 
+    test_user, status, updated_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -30,7 +32,7 @@
     from receive_sample_item
     where id = #{id,jdbcType=CHAR}
   </select>
-   <!--  查询授予当前用户的检验项列表 -->
+  <!--  查询授予当前用户的检验项列表 -->
    <select id="selectByUser" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />
@@ -44,9 +46,8 @@
     </where>
     order by ${orderby}
   </select>
-  
-  
-  <select id="selectByReceiveSampleId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <!--  根据接样ID查询检验项列表 -->
+   <select id="selectByReceiveSampleId" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from receive_sample_item
@@ -57,24 +58,26 @@
     delete from receive_sample_item
     where id = #{id,jdbcType=CHAR}
   </delete>
-   <delete id="deleteByReceiveSampleId" parameterType="java.lang.String" >
+   <!--根据接收样品的id删除 -->
+    <delete id="deleteByReceiveSampleId" parameterType="java.lang.String" >
     delete from receive_sample_item
     where receive_sample_id = #{id,jdbcType=CHAR}
   </delete>
-  
+ 
   <insert id="insert" parameterType="com.gzjy.receive.model.ReceiveSampleItem" >
-    insert into receive_sample_item (id, receive_sample_id, name, 
-      method, unit, standard_value, 
-      detection_limit, quantitation_limit, device, 
-      default_price, test_room, subpackage, 
-      item_result, measured_value, test_user,status,updated_at
+    insert into receive_sample_item (id, receive_sample_id, report_id, 
+      name, method, unit, 
+      standard_value, detection_limit, quantitation_limit, 
+      device, default_price, test_room, 
+      subpackage, item_result, measured_value, 
+      test_user, status, updated_at
       )
-    values (#{id,jdbcType=CHAR}, #{receiveSampleId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{method,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, #{standardValue,jdbcType=VARCHAR}, 
-      #{detectionLimit,jdbcType=VARCHAR}, #{quantitationLimit,jdbcType=VARCHAR}, #{device,jdbcType=VARCHAR}, 
-      #{defaultPrice,jdbcType=DOUBLE}, #{testRoom,jdbcType=VARCHAR}, #{subpackage,jdbcType=VARCHAR}, 
-      #{itemResult,jdbcType=VARCHAR}, #{measuredValue,jdbcType=VARCHAR}, #{testUser,jdbcType=VARCHAR},
-      #{status,jdbcType=INTEGER},#{updatedAt,jdbcType=TIMESTAMP}
+    values (#{id,jdbcType=CHAR}, #{receiveSampleId,jdbcType=VARCHAR}, #{reportId,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{method,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, 
+      #{standardValue,jdbcType=VARCHAR}, #{detectionLimit,jdbcType=VARCHAR}, #{quantitationLimit,jdbcType=VARCHAR}, 
+      #{device,jdbcType=VARCHAR}, #{defaultPrice,jdbcType=DOUBLE}, #{testRoom,jdbcType=VARCHAR}, 
+      #{subpackage,jdbcType=VARCHAR}, #{itemResult,jdbcType=VARCHAR}, #{measuredValue,jdbcType=VARCHAR}, 
+      #{testUser,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{updatedAt,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.gzjy.receive.model.ReceiveSampleItem" >
@@ -85,6 +88,9 @@
       </if>
       <if test="receiveSampleId != null" >
         receive_sample_id,
+      </if>
+      <if test="reportId != null" >
+        report_id,
       </if>
       <if test="name != null" >
         name,
@@ -125,11 +131,11 @@
       <if test="testUser != null" >
         test_user,
       </if>
-      <if test="status != null">
-      status,
+      <if test="status != null" >
+        status,
       </if>
-      <if test="updatedAt != null">
-      updated_at,
+      <if test="updatedAt != null" >
+        updated_at,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -138,6 +144,9 @@
       </if>
       <if test="receiveSampleId != null" >
         #{receiveSampleId,jdbcType=VARCHAR},
+      </if>
+      <if test="reportId != null" >
+        #{reportId,jdbcType=VARCHAR},
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
@@ -192,6 +201,9 @@
       <if test="receiveSampleId != null" >
         receive_sample_id = #{receiveSampleId,jdbcType=VARCHAR},
       </if>
+      <if test="reportId != null" >
+        report_id = #{reportId,jdbcType=VARCHAR},
+      </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
@@ -232,7 +244,7 @@
         test_user = #{testUser,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
-       status = #{status,jdbcType=INTEGER},
+        status = #{status,jdbcType=INTEGER},
       </if>
       <if test="updatedAt != null" >
         updated_at = #{updatedAt,jdbcType=TIMESTAMP},
@@ -243,6 +255,7 @@
   <update id="updateByPrimaryKey" parameterType="com.gzjy.receive.model.ReceiveSampleItem" >
     update receive_sample_item
     set receive_sample_id = #{receiveSampleId,jdbcType=VARCHAR},
+      report_id = #{reportId,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
       method = #{method,jdbcType=VARCHAR},
       unit = #{unit,jdbcType=VARCHAR},
@@ -256,7 +269,7 @@
       item_result = #{itemResult,jdbcType=VARCHAR},
       measured_value = #{measuredValue,jdbcType=VARCHAR},
       test_user = #{testUser,jdbcType=VARCHAR},
-      status = #{status,jdbcType=INTEGER},      
+      status = #{status,jdbcType=INTEGER},
       updated_at = #{updatedAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=CHAR}
   </update>

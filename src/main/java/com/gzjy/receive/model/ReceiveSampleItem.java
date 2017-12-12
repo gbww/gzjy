@@ -17,6 +17,9 @@ public class ReceiveSampleItem {
     //抽样编号
     @NotNull(message="抽样编号不能为空", groups={Add.class})
     private String receiveSampleId;
+  //抽样编号
+    @NotNull(message="报告编号不能为空", groups={Add.class})
+    private String reportId;
     //项目名称
     @NotNull(message="项目名称不能为空", groups={Add.class})
     private String name;
@@ -67,7 +70,13 @@ public class ReceiveSampleItem {
     public void setReceiveSampleId(String receiveSampleId) {
         this.receiveSampleId = receiveSampleId == null ? null : receiveSampleId.trim();
     }
+    public String getReportId() {
+        return reportId;
+    }
 
+    public void setReportId(String reportId) {
+        this.reportId = reportId == null ? null : reportId.trim();
+    }
     public String getName() {
         return name;
     }
