@@ -7,10 +7,7 @@ package com.gzjy.receive.service;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -438,4 +435,35 @@ public class ReceiveSampleService {
 	public List<HashMap<String, String>>selectAllItem(ReceiveSample record){
 		return receiveSampleMapper.selectAllItem(record);
 	}
+	
+	public void generateExcelReport(Workbook workbook, List<HashMap<String, String>> datas) throws IOException, IllegalAccessException, InvocationTargetException, ParseException {
+		Sheet sheet = workbook.createSheet();		
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String key[] = new String[] {"id","id","id"};
+		int i = 0;
+		int max = 1;
+		//先找出列表中item的最大值
+		Map<String, Integer> max_item = new HashMap<String, Integer>();
+		for(HashMap<String, String> data: datas){
+			if(max_item.containsKey(data.get("receive_sample_id"))){
+				int temp = max_item.get(data.get("receive_sample_id"));
+				max_item.put(data.get("receive_sample_id"), temp+1);
+				if (max < temp+1) {
+					max = temp+1;
+				}
+			}
+			else {
+				max_item.put(data.get("receive_sample_id"), 1);
+			}			
+		}
+		for(HashMap<String, String> data: datas){
+			Row row = sheet.createRow(i);
+			int j = 0;
+			for(j=0;j<31+max;j++) {
+				Cell cell = row.createCell(j);
+				cell.setCellValue(data.get(key[0]));
+			}
+		}		
+	}
+
 }

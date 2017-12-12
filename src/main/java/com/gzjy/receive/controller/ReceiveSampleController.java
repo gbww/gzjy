@@ -4,7 +4,9 @@
  */
 package com.gzjy.receive.controller;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -174,15 +176,15 @@ public class ReceiveSampleController {
 			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
 			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value = "startTime", required = false) String startTime,
-            @RequestParam(value = "endTime", required = false) String endTime) {
+			@RequestParam(value = "endTime", required = false) String endTime) {
 		Map<String, Object> filter = new HashMap<String, Object>();
-		
+
 		if (StringUtils.isBlank(startTime)) {
-		    startTime=null;
-        }
+			startTime = null;
+		}
 		if (StringUtils.isBlank(endTime)) {
-		    endTime=null;
-        }
+			endTime = null;
+		}
 		if (!StringUtils.isBlank(id)) {
 			filter.put("receive_sample_id", id);
 		}
@@ -190,30 +192,30 @@ public class ReceiveSampleController {
 			filter.put("entrusted_unit", entrustedUnit);
 		}
 		if (!StringUtils.isBlank(sampleType)) {
-            filter.put("sample_type", sampleType);
-        }
+			filter.put("sample_type", sampleType);
+		}
 		if (!StringUtils.isBlank(checkType)) {
-            filter.put("check_type", checkType);
-        }
+			filter.put("check_type", checkType);
+		}
 		if (StringUtils.isBlank(order)) {
-		    order = "created_at desc";
+			order = "created_at desc";
 		}
 		if (status != 5) {
 			filter.put("status", status);
 		}
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date start = null;
-        Date end = null;
-        
-        try {
-            start = startTime == null ? null : sdf.parse(startTime);
-            end = endTime == null ? null : sdf.parse(endTime);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new BizException("输入的时间格式不合法！");
-        }
+		Date start = null;
+		Date end = null;
 
-		return Response.success(receiveSampleService.select(pageNum, pageSize, order, filter,start,end));
+		try {
+			start = startTime == null ? null : sdf.parse(startTime);
+			end = endTime == null ? null : sdf.parse(endTime);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new BizException("输入的时间格式不合法！");
+		}
+
+		return Response.success(receiveSampleService.select(pageNum, pageSize, order, filter, start, end));
 	}
 
 	// test
@@ -261,15 +263,15 @@ public class ReceiveSampleController {
 	@Privileges(name = "SAMPLE-SELECTITEM", scope = { 1 })
 	@RequestMapping(value = "/sampleItem", method = RequestMethod.GET)
 	public Response listItemByCurrentUser(@RequestParam(name = "status", defaultValue = "0") int status,
-	        @RequestParam(name = "order", required = false) String order,
+			@RequestParam(name = "order", required = false) String order,
 			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
 			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 		Map<String, Object> filter = new HashMap<String, Object>();
 		if (status != 5) {
 			filter.put("status", status);
 		}
-		if(StringUtils.isBlank(order)) {
-		    order="updated_at desc";
+		if (StringUtils.isBlank(order)) {
+			order = "updated_at desc";
 		}
 		return Response.success(receiveSampleService.selectCurrentUserItems(pageNum, pageSize, order, filter));
 	}
@@ -286,7 +288,7 @@ public class ReceiveSampleController {
 			@RequestParam(required = true) String templateFileName, @RequestParam(required = true) String type) {
 		EpicNFSClient client = epicNFSService.getClient("gzjy");
 		// 生成临时模板excel文件
-		String fileSuffix = templateFileName.endsWith("xlsx")?".xlsx":".xls";
+		String fileSuffix = templateFileName.endsWith("xlsx") ? ".xlsx" : ".xls";
 		String tempFileName = ShortUUID.getInstance().generateShortID() + fileSuffix;
 		// 建立远程存放excel模板文件目录
 		if (!client.hasRemoteDir("temp")) {
@@ -298,7 +300,7 @@ public class ReceiveSampleController {
 		String serverTemplateFile = serverTemplatePath + templateFileName;
 		// 建立服务器缓存模板文件
 		String tempFile = "/var/lib/docs/gzjy/temp/" + tempFileName;
-		OutputStream out = null;		
+		OutputStream out = null;
 		String tempPdf = null;
 		Workbook wb = null;
 		try {
@@ -307,10 +309,9 @@ public class ReceiveSampleController {
 			// 获取报告数据
 			ReceiveSample receiveSample = receiveSampleService.getReceiveSample(id);
 			InputStream input = new FileInputStream(tempFile);
-			if(fileSuffix.equals(".xlsx")) {
+			if (fileSuffix.equals(".xlsx")) {
 				wb = new XSSFWorkbook(input);
-			}
-			else {
+			} else {
 				wb = new HSSFWorkbook(input);
 			}
 			// 将数据写入流中
@@ -328,10 +329,10 @@ public class ReceiveSampleController {
 				logger.info("Begin export PDF");
 				String tempPdfName = ShortUUID.getInstance().generateShortID() + ".pdf";
 				tempPdf = "/var/lib/docs/gzjy/temp/" + tempPdfName;
-				String os = System.getProperty("os.name");  
-				if(os.toLowerCase().startsWith("win")){  
+				String os = System.getProperty("os.name");
+				if (os.toLowerCase().startsWith("win")) {
 					ExcelToPdf.xlsToPdf(tempFile, tempPdf);
-				}else {
+				} else {
 					ExcelToPdf.xlsToPdfForLinux(tempFile, tempPdf);
 				}
 				return Response.success(tempPdf);
@@ -342,19 +343,19 @@ public class ReceiveSampleController {
 			logger.error(e + "");
 		} finally {
 			try {
-				if(out!=null) {
+				if (out != null) {
 					out.flush();
 					out.close();
 				}
-				
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		return null;
 	}
-	
-	/**	 
+
+	/**
 	 * 
 	 * @param response
 	 * @param id
@@ -362,8 +363,43 @@ public class ReceiveSampleController {
 	 */
 	@RequestMapping(value = "/sample/export", method = RequestMethod.GET)
 	public Response exportExcel(HttpServletResponse response, @RequestParam(required = false) String templateFileName) {
-		ReceiveSample receiveSample =new ReceiveSample();
+		ReceiveSample receiveSample = new ReceiveSample();
 		List<HashMap<String, String>> data = receiveSampleService.selectAllItem(receiveSample);
+		// 建立服务器缓存模板文件
+		String tempFileName = ShortUUID.getInstance().generateShortID() + ".xlsx";
+		String tempFile = "/var/lib/docs/gzjy/temp/" + tempFileName;
+		OutputStream out = null;
+		Workbook wb = null;
+		try {
+			File file = new File(tempFile);
+			if(!file.exists()) {
+				file.createNewFile();
+			}			
+			wb = new XSSFWorkbook();
+			// 将数据写入流中
+			receiveSampleService.generateExcelReport(wb, data);
+			// 如果是excel，则提供下载功能，需设置头信息
+			response.reset();
+			response.setContentType("application/octet-stream;charset=UTF-8");
+			response.setHeader("Content-disposition",
+					"attachment;filename=" + URLEncoder.encode(tempFileName, "UTF-8"));
+			out = response.getOutputStream();
+			wb.write(out);			
+			// 删除缓存模板文件
+			FileOperate.deleteFile(tempFile);
+		} catch (Exception e) {
+			logger.error(e + "");
+		} finally {
+			try {
+				if (out != null) {
+					out.flush();
+					out.close();
+				}
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}		
 		return Response.success(data);
-	}
+	}	
 }
