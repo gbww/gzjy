@@ -167,18 +167,20 @@ public class ReceiveSampleController {
 	// 查询接样信息
 	@RequestMapping(value = "/sample", method = RequestMethod.GET)
 	@Privileges(name = "SAMPLE-SELECT", scope = { 1 })
-	public Response list(@RequestParam(name = "receivesampleid", required = false) String id,
+	public Response list(@RequestParam(name = "receiveSampleId", required = false) String id,
 	        @RequestParam(name = "reportId", required = false) String reportId,
-			@RequestParam(name = "entrustedunit", required = false) String entrustedUnit,
+			@RequestParam(name = "entrustedUnit", required = false) String entrustedUnit,
 			@RequestParam(name = "inspectedUnit", required = false) String inspectedUnit,
 			@RequestParam(name = "sampleName", required = false) String sampleName,
 			@RequestParam(name = "executeStandard", required = false) String executeStandard,
 			@RequestParam(name = "productionUnit", required = false) String productionUnit,
-			@RequestParam(name = "sampletype", required = false) String sampleType,
-			@RequestParam(name = "checktype", required = false) String checkType,
+			@RequestParam(name = "sampleType", required = false) String sampleType,
+			@RequestParam(name = "checkType", required = false) String checkType,
+			@RequestParam(name = "reportStatus", required = false) Integer reportStatus,
 			@RequestParam(name = "order", required = false) String order,
 			@RequestParam(name = "status", defaultValue = "5") int status,
 			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
+			
 			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value = "startTime", required = false) String startTime,
 			@RequestParam(value = "endTime", required = false) String endTime) {
@@ -215,8 +217,11 @@ public class ReceiveSampleController {
 			filter.put("sample_type", sampleType);
 		}
 		if (!StringUtils.isBlank(checkType)) {
-			filter.put("check_type", checkType);
-		}
+            filter.put("check_type", checkType);
+        }
+		if (reportStatus!=null) {
+            filter.put("report_status", reportStatus);
+        }
 		if (StringUtils.isBlank(order)) {
 			order = "created_at desc";
 		}
@@ -237,6 +242,8 @@ public class ReceiveSampleController {
 
 		return Response.success(receiveSampleService.select(pageNum, pageSize, order, filter, start, end));
 	}
+	
+
 
 	// test
 	@RequestMapping(value = "/sampletest", method = RequestMethod.GET)
@@ -249,7 +256,38 @@ public class ReceiveSampleController {
 
 		return Response.success(receiveSampleService.selectTest(pageNum, pageSize, filter));
 	}
-
+	
+	
+    @RequestMapping(value = "/sample/items/countByDepartment", method = RequestMethod.GET)
+    public Response selectCountItemByDepartment(@RequestParam(name = "order", required = false) String order,
+            @RequestParam(value = "startTime", required = false) String startTime,
+            @RequestParam(value = "endTime", required = false) String endTime){
+        if (StringUtils.isBlank(order)) {
+            order = "updated_at desc";
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date start = null;
+        Date end = null;
+        
+        try {
+            start = startTime == null ? null : sdf.parse(startTime);
+            end = endTime == null ? null : sdf.parse(endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BizException("输入的时间格式不合法！");
+        }
+        if(start==null) {
+            start=new Date();
+        }
+        if(end==null) {
+            end=new Date(new Date().getTime()-1592000000);//某人一个月前
+        }
+        if(start.after(end))
+            throw new BizException("输入的时间格式不合法,开始时间大于了结束时间");
+        
+        return Response.success(null);
+        
+    }
 	// 根据ID获取接样信息
 	@RequestMapping(value = "/sample/{id}", method = RequestMethod.GET)
 	public Response getReceiveSample(@PathVariable(name = "id") String id) {
