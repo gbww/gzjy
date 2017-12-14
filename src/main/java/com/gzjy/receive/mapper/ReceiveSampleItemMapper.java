@@ -1,12 +1,15 @@
 package com.gzjy.receive.mapper;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.gzjy.receive.model.ReceiveSample;
 import com.gzjy.receive.model.ReceiveSampleItem;
+import com.gzjy.receive.model.SampleItemCountView;
 @Mapper
 public interface ReceiveSampleItemMapper {
     int deleteByPrimaryKey(String id);
@@ -26,4 +29,8 @@ public interface ReceiveSampleItemMapper {
     int updateByPrimaryKey(ReceiveSampleItem record);
     //根据接收样品的id删除
     int deleteByReceiveSampleId(String id);
+    
+    //按照部门查询每种状态的检测项数量
+    List<SampleItemCountView> selectCountGroupByDepartment(@Param("filters") Map<String, Object> filter,@Param("orderby")String order,@Param("timeStart") Timestamp timeStart, 
+            @Param("timeEnd") Timestamp timeEnd);
 }

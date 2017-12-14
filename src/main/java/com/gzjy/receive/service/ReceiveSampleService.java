@@ -33,6 +33,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.openid4java.consumer.SampleConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,7 @@ import com.gzjy.receive.mapper.ReceiveSampleItemMapper;
 import com.gzjy.receive.mapper.ReceiveSampleMapper;
 import com.gzjy.receive.model.ReceiveSample;
 import com.gzjy.receive.model.ReceiveSampleItem;
+import com.gzjy.receive.model.SampleItemCountView;
 import com.gzjy.user.UserService;
 import com.gzjy.user.mapper.UserSignMapper;
 import com.gzjy.user.model.User; 
@@ -202,6 +204,15 @@ public class ReceiveSampleService {
         });
         return pages;
     }
+	
+	
+	   public List<SampleItemCountView> selectCountItemByDepartment( Map<String, Object> filter,String order,Date timeStart,Date timeEnd) {
+	       Timestamp start = timeStart == null ? null : new Timestamp(timeStart.getTime());
+	        Timestamp end = timeEnd == null ? null : new Timestamp(timeEnd.getTime());
+	        List<SampleItemCountView> list = receiveSampleItemMapper.selectCountGroupByDepartment(filter, order, start, end);
+	        return list;
+	     
+	    }
 	
 	
     public PageInfo<ReceiveSampleItem> selectCurrentUserItems(Integer pageNum, Integer pageSize,String order,Map<String, Object> filter) {
