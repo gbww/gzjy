@@ -265,6 +265,7 @@ public class ReceiveSampleController {
         if (StringUtils.isBlank(order)) {
             order = "updated_at desc";
         }
+        Map<String, Object> filter = new HashMap<String, Object>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date start = null;
         Date end = null;
@@ -285,7 +286,8 @@ public class ReceiveSampleController {
         if(start.after(end))
             throw new BizException("输入的时间格式不合法,开始时间大于了结束时间");
         
-        return Response.success(null);
+        
+        return Response.success(receiveSampleService.selectCountItemByDepartment(filter, order, start, end));
         
     }
 	// 根据ID获取接样信息
