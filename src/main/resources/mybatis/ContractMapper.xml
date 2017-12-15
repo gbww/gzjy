@@ -4,9 +4,7 @@
 	
 
   <resultMap id="BaseResultMap" type="com.gzjy.contract.model.Contract">
-    <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="sample_id" jdbcType="VARCHAR" property="sampleId" />
-    <result column="protocol_id" jdbcType="VARCHAR" property="protocolId" />
+    <id column="id" jdbcType="VARCHAR" property="id" />    
     <result column="sample_name" jdbcType="VARCHAR" property="sampleName" />
     <result column="process_technology" jdbcType="VARCHAR" property="processTechnology" />
     <result column="quality_level" jdbcType="VARCHAR" property="qualityLevel" />
@@ -16,8 +14,7 @@
     <result column="storage_time" jdbcType="VARCHAR" property="storageTime" />
     <result column="sample_traits" jdbcType="VARCHAR" property="sampleTraits" />
     <result column="process_demand" jdbcType="VARCHAR" property="processDemand" />
-    <result column="detect_purpose" jdbcType="VARCHAR" property="detectPurpose" />
-    <result column="other_data" jdbcType="VARCHAR" property="otherData" />
+    <result column="detect_purpose" jdbcType="VARCHAR" property="detectPurpose" />    
     <result column="detect_type" jdbcType="VARCHAR" property="detectType" />
     <result column="detect_project" jdbcType="VARCHAR" property="detectProject" />
     <result column="execute_standard" jdbcType="VARCHAR" property="executeStandard" />
@@ -35,32 +32,60 @@
     <result column="fax" jdbcType="VARCHAR" property="fax" />
     <result column="contact_person" jdbcType="VARCHAR" property="contactPerson" />
     <result column="report_method" jdbcType="VARCHAR" property="reportMethod" />
-    <result column="report_count" jdbcType="INTEGER" property="reportCount" />
-    <result column="inspection_user" jdbcType="VARCHAR" property="inspectionUser" />
+    <result column="report_count" jdbcType="VARCHAR" property="reportCount" />    
     <result column="inspection_date" jdbcType="TIMESTAMP" property="inspectionDate" />
     <result column="acceptor" jdbcType="VARCHAR" property="acceptor" />
     <result column="acceptance_date" jdbcType="TIMESTAMP" property="acceptanceDate" />
     <result column="cost" jdbcType="REAL" property="cost" />
-    <result column="process_id" jdbcType="VARCHAR" property="processId" />
-    <result column="activity1" jdbcType="VARCHAR" property="activity1" />  
+    <result column="process_id" jdbcType="VARCHAR" property="processId" />    
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
-    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />    
+    <result column="appendix" jdbcType="VARCHAR" property="appendix" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="entrustment" jdbcType="VARCHAR" property="entrustment" />
+    <result column="entrustment_address" jdbcType="VARCHAR" property="entrustmentAddress" />
+    <result column="serial_number" jdbcType="VARCHAR" property="serialNumber" />
+    <result column="project_leader" jdbcType="VARCHAR" property="projectLeader" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="task_category" jdbcType="VARCHAR" property="taskCategory" />
+    <result column="sample_type" jdbcType="VARCHAR" property="sampleType" />
+    <result column="inspection" jdbcType="VARCHAR" property="inspection" />
+    <result column="task_batch" jdbcType="VARCHAR" property="taskBatch" />
+    <result column="settlement_method" jdbcType="VARCHAR" property="settlementMethod" />
+    <result column="is_separate_settlement" jdbcType="TINYINT" property="isSeparateSettlement" />
+    <result column="sign_date" jdbcType="TIMESTAMP" property="signDate" />
+    <result column="contract_term" jdbcType="VARCHAR" property="contractTerm" />
+    <result column="deposit_bank" jdbcType="VARCHAR" property="depositBank" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="auth_category" jdbcType="VARCHAR" property="authCategory" />
+    <result column="auth_type" jdbcType="VARCHAR" property="authType" />
+    <result column="product_type" jdbcType="VARCHAR" property="productType" />
+    <result column="enterprise_file" jdbcType="VARCHAR" property="enterpriseFile" />
+    <result column="limit_time" jdbcType="VARCHAR" property="limitTime" />    
+    <result column="inspect_time" jdbcType="TIMESTAMP" property="inspectTime" />
+    <result column="expire_time" jdbcType="VARCHAR" property="expireTime" />
+    <result column="contract_sign_time" jdbcType="VARCHAR" property="contractSignTime" />
+    <result column="report_send_address" jdbcType="VARCHAR" property="reportSendAddress" />
+    <result column="invoice_send_address" jdbcType="VARCHAR" property="invoiceSendAddress" />    
+    
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.gzjy.contract.model.Contract">
     <result column="extra" jdbcType="LONGVARCHAR" property="extra" />
-  </resultMap>
-  
-  
+  </resultMap>  
   
   <sql id="Base_Column_List">
-    id, sample_id, protocol_id, sample_name, process_technology, quality_level, 
+    id, sample_name, process_technology, quality_level, 
     specification_quantity, product_date, storage_condition, storage_time, sample_traits, 
-    process_demand, detect_purpose, other_data, detect_type, detect_project, execute_standard, 
+    process_demand, detect_purpose, detect_type, detect_project, execute_standard, 
     detect_by, is_use_standard, is_subcontracting, is_expedited, is_evaluation, product_unit, 
     inspection_unit, sampling_address, inspection_unit_address, zip_code, phone, fax, 
-    contact_person, report_method, report_count, inspection_user, inspection_date, acceptor, 
-    acceptance_date, cost, process_id, activity1,status,created_at,updated_at
+    contact_person, report_method, report_count, inspection_date, acceptor, 
+    acceptance_date, cost, process_id, status,created_at,updated_at, appendix, type, entrustment,
+    entrustment_address, serial_number, project_leader, project_name, task_category, sample_type
+    inspection, task_batch, settlement_method, is_separate_settlement, sign_date, contract_term,
+    deposit_bank, account, auth_category, auth_type, product_type, enterprise_file, limit_time,
+    inspect_time, expire_time, contract_sign_time, report_send_address, invoice_send_address
   </sql>
   <sql id="Blob_Column_List">
     extra
@@ -96,48 +121,12 @@
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   
-  <select id="checkContractProtocolId" parameterType="java.lang.String" resultType="java.lang.String">
-    select protocol_id from contract
-    where protocol_id = #{protocolId,jdbcType=VARCHAR}
-  </select>
-  
-  <insert id="insert" parameterType="com.gzjy.contract.model.Contract">
-    insert into contract (id, sample_id, protocol_id, sample_name, process_technology, quality_level, 
-      specification_quantity, product_date, storage_condition, storage_time, sample_traits, process_demand, 
-      detect_purpose, other_data, detect_type, detect_project, execute_standard, detect_by, 
-      is_use_standard, is_subcontracting, is_expedited, is_evaluation, product_unit, inspection_unit, 
-      sampling_address, inspection_unit_address, zip_code, phone, fax, contact_person, report_method, report_count, 
-      inspection_user, inspection_date, acceptor, acceptance_date, cost, activity1, process_id, extra,status,created_at,updated_at)
-    values (#{id,jdbcType=VARCHAR}, #{sampleId,jdbcType=VARCHAR}, #{protocolId,jdbcType=VARCHAR}, 
-      #{sampleName,jdbcType=VARCHAR}, #{processTechnology,jdbcType=VARCHAR}, #{qualityLevel,jdbcType=VARCHAR}, 
-      #{specificationQuantity,jdbcType=VARCHAR}, #{productDate,jdbcType=VARCHAR}, #{storageCondition,jdbcType=VARCHAR}, 
-      #{storageTime,jdbcType=TIMESTAMP}, #{sampleTraits,jdbcType=VARCHAR}, #{processDemand,jdbcType=VARCHAR}, 
-      #{detectPurpose,jdbcType=VARCHAR}, #{otherData,jdbcType=VARCHAR}, #{detectType,jdbcType=VARCHAR}, 
-      #{detectProject,jdbcType=VARCHAR}, #{executeStandard,jdbcType=VARCHAR}, #{detectBy,jdbcType=VARCHAR}, 
-      #{isUseStandard,jdbcType=TINYINT}, #{isSubcontracting,jdbcType=TINYINT}, #{isExpedited,jdbcType=TINYINT}, 
-      #{isEvaluation,jdbcType=TINYINT}, #{productUnit,jdbcType=VARCHAR}, #{inspectionUnit,jdbcType=VARCHAR}, 
-      #{samplingAddress,jdbcType=VARCHAR}, #{inspectionUnitAddress,jdbcType=VARCHAR}, 
-      #{zipCode,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{fax,jdbcType=VARCHAR}, 
-      #{contactPerson,jdbcType=VARCHAR}, #{reportMethod,jdbcType=VARCHAR}, #{reportCount,jdbcType=INTEGER}, 
-      #{inspectionUser,jdbcType=VARCHAR}, #{inspectionDate,jdbcType=TIMESTAMP}, #{acceptor,jdbcType=VARCHAR}, 
-      #{acceptanceDate,jdbcType=TIMESTAMP}, #{cost,jdbcType=REAL}, #{activity1,jdbcType=VARCHAR}, 
-      #{processId,jdbcType=VARCHAR}, #{extra,jdbcType=LONGVARCHAR}, #{status,jdbcType=LONGVARCHAR},
-      #{createdAt,jdbcType=TIMESTAMP},#{updatedAt,jdbcType=TIMESTAMP})
-  </insert>
-  
-  
   <insert id="insertSelective" parameterType="com.gzjy.contract.model.Contract">
     insert into contract
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
-      </if>
-      <if test="sampleId != null">
-        sample_id,
-      </if>
-      <if test="protocolId != null">
-        protocol_id,
-      </if>
+      </if>      
       <if test="sampleName != null">
         sample_name,
       </if>
@@ -167,10 +156,7 @@
       </if>
       <if test="detectPurpose != null">
         detect_purpose,
-      </if>
-      <if test="otherData != null">
-        other_data,
-      </if>
+      </if>      
       <if test="detectType != null">
         detect_type,
       </if>
@@ -224,10 +210,7 @@
       </if>
       <if test="reportCount != null">
         report_count,
-      </if>
-      <if test="inspectionUser != null">
-        inspection_user,
-      </if>
+      </if>      
       <if test="inspectionDate != null">
         inspection_date,
       </if>
@@ -239,10 +222,7 @@
       </if>
       <if test="cost != null">
         cost,
-      </if>
-      <if test="activity1 != null">
-        activity1,
-      </if>
+      </if>      
       <if test="processId != null">
         process_id,
       </if>
@@ -257,18 +237,94 @@
       </if>
       <if test="updatedAt != null">
         updated_at
+      </if>     
+      
+      <if test="appendix != null">
+        appendix
+      </if>      
+      <if test="type != null">
+        type
+      </if>
+      <if test="entrustment != null">
+        entrustment
+      </if>
+      <if test="entrustmentAddress != null">
+        entrustment_address
+      </if>
+      <if test="serialNumber != null">
+        serial_number
+      </if>
+      <if test="projectLeader != null">
+        project_leader
+      </if>
+      <if test="projectName != null">
+        project_name
+      </if>
+      <if test="taskCategory != null">
+        task_category
+      </if>
+      <if test="sampleType != null">
+        sample_type
+      </if>
+      <if test="inspection != null">
+        inspection
+      </if>
+      <if test="taskBatch != null">
+        task_batch
+      </if>
+      <if test="settlementMethod != null">
+        settlement_method
+      </if>
+      <if test="isSeparateSettlement != null">
+        is_separate_settlement
+      </if>
+      <if test="signDate != null">
+        sign_date
+      </if>
+      <if test="contractTerm != null">
+        contract_term
+      </if>
+      <if test="depositBank != null">
+        deposit_bank
+      </if>
+      <if test="account != null">
+        account
+      </if>
+      <if test="authCategory != null">
+        auth_category
+      </if>
+      <if test="authType != null">
+        auth_type
+      </if>
+      <if test="productType != null">
+        product_type
+      </if>
+      <if test="enterpriseFile != null">
+        enterprise_file
+      </if>
+      <if test="limitTime != null">
+        limit_time
+      </if>
+      <if test="inspectTime != null">
+        inspect_time
+      </if>  
+      <if test="expireTime != null">
+        expire_time
+      </if> 
+      <if test="contractSignTime != null">
+        contract_sign_time
+      </if> 
+      <if test="reportSendAddress != null">
+        report_send_address
+      </if>   
+      <if test="invoiceSendAddress != null">
+        invoice_send_address
       </if>      
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
-      </if>
-      <if test="sampleId != null">
-        #{sampleId,jdbcType=VARCHAR},
-      </if>
-      <if test="protocolId != null">
-        #{protocolId,jdbcType=VARCHAR},
-      </if>
+      </if>      
       <if test="sampleName != null">
         #{sampleName,jdbcType=VARCHAR},
       </if>
@@ -298,10 +354,7 @@
       </if>
       <if test="detectPurpose != null">
         #{detectPurpose,jdbcType=VARCHAR},
-      </if>
-      <if test="otherData != null">
-        #{otherData,jdbcType=VARCHAR},
-      </if>
+      </if>      
       <if test="detectType != null">
         #{detectType,jdbcType=VARCHAR},
       </if>
@@ -354,11 +407,8 @@
         #{reportMethod,jdbcType=VARCHAR},
       </if>
       <if test="reportCount != null">
-        #{reportCount,jdbcType=INTEGER},
-      </if>
-      <if test="inspectionUser != null">
-        #{inspectionUser,jdbcType=VARCHAR},
-      </if>
+        #{reportCount,jdbcType=VARCHAR},
+      </if>      
       <if test="inspectionDate != null">
         #{inspectionDate,jdbcType=TIMESTAMP},
       </if>
@@ -370,16 +420,13 @@
       </if>
       <if test="cost != null">
         #{cost,jdbcType=REAL},
-      </if>
-      <if test="activity1 != null">
-        #{activity1,jdbcType=VARCHAR},
-      </if>
+      </if>     
       <if test="processId != null">
         #{process_id,jdbcType=VARCHAR},
-      </if>
+      </if> 
       <if test="extra != null">
-        #{extra,jdbcType=LONGVARCHAR},
-      </if>
+        #{extra,jdbcType=VARCHAR},
+      </if> 
       <if test="status != null">
         #{status,jdbcType=VARCHAR},
       </if>
@@ -388,20 +435,95 @@
       </if>
       <if test="updatedAt != null">
         #{updatedAt,jdbcType=TIMESTAMP}
+      </if>      
+      <if test="appendix != null">
+        #{appendix,jdbcType=VARCHAR}
+      </if>      
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR}
       </if>
+      <if test="entrustment != null">
+        #{entrustment,jdbcType=VARCHAR}
+      </if>
+      <if test="entrustmentAddress != null">
+        #{entrustmentAddress,jdbcType=VARCHAR}
+      </if>
+      <if test="serialNumber != null">
+        #{serialNumber,jdbcType=VARCHAR}
+      </if>
+      <if test="projectLeader != null">
+        #{projectLeader,jdbcType=VARCHAR}
+      </if>
+      <if test="projectName != null">
+        #{projectName,jdbcType=VARCHAR}
+      </if>
+      <if test="taskCategory != null">
+        #{taskCategory,jdbcType=VARCHAR}
+      </if>
+      <if test="sampleType != null">
+        #{sampleType,jdbcType=VARCHAR}
+      </if>
+      <if test="inspection != null">
+        #{inspection,jdbcType=VARCHAR}
+      </if>
+      <if test="taskBatch != null">
+        #{taskBatch,jdbcType=VARCHAR}
+      </if>
+      <if test="settlementMethod != null">
+        #{settlementMethod,jdbcType=VARCHAR}
+      </if>
+      <if test="isSeparateSettlement != null">
+        #{isSeparateSettlement,jdbcType=TINYINT}
+      </if>
+      <if test="signDate != null">
+        #{signDate,jdbcType=TIMESTAMP}
+      </if>
+      <if test="contractTerm != null">
+        #{contractTerm,jdbcType=VARCHAR}
+      </if>
+      <if test="depositBank != null">
+        #{depositBank,jdbcType=VARCHAR}
+      </if>
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR}
+      </if>
+      <if test="authCategory != null">
+        #{authCategory,jdbcType=VARCHAR}
+      </if>
+      <if test="authType != null">
+        #{authType,jdbcType=VARCHAR}
+      </if>
+      <if test="productType != null">
+        #{productType,jdbcType=VARCHAR}
+      </if>
+      <if test="enterpriseFile != null">
+        #{enterpriseFile,jdbcType=VARCHAR}
+      </if>
+      <if test="limitTime != null">
+        #{limitTime,jdbcType=VARCHAR}
+      </if>
+      <if test="inspectTime != null">
+        #{inspectTime,jdbcType=TIMESTAMP}
+      </if>  
+      <if test="expireTime != null">
+        #{expireTime,jdbcType=VARCHAR}
+      </if> 
+      <if test="contractSignTime != null">
+        #{contractSignTime,jdbcType=VARCHAR}
+      </if> 
+      <if test="reportSendAddress != null">
+        #{reportSendAddress,jdbcType=VARCHAR}
+      </if>   
+      <if test="invoiceSendAddress != null">
+        #{invoiceSendAddress,jdbcType=VARCHAR}
+      </if>      
     </trim>
   </insert>
   
   
   <update id="updateByPrimaryKeySelective" parameterType="com.gzjy.contract.model.Contract">
     update contract
-    <set>
-      <if test="sampleId != null">
-        sample_id = #{sampleId,jdbcType=VARCHAR},
-      </if>
-      <if test="protocolId != null">
-        protocol_id = #{protocolId,jdbcType=VARCHAR},
-      </if>
+    <set>      
       <if test="sampleName != null">
         sample_name = #{sampleName,jdbcType=VARCHAR},
       </if>
@@ -431,10 +553,7 @@
       </if>
       <if test="detectPurpose != null">
         detect_purpose = #{detectPurpose,jdbcType=VARCHAR},
-      </if>
-      <if test="otherData != null">
-        other_data = #{otherData,jdbcType=VARCHAR},
-      </if>
+      </if>      
       <if test="detectType != null">
         detect_type = #{detectType,jdbcType=VARCHAR},
       </if>
@@ -488,10 +607,7 @@
       </if>
       <if test="reportCount != null">
         report_count = #{reportCount,jdbcType=INTEGER},
-      </if>
-      <if test="inspectionUser != null">
-        inspection_user = #{inspectionUser,jdbcType=VARCHAR},
-      </if>
+      </if>      
       <if test="inspectionDate != null">
         inspection_date = #{inspectionDate,jdbcType=TIMESTAMP},
       </if>
@@ -503,10 +619,7 @@
       </if>
       <if test="cost != null">
         cost = #{cost,jdbcType=REAL},
-      </if>
-      <if test="activity1 != null">
-        activity1 = #{activity1,jdbcType=VARCHAR},
-      </if>
+      </if>      
       <if test="processId != null">
         process_id = #{processId,jdbcType=VARCHAR},
       </if>
@@ -522,110 +635,95 @@
       <if test="updatedAt != null">
         updated_at = #{updatedAt,jdbcType=TIMESTAMP},
       </if>
+      
+      <if test="appendix != null">
+        appendix = #{appendix,jdbcType=VARCHAR},
+      </if>      
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="entrustment != null">
+        entrustment = #{entrustment,jdbcType=VARCHAR},
+      </if>
+      <if test="entrustmentAddress != null">
+        entrustment_address = #{entrustmentAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumber != null">
+        serial_number = #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="projectLeader != null">
+        project_leader = #{projectLeader,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null">
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskCategory != null">
+        task_category = #{taskCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="sampleType != null">
+        sample_type = #{sampleType,jdbcType=VARCHAR},
+      </if>
+      <if test="inspection != null">
+        inspection = #{inspection,jdbcType=VARCHAR},
+      </if>
+      <if test="taskBatch != null">
+        task_batch = #{taskBatch,jdbcType=VARCHAR},
+      </if>
+      <if test="settlementMethod != null">
+        settlement_method = #{settlementMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="isSeparateSettlement != null">
+        is_separate_settlement = #{isSeparateSettlement,jdbcType=TINYINT},
+      </if>
+      <if test="signDate != null">
+        sign_date = #{signDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractTerm != null">
+        contract_term = #{contractTerm,jdbcType=VARCHAR},
+      </if>
+      <if test="depositBank != null">
+        deposit_bank = #{depositBank,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="authCategory != null">
+        auth_category = #{authCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="authType != null">
+        auth_type = #{authType,jdbcType=VARCHAR},
+      </if>
+      <if test="productType != null">
+        product_type = #{productType,jdbcType=VARCHAR},
+      </if>
+      <if test="enterpriseFile != null">
+        enterprise_file = #{enterpriseFile,jdbcType=VARCHAR},
+      </if>
+      <if test="limitTime != null">
+        limit_time = #{limitTime,jdbcType=VARCHAR},
+      </if>
+      <if test="inspectTime != null">
+        inspect_time = #{inspectTime,jdbcType=TIMESTAMP},
+      </if>  
+      <if test="expireTime != null">
+        expire_time = #{expireTime,jdbcType=VARCHAR},
+      </if> 
+      <if test="contractSignTime != null">
+        contract_sign_time = #{contractSignTime,jdbcType=VARCHAR},
+      </if> 
+      <if test="reportSendAddress != null">
+        report_send_address = #{reportSendAddress,jdbcType=VARCHAR}
+      </if>   
+      <if test="invoiceSendAddress != null">
+       invoice_send_address =  #{invoiceSendAddress,jdbcType=VARCHAR}
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
   
-  
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.gzjy.contract.model.Contract">
-    update contract set 
-      sample_id = #{sampleId,jdbcType=VARCHAR},
-      protocol_id = #{protocolId,jdbcType=VARCHAR},
-      sample_name = #{sampleName,jdbcType=VARCHAR},
-      process_technology = #{processTechnology,jdbcType=VARCHAR},
-      quality_level = #{qualityLevel,jdbcType=VARCHAR},
-      specification_quantity = #{specificationQuantity,jdbcType=VARCHAR},
-      product_date = #{productDate,jdbcType=VARCHAR},
-      storage_condition = #{storageCondition,jdbcType=VARCHAR},
-      storage_time = #{storageTime,jdbcType=TIMESTAMP},
-      sample_traits = #{sampleTraits,jdbcType=VARCHAR},
-      process_demand = #{processDemand,jdbcType=VARCHAR},
-      detect_purpose = #{detectPurpose,jdbcType=VARCHAR},
-      other_data = #{otherData,jdbcType=VARCHAR},
-      detect_type = #{detectType,jdbcType=VARCHAR},
-      detect_project = #{detectProject,jdbcType=VARCHAR},
-      execute_standard = #{executeStandard,jdbcType=VARCHAR},
-      detect_by = #{detectBy,jdbcType=VARCHAR},
-      is_use_standard = #{isUseStandard,jdbcType=TINYINT},
-      is_subcontracting = #{isSubcontracting,jdbcType=TINYINT},
-      is_expedited = #{isExpedited,jdbcType=TINYINT},
-      is_evaluation = #{isEvaluation,jdbcType=TINYINT},
-      product_unit = #{productUnit,jdbcType=VARCHAR},
-      inspection_unit = #{inspectionUnit,jdbcType=VARCHAR},
-      sampling_address = #{samplingAddress,jdbcType=VARCHAR},
-      inspection_unit_address = #{inspectionUnitAddress,jdbcType=VARCHAR},
-      zip_code = #{zipCode,jdbcType=VARCHAR},
-      phone = #{phone,jdbcType=VARCHAR},
-      fax = #{fax,jdbcType=VARCHAR},
-      contact_person = #{contactPerson,jdbcType=VARCHAR},
-      report_method = #{reportMethod,jdbcType=VARCHAR},
-      report_count = #{reportCount,jdbcType=INTEGER},
-      inspection_user = #{inspectionUser,jdbcType=VARCHAR},
-      inspection_date = #{inspectionDate,jdbcType=TIMESTAMP},
-      acceptor = #{acceptor,jdbcType=VARCHAR},
-      acceptance_date = #{acceptanceDate,jdbcType=TIMESTAMP},
-      cost = #{cost,jdbcType=REAL},
-      activity1 = #{activity1,jdbcType=VARCHAR},
-      process_id = #{processId,jdbcType=VARCHAR},
-      extra = #{extra,jdbcType=LONGVARCHAR},
-      status = #{status,jdbcType=VARCHAR},      
-      created_at = #{createdAt,jdbcType=TIMESTAMP},
-      updated_at = #{updatedAt,jdbcType=TIMESTAMP}       
-    where id = #{id,jdbcType=VARCHAR}
-  </update>
-  
-  
   <update id="updateStatusByProcessId" >
     update contract set status = #{status,jdbcType=VARCHAR} 
     where process_id = #{processId,jdbcType=VARCHAR}
-  </update>   
-  
-  
-  
-  <update id="updateByPrimaryKey" parameterType="com.gzjy.contract.model.Contract">
-    update contract
-    set sample_id = #{sampleId,jdbcType=VARCHAR},
-      protocol_id = #{protocolId,jdbcType=VARCHAR},
-      sample_name = #{sampleName,jdbcType=VARCHAR},
-      process_technology = #{processTechnology,jdbcType=VARCHAR},
-      quality_level = #{qualityLevel,jdbcType=VARCHAR},
-      specification_quantity = #{specificationQuantity,jdbcType=VARCHAR},
-      product_date = #{productDate,jdbcType=VARCHAR},
-      storage_condition = #{storageCondition,jdbcType=VARCHAR},
-      storage_time = #{storageTime,jdbcType=VARCHAR},
-      sample_traits = #{sampleTraits,jdbcType=VARCHAR},
-      process_demand = #{processDemand,jdbcType=VARCHAR},
-      detect_purpose = #{detectPurpose,jdbcType=VARCHAR},
-      other_data = #{otherData,jdbcType=VARCHAR},
-      detect_type = #{detectType,jdbcType=VARCHAR},
-      detect_project = #{detectProject,jdbcType=VARCHAR},
-      execute_standard = #{executeStandard,jdbcType=VARCHAR},
-      detect_by = #{detectBy,jdbcType=VARCHAR},
-      is_use_standard = #{isUseStandard,jdbcType=TINYINT},
-      is_subcontracting = #{isSubcontracting,jdbcType=TINYINT},
-      is_expedited = #{isExpedited,jdbcType=TINYINT},
-      is_evaluation = #{isEvaluation,jdbcType=TINYINT},
-      product_unit = #{productUnit,jdbcType=VARCHAR},
-      inspection_unit = #{inspectionUnit,jdbcType=VARCHAR},
-      sampling_address = #{samplingAddress,jdbcType=VARCHAR},
-      inspection_unit_address = #{inspectionUnitAddress,jdbcType=VARCHAR},
-      zip_code = #{zipCode,jdbcType=VARCHAR},
-      phone = #{phone,jdbcType=VARCHAR},
-      fax = #{fax,jdbcType=VARCHAR},
-      contact_person = #{contactPerson,jdbcType=VARCHAR},
-      report_method = #{reportMethod,jdbcType=VARCHAR},
-      report_count = #{reportCount,jdbcType=INTEGER},
-      inspection_user = #{inspectionUser,jdbcType=VARCHAR},
-      inspection_date = #{inspectionDate,jdbcType=TIMESTAMP},
-      acceptor = #{acceptor,jdbcType=VARCHAR},
-      acceptance_date = #{acceptanceDate,jdbcType=TIMESTAMP},
-      cost = #{cost,jdbcType=REAL},
-      activity1 = #{activity1,jdbcType=VARCHAR},
-      process_id = #{processId,jdbcType=VARCHAR},
-      status = #{status,jdbcType=VARCHAR},
-      created_at = #{createdAt,jdbcType=TIMESTAMP},
-      updated_at = #{updatedAt,jdbcType=TIMESTAMP} 
-    where id = #{id,jdbcType=VARCHAR}
-  </update>   
+  </update> 
 
 </mapper>

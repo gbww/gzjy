@@ -4,11 +4,7 @@ import java.util.Date;
 
 public class Contract {
 	//合同编号    
-	private String id;
-    //样品编号
-    private String sampleId;
-    //协议编号
-    private String protocolId;
+	private String id;    
     //样品名称
     private String sampleName;
     //加工工艺
@@ -28,12 +24,10 @@ public class Contract {
     //样品处理要求
     private String processDemand;
     //检测目的
-    private String detectPurpose;
-    //提供的其它有关资料
-    private String otherData;
+    private String detectPurpose;    
     //检测类别
     private String detectType;
-    //检  测  项  目
+    //检测项目
     private String detectProject;
     //执行标准
     private String executeStandard;
@@ -66,9 +60,7 @@ public class Contract {
     //取报告方式
     private String reportMethod;
     //需检测报告份数
-    private Integer reportCount;
-    //送检人
-    private String inspectionUser;
+    private String reportCount;   
     //送检日期
     private Date inspectionDate;
     //受理人
@@ -78,9 +70,7 @@ public class Contract {
     //检测费用
     private Float cost;
     //对应流程ID
-    private String processId;
-    //加工工艺
-    private String activity1;
+    private String processId;    
     //备注
     private String extra;
     //状态
@@ -89,24 +79,65 @@ public class Contract {
     private Date createdAt;
     //更新时间
     private Date updatedAt;
-    
+    //附件
+	private String appendix;
+	//合同类别
+	private String type;
+	//委托单位名称
+	private String entrustment;
+	//委托单位地址
+	private String entrustmentAddress;
+	//流水号
+	private String serialNumber;
+	//项目负责人号
+	private String projectLeader;
+	//项目名称
+	private String projectName;
+	//任务类别
+	private String taskCategory;
+	//样品类型
+	private String sampleType;
+	//抽检环节
+	private String inspection;
+	//任务批次
+	private String taskBatch;
+	//结算方式
+	private String settlementMethod;
+	//是否单独结算
+	private Byte isSeparateSettlement;
+	//签订日期
+    private Date signDate;
+    //合同有效期
+    private String contractTerm;
+    //开户银行
+    private String depositBank;
+    //开户银行账号
+    private String account;
+    //认证类别
+    private String authCategory;
+    //认证类型
+    private String authType;
+    //产品类别
+    private String productType;
+    //企业提供的文本资料
+    private String enterpriseFile;
+    //时限要求
+    private String limitTime;
+    //现场检查时间
+    private Date inspectTime;
+    //续展到期时间
+    private Date expireTime;
+    //合同签订时间
+    private Date contractSignTime;
+    //报告寄送地址
+    private String reportSendAddress;
+    //发票寄送地址
+    private String invoiceSendAddress;
 	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
 		this.id = id;
-	}
-	public String getSampleId() {
-		return sampleId;
-	}
-	public void setSampleId(String sampleId) {
-		this.sampleId = sampleId;
-	}
-	public String getProtocolId() {
-		return protocolId;
-	}
-	public void setProtocolId(String protocolId) {
-		this.protocolId = protocolId;
 	}
 	public String getSampleName() {
 		return sampleName;
@@ -167,12 +198,6 @@ public class Contract {
 	}
 	public void setDetectPurpose(String detectPurpose) {
 		this.detectPurpose = detectPurpose;
-	}
-	public String getOtherData() {
-		return otherData;
-	}
-	public void setOtherData(String otherData) {
-		this.otherData = otherData;
 	}
 	public String getDetectType() {
 		return detectType;
@@ -276,17 +301,11 @@ public class Contract {
 	public void setReportMethod(String reportMethod) {
 		this.reportMethod = reportMethod;
 	}
-	public Integer getReportCount() {
+	public String getReportCount() {
 		return reportCount;
 	}
-	public void setReportCount(Integer reportCount) {
+	public void setReportCount(String reportCount) {
 		this.reportCount = reportCount;
-	}
-	public String getInspectionUser() {
-		return inspectionUser;
-	}
-	public void setInspectionUser(String inspectionUser) {
-		this.inspectionUser = inspectionUser;
 	}
 	public Date getInspectionDate() {
 		return inspectionDate;
@@ -318,12 +337,6 @@ public class Contract {
 	public void setProcessId(String processId) {
 		this.processId = processId;
 	}
-	public String getActivity1() {
-		return activity1;
-	}
-	public void setActivity1(String activity1) {
-		this.activity1 = activity1;
-	}
 	public String getExtra() {
 		return extra;
 	}
@@ -347,5 +360,167 @@ public class Contract {
 	}
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
-	}	
+	}
+	public String getAppendix() {
+		return appendix;
+	}
+	public void setAppendix(String appendix) {
+		this.appendix = appendix;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public String getEntrustment() {
+		return entrustment;
+	}
+	public void setEntrustment(String entrustment) {
+		this.entrustment = entrustment;
+	}
+	public String getEntrustmentAddress() {
+		return entrustmentAddress;
+	}
+	public void setEntrustmentAddress(String entrustmentAddress) {
+		this.entrustmentAddress = entrustmentAddress;
+	}
+	public String getSerialNumber() {
+		return serialNumber;
+	}
+	public void setSerialNumber(String serialNumber) {
+		this.serialNumber = serialNumber;
+	}
+	public String getProjectLeader() {
+		return projectLeader;
+	}
+	public void setProjectLeader(String projectLeader) {
+		this.projectLeader = projectLeader;
+	}
+	public String getProjectName() {
+		return projectName;
+	}
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+	public String getTaskCategory() {
+		return taskCategory;
+	}
+	public void setTaskCategory(String taskCategory) {
+		this.taskCategory = taskCategory;
+	}
+	public String getSampleType() {
+		return sampleType;
+	}
+	public void setSampleType(String sampleType) {
+		this.sampleType = sampleType;
+	}
+	public String getInspection() {
+		return inspection;
+	}
+	public void setInspection(String inspection) {
+		this.inspection = inspection;
+	}
+	public String getTaskBatch() {
+		return taskBatch;
+	}
+	public void setTaskBatch(String taskBatch) {
+		this.taskBatch = taskBatch;
+	}
+	public String getSettlementMethod() {
+		return settlementMethod;
+	}
+	public void setSettlementMethod(String settlementMethod) {
+		this.settlementMethod = settlementMethod;
+	}
+	public Byte getIsSeparateSettlement() {
+		return isSeparateSettlement;
+	}
+	public void setIsSeparateSettlement(Byte isSeparateSettlement) {
+		this.isSeparateSettlement = isSeparateSettlement;
+	}
+	public Date getSignDate() {
+		return signDate;
+	}
+	public void setSignDate(Date signDate) {
+		this.signDate = signDate;
+	}
+	public String getContractTerm() {
+		return contractTerm;
+	}
+	public void setContractTerm(String contractTerm) {
+		this.contractTerm = contractTerm;
+	}
+	public String getDepositBank() {
+		return depositBank;
+	}
+	public void setDepositBank(String depositBank) {
+		this.depositBank = depositBank;
+	}
+	public String getAccount() {
+		return account;
+	}
+	public void setAccount(String account) {
+		this.account = account;
+	}
+	public String getAuthCategory() {
+		return authCategory;
+	}
+	public void setAuthCategory(String authCategory) {
+		this.authCategory = authCategory;
+	}
+	public String getAuthType() {
+		return authType;
+	}
+	public void setAuthType(String authType) {
+		this.authType = authType;
+	}
+	public String getProductType() {
+		return productType;
+	}
+	public void setProductType(String productType) {
+		this.productType = productType;
+	}
+	public String getEnterpriseFile() {
+		return enterpriseFile;
+	}
+	public void setEnterpriseFile(String enterpriseFile) {
+		this.enterpriseFile = enterpriseFile;
+	}
+	public String getLimitTime() {
+		return limitTime;
+	}
+	public void setLimitTime(String limitTime) {
+		this.limitTime = limitTime;
+	}
+	public Date getInspectTime() {
+		return inspectTime;
+	}
+	public void setInspectTime(Date inspectTime) {
+		this.inspectTime = inspectTime;
+	}
+	public Date getExpireTime() {
+		return expireTime;
+	}
+	public void setExpireTime(Date expireTime) {
+		this.expireTime = expireTime;
+	}
+	public Date getContractSignTime() {
+		return contractSignTime;
+	}
+	public void setContractSignTime(Date contractSignTime) {
+		this.contractSignTime = contractSignTime;
+	}
+	public String getReportSendAddress() {
+		return reportSendAddress;
+	}
+	public void setReportSendAddress(String reportSendAddress) {
+		this.reportSendAddress = reportSendAddress;
+	}
+	public String getInvoiceSendAddress() {
+		return invoiceSendAddress;
+	}
+	public void setInvoiceSendAddress(String invoiceSendAddress) {
+		this.invoiceSendAddress = invoiceSendAddress;
+	}    
 }

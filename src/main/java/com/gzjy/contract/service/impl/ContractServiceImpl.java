@@ -55,7 +55,7 @@ public class ContractServiceImpl implements ContractService {
 	}
 	public int insert(Contract record) {
 		// TODO Auto-generated method stub
-		return contractMapper.insert(record);
+		return contractMapper.insertSelective(record);
 	}
 	public int deleteByPrimaryKey(String id) {
 		// TODO Auto-generated method stub

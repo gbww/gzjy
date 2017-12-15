@@ -13,19 +13,13 @@ public interface ContractMapper {
     
     String checkContractProtocolId(String id);
 
-    List<Contract> selectAll(@Param("sampleName")String sampleName);
-    
-    int insert(Contract record);
+    List<Contract> selectAll(@Param("sampleName")String sampleName);   
 
     int insertSelective(Contract record);
 
     Contract selectByPrimaryKey(String id);
 
-    int updateByPrimaryKeySelective(Contract record);
-
-    int updateByPrimaryKeyWithBLOBs(Contract record);
-
-    int updateByPrimaryKey(Contract record);
+    int updateByPrimaryKeySelective(Contract record);    
     
     void updateStatusByProcessId(@Param("status")Integer status, @Param("processId")String processId);
 }
