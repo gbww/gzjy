@@ -5,19 +5,10 @@
 
   <resultMap id="BaseResultMap" type="com.gzjy.contract.model.Contract">
     <id column="id" jdbcType="VARCHAR" property="id" />    
-    <result column="sample_name" jdbcType="VARCHAR" property="sampleName" />
-    <result column="process_technology" jdbcType="VARCHAR" property="processTechnology" />
-    <result column="quality_level" jdbcType="VARCHAR" property="qualityLevel" />
-    <result column="specification_quantity" jdbcType="VARCHAR" property="specificationQuantity" />
-    <result column="product_date" jdbcType="VARCHAR" property="productDate" />
-    <result column="storage_condition" jdbcType="VARCHAR" property="storageCondition" />
-    <result column="storage_time" jdbcType="VARCHAR" property="storageTime" />
     <result column="sample_traits" jdbcType="VARCHAR" property="sampleTraits" />
-    <result column="process_demand" jdbcType="VARCHAR" property="processDemand" />
     <result column="detect_purpose" jdbcType="VARCHAR" property="detectPurpose" />    
     <result column="detect_type" jdbcType="VARCHAR" property="detectType" />
     <result column="detect_project" jdbcType="VARCHAR" property="detectProject" />
-    <result column="execute_standard" jdbcType="VARCHAR" property="executeStandard" />
     <result column="detect_by" jdbcType="VARCHAR" property="detectBy" />
     <result column="is_use_standard" jdbcType="TINYINT" property="isUseStandard" />
     <result column="is_subcontracting" jdbcType="TINYINT" property="isSubcontracting" />
@@ -68,16 +59,14 @@
     <result column="contract_sign_time" jdbcType="VARCHAR" property="contractSignTime" />
     <result column="report_send_address" jdbcType="VARCHAR" property="reportSendAddress" />
     <result column="invoice_send_address" jdbcType="VARCHAR" property="invoiceSendAddress" />    
-    
+    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.gzjy.contract.model.Contract">
     <result column="extra" jdbcType="LONGVARCHAR" property="extra" />
   </resultMap>  
   
   <sql id="Base_Column_List">
-    id, sample_name, process_technology, quality_level, 
-    specification_quantity, product_date, storage_condition, storage_time, sample_traits, 
-    process_demand, detect_purpose, detect_type, detect_project, execute_standard, 
+    id, sample_traits, detect_purpose, detect_type, detect_project, 
     detect_by, is_use_standard, is_subcontracting, is_expedited, is_evaluation, product_unit, 
     inspection_unit, sampling_address, inspection_unit_address, zip_code, phone, fax, 
     contact_person, report_method, report_count, inspection_date, acceptor, 
@@ -85,7 +74,7 @@
     entrustment_address, serial_number, project_leader, project_name, task_category, sample_type
     inspection, task_batch, settlement_method, is_separate_settlement, sign_date, contract_term,
     deposit_bank, account, auth_category, auth_type, product_type, enterprise_file, limit_time,
-    inspect_time, expire_time, contract_sign_time, report_send_address, invoice_send_address
+    inspect_time, expire_time, contract_sign_time, report_send_address, invoice_send_address, is_delete
   </sql>
   <sql id="Blob_Column_List">
     extra
@@ -102,15 +91,15 @@
   </select>
   
   <select id="selectAll" resultMap="BaseResultMap">
-		<if test="sampleName != null">
-			<bind name="sampleNamePattern" value="'%' + sampleName + '%'" />
+		<if test="detectProject != null">
+			<bind name="detectProjectPattern" value="'%' + detectProject + '%'" />
 		</if>		
 		select
 		<include refid="Base_Column_List" />
 		from contract 
 		<where>
-			<if test="sampleName != null">
-				sample_name like #{sampleNamePattern}
+			<if test="detectProject != null">
+				detect_project like #{detectProjectPattern}
 			</if>
 		</where>
 		order by created_at desc
@@ -126,34 +115,10 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
-      </if>      
-      <if test="sampleName != null">
-        sample_name,
-      </if>
-      <if test="processTechnology != null">
-        process_technology,
-      </if>
-      <if test="qualityLevel != null">
-        quality_level,
-      </if>
-      <if test="specificationQuantity != null">
-        specification_quantity,
-      </if>
-      <if test="productDate != null">
-        product_date,
-      </if>
-      <if test="storageCondition != null">
-        storage_condition,
-      </if>
-      <if test="storageTime != null">
-        storage_time,
       </if>
       <if test="sampleTraits != null">
         sample_traits,
-      </if>
-      <if test="processDemand != null">
-        process_demand,
-      </if>
+      </if>      
       <if test="detectPurpose != null">
         detect_purpose,
       </if>      
@@ -162,10 +127,7 @@
       </if>
       <if test="detectProject != null">
         detect_project,
-      </if>
-      <if test="executeStandard != null">
-        execute_standard,
-      </if>
+      </if>      
       <if test="detectBy != null">
         detect_by,
       </if>
@@ -319,39 +281,18 @@
       </if>   
       <if test="invoiceSendAddress != null">
         invoice_send_address
-      </if>      
+      </if> 
+      <if test="isDelete != null">
+        is_delete
+      </if>     
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
-      </if>      
-      <if test="sampleName != null">
-        #{sampleName,jdbcType=VARCHAR},
-      </if>
-      <if test="processTechnology != null">
-        #{processTechnology,jdbcType=VARCHAR},
-      </if>
-      <if test="qualityLevel != null">
-        #{qualityLevel,jdbcType=VARCHAR},
-      </if>
-      <if test="specificationQuantity != null">
-        #{specificationQuantity,jdbcType=VARCHAR},
-      </if>
-      <if test="productDate != null">
-        #{productDate,jdbcType=VARCHAR},
-      </if>
-      <if test="storageCondition != null">
-        #{storageCondition,jdbcType=VARCHAR},
-      </if>
-      <if test="storageTime != null">
-        #{storageTime,jdbcType=TIMESTAMP},
       </if>
       <if test="sampleTraits != null">
         #{sampleTraits,jdbcType=VARCHAR},
-      </if>
-      <if test="processDemand != null">
-        #{processDemand,jdbcType=VARCHAR},
-      </if>
+      </if>      
       <if test="detectPurpose != null">
         #{detectPurpose,jdbcType=VARCHAR},
       </if>      
@@ -360,10 +301,7 @@
       </if>
       <if test="detectProject != null">
         #{detectProject,jdbcType=VARCHAR},
-      </if>
-      <if test="executeStandard != null">
-        #{executeStandard,jdbcType=VARCHAR},
-      </if>
+      </if>      
       <if test="detectBy != null">
         #{detectBy,jdbcType=VARCHAR},
       </if>
@@ -516,6 +454,9 @@
       </if>   
       <if test="invoiceSendAddress != null">
         #{invoiceSendAddress,jdbcType=VARCHAR}
+      </if>  
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT}
       </if>      
     </trim>
   </insert>
@@ -524,33 +465,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.gzjy.contract.model.Contract">
     update contract
     <set>      
-      <if test="sampleName != null">
-        sample_name = #{sampleName,jdbcType=VARCHAR},
-      </if>
-      <if test="processTechnology != null">
-        process_technology = #{processTechnology,jdbcType=VARCHAR},
-      </if>
-      <if test="qualityLevel != null">
-        quality_level = #{qualityLevel,jdbcType=VARCHAR},
-      </if>
-      <if test="specificationQuantity != null">
-        specification_quantity = #{specificationQuantity,jdbcType=VARCHAR},
-      </if>
-      <if test="productDate != null">
-        product_date = #{productDate,jdbcType=VARCHAR},
-      </if>
-      <if test="storageCondition != null">
-        storage_condition = #{storageCondition,jdbcType=VARCHAR},
-      </if>
-      <if test="storageTime != null">
-        storage_time = #{storageTime,jdbcType=VARCHAR},
-      </if>
       <if test="sampleTraits != null">
         sample_traits = #{sampleTraits,jdbcType=VARCHAR},
-      </if>
-      <if test="processDemand != null">
-        process_demand = #{processDemand,jdbcType=VARCHAR},
-      </if>
+      </if>      
       <if test="detectPurpose != null">
         detect_purpose = #{detectPurpose,jdbcType=VARCHAR},
       </if>      
@@ -559,10 +476,7 @@
       </if>
       <if test="detectProject != null">
         detect_project = #{detectProject,jdbcType=VARCHAR},
-      </if>
-      <if test="executeStandard != null">
-        execute_standard = #{executeStandard,jdbcType=VARCHAR},
-      </if>
+      </if>      
       <if test="detectBy != null">
         detect_by = #{detectBy,jdbcType=VARCHAR},
       </if>
@@ -716,6 +630,9 @@
       </if>   
       <if test="invoiceSendAddress != null">
        invoice_send_address =  #{invoiceSendAddress,jdbcType=VARCHAR}
+      </if>
+      <if test="isDelete != null">
+       is_delete =  #{isDelete,jdbcType=TINYINT}
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}

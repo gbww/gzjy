@@ -4,33 +4,15 @@ import java.util.Date;
 
 public class Contract {
 	//合同编号    
-	private String id;    
-    //样品名称
-    private String sampleName;
-    //加工工艺
-    private String processTechnology;
-    //质量等级
-    private String qualityLevel;
-    //规格数量
-    private String specificationQuantity;
-    //生产日期或批号
-    private String productDate;
-    //保存条件
-    private String storageCondition;
-    //保 存 期
-    private String storageTime;
+	private String id;
     //样品性状
-    private String sampleTraits;
-    //样品处理要求
-    private String processDemand;
+    private String sampleTraits;    
     //检测目的
     private String detectPurpose;    
     //检测类别
     private String detectType;
     //检测项目
-    private String detectProject;
-    //执行标准
-    private String executeStandard;
+    private String detectProject;    
     //检测依据
     private String detectBy;
     //是否同意使用非标准方法
@@ -133,66 +115,20 @@ public class Contract {
     private String reportSendAddress;
     //发票寄送地址
     private String invoiceSendAddress;
+    //是否删除
+    private Byte isDelete;
 	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
 		this.id = id;
-	}
-	public String getSampleName() {
-		return sampleName;
-	}
-	public void setSampleName(String sampleName) {
-		this.sampleName = sampleName;
-	}
-	public String getProcessTechnology() {
-		return processTechnology;
-	}
-	public void setProcessTechnology(String processTechnology) {
-		this.processTechnology = processTechnology;
-	}
-	public String getQualityLevel() {
-		return qualityLevel;
-	}
-	public void setQualityLevel(String qualityLevel) {
-		this.qualityLevel = qualityLevel;
-	}
-	public String getSpecificationQuantity() {
-		return specificationQuantity;
-	}
-	public void setSpecificationQuantity(String specificationQuantity) {
-		this.specificationQuantity = specificationQuantity;
-	}
-	public String getProductDate() {
-		return productDate;
-	}
-	public void setProductDate(String productDate) {
-		this.productDate = productDate;
-	}
-	public String getStorageCondition() {
-		return storageCondition;
-	}
-	public void setStorageCondition(String storageCondition) {
-		this.storageCondition = storageCondition;
-	}
-	public String getStorageTime() {
-		return storageTime;
-	}
-	public void setStorageTime(String storageTime) {
-		this.storageTime = storageTime;
-	}
+	}	
 	public String getSampleTraits() {
 		return sampleTraits;
 	}
 	public void setSampleTraits(String sampleTraits) {
 		this.sampleTraits = sampleTraits;
-	}
-	public String getProcessDemand() {
-		return processDemand;
-	}
-	public void setProcessDemand(String processDemand) {
-		this.processDemand = processDemand;
-	}
+	}	
 	public String getDetectPurpose() {
 		return detectPurpose;
 	}
@@ -210,13 +146,7 @@ public class Contract {
 	}
 	public void setDetectProject(String detectProject) {
 		this.detectProject = detectProject;
-	}
-	public String getExecuteStandard() {
-		return executeStandard;
-	}
-	public void setExecuteStandard(String executeStandard) {
-		this.executeStandard = executeStandard;
-	}
+	}	
 	public String getDetectBy() {
 		return detectBy;
 	}
@@ -522,5 +452,11 @@ public class Contract {
 	}
 	public void setInvoiceSendAddress(String invoiceSendAddress) {
 		this.invoiceSendAddress = invoiceSendAddress;
+	}
+	public Byte getIsDelete() {
+		return isDelete;
+	}
+	public void setIsDelete(Byte isDelete) {
+		this.isDelete = isDelete;
 	}    
 }

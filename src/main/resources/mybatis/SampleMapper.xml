@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzjy.contract.mapper.SampleMapper">
+
+
+	<resultMap id="BaseResultMap" type="com.gzjy.contract.model.Sample">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="detect_by" jdbcType="VARCHAR" property="detectBy" />
+		<result column="quality_level" jdbcType="VARCHAR" property="qualityLevel" />
+		<result column="process_technology" jdbcType="VARCHAR" property="processTechnology" />
+		<result column="sample_shape" jdbcType="VARCHAR" property="sampleShape" />
+		<result column="product_date" jdbcType="VARCHAR"	property="productDate" />
+		<result column="specification_quantity" jdbcType="VARCHAR" property="specificationQuantity" />
+		<result column="storage_condition" jdbcType="VARCHAR" property="storageCondition" />
+		<result column="storage_time" jdbcType="VARCHAR" property="storageTime" />
+		<result column="process_demand" jdbcType="VARCHAR" property="processDemand" />
+		<result column="execute_standard" jdbcType="VARCHAR" property="executeStandard" />				
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, name, detect_by, quality_level, process_technology, sample_shape,
+		product_date,specification_quantity, storage_condition,storage_time, process_demand,execute_standard
+	</sql>	
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from shape
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+
+	<insert id="insert" parameterType="com.gzjy.contract.model.Sample">
+		insert into check_item(id, name, detect_by, quality_level, process_technology, sample_shape,
+		product_date,specification_quantity, storage_condition,storage_time, process_demand,execute_standard)
+		values (
+		#{id,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{detectBy,jdbcType=VARCHAR},
+		#{qualityLevel,jdbcType=VARCHAR},
+		#{processTechnology,jdbcType=VARCHAR},
+		#{sampleShape,jdbcType=VARCHAR},
+		#{productDate,jdbcType=VARCHAR},
+		#{specificationQuantity,jdbcType=VARCHAR},
+		#{storageCondition,jdbcType=VARCHAR},
+		#{storageTime,jdbcType=VARCHAR},
+		#{processDemand,jdbcType=VARCHAR},
+		#{executeStandard,jdbcType=VARCHAR})
+	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.gzjy.contract.model.Sample">
+		update shape
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="detectBy != null">
+				detect_by = #{method,jdbcType=VARCHAR},
+			</if>
+			<if test="qualityLevel != null">
+				quality_level = #{qualityLevel,jdbcType=VARCHAR},
+			</if>
+			<if test="processTechnology != null">
+				process_technology = #{processTechnology,jdbcType=VARCHAR},
+			</if>
+			<if test="sampleShape != null">
+				sample_shape = #{sampleShape,jdbcType=VARCHAR},
+			</if>
+			<if test="productDate != null">
+				product_date =	#{productDate,jdbcType=VARCHAR},
+			</if>
+			<if test="specificationQuantity != null">
+				specification_quantity = #{specificationQuantity,jdbcType=VARCHAR},
+			</if>
+			<if test="storageCondition != null">
+				storage_condition = #{storageCondition,jdbcType=VARCHAR},
+			</if>
+			<if test="storageTime != null">
+				storage_time = #{storageTime,jdbcType=VARCHAR},
+			</if>	
+			<if test="processDemand != null">
+				process_demand = #{processDemand,jdbcType=VARCHAR},
+			</if>	
+			<if test="executeStandard != null">
+				execute_standard = #{executeStandard,jdbcType=VARCHAR},
+			</if>	
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from	shape where id = #{id,jdbcType=VARCHAR}
+	</delete>
+
+</mapper>
