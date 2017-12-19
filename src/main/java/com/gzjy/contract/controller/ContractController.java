@@ -9,6 +9,7 @@ import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,10 +24,13 @@ import com.gzjy.common.annotation.Privileges;
 import com.gzjy.contract.model.Contract;
 import com.gzjy.contract.model.ContractComment;
 import com.gzjy.contract.model.ContractProcess;
+import com.gzjy.contract.model.ContractSample;
 import com.gzjy.contract.model.ContractStatus;
 import com.gzjy.contract.model.ContractTask;
+import com.gzjy.contract.model.Sample;
 import com.gzjy.contract.service.ContractCommentService;
 import com.gzjy.contract.service.ContractService;
+import com.gzjy.contract.service.SampleService;
 import com.gzjy.log.constant.LogConstant;
 import com.gzjy.log.service.LogService;
 import com.gzjy.receive.service.ReceiveSampleService;
@@ -49,6 +53,8 @@ public class ContractController {
 	@Autowired
 	UserService userService;
 	
+	@Autowired
+	SampleService sampleService;
 	
 	private static Logger logger = LoggerFactory.getLogger(ReceiveSampleService.class);
 	
@@ -59,13 +65,18 @@ public class ContractController {
 	 */
 	@Privileges(name = "CONTRACT-ADD", scope = {1})
 	@RequestMapping(value = "/contract", method = RequestMethod.POST)
-	public Response createContract(@RequestBody Contract contract) {
+	@Transactional
+	public Response createContract(@RequestBody ContractSample contractSample) {
 		try {
+			Contract contract = contractSample.getContract();
 			contract.setStatus(ContractStatus.READY.getValue());
 			String contractId = ShortUUID.getInstance().generateShortID();
 			contract.setId(contractId);
 			contract.setCreatedAt(new Date());
 			contractService.insert(contract);
+			for(Sample sample:contractSample.getSampleList()) {
+				sampleService.insert(sample);
+			}
 			logService.insertLog(LogConstant.CONTRACT_INPUT.getCode(), contractId, null);
 			return Response.success("success");
 		}
@@ -82,11 +93,11 @@ public class ContractController {
 	 */
 	@Privileges(name = "CONTRACT-SELECT", scope = {1})
 	@RequestMapping(value = "/contract", method = RequestMethod.GET)
-	public Response getContractList(@RequestParam(required = false) String sampleName, 			
+	public Response getContractList(@RequestParam(required = false) String detectProject, 			
 		    @RequestParam(required = false,defaultValue="1") Integer pageNum,
 		    @RequestParam(required = false,defaultValue="10") Integer pageSize) {
 		try {			
-			PageInfo<Contract> result = contractService.getPageList(pageNum, pageSize, sampleName);
+			PageInfo<Contract> result = contractService.getPageList(pageNum, pageSize, detectProject);
 			return Response.success(result);
 		}
 		catch (Exception e) {

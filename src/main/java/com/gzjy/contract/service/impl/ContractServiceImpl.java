@@ -161,13 +161,13 @@ public class ContractServiceImpl implements ContractService {
 		taskService.complete(taskId);
 	}
 	
-	public PageInfo<Contract> getPageList(Integer pageNum, Integer pageSize, String sampleName) {
+	public PageInfo<Contract> getPageList(Integer pageNum, Integer pageSize, String detectProject) {
 		List<Contract> list = new ArrayList<Contract>();
 	    PageInfo<Contract> pages = new PageInfo<Contract>(list);
 	    pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
 	        @Override
 	        public void doSelect() {
-	        	contractMapper.selectAll(sampleName);
+	        	contractMapper.selectAll(detectProject);
 	        }
 	    });
 	    return pages;
