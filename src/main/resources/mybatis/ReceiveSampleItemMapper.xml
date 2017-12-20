@@ -80,7 +80,7 @@
 				and updated_at &lt;= #{timeEnd,jdbcType=TIMESTAMP}
 			</if>
 		</where>
-		GROUP BY test_room 
+		GROUP BY test_room ,status  
 		order by ${orderby}
 	</select>
   

@@ -324,6 +324,8 @@ public class ReceiveSampleController {
 	@RequestMapping(value = "/sampleItem", method = RequestMethod.GET)
 	public Response listItemByCurrentUser(@RequestParam(name = "status", defaultValue = "0") int status,
 			@RequestParam(name = "order", required = false) String order,
+			 @RequestParam(name = "receiveSampleId", required = false) String receiveSampleId,
+			@RequestParam(name = "reportId", required = false) String reportId,
 			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
 			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 		Map<String, Object> filter = new HashMap<String, Object>();
@@ -333,6 +335,12 @@ public class ReceiveSampleController {
 		if (StringUtils.isBlank(order)) {
 			order = "updated_at desc";
 		}
+		if (!StringUtils.isBlank(receiveSampleId)) {
+		    filter.put("receive_sample_id", receiveSampleId);
+        }
+		if (!StringUtils.isBlank(reportId)) {
+            filter.put("report_id", reportId);
+        }
 		return Response.success(receiveSampleService.selectCurrentUserItems(pageNum, pageSize, order, filter));
 	}
 
