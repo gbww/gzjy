@@ -642,5 +642,9 @@
     update contract set status = #{status,jdbcType=VARCHAR} 
     where process_id = #{processId,jdbcType=VARCHAR}
   </update> 
+  
+  <select id="getMaxIdByType" parameterType="java.lang.String">
+    select max(id) from contract where type = #{type,jdbcType=VARCHAR}  
+  </select>
 
 </mapper>

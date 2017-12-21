@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageInfo;
 import com.gzjy.contract.model.Contract;
@@ -36,4 +37,10 @@ public interface ContractService {
 	void updateStatusByProcessId(Integer status, String processId);
 	
 	Task getUpdateTaskByProcessId(String processId);
+	
+	public void uploadFile(MultipartFile[] files);
+	
+	public String getMaxIdByType(String type);
+	
+	public String generateContractId(String contractType, String foodType);
 }

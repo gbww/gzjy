@@ -18,7 +18,9 @@ public interface ContractMapper {
     int insertSelective(Contract record);
 
     Contract selectByPrimaryKey(String id);
-
+    
+    String getMaxIdByType(@Param("type") String type);
+    
     int updateByPrimaryKeySelective(Contract record);    
     
     void updateStatusByProcessId(@Param("status")Integer status, @Param("processId")String processId);
