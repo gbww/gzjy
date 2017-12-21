@@ -225,17 +225,17 @@ public class ContractServiceImpl implements ContractService {
 	public String generateContractId(String contractType, String foodType) {
 		SimpleDateFormat  df = new SimpleDateFormat ("yyyyMM");
 		String ymd = df.format(new Date());
-		String contractId = "";
+		String contractId = "";		
 		//是否是三品一标合同
-		if(contractType.equals("1")){			
+		if(!contractType.equals("pb")){			
 			//如果是食品合同
-			if(foodType.equals("1")){
+			if(foodType.equals("food")){
 				contractId +="F";
 			}else {
 				contractId +="Q";
 			}
 			//政府
-			if(contractType.equals("1")){	
+			if(contractType.equals("government")){	
 				contractId +="S";
 			}else {
 				contractId +="Y";
