@@ -1,6 +1,5 @@
 package com.gzjy.contract.controller;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,14 +18,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.gzjy.common.Response;
-import com.gzjy.common.ShortUUID;
 import com.gzjy.common.annotation.Privileges;
 import com.gzjy.contract.model.Contract;
 import com.gzjy.contract.model.ContractComment;
 import com.gzjy.contract.model.ContractProcess;
-import com.gzjy.contract.model.ContractSample;
 import com.gzjy.contract.model.ContractStatus;
 import com.gzjy.contract.model.ContractTask;
 import com.gzjy.contract.model.Sample;
@@ -68,9 +67,11 @@ public class ContractController {
 	@Privileges(name = "CONTRACT-ADD", scope = { 1 })
 	@RequestMapping(value = "/contract", method = RequestMethod.POST)
 	@Transactional
-	public synchronized Response createContract(@RequestParam MultipartFile[] files,
-			@RequestBody ContractSample contractSample) {
-		if (contractSample.getContract().getType() == null) {
+	public synchronized Response createContract(@RequestParam("files") MultipartFile[] files,
+			@RequestParam String contractSample) {
+		JSONObject jsonData=JSON.parseObject(contractSample);
+		
+		/*if (jsonData.get("contract").getType() == null) {
 			return Response.fail("合同类型为空");
 		}
 		Contract contract = contractSample.getContract();
@@ -91,7 +92,8 @@ public class ContractController {
 		} catch (Exception e) {
 			logger.error(e + "");
 			return Response.fail(e.getMessage());
-		}
+		}		*/
+		return Response.fail("");
 	}
 
 	/**
