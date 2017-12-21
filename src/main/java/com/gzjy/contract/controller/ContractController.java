@@ -78,7 +78,7 @@ public class ContractController {
 		Date now = new Date();
 		contract.setCreatedAt(now);	
 		// 根据合同类型生成规则有序的合同编号
-		String contractId = contractService.generateContractId(contractSample.getContract().getType(),contractSample.getContract().getType());
+		String contractId = contractService.generateContractId(contractSample.getContract().getType(),"food");
 		contract.setId(contractId);
 		try {			
 			contractService.insert(contract);
