@@ -199,10 +199,10 @@ public class ContractServiceImpl implements ContractService {
 		return contractMapper.checkContractProtocolId(ProtocolId);
 	}
 
-	public void uploadFile(MultipartFile[] files) {
+	public void uploadFile(MultipartFile[] files, String catalog) {
 		EpicNFSClient client = epicNFSService.getClient("gzjy");
-		if (!client.hasRemoteDir("attachment")) {
-			client.createRemoteDir("attachment");
+		if (!client.hasRemoteDir("attachment\\"+catalog)) {
+			client.createRemoteDir("attachment\\"+catalog);
 		}
 		if (files != null && files.length > 0) {
 			try {

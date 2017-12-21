@@ -38,7 +38,7 @@ public interface ContractService {
 	
 	Task getUpdateTaskByProcessId(String processId);
 	
-	public void uploadFile(MultipartFile[] files);
+	public void uploadFile(MultipartFile[] files,String contractId);
 	
 	public String getMaxIdByType(String type);
 	

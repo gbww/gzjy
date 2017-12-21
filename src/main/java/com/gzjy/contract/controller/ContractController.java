@@ -85,7 +85,7 @@ public class ContractController {
 			for (Sample sample : contractSample.getSampleList()) {
 				sampleService.insert(sample);
 			}
-			contractService.uploadFile(files);
+			contractService.uploadFile(files, contractId);
 			logService.insertLog(LogConstant.CONTRACT_INPUT.getCode(), contractId, null);
 			return Response.success(contractId);
 		} catch (Exception e) {
