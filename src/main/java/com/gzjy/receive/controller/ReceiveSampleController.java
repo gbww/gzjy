@@ -6,7 +6,6 @@ package com.gzjy.receive.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -48,6 +47,8 @@ import com.gzjy.common.util.fs.EpicNFSService;
 import com.gzjy.receive.model.ReceiveSample;
 import com.gzjy.receive.model.ReceiveSampleItem;
 import com.gzjy.receive.service.ReceiveSampleService;
+import com.gzjy.user.UserService;
+import com.gzjy.user.model.User;
 
 /**
  * @author xuewenlong@cmss.chinamobile.com
@@ -64,6 +65,8 @@ public class ReceiveSampleController {
 
 	@Autowired
 	private EpicNFSService epicNFSService;
+	@Autowired
+	private UserService userService;
 
 	// 添加接样基本信息
 	@RequestMapping(value = "/sample", method = RequestMethod.POST)
@@ -331,6 +334,19 @@ public class ReceiveSampleController {
 		Map<String, Object> filter = new HashMap<String, Object>();
 		if (status != 5) {
 			filter.put("status", status);
+		}
+		if(status==0||status==1||status==2) {
+		    User u=userService.getCurrentUser();
+		    if(status==0) {    //待编辑，根据user的name查询
+		        filter.put("draw_user", u.getName());
+		    }
+		    if(status==1) {   //待审核，根据user的name查询
+                filter.put("examine_user", u.getName());
+            }
+		    if(status==3) {   //待批准，根据user的name查询
+                filter.put("approval_user", u.getName());
+            }
+		   
 		}
 		if (StringUtils.isBlank(order)) {
 			order = "updated_at desc";
