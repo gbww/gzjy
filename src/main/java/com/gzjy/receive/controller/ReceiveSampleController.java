@@ -246,6 +246,104 @@ public class ReceiveSampleController {
 		return Response.success(receiveSampleService.select(pageNum, pageSize, order, filter, start, end));
 	}
 	
+		
+	
+	//查看报告列表
+	@RequestMapping(value = "/sample/reports", method = RequestMethod.GET)
+	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
+    public Response listReports(@RequestParam(name = "receiveSampleId", required = false) String id,
+            @RequestParam(name = "reportId", required = false) String reportId,
+            @RequestParam(name = "entrustedUnit", required = false) String entrustedUnit,
+            @RequestParam(name = "inspectedUnit", required = false) String inspectedUnit,
+            @RequestParam(name = "sampleName", required = false) String sampleName,
+            @RequestParam(name = "executeStandard", required = false) String executeStandard,
+            @RequestParam(name = "productionUnit", required = false) String productionUnit,
+            @RequestParam(name = "sampleType", required = false) String sampleType,
+            @RequestParam(name = "checkType", required = false) String checkType,
+            @RequestParam(name = "reportStatus", required = false) Integer reportStatus,
+            @RequestParam(name = "order", required = false) String order,
+            @RequestParam(name = "status", defaultValue = "5") int status,
+            @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
+            
+            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+            @RequestParam(value = "startTime", required = false) String startTime,
+            @RequestParam(value = "endTime", required = false) String endTime) {
+        Map<String, Object> filter = new HashMap<String, Object>();
+
+        if (StringUtils.isBlank(startTime)) {
+            startTime = null;
+        }
+        if (StringUtils.isBlank(endTime)) {
+            endTime=null;
+        }
+        if(!StringUtils.isBlank(reportId)) {
+            filter.put("report_id", reportId);
+        }
+        if(!StringUtils.isBlank(inspectedUnit)) {
+            filter.put("inspected_unit", inspectedUnit);
+        }
+        if(!StringUtils.isBlank(sampleName)) {
+            filter.put("sample_name", sampleName);
+        }
+        if(!StringUtils.isBlank(executeStandard)) {
+            filter.put("execute_standard", executeStandard);
+        }
+        if(!StringUtils.isBlank(productionUnit)) {
+            filter.put("production_unit", productionUnit);
+        }
+        if (!StringUtils.isBlank(id)) {
+            filter.put("receive_sample_id", id);
+        }
+        if (!StringUtils.isBlank(entrustedUnit)) {
+            filter.put("entrusted_unit", entrustedUnit);
+        }
+        if (!StringUtils.isBlank(sampleType)) {
+            filter.put("sample_type", sampleType);
+        }
+        if (!StringUtils.isBlank(checkType)) {
+            filter.put("check_type", checkType);
+        }
+        if (reportStatus!=null&&reportStatus!=5) {  //所有的不加登录人的过滤
+            filter.put("report_status", reportStatus);
+            User u=userService.getCurrentUser();
+            boolean superUser= u.getRole().isSuperAdmin();
+            if(!superUser) {
+                String name=u.getName();               
+                    if(reportStatus==0) {
+                        filter.put("draw_user", name);
+                    }
+                    if(reportStatus==1) {
+                        filter.put("examine_user", name);
+                    }
+                    if(reportStatus==3) {
+                        filter.put("approval_user", name);
+                    }                             
+            }    
+            
+        }
+        if (StringUtils.isBlank(order)) {
+            order = "created_at desc";
+        }
+        if (status != 5) {
+            filter.put("status", status);
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date start = null;
+        Date end = null;
+
+        try {
+            start = startTime == null ? null : sdf.parse(startTime);
+            end = endTime == null ? null : sdf.parse(endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BizException("输入的时间格式不合法！");
+        }
+
+        return Response.success(receiveSampleService.select(pageNum, pageSize, order, filter, start, end));
+    }
+    
+	
+	
 
 
 	// test
@@ -334,19 +432,6 @@ public class ReceiveSampleController {
 		Map<String, Object> filter = new HashMap<String, Object>();
 		if (status != 5) {
 			filter.put("status", status);
-		}
-		if(status==0||status==1||status==2) {
-		    User u=userService.getCurrentUser();
-		    if(status==0) {    //待编辑，根据user的name查询
-		        filter.put("draw_user", u.getName());
-		    }
-		    if(status==1) {   //待审核，根据user的name查询
-                filter.put("examine_user", u.getName());
-            }
-		    if(status==3) {   //待批准，根据user的name查询
-                filter.put("approval_user", u.getName());
-            }
-		   
 		}
 		if (StringUtils.isBlank(order)) {
 			order = "updated_at desc";

@@ -159,7 +159,10 @@
 		left join roles on users.role_id = roles.id
 		where
 		users.state != -1
-		order by users.updated_at desc
+		<if test="name != null">
+			and users.name  like CONCAT('%',#{name},'%' )
+		</if>
+		order by ${orderby}
 	</select>
 	
 	

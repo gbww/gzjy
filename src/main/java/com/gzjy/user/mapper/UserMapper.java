@@ -1,6 +1,7 @@
 package com.gzjy.user.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -65,7 +66,7 @@ public interface UserMapper {
    * 
    * @return 用户列表
    */
-  List<User> selectAll();
+  List<User> selectAll(@Param("name") String name,@Param("orderby")String order);
   
   List<User> selectUsersBasedOrganization(@Param("organizationId")String organizationId);
   

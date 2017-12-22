@@ -74,6 +74,22 @@ public class ReceiveSampleService {
 	
 	@Transactional
 	public Boolean addReceiveSample(ReceiveSample record) {
+	    if(!StringUtils.isBlank(record.getDrawUser())){
+	        if(!userClient.nameExist(record.getDrawUser()))
+	            throw new BizException("编制人在数据库中不存在");
+	    }
+	    if(!StringUtils.isBlank(record.getExamineUser())){
+            if(!userClient.nameExist(record.getExamineUser()))
+                throw new BizException("审核人在数据库中不存在");
+        }
+	    if(!StringUtils.isBlank(record.getApprovalUser())){
+            if(!userClient.nameExist(record.getApprovalUser()))
+                throw new BizException("批准人在数据库中不存在");
+        }
+	    
+	   
+	    
+	    
 		if (StringUtils.isBlank(record.getReceiveSampleId())) {
 			return false;
 		} else {
@@ -164,7 +180,21 @@ public class ReceiveSampleService {
 	@Transactional
 	public ReceiveSample updateReceiveSample(ReceiveSample record) {
 		ReceiveSample exitrecord = receiveSampleMapper.selectByPrimaryKey(record.getReceiveSampleId());
+	     
+	        
 		if (exitrecord != null) {
+		    if(!StringUtils.isBlank(record.getDrawUser())){
+                if(!userClient.nameExist(record.getDrawUser()))
+                    throw new BizException("编制人在数据库中不存在");
+            }
+            if(!StringUtils.isBlank(record.getExamineUser())){
+                if(!userClient.nameExist(record.getExamineUser()))
+                    throw new BizException("审核人在数据库中不存在");
+            }
+            if(!StringUtils.isBlank(record.getApprovalUser())){
+                if(!userClient.nameExist(record.getApprovalUser()))
+                    throw new BizException("批准人在数据库中不存在");
+            }
 			receiveSampleMapper.updateByPrimaryKeySelective(record);
 		}
 

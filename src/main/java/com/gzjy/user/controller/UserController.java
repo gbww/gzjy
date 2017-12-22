@@ -1,8 +1,10 @@
 package com.gzjy.user.controller;
 
 
+import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -120,10 +122,18 @@ public class UserController {
       @RequestParam(required = false) String roleId, @RequestParam(required = false) Integer status,
       @RequestParam(required = false,defaultValue="1") Integer pageNum,
       @RequestParam(required = false,defaultValue="20") Integer pageSize,
-      @RequestParam(required = false, name = "searchValue") String search) {
+      @RequestParam( name = "name",required = false) String name,
+      @RequestParam(name = "order", required = false) String order) {
+      if (StringUtils.isBlank(order)) {
+          order = "created_at desc";
+      }
+      Map<String, Object> filter = new HashMap<String, Object>();
+      if(!StringUtils.isBlank(name)) {
+          filter.put("name", name);
+      }
    
     return Response
-        .success(userService.getUsers(pageNum, pageSize, search));
+        .success(userService.getUsers(pageNum, pageSize, order,name));
   }
 
 

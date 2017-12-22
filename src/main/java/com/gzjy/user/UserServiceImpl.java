@@ -412,13 +412,13 @@ public class UserServiceImpl implements UserService {
   }
   
   @Override
-  public PageInfo<User> getUsers(Integer pageNum, Integer pageSize, String search) {
+  public PageInfo<User> getUsers(Integer pageNum, Integer pageSize, String order, String name) {
     List<User> list = new ArrayList<User>();
     PageInfo<User> pages = new PageInfo<User>(list);
     pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
         @Override
         public void doSelect() {
-          userMapper.selectAll();
+          userMapper.selectAll(name, order);
         }
     });
   

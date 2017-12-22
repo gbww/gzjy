@@ -177,7 +177,7 @@ public interface UserService {
   /*
    * 查询所有用户
    */
-  PageInfo<User> getUsers(Integer pageNum, Integer pageSize, String search);
+  PageInfo<User> getUsers(Integer pageNum, Integer pageSize, String order, String name);
   
  
 
