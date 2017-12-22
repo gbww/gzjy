@@ -315,7 +315,7 @@ public class ReceiveSampleController {
                     if(reportStatus==1) {
                         filter.put("examine_user", name);
                     }
-                    if(reportStatus==3) {
+                    if(reportStatus==2) {
                         filter.put("approval_user", name);
                     }                             
             }    
