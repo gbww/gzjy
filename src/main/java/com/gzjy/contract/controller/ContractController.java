@@ -29,6 +29,7 @@ import com.gzjy.contract.model.ContractProcess;
 import com.gzjy.contract.model.ContractSample;
 import com.gzjy.contract.model.ContractStatus;
 import com.gzjy.contract.model.ContractTask;
+import com.gzjy.contract.model.Sample;
 import com.gzjy.contract.service.ContractCommentService;
 import com.gzjy.contract.service.ContractService;
 import com.gzjy.contract.service.SampleService;
@@ -70,27 +71,25 @@ public class ContractController {
 	public synchronized Response createContract(@RequestParam("files") MultipartFile[] files,
 			@RequestParam String contractSample) {
 		ObjectMapper objectMapper = new ObjectMapper();
-		ContractSample acc = null;
+		ContractSample contractSampleObject = null;
         try {
-            acc = objectMapper.readValue(contractSample, ContractSample.class);            
+        	contractSampleObject = objectMapper.readValue(contractSample, ContractSample.class);            
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-		
-		
-		/*if (jsonData.get("contract").getType() == null) {
+        	return Response.fail(e.getMessage());
+        }		
+		if (contractSampleObject.getContract().getType() == null) {
 			return Response.fail("合同类型为空");
 		}
-		Contract contract = contractSample.getContract();
+		Contract contract = contractSampleObject.getContract();
 		contract.setStatus(ContractStatus.READY.getValue());
 		Date now = new Date();
 		contract.setCreatedAt(now);	
 		// 根据合同类型生成规则有序的合同编号
-		String contractId = contractService.generateContractId(contractSample.getContract().getType(),"food");
+		String contractId = contractService.generateContractId(contractSampleObject.getContract().getType(),"food");
 		contract.setId(contractId);
 		try {			
 			contractService.insert(contract);
-			for (Sample sample : contractSample.getSampleList()) {
+			for (Sample sample : contractSampleObject.getSampleList()) {
 				sampleService.insert(sample);
 			}
 			contractService.uploadFile(files, contractId);
@@ -99,8 +98,7 @@ public class ContractController {
 		} catch (Exception e) {
 			logger.error(e + "");
 			return Response.fail(e.getMessage());
-		}		*/
-		return Response.fail("");
+		}
 	}
 
 	/**
