@@ -75,6 +75,7 @@ public class ContractController {
         try {
         	contractSampleObject = objectMapper.readValue(contractSample, ContractSample.class);            
         } catch (IOException e) {
+        	logger.info("exception:"+e.getMessage());
         	return Response.fail(e.getMessage());
         }		
 		if (contractSampleObject.getContract().getType() == null) {
