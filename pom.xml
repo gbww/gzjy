@@ -188,13 +188,13 @@
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
 			<version>3.14</version>
-		</dependency>		
-		
+		</dependency>
+
 		<dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>3.14</version>
-        </dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.14</version>
+		</dependency>
 
 		<dependency>
 			<groupId>net.sf.jacob-project</groupId>
@@ -214,22 +214,22 @@
 			<version>2.3.26-incubating</version>
 		</dependency>
 		<!-- 邮箱服务 -->
-	<dependency>  
-        <groupId>org.springframework.boot</groupId>  
-        <artifactId>spring-boot-starter-mail</artifactId>  
-    </dependency>  
-    
-    <dependency>
-    	<groupId>com.alibaba</groupId>
-    	<artifactId>fastjson</artifactId>
-    	<version>1.2.4</version>
-	</dependency>
-    
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.13</version>
+		</dependency>
+
 
 	</dependencies>
 	<!--maven的插件 -->
 	<build>
-	<defaultGoal>compile</defaultGoal>
+		<defaultGoal>compile</defaultGoal>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -263,5 +263,5 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-	
+
 </project>

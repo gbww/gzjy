@@ -1,11 +1,13 @@
 package com.gzjy.contract.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +20,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.gzjy.common.Response;
 import com.gzjy.common.annotation.Privileges;
 import com.gzjy.contract.model.Contract;
 import com.gzjy.contract.model.ContractComment;
 import com.gzjy.contract.model.ContractProcess;
+import com.gzjy.contract.model.ContractSample;
 import com.gzjy.contract.model.ContractStatus;
 import com.gzjy.contract.model.ContractTask;
-import com.gzjy.contract.model.Sample;
 import com.gzjy.contract.service.ContractCommentService;
 import com.gzjy.contract.service.ContractService;
 import com.gzjy.contract.service.SampleService;
@@ -69,7 +69,14 @@ public class ContractController {
 	@Transactional
 	public synchronized Response createContract(@RequestParam("files") MultipartFile[] files,
 			@RequestParam String contractSample) {
-		JSONObject jsonData=JSON.parseObject(contractSample);
+		ObjectMapper objectMapper = new ObjectMapper();
+		ContractSample acc = null;
+        try {
+            acc = objectMapper.readValue(contractSample, ContractSample.class);            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+		
 		
 		/*if (jsonData.get("contract").getType() == null) {
 			return Response.fail("合同类型为空");
