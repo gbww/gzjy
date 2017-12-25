@@ -246,15 +246,13 @@ public class ContractServiceImpl implements ContractService {
 		contractId +=ymd;
 		String str ="0000";
 		String maxId = contractMapper.getMaxIdByType(contractType);	
-		if(maxId == null) {
-			maxId = "0001";
-			return contractId+maxId;
-		}else {
-			int maxIdLength = maxId.length();
-			int data = Integer.parseInt(maxId.substring(maxIdLength-4, maxIdLength));		
-			data+=1;
-			String str_m=str.substring(0, 4-(data+"").length())+data;
-			return contractId+str_m;
-		}		
+		if(maxId == null || maxId.equals("")) {
+		    return contractId+"0001";
+		}
+		int maxIdLength = maxId.length();
+		int data = Integer.parseInt(maxId.substring(maxIdLength-4, maxIdLength));		
+		data+=1;		
+		String str_m=str.substring(0, 4-(data+"").length())+data;
+		return contractId+str_m;
 	}
 }

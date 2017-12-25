@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageInfo;
 import com.gzjy.common.Response;
+import com.gzjy.common.ShortUUID;
 import com.gzjy.common.annotation.Privileges;
 import com.gzjy.contract.model.Contract;
 import com.gzjy.contract.model.ContractComment;
@@ -75,7 +76,6 @@ public class ContractController {
         try {
         	contractSampleObject = objectMapper.readValue(contractSample, ContractSample.class);            
         } catch (IOException e) {
-        	logger.info("exception:"+e.getMessage());
         	return Response.fail(e.getMessage());
         }		
 		if (contractSampleObject.getContract().getType() == null) {
@@ -91,6 +91,8 @@ public class ContractController {
 		try {			
 			contractService.insert(contract);
 			for (Sample sample : contractSampleObject.getSampleList()) {
+			    String id = ShortUUID.getInstance().generateShortID();
+			    sample.setId(id);
 				sampleService.insert(sample);
 			}
 			contractService.uploadFile(files, contractId);

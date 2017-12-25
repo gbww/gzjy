@@ -643,7 +643,7 @@
     where process_id = #{processId,jdbcType=VARCHAR}
   </update> 
   
-  <select id="getMaxIdByType" parameterType="java.lang.String" resultMap="string">
+  <select id="getMaxIdByType" parameterType="java.lang.String" resultType="string">
     select max(id) from contract where type = #{type,jdbcType=VARCHAR}  
   </select>
 
