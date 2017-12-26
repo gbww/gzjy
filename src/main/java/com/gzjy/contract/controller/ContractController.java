@@ -76,7 +76,8 @@ public class ContractController {
         try {
         	contractSampleObject = objectMapper.readValue(contractSample, ContractSample.class);            
         } catch (IOException e) {
-        	return Response.fail(e.getMessage());
+        	logger.info(e.getMessage());
+        	return Response.fail("数据转换异常:"+e.getMessage());
         }		
 		if (contractSampleObject.getContract().getType() == null) {
 			return Response.fail("合同类型为空");
