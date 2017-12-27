@@ -22,6 +22,98 @@
     <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
   </resultMap>
   
+  
+  <resultMap id="ReceiveSampleResultMap" type="com.gzjy.receive.model.ReceiveSample">
+			<id column="receive_sample_id" property="receiveSampleId" jdbcType="CHAR" />
+		<result column="report_id" property="reportId" jdbcType="CHAR" />
+		<result column="sample_type" property="sampleType" jdbcType="VARCHAR" />
+		<result column="check_type" property="checkType" jdbcType="VARCHAR" />
+		<result column="entrusted_unit" property="entrustedUnit"
+			jdbcType="VARCHAR" />
+		<result column="entrusted_unit_address" property="entrustedUnitAddress"
+			jdbcType="VARCHAR" />
+		<result column="entrusted_user_phone" property="entrustedUserPhone"
+			jdbcType="VARCHAR" />
+		<result column="entrusted_user_email" property="entrustedUserEmail"
+			jdbcType="VARCHAR" />
+		<result column="inspected_unit" property="inspectedUnit"
+			jdbcType="VARCHAR" />
+		<result column="inspected_unit_address" property="inspectedUnitAddress"
+			jdbcType="VARCHAR" />
+		<result column="inspected_user" property="inspectedUser"
+			jdbcType="VARCHAR" />
+		<result column="inspected_user_phone" property="inspectedUserPhone"
+			jdbcType="VARCHAR" />
+		<result column="inspected_user_email" property="inspectedUserEmail"
+			jdbcType="VARCHAR" />
+		<result column="sample_address" property="sampleAddress"
+			jdbcType="VARCHAR" />
+		<result column="sample_name" property="sampleName" jdbcType="VARCHAR" />
+		<result column="sample_link" property="sampleLink" jdbcType="VARCHAR" />
+		<result column="sample_trademark" property="sampleTrademark"
+			jdbcType="VARCHAR" />
+		<result column="sample_circulate" property="sampleCirculate"
+			jdbcType="VARCHAR" />
+		<result column="sample_circulate_date" property="sampleCirculateDate"
+			jdbcType="TIMESTAMP" />
+		<result column="sample_date" property="sampleDate" jdbcType="TIMESTAMP" />
+		<result column="sample_way" property="sampleWay" jdbcType="VARCHAR" />
+		<result column="specification_model" property="specificationModel"
+			jdbcType="VARCHAR" />
+		<result column="execute_standard" property="executeStandard"
+			jdbcType="VARCHAR" />
+		<result column="sample_names" property="sampleNames" jdbcType="VARCHAR" />
+		<result column="processing_technology" property="processingTechnology"
+			jdbcType="VARCHAR" />
+		<result column="closed_status" property="closedStatus"
+			jdbcType="VARCHAR" />
+		<result column="sample_number" property="sampleNumber"
+			jdbcType="VARCHAR" />
+		<result column="sample_status" property="sampleStatus"
+			jdbcType="VARCHAR" />
+		<result column="sample_basenumber" property="sampleBasenumber"
+			jdbcType="VARCHAR" />
+		<result column="save_way" property="saveWay" jdbcType="VARCHAR" />
+		<result column="production_unit" property="productionUnit"
+			jdbcType="VARCHAR" />
+		<result column="production_address" property="productionAddress"
+			jdbcType="VARCHAR" />
+		<result column="production_user" property="productionUser"
+			jdbcType="VARCHAR" />
+		<result column="production_phone" property="productionPhone"
+			jdbcType="VARCHAR" />
+		<result column="cost" property="cost" jdbcType="VARCHAR" />
+		<result column="remarks" property="remarks" jdbcType="VARCHAR" />
+		<result column="data_remarks" property="dataRemarks" jdbcType="VARCHAR" />
+		<result column="responsible_person" property="responsiblePerson"
+			jdbcType="VARCHAR" />
+		<result column="sample_holder" property="sampleHolder"
+			jdbcType="VARCHAR" />
+		<result column="receive_user" property="receiveUser" jdbcType="VARCHAR" />
+		<result column="receive_date" property="receiveDate" jdbcType="TIMESTAMP" />
+		<result column="arrange_finish_date" property="arrangeFinishDate"
+			jdbcType="TIMESTAMP" />
+		<result column="finish_date" property="finishDate" jdbcType="TIMESTAMP" />
+		<result column="protocol_id" property="protocolId" jdbcType="VARCHAR" />
+		<result column="subpackage" property="subpackage" jdbcType="VARCHAR" />
+		<result column="result" property="result" jdbcType="VARCHAR" />
+		<result column="determine" property="determine" jdbcType="VARCHAR" />
+		<result column="approval_user" property="approvalUser"
+			jdbcType="VARCHAR" />
+		<result column="examine_user" property="examineUser" jdbcType="VARCHAR" />
+		<result column="draw_user" property="drawUser" jdbcType="VARCHAR" />
+		<result column="principal_inspector" property="principalInspector"
+			jdbcType="VARCHAR" />
+		<result column="rs_status" property="status" jdbcType="INTEGER" />
+		<result column="report_status" property="reportStatus"
+			jdbcType="INTEGER" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+  
+  
+  
+  
   <resultMap id="CountItemResultByTestRoom" type="com.gzjy.receive.model.SampleItemCountView" >
     <result column="item_count" property="itemCount" jdbcType="INTEGER" />
     <result column="status" property="status" jdbcType="INTEGER" />
@@ -29,28 +121,97 @@
     <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
   </resultMap>
   
+  <resultMap id="DetailResultMap" type="com.gzjy.receive.model.ReceiveSampleItem"
+		extends="BaseResultMap">
+		<association property="sample"  resultMap="ReceiveSampleResultMap"></association>
+	</resultMap>
+  
   <sql id="Base_Column_List" >
     id, receive_sample_id, report_id, name, method, unit, standard_value, detection_limit, 
     quantitation_limit, device, default_price, test_room, subpackage, item_result, measured_value, 
     test_user, status, updated_at
   </sql>
+  
+  <sql id="Detail_Column_List" >
+    a.id, a.receive_sample_id, a.report_id, a.name, a.method, a.unit, a.standard_value, a.detection_limit, 
+    a.quantitation_limit, a.device, a.default_price, a.test_room, a.subpackage, a.item_result, a.measured_value, 
+    a.test_user, a.status, a.updated_at,
+    b.receive_sample_id, b.report_id, b.sample_type, b.check_type, b.entrusted_unit,
+		b.entrusted_unit_address,
+		b.entrusted_user_phone, b.entrusted_user_email, b.inspected_unit, b.inspected_unit_address,
+		b.inspected_user, b.inspected_user_phone, b.inspected_user_email,
+		b.sample_address, b.sample_name,
+		b.sample_link, b.sample_trademark, b.sample_circulate, b.sample_circulate_date,
+		b.sample_date,
+		b.sample_way, b.specification_model, b.execute_standard, b.sample_names,
+		b.processing_technology,
+		b.closed_status, b.sample_number, b.sample_status, b.sample_basenumber, b.save_way,
+		b.production_unit,
+		b.production_address, b.production_user, b.production_phone, b.cost, b.remarks, b.data_remarks,
+		b.responsible_person, b.sample_holder, b.receive_user, b.receive_date,
+		b.arrange_finish_date,
+		b.finish_date, b.protocol_id, b.subpackage, b.result, b.determine, b.approval_user,
+		b.examine_user,
+		b.draw_user, b.principal_inspector, b.status rs_status, b.report_status, b.created_at
+  </sql>
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from receive_sample_item
     where id = #{id,jdbcType=CHAR}
   </select>
+  
+  
+  <select id="selectTestDetail" resultMap="DetailResultMap"  >
+    select 
+    <include refid="Detail_Column_List" />
+    from receive_sample_item a left join receive_sample b on a.receive_sample_id=b.receive_sample_id
+          <where>
+    	<foreach collection="filters.keys" item="key" separator="and">
+    	<choose>
+    	<when test="key=='status'">
+    	 a.status LIKE CONCAT('%',#{filters[${key}]},'%' )
+    	</when>
+    	<when test="key=='receive_sample_id'">
+    	 a.receive_sample_id LIKE CONCAT('%',#{filters[${key}]},'%' )
+    	</when>
+        <otherwise>
+        <if test="null!=filters[key]">
+         ${key} LIKE CONCAT('%',#{filters[${key}]},'%' )
+        </if>
+        </otherwise>    	
+    	</choose>    			
+		</foreach>	
+    </where>
+    order by ${orderby}
+  </select>
+  
+  
+  
+  
+  
   <!--  查询授予当前用户的检验项列表 -->
    <select id="selectByUser" resultMap="BaseResultMap" >
     select 
-    <include refid="Base_Column_List" />
-    from receive_sample_item
-       <where>
-    	<foreach collection="filters.keys" item="key" separator="and">
+    <include refid="Detail_Column_List" />
+    from receive_sample_item a left join receive_sample b on a.receive_sample_id=b.receive_sample_id
+          <where>
+        	<foreach collection="filters.keys" item="key" separator="and">
+    	<choose>
+    	<when test="key=='status'">
+    	 a.status LIKE CONCAT('%',#{filters[${key}]},'%' )
+    	</when>
+    	<when test="key=='receive_sample_id'">
+    	 a.receive_sample_id LIKE CONCAT('%',#{filters[${key}]},'%' )
+    	</when>
+        <otherwise>
         <if test="null!=filters[key]">
-    	    ${key} =  #{filters[${key}]}
-    	 </if>		    			
-		</foreach>	
+         ${key} LIKE CONCAT('%',#{filters[${key}]},'%' )
+        </if>
+        </otherwise>    	
+    	</choose>    			
+		</foreach>
     </where>
     order by ${orderby}
   </select>

@@ -1,11 +1,16 @@
 package com.gzjy.receive.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
-public class ReceiveSample {
+public class ReceiveSample implements Serializable{
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 3186945089719476726L;
     //抽样单编号
     @NotEmpty
     private String receiveSampleId;  //查询

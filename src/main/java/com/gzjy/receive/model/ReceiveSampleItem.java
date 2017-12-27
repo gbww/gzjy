@@ -1,5 +1,6 @@
 package com.gzjy.receive.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.validation.constraints.NotNull;
@@ -10,7 +11,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.gzjy.common.Add;
 import com.gzjy.common.Update;
 
-public class ReceiveSampleItem {
+public class ReceiveSampleItem implements Serializable{
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1549980287356846170L;
+    private ReceiveSample sample;
     //接样检验项目的id
     @NotEmpty(message="检验项目的id不能为空", groups={Update.class})
     private String id;
@@ -54,6 +60,14 @@ public class ReceiveSampleItem {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updatedAt;
     
+
+    public ReceiveSample getSample() {
+        return sample;
+    }
+
+    public void setSample(ReceiveSample sample) {
+        this.sample = sample;
+    }
 
     public String getId() {
         return id;

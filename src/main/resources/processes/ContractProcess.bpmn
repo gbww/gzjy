@@ -15,7 +15,7 @@
     <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
     <sequenceFlow id="flow2" sourceRef="usertask1" targetRef="exclusivegateway1"></sequenceFlow>
     <userTask id="usertask2" name="修改合同" activiti:assignee="${update_contract_user}"></userTask>
-    <sequenceFlow id="flow3" sourceRef="exclusivegateway1" targetRef="usertask2">
+    <sequenceFlow id="flow3" name="拒绝" sourceRef="exclusivegateway1" targetRef="usertask2">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${result == 0}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="flow4" sourceRef="exclusivegateway1" targetRef="endevent2">
@@ -51,6 +51,9 @@
       <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
         <omgdi:waypoint x="456.0" y="117.0"></omgdi:waypoint>
         <omgdi:waypoint x="456.0" y="219.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="456.0" y="117.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
         <omgdi:waypoint x="476.0" y="97.0"></omgdi:waypoint>

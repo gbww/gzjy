@@ -29,6 +29,8 @@ public interface ReceiveSampleItemMapper {
     int updateByPrimaryKey(ReceiveSampleItem record);
     //根据接收样品的id删除
     int deleteByReceiveSampleId(String id);
+    //测试一对一连表查询
+    List<ReceiveSampleItem> selectTestDetail(@Param("filters") Map<String, Object> filter,@Param("orderby")String order);
     
     //按照部门查询每种状态的检测项数量
     List<SampleItemCountView> selectCountGroupByDepartment(@Param("filters") Map<String, Object> filter,@Param("orderby")String order,@Param("timeStart") Timestamp timeStart, 
