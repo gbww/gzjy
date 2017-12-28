@@ -90,8 +90,9 @@ public class ContractController {
 		String contractId = contractService.generateContractId(contractSampleObject.getContract().getType(),"food");
 		contract.setId(contractId);		
 		String appendix="";
+		String path = "var\\lib\\docs\\gzjy\\attachment\\";
 		for (MultipartFile file:files) {
-			appendix=appendix+"attachment\\"+contractId +file.getOriginalFilename()+";";
+			appendix=appendix+path+contractId +file.getOriginalFilename()+";";
 		}
 		contract.setAppendix(appendix);
 		try {
