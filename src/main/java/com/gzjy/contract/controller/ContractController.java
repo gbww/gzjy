@@ -88,8 +88,13 @@ public class ContractController {
 		contract.setCreatedAt(now);	
 		// 根据合同类型生成规则有序的合同编号
 		String contractId = contractService.generateContractId(contractSampleObject.getContract().getType(),"food");
-		contract.setId(contractId);
-		try {			
+		contract.setId(contractId);		
+		String appendix="";
+		for (MultipartFile file:files) {
+			appendix=appendix+"attachment\\"+contractId +file.getOriginalFilename()+";";
+		}
+		contract.setAppendix(appendix);
+		try {
 			contractService.insert(contract);
 			for (Sample sample : contractSampleObject.getSampleList()) {
 			    String id = ShortUUID.getInstance().generateShortID();
@@ -100,7 +105,7 @@ public class ContractController {
 			logService.insertLog(LogConstant.CONTRACT_INPUT.getCode(), contractId, null);
 			return Response.success(contractId);
 		} catch (Exception e) {
-			logger.error(e + "");
+			logger.error(e.getMessage());
 			return Response.fail(e.getMessage());
 		}
 	}
