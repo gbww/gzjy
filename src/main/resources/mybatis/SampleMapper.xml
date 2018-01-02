@@ -15,12 +15,13 @@
 		<result column="storage_condition" jdbcType="VARCHAR" property="storageCondition" />
 		<result column="storage_time" jdbcType="VARCHAR" property="storageTime" />
 		<result column="process_demand" jdbcType="VARCHAR" property="processDemand" />
-		<result column="execute_standard" jdbcType="VARCHAR" property="executeStandard" />				
+		<result column="execute_standard" jdbcType="VARCHAR" property="executeStandard" />	
+		<result column="contract_id" jdbcType="VARCHAR" property="contractId" />				
 	</resultMap>
 
 	<sql id="Base_Column_List">
 		id, name, detect_by, quality_level, process_technology, sample_shape,
-		product_date,specification_quantity, storage_condition,storage_time, process_demand,execute_standard
+		product_date,specification_quantity, storage_condition,storage_time, process_demand,execute_standard,contract_id
 	</sql>	
 
 	<select id="selectByPrimaryKey" parameterType="java.lang.String"
@@ -30,6 +31,15 @@
 		from sample
 		where id = #{id,jdbcType=VARCHAR}
 	</select>
+	
+	<select id="getListByContractId" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sample
+		where contract_id = #{contractId,jdbcType=VARCHAR}
+	</select>
+	
 
 	<insert id="insert" parameterType="com.gzjy.contract.model.Sample">
 		insert into sample(id, name, detect_by, quality_level, process_technology, sample_shape,

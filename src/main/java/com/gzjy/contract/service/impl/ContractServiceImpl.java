@@ -23,19 +23,20 @@ import org.springframework.web.multipart.MultipartFile;
 import com.github.pagehelper.ISelect;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.gzjy.common.ShortUUID;
 import com.gzjy.common.exception.BizException;
 import com.gzjy.common.util.UUID;
 import com.gzjy.common.util.fs.EpicNFSClient;
 import com.gzjy.common.util.fs.EpicNFSService;
 import com.gzjy.contract.mapper.ContractCommentMapper;
 import com.gzjy.contract.mapper.ContractMapper;
+import com.gzjy.contract.mapper.SampleMapper;
 import com.gzjy.contract.model.Contract;
 import com.gzjy.contract.model.ContractComment;
+import com.gzjy.contract.model.ContractSample;
 import com.gzjy.contract.model.ContractStatus;
+import com.gzjy.contract.model.Sample;
 import com.gzjy.contract.service.ContractService;
 import com.gzjy.receive.service.ReceiveSampleService;
-import com.gzjy.template.model.Template;
 import com.gzjy.user.UserService;
 import com.gzjy.user.model.User;
 
@@ -56,6 +57,9 @@ public class ContractServiceImpl implements ContractService {
 
 	@Autowired
 	private EpicNFSService epicNFSService;
+	
+	@Autowired
+	private SampleMapper sampleMapper;
 
 	private static Logger logger = LoggerFactory.getLogger(ReceiveSampleService.class);
 
@@ -255,5 +259,14 @@ public class ContractServiceImpl implements ContractService {
 		data+=1;		
 		String str_m=str.substring(0, 4-(data+"").length())+data;
 		return contractId+str_m;
+	}
+
+	public ContractSample getContractDetail(String contractId) {
+		Contract contract = contractMapper.selectByPrimaryKey(contractId);
+		List<Sample> sampleList = sampleMapper.getListByContractId(contractId);
+		ContractSample contractSample = new ContractSample();
+		contractSample.setContract(contract);
+		contractSample.setSampleList(sampleList);
+		return contractSample;
 	}
 }

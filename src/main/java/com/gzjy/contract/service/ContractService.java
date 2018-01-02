@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageInfo;
 import com.gzjy.contract.model.Contract;
+import com.gzjy.contract.model.ContractSample;
 
 public interface ContractService {
 	
@@ -21,6 +22,8 @@ public interface ContractService {
 	int deleteByPrimaryKey(String id);
 	
 	String checkContractProtocolId(String ProtocolId);
+	
+	ContractSample getContractDetail(String contractId);
 	
 	int updateByPrimaryKey(Contract record);
 	

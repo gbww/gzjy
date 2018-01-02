@@ -1,6 +1,9 @@
 package com.gzjy.contract.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.gzjy.contract.model.Sample;
 
@@ -12,6 +15,8 @@ public interface SampleMapper {
 
     Sample selectByPrimaryKey(String id);
 
-    int updateByPrimaryKeySelective(Sample record);    
+    int updateByPrimaryKeySelective(Sample record);   
+    
+    List<Sample> getListByContractId(@Param("contractId")String contractId);
   
 }

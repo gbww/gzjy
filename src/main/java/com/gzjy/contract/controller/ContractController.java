@@ -100,6 +100,7 @@ public class ContractController {
 			for (Sample sample : contractSampleObject.getSampleList()) {
 			    String id = ShortUUID.getInstance().generateShortID();
 			    sample.setId(id);
+			    sample.setContractId(contractId);
 				sampleService.insert(sample);
 			}
 			contractService.uploadFile(files, contractId);
@@ -140,13 +141,14 @@ public class ContractController {
 	@RequestMapping(value = "/contract/{id}", method = RequestMethod.GET)
 	public Response getContractById(@PathVariable String id) {
 		try {
-			Contract contract = contractService.selectByPrimaryKey(id);
-			return Response.success(contract);
+			ContractSample contractSample = contractService.getContractDetail(id);
+			return Response.success(contractSample);
 		} catch (Exception e) {
 			logger.error(e + "");
 			return Response.fail(e.getMessage());
 		}
 	}
+	
 
 	/**
 	 * 检测合同协议ID是否存在
