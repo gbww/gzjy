@@ -198,92 +198,92 @@
         created_at,
       </if>
       <if test="updatedAt != null">
-        updated_at
+        updated_at,
       </if>     
       
       <if test="appendix != null">
-        appendix
+        appendix,
       </if>      
       <if test="type != null">
-        type
+        type,
       </if>
       <if test="entrustment != null">
-        entrustment
+        entrustment,
       </if>
       <if test="entrustmentAddress != null">
-        entrustment_address
+        entrustment_address,
       </if>
       <if test="serialNumber != null">
-        serial_number
+        serial_number,
       </if>
       <if test="projectLeader != null">
-        project_leader
+        project_leader,
       </if>
       <if test="projectName != null">
-        project_name
+        project_name,
       </if>
       <if test="taskCategory != null">
-        task_category
+        task_category,
       </if>
       <if test="sampleType != null">
-        sample_type
+        sample_type,
       </if>
       <if test="inspection != null">
-        inspection
+        inspection,
       </if>
       <if test="taskBatch != null">
-        task_batch
+        task_batch,
       </if>
       <if test="settlementMethod != null">
-        settlement_method
+        settlement_method,
       </if>
       <if test="isSeparateSettlement != null">
-        is_separate_settlement
+        is_separate_settlement,
       </if>
       <if test="signDate != null">
-        sign_date
+        sign_date,
       </if>
       <if test="contractTerm != null">
-        contract_term
+        contract_term,
       </if>
       <if test="depositBank != null">
-        deposit_bank
+        deposit_bank,
       </if>
       <if test="account != null">
-        account
+        account,
       </if>
       <if test="authCategory != null">
-        auth_category
+        auth_category,
       </if>
       <if test="authType != null">
-        auth_type
+        auth_type,
       </if>
       <if test="productType != null">
-        product_type
+        product_type,
       </if>
       <if test="enterpriseFile != null">
-        enterprise_file
+        enterprise_file,
       </if>
       <if test="limitTime != null">
-        limit_time
+        limit_time,
       </if>
       <if test="inspectTime != null">
-        inspect_time
+        inspect_time,
       </if>  
       <if test="expireTime != null">
-        expire_time
+        expire_time,
       </if> 
       <if test="contractSignTime != null">
-        contract_sign_time
+        contract_sign_time,
       </if> 
       <if test="reportSendAddress != null">
-        report_send_address
+        report_send_address,
       </if>   
       <if test="invoiceSendAddress != null">
-        invoice_send_address
+        invoice_send_address,
       </if> 
       <if test="isDelete != null">
-        is_delete
+        is_delete,
       </if>     
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -372,91 +372,91 @@
         #{createdAt,jdbcType=TIMESTAMP},
       </if>
       <if test="updatedAt != null">
-        #{updatedAt,jdbcType=TIMESTAMP}
+        #{updatedAt,jdbcType=TIMESTAMP},
       </if>      
       <if test="appendix != null">
-        #{appendix,jdbcType=VARCHAR}
+        #{appendix,jdbcType=VARCHAR},
       </if>      
       <if test="type != null">
-        #{type,jdbcType=VARCHAR}
+        #{type,jdbcType=VARCHAR},
       </if>
       <if test="entrustment != null">
-        #{entrustment,jdbcType=VARCHAR}
+        #{entrustment,jdbcType=VARCHAR},
       </if>
       <if test="entrustmentAddress != null">
-        #{entrustmentAddress,jdbcType=VARCHAR}
+        #{entrustmentAddress,jdbcType=VARCHAR},
       </if>
       <if test="serialNumber != null">
-        #{serialNumber,jdbcType=VARCHAR}
+        #{serialNumber,jdbcType=VARCHAR},
       </if>
       <if test="projectLeader != null">
-        #{projectLeader,jdbcType=VARCHAR}
+        #{projectLeader,jdbcType=VARCHAR},
       </if>
       <if test="projectName != null">
-        #{projectName,jdbcType=VARCHAR}
+        #{projectName,jdbcType=VARCHAR},
       </if>
       <if test="taskCategory != null">
-        #{taskCategory,jdbcType=VARCHAR}
+        #{taskCategory,jdbcType=VARCHAR},
       </if>
       <if test="sampleType != null">
-        #{sampleType,jdbcType=VARCHAR}
+        #{sampleType,jdbcType=VARCHAR},
       </if>
       <if test="inspection != null">
-        #{inspection,jdbcType=VARCHAR}
+        #{inspection,jdbcType=VARCHAR},
       </if>
       <if test="taskBatch != null">
-        #{taskBatch,jdbcType=VARCHAR}
+        #{taskBatch,jdbcType=VARCHAR},
       </if>
       <if test="settlementMethod != null">
-        #{settlementMethod,jdbcType=VARCHAR}
+        #{settlementMethod,jdbcType=VARCHAR},
       </if>
       <if test="isSeparateSettlement != null">
-        #{isSeparateSettlement,jdbcType=TINYINT}
+        #{isSeparateSettlement,jdbcType=TINYINT},
       </if>
       <if test="signDate != null">
-        #{signDate,jdbcType=TIMESTAMP}
+        #{signDate,jdbcType=TIMESTAMP},
       </if>
       <if test="contractTerm != null">
-        #{contractTerm,jdbcType=VARCHAR}
+        #{contractTerm,jdbcType=VARCHAR},
       </if>
       <if test="depositBank != null">
-        #{depositBank,jdbcType=VARCHAR}
+        #{depositBank,jdbcType=VARCHAR},
       </if>
       <if test="account != null">
-        #{account,jdbcType=VARCHAR}
+        #{account,jdbcType=VARCHAR},
       </if>
       <if test="authCategory != null">
-        #{authCategory,jdbcType=VARCHAR}
+        #{authCategory,jdbcType=VARCHAR},
       </if>
       <if test="authType != null">
-        #{authType,jdbcType=VARCHAR}
+        #{authType,jdbcType=VARCHAR},
       </if>
       <if test="productType != null">
-        #{productType,jdbcType=VARCHAR}
+        #{productType,jdbcType=VARCHAR},
       </if>
       <if test="enterpriseFile != null">
-        #{enterpriseFile,jdbcType=VARCHAR}
+        #{enterpriseFile,jdbcType=VARCHAR},
       </if>
       <if test="limitTime != null">
-        #{limitTime,jdbcType=VARCHAR}
+        #{limitTime,jdbcType=VARCHAR},
       </if>
       <if test="inspectTime != null">
-        #{inspectTime,jdbcType=TIMESTAMP}
+        #{inspectTime,jdbcType=TIMESTAMP},
       </if>  
       <if test="expireTime != null">
-        #{expireTime,jdbcType=VARCHAR}
+        #{expireTime,jdbcType=VARCHAR},
       </if> 
       <if test="contractSignTime != null">
-        #{contractSignTime,jdbcType=VARCHAR}
+        #{contractSignTime,jdbcType=VARCHAR},
       </if> 
       <if test="reportSendAddress != null">
-        #{reportSendAddress,jdbcType=VARCHAR}
+        #{reportSendAddress,jdbcType=VARCHAR},
       </if>   
       <if test="invoiceSendAddress != null">
-        #{invoiceSendAddress,jdbcType=VARCHAR}
+        #{invoiceSendAddress,jdbcType=VARCHAR},
       </if>  
       <if test="isDelete != null">
-        #{isDelete,jdbcType=TINYINT}
+        #{isDelete,jdbcType=TINYINT},
       </if>      
     </trim>
   </insert>

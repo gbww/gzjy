@@ -18,12 +18,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @Configuration
 @EnableAutoConfiguration
 @EnableAsync
 @EnableScheduling
+@EnableTransactionManagement
 @ComponentScan
 @ServletComponentScan
 public class Application  {

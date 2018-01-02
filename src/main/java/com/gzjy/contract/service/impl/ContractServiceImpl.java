@@ -201,14 +201,15 @@ public class ContractServiceImpl implements ContractService {
 
 	public void uploadFile(MultipartFile[] files, String catalog) {
 		EpicNFSClient client = epicNFSService.getClient("gzjy");
-		if (!client.hasRemoteDir("attachment\\"+catalog)) {
-			client.createRemoteDir("attachment\\"+catalog);
+		String dir = "attachment\\"+catalog;
+		if (!client.hasRemoteDir(dir)) {
+			client.createRemoteDir(dir);
 		}
 		if (files != null && files.length > 0) {
 			try {
 				for (int i = 0; i < files.length; i++) {
 					MultipartFile file = files[i];
-					client.upload(file.getInputStream(), "attachment/" + file.getName());
+					client.upload(file.getInputStream(), dir+"\\" + file.getOriginalFilename());
 				}
 				client.close();
 			} catch (Exception e) {
