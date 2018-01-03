@@ -92,9 +92,9 @@ public class ContractServiceImpl implements ContractService {
 	 * @return
 	 */
 	public void deploymentProcess(String contractId, ArrayList<String> approveUsers, String updateContractUser) {
-		RepositoryService repositoryService = processEngine.getRepositoryService();
+//		RepositoryService repositoryService = processEngine.getRepositoryService();
 		RuntimeService runtimeService = processEngine.getRuntimeService();
-		repositoryService.createDeployment().addClasspathResource("processes/ContractProcess.bpmn").deploy();
+//		repositoryService.createDeployment().addClasspathResource("processes/ContractProcess.bpmn").deploy();
 		Map<String, Object> variables = new HashMap<String, Object>();
 		variables.put("approve_users", approveUsers);
 		variables.put("resultCount", 0);
@@ -183,13 +183,13 @@ public class ContractServiceImpl implements ContractService {
 		taskService.complete(taskId);
 	}
 
-	public PageInfo<Contract> getPageList(Integer pageNum, Integer pageSize, String detectProject) {
+	public PageInfo<Contract> getPageList(Integer pageNum, Integer pageSize, String detectProject, String type) {
 		List<Contract> list = new ArrayList<Contract>();
 		PageInfo<Contract> pages = new PageInfo<Contract>(list);
 		pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
 			@Override
 			public void doSelect() {
-				contractMapper.selectAll(detectProject);
+				contractMapper.selectAll(detectProject, type);
 			}
 		});
 		return pages;

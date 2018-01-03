@@ -122,9 +122,10 @@ public class ContractController {
 	@RequestMapping(value = "/contract", method = RequestMethod.GET)
 	public Response getContractList(@RequestParam(required = false) String detectProject,
 			@RequestParam(required = false, defaultValue = "1") Integer pageNum,
-			@RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+			@RequestParam(required = false, defaultValue = "10") Integer pageSize,
+			@RequestParam(required = false) String type) {
 		try {
-			PageInfo<Contract> result = contractService.getPageList(pageNum, pageSize, detectProject);
+			PageInfo<Contract> result = contractService.getPageList(pageNum, pageSize, detectProject, type);
 			return Response.success(result);
 		} catch (Exception e) {
 			logger.error(e + "");
