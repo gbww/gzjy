@@ -1,6 +1,7 @@
 package com.gzjy.contract.controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -72,6 +73,7 @@ public class ContractController {
 	public synchronized Response createContract(@RequestParam("files") MultipartFile[] files,
 			@RequestParam String contractSample) {
 		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
 		ContractSample contractSampleObject = null;
         try {
         	contractSampleObject = objectMapper.readValue(contractSample, ContractSample.class);            
@@ -83,6 +85,7 @@ public class ContractController {
 			return Response.fail("合同类型为空");
 		}
 		Contract contract = contractSampleObject.getContract();
+		
 		contract.setStatus(ContractStatus.READY.getValue());
 		Date now = new Date();
 		contract.setCreatedAt(now);	

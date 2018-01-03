@@ -2,6 +2,8 @@ package com.gzjy.contract.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 public class Contract {
 	//合同编号    
 	private String id;
@@ -240,6 +242,7 @@ public class Contract {
 	public Date getInspectionDate() {
 		return inspectionDate;
 	}
+	@JsonDeserialize(using = JsonDateSerializer.class)
 	public void setInspectionDate(Date inspectionDate) {
 		this.inspectionDate = inspectionDate;
 	}
@@ -252,6 +255,7 @@ public class Contract {
 	public Date getAcceptanceDate() {
 		return acceptanceDate;
 	}
+	@JsonDeserialize(using = JsonDateSerializer.class)
 	public void setAcceptanceDate(Date acceptanceDate) {
 		this.acceptanceDate = acceptanceDate;
 	}
