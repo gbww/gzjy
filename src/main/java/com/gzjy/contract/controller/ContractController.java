@@ -92,7 +92,7 @@ public class ContractController {
 		String appendix="";
 		String path = "var\\lib\\docs\\gzjy\\attachment\\";
 		for (MultipartFile file:files) {
-			appendix=appendix+path+contractId +file.getOriginalFilename()+";";
+			appendix=appendix+path+contractId +"\\"+file.getOriginalFilename()+";";
 		}
 		contract.setAppendix(appendix);
 		try {
