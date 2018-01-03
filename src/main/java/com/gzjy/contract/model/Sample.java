@@ -25,6 +25,8 @@ public class Sample {
     private String processDemand;
     //执行标准
     private String executeStandard;
+    //合同编号
+    private String contractId;
     
 	public String getId() {
 		return id;
@@ -97,6 +99,12 @@ public class Sample {
 	}
 	public void setExecuteStandard(String executeStandard) {
 		this.executeStandard = executeStandard;
+	}
+	public String getContractId() {
+		return contractId;
+	}
+	public void setContractId(String contractId) {
+		this.contractId = contractId;
 	}	
 	
 }
