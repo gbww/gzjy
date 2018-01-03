@@ -1,5 +1,6 @@
 package com.gzjy.contract.service;
 
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,4 +47,8 @@ public interface ContractService {
 	public String getMaxIdByType(String type);
 	
 	public String generateContractId(String contractType, String foodType);
+	
+	public OutputStream getAppendix(OutputStream out, String contractId, String filename);
+	
+	public void deleteAppendix(String contractId, String filename);
 }

@@ -1,10 +1,14 @@
 package com.gzjy.contract.controller;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
@@ -113,6 +117,53 @@ public class ContractController {
 			logger.error(e.getMessage());
 			return Response.fail(e.getMessage());
 		}
+	}
+	
+	
+	/**
+	 * 下载合同附件
+	 * @param Contract实体对象
+	 * @return
+	 */
+	@Privileges(name = "CONTRACT-SELECT", scope = { 1 })
+	@RequestMapping(value = "/contract/{id}/appendix", method = RequestMethod.GET)
+	public Response getAppendix(@PathVariable(required = true) String id,
+			@RequestParam(required = true) String filename, HttpServletResponse response) {		
+		try {
+			response.reset();
+			response.setContentType("application/octet-stream;charset=UTF-8");
+			response.setHeader("Content-disposition",
+					"attachment;filename=" + URLEncoder.encode(filename, "UTF-8"));
+			OutputStream out = response.getOutputStream();
+			if(out == null) {
+				return Response.fail("附件不存在");
+			}
+			contractService.getAppendix(out, id, filename);			
+		} catch (Exception e) {
+			logger.error(e.getMessage());			
+		}
+		return null;
+	}
+	
+	/**
+	 * 删除合同附件
+	 * @return
+	 */
+	@Privileges(name = "CONTRACT-DELETE", scope = { 1 })
+	@RequestMapping(value = "/contract/{id}/appendix", method = RequestMethod.DELETE)
+	public Response deleteAppendix(@PathVariable(required = true) String id,
+			@RequestParam(required = true) String filename) {		
+		try {
+			contractService.deleteAppendix(id, filename);	
+			Contract contract = new Contract();
+			contract.setId(id);
+//			contractService.updateByPrimaryKey(contract);
+			//同时更新数据库字段信息
+		} catch (Exception e) {
+			logger.error(e.getMessage());	
+			return Response.fail(e.getMessage()); 
+		}
+		return null;
 	}
 
 	/**

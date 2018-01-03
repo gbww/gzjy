@@ -1,5 +1,9 @@
 package com.gzjy.contract.service.impl;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,7 +13,6 @@ import java.util.Map;
 
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricTaskInstance;
@@ -268,5 +271,36 @@ public class ContractServiceImpl implements ContractService {
 		contractSample.setContract(contract);
 		contractSample.setSampleList(sampleList);
 		return contractSample;
+	}
+	
+	public OutputStream getAppendix(OutputStream out, String contractId, String filename) {
+		EpicNFSClient client = epicNFSService.getClient("gzjy");
+		String filePath = "attachment\\"+contractId+"\\"+filename;
+		if(client.hasRemoteFile(filePath)) {
+			return null;
+		}
+		try {
+			InputStream inputStream = new FileInputStream(filePath);        
+	        byte[] b = new byte[1024];
+	        int i=0;
+	        while((i=inputStream.read(b))!=-1){
+	            out.write(b, 0, i);
+	        }
+	        inputStream.close();
+	        out.close();
+		}
+		catch (Exception e) {
+			logger.info(e.getMessage());
+		}
+		return out;
+	}
+
+	
+	public void deleteAppendix(String contractId, String filename) {
+		EpicNFSClient client = epicNFSService.getClient("gzjy");
+		String filePath = "attachment\\"+contractId+"\\"+filename;
+		if(client.hasRemoteFile(filePath)) {
+			client.deleteRemoteFile(filePath);
+		}
 	}
 }
