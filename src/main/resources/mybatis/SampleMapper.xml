@@ -43,7 +43,7 @@
 
 	<insert id="insert" parameterType="com.gzjy.contract.model.Sample">
 		insert into sample(id, name, detect_by, quality_level, process_technology, sample_shape,
-		product_date,specification_quantity, storage_condition,storage_time, process_demand,execute_standard)
+		product_date,specification_quantity, storage_condition,storage_time, process_demand,execute_standard, contract_id)
 		values (
 		#{id,jdbcType=VARCHAR},
 		#{name,jdbcType=VARCHAR},
@@ -56,7 +56,8 @@
 		#{storageCondition,jdbcType=VARCHAR},
 		#{storageTime,jdbcType=VARCHAR},
 		#{processDemand,jdbcType=VARCHAR},
-		#{executeStandard,jdbcType=VARCHAR})
+		#{executeStandard,jdbcType=VARCHAR},
+		#{contractId,jdbcType=VARCHAR})
 	</insert>
 
 	<update id="updateByPrimaryKeySelective" parameterType="com.gzjy.contract.model.Sample">
@@ -94,6 +95,9 @@
 			</if>	
 			<if test="executeStandard != null">
 				execute_standard = #{executeStandard,jdbcType=VARCHAR},
+			</if>
+			<if test="contractId != null">
+				contract_id = #{contractId,jdbcType=VARCHAR},
 			</if>	
 		</set>
 		where id = #{id,jdbcType=VARCHAR}

@@ -1,9 +1,14 @@
 package com.gzjy.contract.controller;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
@@ -72,6 +77,7 @@ public class ContractController {
 	public synchronized Response createContract(@RequestParam("files") MultipartFile[] files,
 			@RequestParam String contractSample) {
 		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
 		ContractSample contractSampleObject = null;
         try {
         	contractSampleObject = objectMapper.readValue(contractSample, ContractSample.class);            
@@ -83,6 +89,7 @@ public class ContractController {
 			return Response.fail("合同类型为空");
 		}
 		Contract contract = contractSampleObject.getContract();
+		
 		contract.setStatus(ContractStatus.READY.getValue());
 		Date now = new Date();
 		contract.setCreatedAt(now);	
@@ -92,7 +99,7 @@ public class ContractController {
 		String appendix="";
 		String path = "var\\lib\\docs\\gzjy\\attachment\\";
 		for (MultipartFile file:files) {
-			appendix=appendix+path+contractId +file.getOriginalFilename()+";";
+			appendix=appendix+path+contractId +"\\"+file.getOriginalFilename()+";";
 		}
 		contract.setAppendix(appendix);
 		try {
@@ -111,6 +118,53 @@ public class ContractController {
 			return Response.fail(e.getMessage());
 		}
 	}
+	
+	
+	/**
+	 * 下载合同附件
+	 * @param Contract实体对象
+	 * @return
+	 */
+	@Privileges(name = "CONTRACT-SELECT", scope = { 1 })
+	@RequestMapping(value = "/contract/{id}/appendix", method = RequestMethod.GET)
+	public Response getAppendix(@PathVariable(required = true) String id,
+			@RequestParam(required = true) String filename, HttpServletResponse response) {		
+		try {
+			response.reset();
+			response.setContentType("application/octet-stream;charset=UTF-8");
+			response.setHeader("Content-disposition",
+					"attachment;filename=" + URLEncoder.encode(filename, "UTF-8"));
+			OutputStream out = response.getOutputStream();
+			if(out == null) {
+				return Response.fail("附件不存在");
+			}
+			contractService.getAppendix(out, id, filename);			
+		} catch (Exception e) {
+			logger.error(e.getMessage());			
+		}
+		return null;
+	}
+	
+	/**
+	 * 删除合同附件
+	 * @return
+	 */
+	@Privileges(name = "CONTRACT-DELETE", scope = { 1 })
+	@RequestMapping(value = "/contract/{id}/appendix", method = RequestMethod.DELETE)
+	public Response deleteAppendix(@PathVariable(required = true) String id,
+			@RequestParam(required = true) String filename) {		
+		try {
+			contractService.deleteAppendix(id, filename);	
+			Contract contract = new Contract();
+			contract.setId(id);
+//			contractService.updateByPrimaryKey(contract);
+			//同时更新数据库字段信息
+		} catch (Exception e) {
+			logger.error(e.getMessage());	
+			return Response.fail(e.getMessage()); 
+		}
+		return null;
+	}
 
 	/**
 	 * 获取合同列表信息
@@ -122,9 +176,10 @@ public class ContractController {
 	@RequestMapping(value = "/contract", method = RequestMethod.GET)
 	public Response getContractList(@RequestParam(required = false) String detectProject,
 			@RequestParam(required = false, defaultValue = "1") Integer pageNum,
-			@RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+			@RequestParam(required = false, defaultValue = "10") Integer pageSize,
+			@RequestParam(required = false) String type) {
 		try {
-			PageInfo<Contract> result = contractService.getPageList(pageNum, pageSize, detectProject);
+			PageInfo<Contract> result = contractService.getPageList(pageNum, pageSize, detectProject, type);
 			return Response.success(result);
 		} catch (Exception e) {
 			logger.error(e + "");

@@ -13,7 +13,7 @@ public interface ContractMapper {
     
     String checkContractProtocolId(String id);
 
-    List<Contract> selectAll(@Param("detectProject")String detectProject);   
+    List<Contract> selectAll(@Param("detectProject")String detectProject, @Param("type")String type);   
 
     int insertSelective(Contract record);
 
