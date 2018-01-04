@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageInfo;
@@ -51,4 +52,6 @@ public interface ContractService {
 	public OutputStream getAppendix(OutputStream out, String contractId, String filename);
 	
 	public void deleteAppendix(String contractId, String filename);
+	
+	public String getAppendixById(String id);
 }

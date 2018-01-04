@@ -155,10 +155,47 @@ public class ContractController {
 			@RequestParam(required = true) String filename) {		
 		try {
 			contractService.deleteAppendix(id, filename);	
+			String appendix = contractService.getAppendixById(id);
+			if(appendix != null) {
+				String []datas = appendix.split(";");
+				String temp="";
+				for(String data:datas) {
+					if(!data.contains(filename)) {
+						temp+=data+";";
+					}
+				}
+				Contract contract = new Contract();
+				contract.setId(id);
+				contract.setAppendix(temp);
+				contractService.updateByPrimaryKey(contract);
+				//同时更新数据库字段信息
+			}
+			
+		} catch (Exception e) {
+			logger.error(e.getMessage());	
+			return Response.fail(e.getMessage()); 
+		}
+		return null;
+	}
+	
+	/**
+	 * 上传合同附件
+	 * @return
+	 */
+	@Privileges(name = "CONTRACT-ADD", scope = { 1 })
+	@RequestMapping(value = "/contract/{id}/appendix", method = RequestMethod.POST)
+	public Response addAppendix(@PathVariable(required = true) String id,
+			@RequestParam("file") MultipartFile file) {		
+		try {
+			MultipartFile [] fileList = new MultipartFile[1];
+			fileList[0] = file;
+			contractService.uploadFile(fileList, id);
+			String path = "var\\lib\\docs\\gzjy\\attachment\\";				
+			String appendix = contractService.getAppendixById(id);
 			Contract contract = new Contract();
 			contract.setId(id);
-//			contractService.updateByPrimaryKey(contract);
-			//同时更新数据库字段信息
+			contract.setAppendix(appendix+path+file.getOriginalFilename()+";");
+			contractService.updateByPrimaryKey(contract);			
 		} catch (Exception e) {
 			logger.error(e.getMessage());	
 			return Response.fail(e.getMessage()); 
