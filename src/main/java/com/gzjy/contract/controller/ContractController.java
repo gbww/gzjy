@@ -283,7 +283,9 @@ public class ContractController {
 	 */
 	@Privileges(name = "CONTRACT-UPDATE", scope = { 1 })
 	@RequestMapping(value = "/contract/{id}", method = RequestMethod.PUT)
-	public Response updateContract(@PathVariable String id, @RequestBody Contract contract) {
+	@Transactional
+	public Response updateContract(@PathVariable String id, @RequestBody ContractSample contractSample) {
+		Contract contract = contractSample.getContract();
 		try {
 			Contract temp = contractService.selectByPrimaryKey(id);
 			if (temp.getStatus() == ContractStatus.UPDATING.getValue()) {
@@ -298,6 +300,12 @@ public class ContractController {
 			contract.setId(id);
 			contract.setUpdatedAt(new Date());
 			contractService.updateByPrimaryKey(contract);
+			List<Sample> sampleList= contractSample.getSampleList();
+			if(sampleList!=null && sampleList.size()!=0) {
+				for(Sample sample:sampleList) {
+					sampleService.updateSampleById(sample);
+				}
+			}
 			logService.insertLog(LogConstant.CONTRACT_UPDATE.getCode(), id, null);
 			return Response.success("success");
 		} catch (Exception e) {
