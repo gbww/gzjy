@@ -124,8 +124,7 @@ public class ContractController {
 	 * 下载合同附件
 	 * @param Contract实体对象
 	 * @return
-	 */
-	@Privileges(name = "CONTRACT-SELECT", scope = { 1 })
+	 */	
 	@RequestMapping(value = "/contract/{id}/appendix", method = RequestMethod.GET)
 	public Response getAppendix(@PathVariable(required = true) String id,
 			@RequestParam(required = true) String filename, HttpServletResponse response) {		
@@ -148,8 +147,7 @@ public class ContractController {
 	/**
 	 * 删除合同附件
 	 * @return
-	 */
-	@Privileges(name = "CONTRACT-DELETE", scope = { 1 })
+	 */	
 	@RequestMapping(value = "/contract/{id}/appendix", method = RequestMethod.DELETE)
 	public Response deleteAppendix(@PathVariable(required = true) String id,
 			@RequestParam(required = true) String filename) {		
@@ -181,8 +179,7 @@ public class ContractController {
 	/**
 	 * 上传合同附件
 	 * @return
-	 */
-	@Privileges(name = "CONTRACT-ADD", scope = { 1 })
+	 */	
 	@RequestMapping(value = "/contract/{id}/appendix", method = RequestMethod.POST)
 	public Response addAppendix(@PathVariable(required = true) String id,
 			@RequestParam("file") MultipartFile file) {		
