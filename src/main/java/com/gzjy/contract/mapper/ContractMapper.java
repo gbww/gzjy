@@ -24,4 +24,6 @@ public interface ContractMapper {
     int updateByPrimaryKeySelective(Contract record);    
     
     void updateStatusByProcessId(@Param("status")Integer status, @Param("processId")String processId);
+    
+    String getAppendixById(@Param("id")String id);
 }

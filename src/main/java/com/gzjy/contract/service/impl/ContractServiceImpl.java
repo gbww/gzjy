@@ -303,4 +303,8 @@ public class ContractServiceImpl implements ContractService {
 			client.deleteRemoteFile(filePath);
 		}
 	}
+
+	public String getAppendixById(String id) {
+		return contractMapper.getAppendixById(id);
+	}
 }
