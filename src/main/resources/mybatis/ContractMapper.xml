@@ -121,11 +121,7 @@
 			</if>
 		</where>
 		order by created_at desc
-	</select>
-
-	<select id="getAppendix" resultMap="string" parameterType="java.lang.String">		
-		select appendix from contract where id = #{id}		
-	</select>
+	</select>	
 
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		delete from contract
@@ -668,6 +664,10 @@
 	<select id="getMaxIdByType" parameterType="java.lang.String"
 		resultType="string">
 		select max(id) from contract where type = #{type,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getAppendix" resultType="string" parameterType="java.lang.String">		
+		select appendix from contract where id = #{id}		
 	</select>
 
 </mapper>
