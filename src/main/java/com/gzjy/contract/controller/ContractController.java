@@ -75,7 +75,7 @@ public class ContractController {
 	@RequestMapping(value = "/contract", method = RequestMethod.POST)
 	@Transactional
 	public synchronized Response createContract(@RequestParam("files") MultipartFile[] files,
-			@RequestParam String contractSample) {
+			@RequestParam(required = true) String contractSample, @RequestParam(required = true) String isFood) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
 		ContractSample contractSampleObject = null;
@@ -88,13 +88,12 @@ public class ContractController {
 		if (contractSampleObject.getContract().getType() == null) {
 			return Response.fail("合同类型为空");
 		}
-		Contract contract = contractSampleObject.getContract();
-		
+		Contract contract = contractSampleObject.getContract();		
 		contract.setStatus(ContractStatus.READY.getValue());
 		Date now = new Date();
 		contract.setCreatedAt(now);	
 		// 根据合同类型生成规则有序的合同编号
-		String contractId = contractService.generateContractId(contractSampleObject.getContract().getType(),"food");
+		String contractId = contractService.generateContractId(contractSampleObject.getContract().getType(),isFood);
 		contract.setId(contractId);		
 		String appendix="";
 		String path = "var\\lib\\docs\\gzjy\\attachment\\";
