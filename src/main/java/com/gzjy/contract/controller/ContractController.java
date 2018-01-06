@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,7 +42,6 @@ import com.gzjy.contract.service.ContractService;
 import com.gzjy.contract.service.SampleService;
 import com.gzjy.log.constant.LogConstant;
 import com.gzjy.log.service.LogService;
-import com.gzjy.receive.service.ReceiveSampleService;
 import com.gzjy.user.UserService;
 import com.gzjy.user.model.User;
 
@@ -64,7 +64,7 @@ public class ContractController {
 	@Autowired
 	SampleService sampleService;
 
-	private static Logger logger = LoggerFactory.getLogger(ReceiveSampleService.class);
+	private static Logger logger = LoggerFactory.getLogger(ContractService.class);
 
 	/**
 	 * 录入合同信息到数据库
@@ -114,6 +114,7 @@ public class ContractController {
 			return Response.success(contractId);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			return Response.fail(e.getMessage());
 		}
 	}
