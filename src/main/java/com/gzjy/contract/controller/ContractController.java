@@ -310,6 +310,7 @@ public class ContractController {
 			return Response.success("success");
 		} catch (Exception e) {
 			logger.error(e + "");
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			return Response.fail(e.getMessage());
 		}
 	}
