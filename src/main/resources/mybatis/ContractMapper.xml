@@ -666,7 +666,7 @@
 		select max(id) from contract where type = #{type,jdbcType=VARCHAR}
 	</select>
 	
-	<select id="getAppendix" resultType="string" parameterType="java.lang.String">		
+	<select id="getAppendixById" resultType="string" parameterType="java.lang.String">		
 		select appendix from contract where id = #{id}		
 	</select>
 

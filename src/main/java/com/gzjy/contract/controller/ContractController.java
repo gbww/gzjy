@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,7 +42,6 @@ import com.gzjy.contract.service.ContractService;
 import com.gzjy.contract.service.SampleService;
 import com.gzjy.log.constant.LogConstant;
 import com.gzjy.log.service.LogService;
-import com.gzjy.receive.service.ReceiveSampleService;
 import com.gzjy.user.UserService;
 import com.gzjy.user.model.User;
 
@@ -64,7 +64,7 @@ public class ContractController {
 	@Autowired
 	SampleService sampleService;
 
-	private static Logger logger = LoggerFactory.getLogger(ReceiveSampleService.class);
+	private static Logger logger = LoggerFactory.getLogger(ContractService.class);
 
 	/**
 	 * 录入合同信息到数据库
@@ -75,7 +75,7 @@ public class ContractController {
 	@RequestMapping(value = "/contract", method = RequestMethod.POST)
 	@Transactional
 	public synchronized Response createContract(@RequestParam("files") MultipartFile[] files,
-			@RequestParam String contractSample) {
+			@RequestParam(required = true) String contractSample, @RequestParam(required = true) String isFood) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
 		ContractSample contractSampleObject = null;
@@ -88,13 +88,12 @@ public class ContractController {
 		if (contractSampleObject.getContract().getType() == null) {
 			return Response.fail("合同类型为空");
 		}
-		Contract contract = contractSampleObject.getContract();
-		
+		Contract contract = contractSampleObject.getContract();		
 		contract.setStatus(ContractStatus.READY.getValue());
 		Date now = new Date();
 		contract.setCreatedAt(now);	
 		// 根据合同类型生成规则有序的合同编号
-		String contractId = contractService.generateContractId(contractSampleObject.getContract().getType(),"food");
+		String contractId = contractService.generateContractId(contractSampleObject.getContract().getType(),isFood);
 		contract.setId(contractId);		
 		String appendix="";
 		String path = "var\\lib\\docs\\gzjy\\attachment\\";
@@ -115,6 +114,7 @@ public class ContractController {
 			return Response.success(contractId);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			return Response.fail(e.getMessage());
 		}
 	}
@@ -283,7 +283,9 @@ public class ContractController {
 	 */
 	@Privileges(name = "CONTRACT-UPDATE", scope = { 1 })
 	@RequestMapping(value = "/contract/{id}", method = RequestMethod.PUT)
-	public Response updateContract(@PathVariable String id, @RequestBody Contract contract) {
+	@Transactional
+	public Response updateContract(@PathVariable String id, @RequestBody ContractSample contractSample) {
+		Contract contract = contractSample.getContract();
 		try {
 			Contract temp = contractService.selectByPrimaryKey(id);
 			if (temp.getStatus() == ContractStatus.UPDATING.getValue()) {
@@ -298,10 +300,17 @@ public class ContractController {
 			contract.setId(id);
 			contract.setUpdatedAt(new Date());
 			contractService.updateByPrimaryKey(contract);
+			List<Sample> sampleList= contractSample.getSampleList();
+			if(sampleList!=null && sampleList.size()!=0) {
+				for(Sample sample:sampleList) {
+					sampleService.updateSampleById(sample);
+				}
+			}
 			logService.insertLog(LogConstant.CONTRACT_UPDATE.getCode(), id, null);
 			return Response.success("success");
 		} catch (Exception e) {
 			logger.error(e + "");
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			return Response.fail(e.getMessage());
 		}
 	}

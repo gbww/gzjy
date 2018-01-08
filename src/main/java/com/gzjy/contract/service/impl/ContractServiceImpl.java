@@ -237,7 +237,7 @@ public class ContractServiceImpl implements ContractService {
 		//是否是三品一标合同
 		if(!contractType.equals("pb")){			
 			//如果是食品合同
-			if(foodType.equals("food")){
+			if(foodType.equals("true")){
 				contractId +="F";
 			}else {
 				contractId +="Q";
