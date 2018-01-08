@@ -1,5 +1,7 @@
 package com.gzjy.contract.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,10 @@ public class SampleServiceImpl implements SampleService {
 	}
 	public void updateSampleById(Sample sample) {
 		sampleMapper.updateByPrimaryKeySelective(sample);		
+	}
+	
+	public int deleteByIds(List<String> idList) {
+		return sampleMapper.deleteByIds(idList);		
 	}
 
 }

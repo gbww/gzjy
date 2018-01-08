@@ -106,5 +106,12 @@
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		delete from	sample where id = #{id,jdbcType=VARCHAR}
 	</delete>
+	
+	<delete id="deleteByIds">
+		delete from	sample	where id in 
+		<foreach item="item" index="index" collection="idList" open="(" separator="," close=")">
+		  	#{item}
+		</foreach>  
+	</delete>
 
 </mapper>

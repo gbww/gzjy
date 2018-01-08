@@ -18,5 +18,7 @@ public interface SampleMapper {
     int updateByPrimaryKeySelective(Sample record);   
     
     List<Sample> getListByContractId(@Param("contractId")String contractId);
+    
+    int deleteByIds(@Param("idList")List<String> idList);
   
 }

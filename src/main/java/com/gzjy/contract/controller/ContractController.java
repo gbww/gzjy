@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -44,6 +45,8 @@ import com.gzjy.log.constant.LogConstant;
 import com.gzjy.log.service.LogService;
 import com.gzjy.user.UserService;
 import com.gzjy.user.model.User;
+
+import org.apache.commons.lang3.StringUtils;
 
 @RestController
 @RequestMapping({ "/v1/ahgz" })
@@ -284,8 +287,22 @@ public class ContractController {
 	@Privileges(name = "CONTRACT-UPDATE", scope = { 1 })
 	@RequestMapping(value = "/contract/{id}", method = RequestMethod.PUT)
 	@Transactional
-	public Response updateContract(@PathVariable String id, @RequestBody ContractSample contractSample) {
-		Contract contract = contractSample.getContract();
+	public Response updateContract(
+			@PathVariable String id, 
+			@RequestParam String contractSample, 
+			@RequestParam String deleteSampleIdList, 
+			@RequestParam("files") MultipartFile[] files,
+			@RequestParam String deleteFileNameList) {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+		ContractSample contractSampleObject = null;
+        try {
+        	contractSampleObject = objectMapper.readValue(contractSample, ContractSample.class);            
+        } catch (IOException e) {
+        	logger.info(e.getMessage());
+        	return Response.fail("数据转换异常:"+e.getMessage());
+        }
+		Contract contract = contractSampleObject.getContract();
 		try {
 			Contract temp = contractService.selectByPrimaryKey(id);
 			if (temp.getStatus() == ContractStatus.UPDATING.getValue()) {
@@ -296,16 +313,51 @@ public class ContractController {
 					contract.setStatus(ContractStatus.APPROVING.getValue());
 				}
 			}
-			// 修改数据库表数据
-			contract.setId(id);
-			contract.setUpdatedAt(new Date());
-			contractService.updateByPrimaryKey(contract);
-			List<Sample> sampleList= contractSample.getSampleList();
-			if(sampleList!=null && sampleList.size()!=0) {
-				for(Sample sample:sampleList) {
-					sampleService.updateSampleById(sample);
+			//删除合同修改中去掉的样品
+			if(deleteSampleIdList!=null && (!deleteSampleIdList.equals(""))) {
+				List <String> sampleIdList = Arrays.asList(deleteSampleIdList.split(";"));
+				sampleService.deleteByIds(sampleIdList);
+			}
+			String appendix = temp.getAppendix();
+			//修改合同中新添加附件
+			if(files.length!=0) {
+				contractService.uploadFile(files, id);
+				for(MultipartFile file:files) {
+					appendix+="var\\lib\\docs\\gzjy\\attachment\\"+id+"\\"+file.getOriginalFilename();
 				}
 			}
+			String [] tempFile = new String[50];
+			if(deleteFileNameList!=null && (!deleteFileNameList.equals(""))) {
+				String []delFileArray = deleteFileNameList.split(";");
+				List <String> appendixArray = Arrays.asList(appendix.split(";"));
+				int j=0;
+				for(int i=0;i<delFileArray.length;i++) {
+					for(String a:appendixArray) {
+						if(!a.contains(delFileArray[i])) {
+							tempFile[j] = a;
+							j+=1;
+						}
+					}
+				}
+				
+			}
+			// 修改数据库表数据
+			contract.setId(id);
+			contract.setAppendix(StringUtils.join(tempFile, ";"));
+			contract.setUpdatedAt(new Date());
+			contractService.updateByPrimaryKey(contract);
+			List<Sample> sampleList= contractSampleObject.getSampleList();
+			if(sampleList!=null && sampleList.size()!=0) {
+				for(Sample sample:sampleList) {
+					if(sample.getId()!=null) {
+						sampleService.updateSampleById(sample);
+					}
+					else {
+						sample.setId(ShortUUID.getInstance().generateShortID());
+						sampleService.insert(sample);
+					}
+				}
+			}			
 			logService.insertLog(LogConstant.CONTRACT_UPDATE.getCode(), id, null);
 			return Response.success("success");
 		} catch (Exception e) {
