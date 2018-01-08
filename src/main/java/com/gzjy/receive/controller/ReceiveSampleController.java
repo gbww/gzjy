@@ -108,10 +108,13 @@ public class ReceiveSampleController {
 		if (result.hasErrors()) {
 			return Response.fail(result.getFieldError().getDefaultMessage());
 		}
-		for (ReceiveSampleItem item : items) {
-
-		}
+		
 		boolean flag = receiveSampleService.updateSampleItemsResoult(items);
+		for (ReceiveSampleItem item : items) {
+		    if(receiveSampleService.checkReceiveSampleIsFinished(item.getReceiveSampleId())) { //如果接样单的检测项都完成了结果录入
+		        receiveSampleService.setStatus(item.getReceiveSampleId(), 2);
+		    }
+        }
 
 		return Response.success("操作成功：" + flag);
 	}
@@ -164,6 +167,7 @@ public class ReceiveSampleController {
 			return Response.fail("接收样品编号不能为空");
 		}
 		receiveSample = receiveSampleService.updateReceiveSample(receiveSample);
+		
 		return Response.success(receiveSample);
 	}
 
@@ -245,6 +249,89 @@ public class ReceiveSampleController {
 
 		return Response.success(receiveSampleService.select(pageNum, pageSize, order, filter, start, end));
 	}
+	
+	
+	
+	
+	// 查询未分配的接样信息
+    @RequestMapping(value = "/sample/listForDistribute", method = RequestMethod.GET)
+    public Response listSampleForDistribute(@RequestParam(name = "receiveSampleId", required = false) String id,
+            @RequestParam(name = "reportId", required = false) String reportId,
+            @RequestParam(name = "entrustedUnit", required = false) String entrustedUnit,
+            @RequestParam(name = "inspectedUnit", required = false) String inspectedUnit,
+            @RequestParam(name = "sampleName", required = false) String sampleName,
+            @RequestParam(name = "executeStandard", required = false) String executeStandard,
+            @RequestParam(name = "productionUnit", required = false) String productionUnit,
+            @RequestParam(name = "sampleType", required = false) String sampleType,
+            @RequestParam(name = "checkType", required = false) String checkType,
+            @RequestParam(name = "reportStatus", required = false) Integer reportStatus,
+            @RequestParam(name = "order", required = false) String order,
+            @RequestParam(name = "status", defaultValue = "0") int status,
+            @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
+            
+            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+            @RequestParam(value = "startTime", required = false) String startTime,
+            @RequestParam(value = "endTime", required = false) String endTime) {
+        Map<String, Object> filter = new HashMap<String, Object>();
+
+        if (StringUtils.isBlank(startTime)) {
+            startTime = null;
+        }
+        if (StringUtils.isBlank(endTime)) {
+            endTime=null;
+        }
+        if(!StringUtils.isBlank(reportId)) {
+            filter.put("report_id", reportId);
+        }
+        if(!StringUtils.isBlank(inspectedUnit)) {
+            filter.put("inspected_unit", inspectedUnit);
+        }
+        if(!StringUtils.isBlank(sampleName)) {
+            filter.put("sample_name", sampleName);
+        }
+        if(!StringUtils.isBlank(executeStandard)) {
+            filter.put("execute_standard", executeStandard);
+        }
+        if(!StringUtils.isBlank(productionUnit)) {
+            filter.put("production_unit", productionUnit);
+        }
+        if (!StringUtils.isBlank(id)) {
+            filter.put("receive_sample_id", id);
+        }
+        if (!StringUtils.isBlank(entrustedUnit)) {
+            filter.put("entrusted_unit", entrustedUnit);
+        }
+        if (!StringUtils.isBlank(sampleType)) {
+            filter.put("sample_type", sampleType);
+        }
+        if (!StringUtils.isBlank(checkType)) {
+            filter.put("check_type", checkType);
+        }
+        if (reportStatus!=null) {
+            filter.put("report_status", reportStatus);
+        }
+        if (StringUtils.isBlank(order)) {
+            order = "created_at desc";
+        }
+        if (status != 5) {
+            filter.put("status", status);
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date start = null;
+        Date end = null;
+
+        try {
+            start = startTime == null ? null : sdf.parse(startTime);
+            end = endTime == null ? null : sdf.parse(endTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BizException("输入的时间格式不合法！");
+        }
+
+        return Response.success(receiveSampleService.select(pageNum, pageSize, order, filter, start, end));
+    }
+    
+	
 	
 		
 	
@@ -444,6 +531,32 @@ public class ReceiveSampleController {
         }
 		return Response.success(receiveSampleService.selectCurrentUserItems(pageNum, pageSize, order, filter));
 	}
+	
+	
+	
+	// 查询当前用户接样单信息(检测人员关心的接样单)
+    @RequestMapping(value = "/sampleItem/sample", method = RequestMethod.GET)
+    public Response listReceiveItemByCurrentUser(@RequestParam(name = "status", defaultValue = "0") int status,
+            @RequestParam(name = "order", required = false) String order,
+             @RequestParam(name = "receiveSampleId", required = false) String receiveSampleId,
+            @RequestParam(name = "reportId", required = false) String reportId,
+            @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
+            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+        Map<String, Object> filter = new HashMap<String, Object>();
+        if (status != 5) {
+            filter.put("status", status);
+        }
+        if (StringUtils.isBlank(order)) {
+            order = "updated_at desc";
+        }
+        if (!StringUtils.isBlank(receiveSampleId)) {
+            filter.put("receive_sample_id", receiveSampleId);
+        }
+        if (!StringUtils.isBlank(reportId)) {
+            filter.put("report_id", reportId);
+        }
+        return Response.success(receiveSampleService.selectUnderDetection(pageNum, pageSize, order, filter));
+    }
 
 	/**
 	 * 通过模板导出报告(excel or pdf)并下载

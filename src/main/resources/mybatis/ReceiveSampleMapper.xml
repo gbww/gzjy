@@ -125,6 +125,28 @@
 			</foreach>
 		</where>
 	</select>
+	
+	<!-- 查询待检测的接样单列表 -->
+	<select id="selectUnderDetection" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from receive_sample
+		<where>			
+			<foreach collection="filters.keys" item="key" separator="and">
+				<if test="null!=filters[key]">
+					${key} LIKE #{filters[${key}]}
+				</if>
+			</foreach>
+			and  receive_sample_id IN( select receive_sample_id from receive_sample_item where
+			test_user=#{user} and status=1
+			)
+		</where>
+		order by ${orderby}
+	</select>
+	
+	
+	
+	
 
 
 	<select id="selectAll" resultMap="BaseResultMap">

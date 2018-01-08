@@ -29,4 +29,6 @@ public interface ReceiveSampleMapper {
             @Param("timeEnd") Timestamp timeEnd);
     
     List<HashMap<String, String>>selectAllItem(ReceiveSample record);
+    
+    List<ReceiveSample>  selectUnderDetection(@Param("user")String testUser,@Param("filters") Map<String, Object> filter,@Param("orderby")String order);
 }

@@ -119,6 +119,19 @@ public class ReceiveSampleService {
 	    }
 	    return result;
 	}
+	
+	
+	@Transactional
+    public Boolean checkReceiveSampleIsFinished(String receiveSampleId) {
+
+        List<ReceiveSampleItem> doingItems = receiveSampleItemMapper
+                .selectDoingItems(receiveSampleId);
+        if (doingItems.size() > 0)
+            return false;
+        else
+            return true;
+
+    }
 
 	@Transactional
 	public Boolean addReceiveSampleItems(List<ReceiveSampleItem> items) {
@@ -262,6 +275,27 @@ public class ReceiveSampleService {
         });
         return pages;
     }
+    
+    
+    public PageInfo<ReceiveSample> selectUnderDetection(Integer pageNum, Integer pageSize,String order,Map<String, Object> filter) {
+        User u=userClient.getCurrentUser();
+      /* boolean superUser= u.getRole().isSuperAdmin();
+       String user=null;
+       if(!superUser) {
+           String name=u.getName();
+           filter.put("test_user", name);
+       }  */  
+        List<ReceiveSample> list = new ArrayList<ReceiveSample>();
+        PageInfo<ReceiveSample> pages = new PageInfo<ReceiveSample>(list);
+        pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
+            @Override
+            public void doSelect() {
+                receiveSampleMapper.selectUnderDetection(u.getName(), filter,order);
+            }
+        });
+        return pages;
+    }
+    
 
 	public ReceiveSample getReceiveSample(String id) {
 

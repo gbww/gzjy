@@ -35,4 +35,7 @@ public interface ReceiveSampleItemMapper {
     //按照部门查询每种状态的检测项数量
     List<SampleItemCountView> selectCountGroupByDepartment(@Param("filters") Map<String, Object> filter,@Param("orderby")String order,@Param("timeStart") Timestamp timeStart, 
             @Param("timeEnd") Timestamp timeEnd);
+    
+    
+    List<ReceiveSampleItem> selectDoingItems(String receiveSampleId);
 }
