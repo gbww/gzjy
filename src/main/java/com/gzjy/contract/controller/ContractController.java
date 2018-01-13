@@ -318,35 +318,42 @@ public class ContractController {
 				for (MultipartFile file : files) {
 					appendix += "var\\lib\\docs\\gzjy\\attachment\\" + id + "\\" + file.getOriginalFilename();
 				}
+				contract.setAppendix(appendix);
 			}
 			String tempFileArray[] = new String[50];
-			String delFileArray[] = deleteFileNameList.split(";");
-			if (deleteFileNameList != null && (!deleteFileNameList.equals(""))) {
-				String appendixArray[] = appendix.split(";");
-				int j = 0;
-				for (String a : appendixArray) {
-					int find = 0;
-					for (String d : delFileArray) {
-						if (a.contains(d)) {
-							find = 1;
-							break;
+			//如果附件需要删除，在删除附件的时候也需要对数据库appendix进行更新
+			if(deleteFileNameList!=null) {
+				String delFileArray[] = deleteFileNameList.split(";");
+				if (deleteFileNameList != null && (!deleteFileNameList.equals(""))) {
+					String appendixArray[] = appendix.split(";");
+					int j = 0;
+					for (String a : appendixArray) {
+						int find = 0;
+						for (String d : delFileArray) {
+							if (a.contains(d)) {
+								find = 1;
+								break;
+							}
+						}
+						if (find == 0) {
+							tempFileArray[j] = a;
+							j += 1;
 						}
 					}
-					if (find == 0) {
-						tempFileArray[j] = a;
-						j += 1;
+				}
+				for (String d : delFileArray) {
+					contractService.deleteAppendix(id, d);
+				}
+				String appendixTemp = "";
+				for (String s : tempFileArray) {
+					if (s != null) {
+						appendixTemp += s + ";";
 					}
 				}
-			}
+				contract.setAppendix(appendixTemp);
+			}			
 			// 修改数据库表数据
-			contract.setId(id);
-			String appendixTemp = "";
-			for (String s : tempFileArray) {
-				if (s != null) {
-					appendixTemp += s + ";";
-				}
-			}
-			contract.setAppendix(appendixTemp);
+			contract.setId(id);			
 			contract.setUpdatedAt(new Date());
 			contractService.updateByPrimaryKey(contract);
 			List<Sample> sampleList = contractSampleObject.getSampleList();
@@ -366,10 +373,7 @@ public class ContractController {
 						sampleService.insert(sample);
 					}
 				}
-			}
-			for (String d : delFileArray) {
-				contractService.deleteAppendix(id, d);
-			}
+			}			
 			logService.insertLog(LogConstant.CONTRACT_UPDATE.getCode(), id, null);
 			return Response.success("success");
 		} catch (Exception e) {
