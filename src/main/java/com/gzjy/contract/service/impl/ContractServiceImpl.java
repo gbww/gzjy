@@ -275,12 +275,12 @@ public class ContractServiceImpl implements ContractService {
 	
 	public OutputStream getAppendix(OutputStream out, String contractId, String filename) {
 		EpicNFSClient client = epicNFSService.getClient("gzjy");
-		String filePath = "attachment\\"+contractId+"\\"+filename;
-		if(client.hasRemoteFile(filePath)) {
+		String filePath = "attachment/"+contractId+"/"+filename;
+		if(!client.hasRemoteFile(filePath)) {
 			return null;
 		}
 		try {
-			InputStream inputStream = new FileInputStream(filePath);        
+			InputStream inputStream = new FileInputStream("/var/lib/docs/gzjy/"+filePath);        
 	        byte[] b = new byte[1024];
 	        int i=0;
 	        while((i=inputStream.read(b))!=-1){
