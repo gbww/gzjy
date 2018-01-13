@@ -285,7 +285,7 @@ public class ContractController {
 	 * @return
 	 */
 	@Privileges(name = "CONTRACT-UPDATE", scope = { 1 })
-	@RequestMapping(value = "/contract/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/contract/{id}", method = RequestMethod.POST)
 	@Transactional
 	public Response updateContract(
 			@PathVariable String id, 
