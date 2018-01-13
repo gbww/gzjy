@@ -316,7 +316,7 @@ public class ContractController {
 			if (files.length != 0) {
 				contractService.uploadFile(files, id);
 				for (MultipartFile file : files) {
-					appendix += "var\\lib\\docs\\gzjy\\attachment\\" + id + "\\" + file.getOriginalFilename();
+					appendix += "var\\lib\\docs\\gzjy\\attachment\\" + id + "\\" + file.getOriginalFilename()+";";
 				}
 				contract.setAppendix(appendix);
 			}
