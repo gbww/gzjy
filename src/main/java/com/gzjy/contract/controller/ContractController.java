@@ -16,6 +16,7 @@ import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -284,15 +285,15 @@ public class ContractController {
 	 * @param contract
 	 * @return
 	 */
-	@Privileges(name = "CONTRACT-UPDATE", scope = { 1 })
-	@RequestMapping(value = "/contract/{id}", method = RequestMethod.POST)
+	@Privileges(name = "CONTRACT-UPDATE", scope = { 1 })	
+	@RequestMapping(value = "/contract/update", method = RequestMethod.POST)
 	@Transactional
 	public Response updateContract(
-			@PathVariable String id, 
-			@RequestParam String contractSample, 
-			@RequestParam String deleteSampleIdList, 
+			@RequestParam(required=true) String id, 
+			@RequestParam(required=true) String contractSample, 
+			@RequestParam(required=false) String deleteSampleIdList, 
 			@RequestParam("files") MultipartFile[] files,
-			@RequestParam String deleteFileNameList) {
+			@RequestParam(required=false) String deleteFileNameList) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
 		ContractSample contractSampleObject = null;
