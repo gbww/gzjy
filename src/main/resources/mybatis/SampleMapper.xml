@@ -67,7 +67,7 @@
 				name = #{name,jdbcType=VARCHAR},
 			</if>
 			<if test="detectBy != null">
-				detect_by = #{method,jdbcType=VARCHAR},
+				detect_by = #{detectBy,jdbcType=VARCHAR},
 			</if>
 			<if test="qualityLevel != null">
 				quality_level = #{qualityLevel,jdbcType=VARCHAR},

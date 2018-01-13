@@ -13,10 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,8 +47,6 @@ import com.gzjy.log.service.LogService;
 import com.gzjy.user.UserService;
 import com.gzjy.user.model.User;
 
-import org.apache.commons.lang3.StringUtils;
-
 @RestController
 @RequestMapping({ "/v1/ahgz" })
 public class ContractController {
@@ -72,6 +70,7 @@ public class ContractController {
 
 	/**
 	 * 录入合同信息到数据库
+	 * 
 	 * @param Contract实体对象
 	 * @return
 	 */
@@ -83,34 +82,34 @@ public class ContractController {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
 		ContractSample contractSampleObject = null;
-        try {
-        	contractSampleObject = objectMapper.readValue(contractSample, ContractSample.class);            
-        } catch (IOException e) {
-        	logger.info(e.getMessage());
-        	return Response.fail("数据转换异常:"+e.getMessage());
-        }		
+		try {
+			contractSampleObject = objectMapper.readValue(contractSample, ContractSample.class);
+		} catch (IOException e) {
+			logger.info(e.getMessage());
+			return Response.fail("数据转换异常:" + e.getMessage());
+		}
 		if (contractSampleObject.getContract().getType() == null) {
 			return Response.fail("合同类型为空");
 		}
-		Contract contract = contractSampleObject.getContract();		
+		Contract contract = contractSampleObject.getContract();
 		contract.setStatus(ContractStatus.READY.getValue());
 		Date now = new Date();
-		contract.setCreatedAt(now);	
+		contract.setCreatedAt(now);
 		// 根据合同类型生成规则有序的合同编号
-		String contractId = contractService.generateContractId(contractSampleObject.getContract().getType(),isFood);
-		contract.setId(contractId);		
-		String appendix="";
+		String contractId = contractService.generateContractId(contractSampleObject.getContract().getType(), isFood);
+		contract.setId(contractId);
+		String appendix = "";
 		String path = "var\\lib\\docs\\gzjy\\attachment\\";
-		for (MultipartFile file:files) {
-			appendix=appendix+path+contractId +"\\"+file.getOriginalFilename()+";";
+		for (MultipartFile file : files) {
+			appendix = appendix + path + contractId + "\\" + file.getOriginalFilename() + ";";
 		}
 		contract.setAppendix(appendix);
 		try {
 			contractService.insert(contract);
 			for (Sample sample : contractSampleObject.getSampleList()) {
-			    String id = ShortUUID.getInstance().generateShortID();
-			    sample.setId(id);
-			    sample.setContractId(contractId);
+				String id = ShortUUID.getInstance().generateShortID();
+				sample.setId(id);
+				sample.setContractId(contractId);
 				sampleService.insert(sample);
 			}
 			contractService.uploadFile(files, contractId);
@@ -122,84 +121,84 @@ public class ContractController {
 			return Response.fail(e.getMessage());
 		}
 	}
-	
-	
+
 	/**
 	 * 下载合同附件
+	 * 
 	 * @param Contract实体对象
 	 * @return
-	 */	
+	 */
 	@RequestMapping(value = "/contract/{id}/appendix", method = RequestMethod.GET)
 	public Response getAppendix(@PathVariable(required = true) String id,
-			@RequestParam(required = true) String filename, HttpServletResponse response) {		
+			@RequestParam(required = true) String filename, HttpServletResponse response) {
 		try {
 			response.reset();
 			response.setContentType("application/octet-stream;charset=UTF-8");
-			response.setHeader("Content-disposition",
-					"attachment;filename=" + URLEncoder.encode(filename, "UTF-8"));
+			response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(filename, "UTF-8"));
 			OutputStream out = response.getOutputStream();
-			if(out == null) {
+			if (out == null) {
 				return Response.fail("附件不存在");
 			}
-			contractService.getAppendix(out, id, filename);			
+			contractService.getAppendix(out, id, filename);
 		} catch (Exception e) {
-			logger.error(e.getMessage());			
+			logger.error(e.getMessage());
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 删除合同附件
+	 * 
 	 * @return
-	 */	
+	 */
 	@RequestMapping(value = "/contract/{id}/appendix", method = RequestMethod.DELETE)
 	public Response deleteAppendix(@PathVariable(required = true) String id,
-			@RequestParam(required = true) String filename) {		
+			@RequestParam(required = true) String filename) {
 		try {
-			contractService.deleteAppendix(id, filename);	
+			contractService.deleteAppendix(id, filename);
 			String appendix = contractService.getAppendixById(id);
-			if(appendix != null) {
-				String []datas = appendix.split(";");
-				String temp="";
-				for(String data:datas) {
-					if(!data.contains(filename)) {
-						temp+=data+";";
+			if (appendix != null) {
+				String[] datas = appendix.split(";");
+				String temp = "";
+				for (String data : datas) {
+					if (!data.contains(filename)) {
+						temp += data + ";";
 					}
 				}
 				Contract contract = new Contract();
 				contract.setId(id);
 				contract.setAppendix(temp);
 				contractService.updateByPrimaryKey(contract);
-				//同时更新数据库字段信息
+				// 同时更新数据库字段信息
 			}
-			
+
 		} catch (Exception e) {
-			logger.error(e.getMessage());	
-			return Response.fail(e.getMessage()); 
+			logger.error(e.getMessage());
+			return Response.fail(e.getMessage());
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 上传合同附件
+	 * 
 	 * @return
-	 */	
+	 */
 	@RequestMapping(value = "/contract/{id}/appendix", method = RequestMethod.POST)
-	public Response addAppendix(@PathVariable(required = true) String id,
-			@RequestParam("file") MultipartFile file) {		
+	public Response addAppendix(@PathVariable(required = true) String id, @RequestParam("file") MultipartFile file) {
 		try {
-			MultipartFile [] fileList = new MultipartFile[1];
+			MultipartFile[] fileList = new MultipartFile[1];
 			fileList[0] = file;
 			contractService.uploadFile(fileList, id);
-			String path = "var\\lib\\docs\\gzjy\\attachment\\";				
+			String path = "var\\lib\\docs\\gzjy\\attachment\\";
 			String appendix = contractService.getAppendixById(id);
 			Contract contract = new Contract();
 			contract.setId(id);
-			contract.setAppendix(appendix+path+file.getOriginalFilename()+";");
-			contractService.updateByPrimaryKey(contract);			
+			contract.setAppendix(appendix + path + file.getOriginalFilename() + ";");
+			contractService.updateByPrimaryKey(contract);
 		} catch (Exception e) {
-			logger.error(e.getMessage());	
-			return Response.fail(e.getMessage()); 
+			logger.error(e.getMessage());
+			return Response.fail(e.getMessage());
 		}
 		return null;
 	}
@@ -241,7 +240,6 @@ public class ContractController {
 			return Response.fail(e.getMessage());
 		}
 	}
-	
 
 	/**
 	 * 检测合同协议ID是否存在
@@ -285,24 +283,23 @@ public class ContractController {
 	 * @param contract
 	 * @return
 	 */
-	@Privileges(name = "CONTRACT-UPDATE", scope = { 1 })	
+	@Privileges(name = "CONTRACT-UPDATE", scope = { 1 })
 	@RequestMapping(value = "/contract/update", method = RequestMethod.POST)
 	@Transactional
-	public Response updateContract(
-			@RequestParam(required=true) String id, 
-			@RequestParam(required=true) String contractSample, 
-			@RequestParam(required=false) String deleteSampleIdList, 
+	public Response updateContract(@RequestParam(required = true) String id,
+			@RequestParam(required = true) String contractSample,
+			@RequestParam(required = false) String deleteSampleIdList, 
 			@RequestParam("files") MultipartFile[] files,
-			@RequestParam(required=false) String deleteFileNameList) {
+			@RequestParam(required = false) String deleteFileNameList) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
 		ContractSample contractSampleObject = null;
-        try {
-        	contractSampleObject = objectMapper.readValue(contractSample, ContractSample.class);            
-        } catch (IOException e) {
-        	logger.info(e.getMessage());
-        	return Response.fail("数据转换异常:"+e.getMessage());
-        }
+		try {
+			contractSampleObject = objectMapper.readValue(contractSample, ContractSample.class);
+		} catch (IOException e) {
+			logger.info(e.getMessage());
+			return Response.fail("数据转换异常:" + e.getMessage());
+		}
 		Contract contract = contractSampleObject.getContract();
 		try {
 			Contract temp = contractService.selectByPrimaryKey(id);
@@ -314,51 +311,65 @@ public class ContractController {
 					contract.setStatus(ContractStatus.APPROVING.getValue());
 				}
 			}
-			//删除合同修改中去掉的样品
-			if(deleteSampleIdList!=null && (!deleteSampleIdList.equals(""))) {
-				List <String> sampleIdList = Arrays.asList(deleteSampleIdList.split(";"));
-				sampleService.deleteByIds(sampleIdList);
-			}
 			String appendix = temp.getAppendix();
-			//修改合同中新添加附件
-			if(files.length!=0) {
+			// 修改合同中新添加附件
+			if (files.length != 0) {
 				contractService.uploadFile(files, id);
-				for(MultipartFile file:files) {
-					appendix+="var\\lib\\docs\\gzjy\\attachment\\"+id+"\\"+file.getOriginalFilename();
+				for (MultipartFile file : files) {
+					appendix += "var\\lib\\docs\\gzjy\\attachment\\" + id + "\\" + file.getOriginalFilename();
 				}
 			}
-			String [] tempFile = new String[50];
-			if(deleteFileNameList!=null && (!deleteFileNameList.equals(""))) {
-				String []delFileArray = deleteFileNameList.split(";");
-				List <String> appendixArray = Arrays.asList(appendix.split(";"));
-				int j=0;
-				for(int i=0;i<delFileArray.length;i++) {
-					for(String a:appendixArray) {
-						if(!a.contains(delFileArray[i])) {
-							tempFile[j] = a;
-							j+=1;
+			String tempFileArray[] = new String[50];
+			String delFileArray[] = deleteFileNameList.split(";");
+			if (deleteFileNameList != null && (!deleteFileNameList.equals(""))) {
+				String appendixArray[] = appendix.split(";");
+				int j = 0;
+				for (String a : appendixArray) {
+					int find = 0;
+					for (String d : delFileArray) {
+						if (a.contains(d)) {
+							find = 1;
+							break;
 						}
 					}
+					if (find == 0) {
+						tempFileArray[j] = a;
+						j += 1;
+					}
 				}
-				
 			}
 			// 修改数据库表数据
 			contract.setId(id);
-			contract.setAppendix(StringUtils.join(tempFile, ";"));
+			String appendixTemp = "";
+			for (String s : tempFileArray) {
+				if (s != null) {
+					appendixTemp += s + ";";
+				}
+			}
+			contract.setAppendix(appendixTemp);
 			contract.setUpdatedAt(new Date());
 			contractService.updateByPrimaryKey(contract);
-			List<Sample> sampleList= contractSampleObject.getSampleList();
-			if(sampleList!=null && sampleList.size()!=0) {
-				for(Sample sample:sampleList) {
-					if(sample.getId()!=null) {
+			List<Sample> sampleList = contractSampleObject.getSampleList();
+			// 删除合同修改中去掉的样品
+			if (deleteSampleIdList != null && (!deleteSampleIdList.equals(""))) {
+				List<String> sampleIdList = Arrays.asList(deleteSampleIdList.split(";"));
+				sampleService.deleteByIds(sampleIdList);
+			}
+			//添加或修改合同中的样品
+			if (sampleList != null && sampleList.size() != 0) {
+				for (Sample sample : sampleList) {
+					if (sample.getId() != null) {
 						sampleService.updateSampleById(sample);
-					}
-					else {
+					} else {
 						sample.setId(ShortUUID.getInstance().generateShortID());
+						sample.setContractId(id);
 						sampleService.insert(sample);
 					}
 				}
-			}			
+			}
+			for (String d : delFileArray) {
+				contractService.deleteAppendix(id, d);
+			}
 			logService.insertLog(LogConstant.CONTRACT_UPDATE.getCode(), id, null);
 			return Response.success("success");
 		} catch (Exception e) {

@@ -53,5 +53,6 @@ public interface ContractService {
 	
 	public void deleteAppendix(String contractId, String filename);
 	
-	public String getAppendixById(String id);
+	public String getAppendixById(String id);	
+	
 }
