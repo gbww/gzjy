@@ -22,6 +22,7 @@ import com.gzjy.checkitems.service.CheckItemsCatalogMappingService;
 import com.gzjy.checkitems.service.CheckItemsCatalogService;
 import com.gzjy.common.Response;
 import com.gzjy.common.ShortUUID;
+import com.gzjy.common.annotation.Privileges;
 
 @RestController
 @RequestMapping({ "/v1/ahgz" })
@@ -42,6 +43,7 @@ public class CheckItemsController {
 	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/{id}", method = RequestMethod.GET)
+	@Privileges(name = "CHECKITEM-CATALOG-SELECT", scope = { 1 })
 	public Response getCheckItemsCatalog(@PathVariable String id) {
 		try {
 			CheckItemsCatalog item= checkItemsCatalogService.selectByPrimaryKey(id);
@@ -59,6 +61,7 @@ public class CheckItemsController {
 	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog", method = RequestMethod.POST)
+	@Privileges(name = "CHECKITEM-CATALOG-ADD", scope = { 1 })
 	public Response createCheckItemsCatalog(@RequestBody CheckItemsCatalog record) {
 		if(record.getParentId() == null || record.getProductId() == null 
 				||record.getProductName()==null ||record.getIsCatalog()==null) {
@@ -80,6 +83,7 @@ public class CheckItemsController {
 	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/children", method = RequestMethod.GET)
+	@Privileges(name = "CHECKITEM-CATALOG-CHILD-SELECT", scope = { 1 })
 	public Response getCheckItemsCatalogChildren(@RequestParam(required = true) String parentId) {
 		try {
 			List<CheckItemsCatalog> result = checkItemsCatalogService.selectByParentId(parentId);
@@ -96,6 +100,7 @@ public class CheckItemsController {
 	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog", method = RequestMethod.PUT)
+	@Privileges(name = "CHECKITEM-CATALOG-UPDATE", scope = { 1 })
 	public Response updateCheckItemsCatalog(@RequestBody CheckItemsCatalog record) {
 		try {
 			checkItemsCatalogService.updateByPrimaryKeySelective(record);
@@ -128,6 +133,7 @@ public class CheckItemsController {
 	 * @param record
 	 * @return
 	 */
+	@Privileges(name = "CHECKITEM-ADD", scope = { 1 })
 	@RequestMapping(value = "/checkitemscatalog/item", method = RequestMethod.POST)
 	public Response createCheckItem(@RequestBody CheckItem record) {
 		try {
@@ -148,6 +154,7 @@ public class CheckItemsController {
 	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/item", method = RequestMethod.GET)
+	@Privileges(name = "CHECKITEM-SELECT", scope = { 1 })
 	public Response getCheckItemList(
 			@RequestParam(required = false) String name, 
 			@RequestParam(required = false) String method,
@@ -170,6 +177,7 @@ public class CheckItemsController {
 	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/item/{id}", method = RequestMethod.PUT)
+	@Privileges(name = "CHECKITEM-UPDATE", scope = { 1 })
 	public Response updateCheckItem(@RequestBody CheckItem record, @PathVariable String id) {
 		try {
 			record.setId(id);
@@ -189,6 +197,7 @@ public class CheckItemsController {
 	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/item/{id}", method = RequestMethod.DELETE)
+	@Privileges(name = "CHECKITEM-DELETE", scope = { 1 })
 	public Response deleteCheckItem(@PathVariable String id) {
 		try {
 			checkItemService.deleteByPrimaryKey(id);
@@ -224,6 +233,7 @@ public class CheckItemsController {
 	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/item/{id}", method = RequestMethod.GET)
+	@Privileges(name = "CHECKITEM-GET", scope = { 1 })
 	public Response getCheckItem(@PathVariable String id) {
 		try {
 			CheckItem item = checkItemService.selectByPrimaryKey(id);
@@ -258,6 +268,7 @@ public class CheckItemsController {
 	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/item/mapping", method = RequestMethod.POST)
+	@Privileges(name = "CHECKITEM-MAPPING-ADD", scope = { 1 })
 	public Response createCheckItemMapping(@RequestBody CheckItemsCatalogMapping record) {
 		if(record.getCatalogId() ==null || record.getCheckItemId()==null) {
 			return Response.fail("Param Invalid");
@@ -279,6 +290,7 @@ public class CheckItemsController {
 	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/item/mapping/list", method = RequestMethod.POST)
+	@Privileges(name = "CHECKITEM-MAPPING-MUPL-ADD", scope = { 1 })
 	public Response getCheckItemListById(@RequestBody List<HashMap<String, String>> records) {
 		if(records ==null || records.size()==0) {			
 			return Response.fail("Param Invalid");
@@ -306,6 +318,7 @@ public class CheckItemsController {
 	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/item/mapping/{id}", method = RequestMethod.DELETE)
+	@Privileges(name = "CHECKITEM-MAPPING-DELETE", scope = { 1 })
 	public Response deleteCheckItemListById(@PathVariable String id) {		
 		try {
 			checkItemsCatalogMappingService.deleteByPrimaryKey(id);
@@ -323,6 +336,7 @@ public class CheckItemsController {
 	 * @return
 	 */
 	@RequestMapping(value = "/checkitems/import", method = RequestMethod.POST)
+	@Privileges(name = "CHECKITEM-IMPORT", scope = { 1 })
 	public Response multiImport(@RequestParam("file") MultipartFile file) {
 		try {
 			checkItemService.importFile(file);

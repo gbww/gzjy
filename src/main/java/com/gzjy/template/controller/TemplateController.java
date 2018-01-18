@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.github.pagehelper.PageInfo;
 import com.gzjy.common.Response;
 import com.gzjy.common.ShortUUID;
+import com.gzjy.common.annotation.Privileges;
 import com.gzjy.template.model.Template;
 import com.gzjy.template.service.TemplateService;
 
@@ -77,11 +78,12 @@ public class TemplateController {
 	}
 	
 	/**
-	 * 修改模板表数据记录
+	 * 删除模板表数据记录
 	 * @param record
 	 * @return
 	 */
 	@RequestMapping(value = "/template/{id}", method = RequestMethod.DELETE)
+	@Privileges(name = "TEMPLATE-DELETE", scope = { 1 })
 	public Response deleteTemplate(@PathVariable String id) {		
 		try {			
 			templateService.deleteByPrimaryKey(id);
@@ -99,6 +101,7 @@ public class TemplateController {
 	 * @return
 	 */
 	@RequestMapping(value = "/template/upload", method = RequestMethod.POST)
+	@Privileges(name = "TEMPLATE-UPLOAD", scope = { 1 })
 	public Response uploadTemplate(@RequestParam("file") MultipartFile file, 
 			@RequestParam String name, @RequestParam String description, @RequestParam String category) {
 		try {
@@ -116,6 +119,7 @@ public class TemplateController {
 	 * @return
 	 */
 	@RequestMapping(value = "/templates", method = RequestMethod.GET)
+	@Privileges(name = "TEMPLATE-SELECT", scope = { 1 })
 	public Response getTemplateList(
 			@RequestParam(required = false) String name,			
 		    @RequestParam(required = false,defaultValue="1") Integer pageNum,
@@ -133,11 +137,12 @@ public class TemplateController {
 	}
 	
 	/**
-	 * 获取模板列表
+	 * 获取模板类别列表
 	 * @param record
 	 * @return
 	 */
 	@RequestMapping(value = "/template/types", method = RequestMethod.GET)
+	@Privileges(name = "TEMPLATE-TYPE-SELECT", scope = { 1 })
 	public Response getTypeList(@RequestParam(required = true) String category) {
 		try {
 			ArrayList<String> data = templateService.selectTypeByCagegory(category);
