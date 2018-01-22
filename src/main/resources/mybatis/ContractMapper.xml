@@ -75,18 +75,15 @@
 	<sql id="Base_Column_List">
 		id, sample_traits, detect_purpose, detect_type, detect_project,
 		detect_by, is_use_standard, is_subcontracting, is_expedited,
-		is_evaluation, product_unit,
-		inspection_unit, sampling_address, inspection_unit_address, zip_code, phone, fax,
-		contact_person, report_method, report_count, inspection_date,
-		acceptor,
-		acceptance_date, cost, process_id, status,created_at,updated_at, appendix, type,
-		entrustment,
-		entrustment_address, serial_number, project_leader, project_name, task_category,
-		sample_type
-		inspection, task_batch, settlement_method, is_separate_settlement, sign_date,
-		contract_term,
-		deposit_bank, account, auth_category, auth_type, product_type, enterprise_file,
-		limit_time,
+		is_evaluation, product_unit,inspection_unit, sampling_address, 
+		inspection_unit_address, zip_code, phone, fax,contact_person, 
+		report_method, report_count, inspection_date,acceptor,acceptance_date, 
+		cost, process_id, status,created_at,updated_at, appendix, type,
+		entrustment,entrustment_address, serial_number, project_leader, 
+		project_name, task_category,sample_type,inspection, task_batch, 
+		settlement_method, is_separate_settlement, sign_date,
+		contract_term,deposit_bank, account, auth_category, auth_type, 
+		product_type, enterprise_file,limit_time,
 		inspect_time, expire_time, contract_sign_time, report_send_address,
 		invoice_send_address, is_delete
 	</sql>
