@@ -19,6 +19,8 @@ public interface SampleMapper {
     
     List<Sample> getListByContractId(@Param("contractId")String contractId);
     
+    int deleteByContractId(@Param("contractId")String contractId);
+    
     int deleteByIds(@Param("idList")List<String> idList);
   
 }

@@ -9,5 +9,7 @@ public interface SampleService {
 	
 	public void updateSampleById(Sample sample);
 	
+	int deleteByContractId(String contractId);
+	
 	int deleteByIds(List<String> idList);
 }

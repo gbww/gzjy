@@ -25,5 +25,9 @@ public class SampleServiceImpl implements SampleService {
 	public int deleteByIds(List<String> idList) {
 		return sampleMapper.deleteByIds(idList);		
 	}
+	
+	public int deleteByContractId(String contractId) {
+		return sampleMapper.deleteByContractId(contractId);
+	}
 
 }

@@ -264,15 +264,18 @@ public class ContractController {
 	 * @param id
 	 * @return
 	 */
+	@Transactional
 	@Privileges(name = "CONTRACT-DELETE", scope = { 1 })
 	@RequestMapping(value = "/contract/{id}", method = RequestMethod.DELETE)
 	public Response delContractById(@PathVariable String id) {
 		try {
 			contractService.deleteByPrimaryKey(id);
+			sampleService.deleteByContractId(id);
 			logService.insertLog(LogConstant.CONTRACT_DELETE.getCode(), id, null);
 			return Response.success("success");
 		} catch (Exception e) {
 			logger.error(e + "");
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			return Response.fail(e.getMessage());
 		}
 	}
