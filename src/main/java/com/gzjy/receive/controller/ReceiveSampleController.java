@@ -267,7 +267,7 @@ public class ReceiveSampleController {
             @RequestParam(name = "reportStatus", required = false) Integer reportStatus,
             @RequestParam(name = "order", required = false) String order,
             @RequestParam(name = "status", defaultValue = "0") int status,
-            @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
+            @RequestParam(name = "pageNum", required = false) Integer pageNum,
             
             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
             @RequestParam(value = "startTime", required = false) String startTime,
@@ -327,8 +327,13 @@ public class ReceiveSampleController {
             e.printStackTrace();
             throw new BizException("输入的时间格式不合法！");
         }
+        if(pageNum==null) {
+            return Response.success(receiveSampleService.selectNoPage(order, filter, start, end));
+        }else {
+            return Response.success(receiveSampleService.select(pageNum, pageSize, order, filter, start, end));
+        }
 
-        return Response.success(receiveSampleService.select(pageNum, pageSize, order, filter, start, end));
+        
     }
     
 	
@@ -540,14 +545,14 @@ public class ReceiveSampleController {
             @RequestParam(name = "order", required = false) String order,
              @RequestParam(name = "receiveSampleId", required = false) String receiveSampleId,
             @RequestParam(name = "reportId", required = false) String reportId,
-            @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
+            @RequestParam(name = "pageNum", required = false) Integer pageNum,
             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
         Map<String, Object> filter = new HashMap<String, Object>();
         if (status != 5) {
             filter.put("status", status);
         }
         if (StringUtils.isBlank(order)) {
-            order = "updated_at desc";
+            order = "created_at desc";
         }
         if (!StringUtils.isBlank(receiveSampleId)) {
             filter.put("receive_sample_id", receiveSampleId);
@@ -555,7 +560,11 @@ public class ReceiveSampleController {
         if (!StringUtils.isBlank(reportId)) {
             filter.put("report_id", reportId);
         }
-        return Response.success(receiveSampleService.selectUnderDetection(pageNum, pageSize, order, filter));
+        if(pageNum==null) {
+            return Response.success(receiveSampleService.selectUnderDetectionForNOPage(order, filter));
+        }
+        else
+            return Response.success(receiveSampleService.selectUnderDetection(pageNum, pageSize, order, filter));
     }
 
 	/**

@@ -231,6 +231,23 @@ public class ReceiveSampleService {
 	}
 	
 	
+	@Transactional
+    public List<ReceiveSample> selectNoPage( String order, Map<String, Object> filter,Date timeStart,Date timeEnd) {
+
+        List<ReceiveSample> list = new ArrayList<ReceiveSample>();
+       
+        Timestamp start = timeStart == null ? null : new Timestamp(timeStart.getTime());
+        Timestamp end = timeEnd == null ? null : new Timestamp(timeEnd.getTime());
+       
+        list= receiveSampleMapper.selectAll(filter, order,start,end);
+         
+        return list;
+    }
+	
+	
+	
+	
+	
 	/**
 	 * 
 	测试
@@ -294,6 +311,21 @@ public class ReceiveSampleService {
             }
         });
         return pages;
+    }
+    
+    public List<ReceiveSample> selectUnderDetectionForNOPage(String order,Map<String, Object> filter) {
+        User u=userClient.getCurrentUser();
+      /* boolean superUser= u.getRole().isSuperAdmin();
+       String user=null;
+       if(!superUser) {
+           String name=u.getName();
+           filter.put("test_user", name);
+       }  */  
+        List<ReceiveSample> list = new ArrayList<ReceiveSample>();
+      
+        list=receiveSampleMapper.selectUnderDetection(u.getName(), filter,order);
+         
+        return list;
     }
     
 
