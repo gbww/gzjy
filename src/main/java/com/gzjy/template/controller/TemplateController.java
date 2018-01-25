@@ -66,6 +66,7 @@ public class TemplateController {
 	 * @param record
 	 * @return
 	 */
+	@Privileges(name = "TEMPLATE-UPDATE", scope = { 1 })
 	@RequestMapping(value = "/template", method = RequestMethod.PUT)
 	public Response updateTemplate(@RequestBody Template record) {		
 		try {			
