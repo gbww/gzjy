@@ -626,6 +626,7 @@ public class ReceiveSampleController {
 				} else {
 					ExcelToPdf.xlsToPdfForLinux(tempFile, tempPdf);
 				}
+				logger.info("End export PDF");
 				return Response.success(tempPdf);
 			}
 			// 删除缓存模板文件
