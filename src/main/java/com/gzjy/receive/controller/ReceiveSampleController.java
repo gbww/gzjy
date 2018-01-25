@@ -580,7 +580,8 @@ public class ReceiveSampleController {
 		EpicNFSClient client = epicNFSService.getClient("gzjy");
 		// 生成临时模板excel文件
 		String fileSuffix = templateFileName.endsWith("xlsx") ? ".xlsx" : ".xls";
-		String tempFileName = ShortUUID.getInstance().generateShortID() + fileSuffix;
+		String temp = ShortUUID.getInstance().generateShortID();
+		String tempFileName = temp + fileSuffix;
 		// 建立远程存放excel模板文件目录
 		if (!client.hasRemoteDir("temp")) {
 			client.createRemoteDir("temp");
@@ -624,10 +625,10 @@ public class ReceiveSampleController {
 				if (os.toLowerCase().startsWith("win")) {
 					ExcelToPdf.xlsToPdf(tempFile, tempPdf);
 				} else {
-					ExcelToPdf.xlsToPdfForLinux(tempFile, tempPdf);
+					ExcelToPdf.xlsToPdfForLinux(tempFile);
 				}
 				logger.info("End export PDF");
-				return Response.success(tempPdf);
+				return Response.success("/var/lib/docs/gzjy/temp/"+temp+".pdf");
 			}
 			// 删除缓存模板文件
 			FileOperate.deleteFile(tempFile);

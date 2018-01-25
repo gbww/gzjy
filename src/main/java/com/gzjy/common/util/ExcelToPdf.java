@@ -1,7 +1,10 @@
 package com.gzjy.common.util;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /*import org.artofsolving.jodconverter.OfficeDocumentConverter;
 import org.artofsolving.jodconverter.office.DefaultOfficeManagerConfiguration;
@@ -53,19 +56,30 @@ public class ExcelToPdf {
 	}
 
 	/**
-	 * Linux环境下
-	 * 前提条件：Linux系统装好了libreoffice
+	 * Linux环境下 前提条件：Linux系统装好了libreoffice
+	 * 
 	 * @param inFilePath
 	 * @param outFilePath
+	 * @throws InterruptedException 
 	 */
-	public static void xlsToPdfForLinux(String inFilePath, String outFilePath) {
-		System.out.println("inFilePath:"+inFilePath);
-		System.out.println("outFilePath:"+outFilePath);
-		String command = "/opt/libreoffice5.4/program/soffice --headless --convert-to pdf " + inFilePath +"" +outFilePath;
-        try{
-            Runtime.getRuntime().exec(command);            
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+	public static void xlsToPdfForLinux(String inFilePath) throws InterruptedException {
+		System.out.println("inFilePath:" + inFilePath);		
+		String command = "/opt/libreoffice5.4/program/soffice --headless --convert-to pdf " + inFilePath + " --outdir /var/lib/docs/gzjy/temp";
+		System.out.println(command);
+		try {
+			Process process = Runtime.getRuntime().exec(command);
+			InputStream input = process.getErrorStream();			
+			String line;
+			BufferedReader br = new BufferedReader(new InputStreamReader(input));
+			while ((line = br.readLine()) != null) {
+			    System.out.println(line);;
+			}
+			process.waitFor();
+			input.close();
+	        br.close();
+	        process.destroy();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
