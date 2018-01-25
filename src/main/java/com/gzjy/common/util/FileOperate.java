@@ -59,6 +59,7 @@ public class FileOperate {
 				throw new IOException("临时模板文件删除失败");
 			}
 		}
+		System.out.println("文件" + filePath + "删除OK");
 	}
 	/**
 	 * 删除目录下所有文件
