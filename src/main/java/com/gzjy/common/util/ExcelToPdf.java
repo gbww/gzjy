@@ -59,7 +59,8 @@ public class ExcelToPdf {
 	 * @param outFilePath
 	 */
 	public static void xlsToPdfForLinux(String inFilePath, String outFilePath) {
-		
+		System.out.println("inFilePath:"+inFilePath);
+		System.out.println("outFilePath:"+outFilePath);
 		String command = "/opt/libreoffice5.4/program/soffice --headless --convert-to pdf " + inFilePath +"" +outFilePath;
         try{
             Runtime.getRuntime().exec(command);            
