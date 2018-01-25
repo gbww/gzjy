@@ -31,6 +31,7 @@ public class FileOperate {
 				throw new Exception("模板文件不存在");
 		} catch (Exception e) {
 			System.out.println("复制文件出错");
+			e.printStackTrace();			
 		} finally {
 			try {
 				inStream.close();
