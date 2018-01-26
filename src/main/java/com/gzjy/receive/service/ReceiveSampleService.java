@@ -439,7 +439,8 @@ public class ReceiveSampleService {
 				default:
 					break;
 				}
-				if(value.indexOf("&") ==0) {
+				if(value.trim().indexOf("&") ==0) {
+					logger.info("----->Get param: " + value);
 					String key = value.substring(1);
 					if(key.contains("Date") && mapdata.get(key)!=null) {						
 						cell.setCellValue(formatter.format(mapdata.get(key)));
