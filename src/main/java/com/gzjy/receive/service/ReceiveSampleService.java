@@ -447,6 +447,7 @@ public class ReceiveSampleService {
 					}else {
 						cell.setCellValue(mapdata.get(key)!=null?(mapdata.get(key)+""):"");
 					}
+					logger.info("----->Set value: " + mapdata.get(key));
 					if("&remark".equals(value)) {
 						remarkRowHeight = row.getHeight();						
 					}

@@ -6,6 +6,7 @@ package com.gzjy.receive.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -619,6 +620,8 @@ public class ReceiveSampleController {
 				input.close();
 			} else {
 				logger.info("Begin export PDF");
+				OutputStream outputStream = new FileOutputStream(tempFile);
+				wb.write(outputStream);				
 				String tempPdfName = ShortUUID.getInstance().generateShortID() + ".pdf";
 				tempPdf = "/var/lib/docs/gzjy/temp/" + tempPdfName;
 				String os = System.getProperty("os.name");
@@ -628,8 +631,10 @@ public class ReceiveSampleController {
 					ExcelToPdf.xlsToPdfForLinux(tempFile);
 				}
 				logger.info("End export PDF");
+				// 删除缓存模板文件
+				FileOperate.deleteFile(tempFile);
 				return Response.success("/var/lib/docs/gzjy/temp/"+temp+".pdf");
-			}
+			}	
 			// 删除缓存模板文件
 			FileOperate.deleteFile(tempFile);
 		} catch (Exception e) {
