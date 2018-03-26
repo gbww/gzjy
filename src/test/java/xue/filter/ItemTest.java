@@ -17,6 +17,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.gzjy.Application;
 import com.gzjy.mail.service.MailService;
 import com.gzjy.receive.mapper.ReceiveSampleItemMapper;
+import com.gzjy.receive.mapper.ReceiveSampleMapper;
+import com.gzjy.receive.model.ReceiveSample;
 import com.gzjy.receive.model.ReceiveSampleItem;
 
 /**
@@ -31,6 +33,8 @@ public class ItemTest {
     private MailService mailService;  
     @Autowired  
     private ReceiveSampleItemMapper mapper;
+    @Autowired  
+    private ReceiveSampleMapper receiveSampleMapper;
     
     
     @Test  
@@ -40,6 +44,18 @@ public class ItemTest {
         filter.put("status", 1);
         //filter.put("unit", "g");
         List<ReceiveSampleItem>  resoult= mapper.selectTestDetail(filter,"updated_at desc");
+        System.out.println(resoult.size());
+    }  
+    
+
+    
+    @Test  
+    public void testUnderDetection() {  
+        Map<String, Object> filter = new HashMap<String, Object>();
+   //     filter.put("receive_sample_id", "F005");
+      //  filter.put("status", 1);
+        List<ReceiveSample>  resoult =receiveSampleMapper.selectUnderDetection("薛文龙", filter,"updated_at desc");
+       // List<ReceiveSampleItem>  resoult= mapper.selectTestDetail(filter,"updated_at desc");
         System.out.println(resoult.size());
     }  
       

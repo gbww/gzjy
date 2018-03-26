@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -51,6 +52,12 @@ import com.gzjy.receive.service.ReceiveSampleService;
 import com.gzjy.user.UserService;
 import com.gzjy.user.model.User;
 
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.swing.JRViewer;
+
 /**
  * @author xuewenlong@cmss.chinamobile.com
  * @updated 2017年9月3日
@@ -68,6 +75,32 @@ public class ReceiveSampleController {
 	private EpicNFSService epicNFSService;
 	@Autowired
 	private UserService userService;
+	 @Autowired
+	 private DataSource dataSource; 
+	@RequestMapping(value = "/sample/xue_test", method = RequestMethod.GET)
+	public void testReport() throws Exception{
+	    //设定报表所需要的外部参数内容
+	    Map<String, Object> rptParameters = new HashMap<String, Object>();
+	       //rptParameters.put("name", "薛文龙");
+	      // rptParameters.put("age", "12");
+	    rptParameters.put("id", "F201233");
+	       
+	       //传入报表源文件绝对路径，外部参数对象，DB连接，得到JasperPring对象
+	      // JasperPrint jasperPrint = JasperFillManager.fillReport("F:/Blank_A4.jasper", rptParameters, new JREmptyDataSource());
+	       JasperPrint jasperPrint = JasperFillManager.fillReport("F:/Coffee1.jasper", rptParameters, dataSource.getConnection());
+	       
+	       JasperExportManager.exportReportToHtmlFile(jasperPrint,"F:/a4.html");
+	      
+	       
+	       //导出PDF文件
+	       JasperExportManager.exportReportToPdfFile(jasperPrint, "F:/a4.pdf");
+	       
+	       //导入HTML文件
+	      // JasperExportManager.exportReportToHtmlFile(jasperPrint, "D:/temp/jasper_test/test.html");
+	       
+	       //执行结束
+	       System.out.println("Export success!!");
+	}
 
 	// 添加接样基本信息
 	@RequestMapping(value = "/sample", method = RequestMethod.POST)

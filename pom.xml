@@ -27,6 +27,10 @@
 	</parent>
 	<dependencies>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-dependencies</artifactId>
 			<version>Camden.SR2</version>
@@ -59,10 +63,22 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+	
+	<!-- 	<dependency>
+		  <groupId>org.springframework.boot</groupId>
+		  <artifactId>spring-boot-starter-tomcat</artifactId>
+		  <scope>provided</scope>
+		</dependency> -->
+
+		<!-- <dependency>
+		如果用自带的tomcate，需要加servlet-api的依赖
+		 <groupId>org.apache.tomcat</groupId>
+			  <artifactId>tomcat-servlet-api</artifactId>
+			  <version>8.5.20</version>
+			  <scope>provided</scope>
+			</dependency> -->
+			
+			
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
@@ -85,6 +101,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-artemis</artifactId>
 		</dependency>
+		<!-- jaspre报表 -->
+		  <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>6.5.1</version>
+        </dependency> 
 
 
 		<!-- https://mvnrepository.com/artifact/com.github.axet/kaptcha -->
@@ -201,6 +223,21 @@
 			<artifactId>jacob</artifactId>
 			<version>1.18</version>
 		</dependency>
+		<!-- 二维码支持包    start-->  
+            <dependency>  
+               <groupId>com.google.zxing</groupId>  
+               <artifactId>core</artifactId>  
+               <version>3.2.0</version>  
+        </dependency>   
+          
+        <dependency>  
+               <groupId>com.google.zxing</groupId>  
+               <artifactId>javase</artifactId>  
+               <version>3.2.0</version>  
+        </dependency>  
+        
+        <!-- 二维码支持包   end-->  
+		
 
 
 		<dependency>
@@ -224,14 +261,24 @@
 	<build>
 		<defaultGoal>compile</defaultGoal>
 		<plugins>
-			<plugin>
+		<!-- 如果要打成jar包并使用 java -jar **.jar运行，请不要注释spring-boot-maven-plugin -->  
+	 	 	<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<fork>true</fork>
 					<mainClass>com.gzjy.Application</mainClass>
 				</configuration>
-			</plugin>
+			</plugin>  
+	<!-- 		<plugin>
+		    <groupId>org.apache.maven.plugins</groupId>
+		    <artifactId>maven-war-plugin</artifactId>
+		    <configuration>
+		        <warName>gz</warName>
+		        <fork>true</fork>
+					<mainClass>com.gzjy.Application</mainClass>
+		    </configuration>
+		    </plugin> --> 
 			<plugin>
 				<groupId>org.mybatis.generator</groupId>
 				<artifactId>mybatis-generator-maven-plugin</artifactId>
