@@ -11,19 +11,19 @@
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://127.0.0.1:3306/db_web?useUnicode=true&amp;characterEncoding=UTF-8"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/ahgz_lims?useUnicode=true&amp;characterEncoding=UTF-8"
                         userId="root" password="123"/>
-        <javaModelGenerator targetPackage="com.gzjy.user.model"
+        <javaModelGenerator targetPackage="com.gzjy.client.model"
                             targetProject="E:\project\gzjy-app\src\main\java">
             <property name="enableSubPackages" value="false" />
             <property name="trimStrings" value="true" />
         </javaModelGenerator>
         <sqlMapGenerator targetPackage="mybatis"
                          targetProject="E:\project\gzjy-app\src\main\resources"/>
-        <javaClientGenerator targetPackage="com.gzjy.user.mapper"
+        <javaClientGenerator targetPackage="com.gzjy.client.mapper"
                              targetProject="E:\project\gzjy-app\src\main\java"
                              type="XMLMAPPER"/>
-           <table schema="user" tableName="user" domainObjectName="User"	
+           <table schema="ahgz_lims" tableName="scheduler_report" domainObjectName="SchedulerReport"	
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false"
                enableSelectByExample="false"/> 

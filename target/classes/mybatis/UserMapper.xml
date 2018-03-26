@@ -1,16 +1,437 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.gzjy.user.mapper.UserMapper" >
-  <resultMap id="BaseResultMap" type="com.gzjy.user.model.User" >
-    <id column="userName" property="username" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    userName
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from user
-    where userName = #{name,jdbcType=VARCHAR}
-  </select>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzjy.user.mapper.UserMapper">
+	<resultMap id="BaseResultMap" type="com.gzjy.user.model.User">
+		<id column="id" jdbcType="CHAR" property="id" />
+		<result column="organization_id" jdbcType="CHAR" property="organizationId" />
+		<result column="role_id" jdbcType="CHAR" property="roleId" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="username" jdbcType="VARCHAR" property="username" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<result column="phone" jdbcType="VARCHAR" property="phone" />
+		<result column="password" jdbcType="VARCHAR" property="password" />
+		<result column="state" jdbcType="INTEGER" property="state" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+		<result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+		<result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+	</resultMap>
+
+	<resultMap id="OrganizationResultMap" type="com.gzjy.organization.model.Organization">
+		<id column="organization_id" property="id" jdbcType="CHAR" />
+	
+		<result column="organization_name" property="name" jdbcType="VARCHAR" />
+		<result column="organization_description" property="description"
+			jdbcType="VARCHAR" />
+		<result column="organization_parent" jdbcType="CHAR" property="parent" />
+	</resultMap>
+
+	<resultMap id="RoleResultMap" type="com.gzjy.role.model.CrabRole">
+		<id column="role_id" property="id" jdbcType="CHAR" />
+		<result column="organization_id" jdbcType="CHAR" property="organizationId" />
+		<result column="role_name" property="name" jdbcType="VARCHAR" />
+		<result column="role_description" property="description"
+			jdbcType="VARCHAR" />
+		<result column="role_scope" property="scope" jdbcType="INTEGER" />
+		<result column="role_defaults" property="defaults" jdbcType="BIT" />
+		<result column="role_created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="role_updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<resultMap id="DetailResultMap" type="com.gzjy.user.model.User"
+		extends="BaseResultMap">
+		<collection property="role" resultMap="RoleResultMap" />
+		<collection property="organization" resultMap="OrganizationResultMap">
+		</collection>
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, organization_id, role_id, name, username, email,
+		phone,
+		password, state,
+		description,
+		created_at, updated_at
+	</sql>
+
+	<sql id="Full_Column_List">
+		users.id, users.organization_id, 
+		organizations.name organization_name,
+		organizations.description organization_description,
+		organizations.parent
+		organization_parent,
+		role_id,
+		roles.name role_name,
+		roles.description role_description,
+		roles.scope role_scope,
+		roles.defaults role_defaults,
+		roles.created_at
+		role_created_at,
+		roles.updated_at role_updated_at, users.name,
+		users.username,
+		users.email, users.phone, users.password, users.state,
+		users.description,
+		users.created_at, users.updated_at
+	</sql>
+
+	<select id="selectById" parameterType="java.lang.String"
+		resultMap="DetailResultMap">
+		select
+		<include refid="Full_Column_List" />
+		from users
+		left join organizations
+		on users.organization_id =
+		organizations.id
+		left join roles on
+		users.role_id = roles.id
+		where
+		users.id = #{id,jdbcType=CHAR}
+	</select>
+
+	<select id="selectByUsername" parameterType="java.lang.String"
+		resultMap="DetailResultMap">
+		select
+		<include refid="Full_Column_List" />
+		from users
+		left join organizations on users.organization_id =
+		organizations.id
+		left join roles on users.role_id = roles.id
+		where
+		users.username = #{username,jdbcType=CHAR} and users.state != -1
+	</select>
+	
+	<select id="selectByName" parameterType="java.lang.String"
+		resultMap="DetailResultMap">
+		select
+		<include refid="Full_Column_List" />
+		from users
+		left join organizations on users.organization_id =
+		organizations.id
+		left join roles on users.role_id = roles.id
+		where
+		users.name = #{name,jdbcType=CHAR} and users.state != -1
+	</select>
+
+	<select id="selectByEmail" parameterType="java.lang.String"
+		resultMap="DetailResultMap">
+		select
+		<include refid="Full_Column_List" />
+		from users
+		left join organizations on users.organization_id =
+		organizations.id
+		left join roles on users.role_id = roles.id
+		where
+		users.email = #{email,jdbcType=VARCHAR} and users.state != -1
+		limit 1
+	</select>
+
+	<select id="selectByPhone" parameterType="java.lang.String"
+		resultMap="DetailResultMap">
+		select
+		<include refid="Full_Column_List" />
+		from users
+		left join organizations on users.organization_id =
+		organizations.id
+		left join roles on users.role_id = roles.id
+		where
+		users.phone = #{phone,jdbcType=VARCHAR} and users.state != -1
+		limit 1
+	</select>
+
+
+
+	<select id="selectHasRoleUser" resultType="boolean"
+		parameterType="java.lang.String">
+    <![CDATA[select ifnull((select 1 from users
+    where role_id = #{roleId,jdbcType=CHAR} and state != -1 limit 1),0)]]>
+	</select>
+
+	<select id="selectHasOrganizationUser" resultType="boolean"
+		parameterType="java.lang.String">
+    <![CDATA[select ifnull((select 1 from users
+    where organization_id = #{organizationId,jdbcType=CHAR} and state != -1 limit 1),0)]]>
+	</select>
+
+	<select id="selectAll" resultMap="DetailResultMap">
+		select
+		<include refid="Full_Column_List" />
+		from users
+		left join organizations on users.organization_id =
+		organizations.id
+		left join roles on users.role_id = roles.id
+		where
+		users.state != -1
+		<if test="name != null">
+			and users.name  like CONCAT('%',#{name},'%' )
+		</if>
+		order by ${orderby}
+	</select>
+	
+	
+	<select id="selectUsersBasedOrganization" resultMap="DetailResultMap">
+		select
+		<include refid="Full_Column_List" />
+		from users
+		left join organizations on users.organization_id =
+		organizations.id
+		left join roles on users.role_id = roles.id
+		where
+		users.state != -1 and
+		users.organization_id = #{organizationId,jdbcType=CHAR}
+		order by users.updated_at desc
+	</select>
+	
+<select id="selectByRoleId" resultMap="DetailResultMap">
+		select
+		<include refid="Full_Column_List" />
+		from users
+		left join organizations on users.organization_id =
+		organizations.id
+		left join roles on users.role_id = roles.id
+		where
+		users.state != -1 and
+		role_id = #{roleId,jdbcType=CHAR}
+		order by users.updated_at desc
+</select>
+	
+	<select id="seletTest" resultMap="BaseResultMap">
+	select
+		*
+		from users
+	
+	</select>
+	
+	<select id="selectStatusUsersBasedOrganizationsAndRole" resultMap="DetailResultMap">
+		select
+		<include refid="Full_Column_List" />
+		from users
+		left join organizations on users.organization_id =
+		organizations.id
+		left join roles on users.role_id = roles.id
+		where users.state != -1 
+		<if test="roleId != null">
+			and users.role_id = #{roleId} 
+		</if>
+		<if test="status != null">
+			and users.state = #{status}
+		</if>
+		<if test="organizations.size != 0">
+			and users.organization_id in
+			<foreach collection="organizations" item="organization"
+				separator="," open="(" close=")">
+				#{organization.id, jdbcType=CHAR}
+			</foreach>
+		</if>
+		<if test="username != null">
+			and users.username like CONCAT('%',#{username},'%' )
+		</if>
+		order by users.updated_at desc
+	</select>
+
+	<delete id="deleteById" parameterType="java.lang.String"> update users set state =
+		-1 where id = #{id,jdbcType=CHAR}
+	</delete>
+
+	<insert id="insert" parameterType="com.gzjy.user.model.User">
+		insert into users (id,
+		organization_id, role_id,
+		name, username, email,
+		phone, password, state,
+		description,
+		created_at, updated_at
+		)
+		values
+		(#{id,jdbcType=CHAR},
+		#{organizationId,jdbcType=CHAR},
+		#{roleId,jdbcType=CHAR},
+		#{name,jdbcType=VARCHAR},
+		#{username,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR},
+		#{phone,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{state,jdbcType=INTEGER},
+		#{description,jdbcType=VARCHAR},
+		#{createdAt,jdbcType=TIMESTAMP},
+		#{updatedAt,jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<insert id="insertSelective" parameterType="com.gzjy.user.model.User">
+		insert into users
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="organizationId != null">
+				organization_id,
+			</if>
+			<if test="roleId != null">
+				role_id,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="username != null">
+				username,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+			<if test="phone != null">
+				phone,
+			</if>
+			<if test="password != null">
+				password,
+			</if>
+			<if test="state != null">
+				state,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+			<if test="createdAt != null">
+				created_at,
+			</if>
+			<if test="updatedAt != null">
+				updated_at,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=CHAR},
+			</if>
+			<if test="organizationId != null">
+				#{organizationId,jdbcType=CHAR},
+			</if>
+			<if test="roleId != null">
+				#{roleId,jdbcType=CHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="username != null">
+				#{username,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				#{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="state != null">
+				#{state,jdbcType=INTEGER},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="createdAt != null">
+				#{createdAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedAt != null">
+				#{updatedAt,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateByIdSelective" parameterType="com.gzjy.user.model.User">
+		update users
+		<set>
+			<if test="organizationId != null">
+				organization_id = #{organizationId,jdbcType=CHAR},
+			</if>
+			<if test="roleId != null">
+				role_id = #{roleId,jdbcType=CHAR},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="username != null">
+				username = #{username,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				phone = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="state != null">
+				state = #{state,jdbcType=INTEGER},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR},
+			</if>
+			<if test="createdAt != null">
+				created_at = #{createdAt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedAt != null">
+				updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=CHAR}
+	</update>
+
+	<update id="updateById" parameterType="com.gzjy.user.model.User">
+		update users
+		set
+		organization_id = #{organizationId,jdbcType=CHAR},
+		role_id =
+		#{roleId,jdbcType=CHAR},
+		name = #{name,jdbcType=VARCHAR},
+		username =
+		#{username,jdbcType=VARCHAR},
+		email =
+		#{email,jdbcType=VARCHAR},
+		phone =
+		#{phone,jdbcType=VARCHAR},
+		password = #{password,jdbcType=VARCHAR},
+		state =
+		#{state,jdbcType=INTEGER},
+		description =
+		#{description,jdbcType=VARCHAR},
+		created_at =
+		#{createdAt,jdbcType=TIMESTAMP},
+		updated_at =
+		#{updatedAt,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=CHAR}
+	</update>
+	
+	
+	
+	<select id="selectUsersBasedScope" resultMap="DetailResultMap">
+		select
+		<include refid="Full_Column_List" />
+		from users
+		left join organizations on users.organization_id =
+		organizations.id
+		left join roles on users.role_id = roles.id
+		where users.state != -1 
+		order by users.updated_at desc
+	</select>
+	
+	<select id="selectStatusUsersBasedOrganizationAndRole" resultMap="DetailResultMap">
+		select
+		<include refid="Full_Column_List" />
+		from users
+		left join organizations on users.organization_id =
+		organizations.id
+		left join roles on users.role_id = roles.id
+		where users.state != -1 
+		<if test="roleId != null">
+			and users.role_id = #{roleId} 
+		</if>
+		<if test="status != null">
+			and users.state = #{status}
+		</if>
+		<if test="organizationId != null">
+			and users.organization_id = #{organizationId}
+		</if>
+		<if test="username != null">
+			and users.username like CONCAT('%',#{username},'%' )
+		</if>
+		order by users.updated_at desc
+	</select>
 </mapper>
