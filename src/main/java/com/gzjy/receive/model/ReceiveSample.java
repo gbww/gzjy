@@ -122,9 +122,33 @@ public class ReceiveSample implements Serializable{
     private String examineUser;
     //编制人
     private String drawUser;
-    //主检人
-    
+    //主检人    
     private String principalInspector;
+   //留样数量
+    private String liuyangCount;
+    //食品大类
+    private String foodDalei;
+    //食品亚类
+    private String foodYalei;
+    
+    private String foodCiyalei;
+
+    private String foodXilei;
+    //签发日期
+    private Date qianfaDate;
+    //样品类型
+    private String sampleLeixing;
+    //包装分类
+    private String packageClassify;
+    //质保期
+    private Integer zhibaoqi;
+    //生成许可证
+    private String licence;
+    //报告流程id
+    private String reportProcessId;
+    //附件
+    private String appendix;
+    
     //接样状态(0:未完成，1：完成)5作为查询时判断是否是全部查询的判断
     private Integer status;
     //创建时间
@@ -570,6 +594,107 @@ public class ReceiveSample implements Serializable{
     public void setReportStatus(Integer reportStatus) {
         this.reportStatus = reportStatus;
     }
+    
+    public String getLiuyangCount() {
+        return liuyangCount;
+    }
+
+    public void setLiuyangCount(String liuyangCount) {
+        this.liuyangCount = liuyangCount;
+    }
+
+    public String getFoodDalei() {
+        return foodDalei;
+    }
+
+    public void setFoodDalei(String foodDalei) {
+        this.foodDalei = foodDalei;
+    }
+
+    public String getFoodCiyalei() {
+        return foodCiyalei;
+    }
+
+    public void setFoodCiyalei(String foodCiyalei) {
+        this.foodCiyalei = foodCiyalei;
+    }
+
+    public String getFoodXilei() {
+        return foodXilei;
+    }
+
+    public void setFoodXilei(String foodXilei) {
+        this.foodXilei = foodXilei;
+    }
+
+    public Date getQianfaDate() {
+        return qianfaDate;
+    }
+
+    public void setQianfaDate(Date qianfaDate) {
+        this.qianfaDate = qianfaDate;
+    }
+
+    public String getSampleLeixing() {
+        return sampleLeixing;
+    }
+
+    public void setSampleLeixing(String sampleLeixing) {
+        this.sampleLeixing = sampleLeixing;
+    }
+
+    public Integer getZhibaoqi() {
+        return zhibaoqi;
+    }
+
+    public void setZhibaoqi(Integer zhibaoqi) {
+        this.zhibaoqi = zhibaoqi;
+    }
+
+    public String getLicence() {
+        return licence;
+    }
+
+    public void setLicence(String licence) {
+        this.licence = licence;
+    }
+
+    public String getReportProcessId() {
+        return reportProcessId;
+    }
+
+    public void setReportProcessId(String reportProcessId) {
+        this.reportProcessId = reportProcessId;
+    }
+
+    public String getAppendix() {
+        return appendix;
+    }
+
+    public void setAppendix(String appendix) {
+        this.appendix = appendix;
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
+
+    public String getFoodYalei() {
+        return foodYalei;
+    }
+
+    public void setFoodYalei(String foodYalei) {
+        this.foodYalei = foodYalei;
+    }
+
+    public String getPackageClassify() {
+        return packageClassify;
+    }
+
+    public void setPackageClassify(String packageClassify) {
+        this.packageClassify = packageClassify;
+    }
+
     @Override
     public String toString() {
         return "ReceiveSample [receiveSampleId=" + receiveSampleId
@@ -605,8 +730,76 @@ public class ReceiveSample implements Serializable{
                 + ", subpackage=" + subpackage + ", result=" + result
                 + ", determine=" + determine + ", approvalUser=" + approvalUser
                 + ", examineUser=" + examineUser + ", drawUser=" + drawUser
-                + ", principalInspector=" + principalInspector + ", status="
-                + status + ", createdAt=" + createdAt + ", reportStatus="
-                + reportStatus + "]";
+                + ", principalInspector=" + principalInspector
+                + ", liuyangCount=" + liuyangCount + ", foodDalei=" + foodDalei
+                + ", foodYalei=" + foodYalei + ", foodCiyalei=" + foodCiyalei
+                + ", foodXilei=" + foodXilei + ", qianfaDate=" + qianfaDate
+                + ", sampleLeixing=" + sampleLeixing + ", packageClassify="
+                + packageClassify + ", zhibaoqi=" + zhibaoqi + ", licence="
+                + licence + ", reportProcessId=" + reportProcessId
+                + ", appendix=" + appendix + ", status=" + status
+                + ", createdAt=" + createdAt + ", reportStatus=" + reportStatus
+                + ", getReceiveSampleId()=" + getReceiveSampleId()
+                + ", getReportId()=" + getReportId() + ", getSampleType()="
+                + getSampleType() + ", getCheckType()=" + getCheckType()
+                + ", getEntrustedUnit()=" + getEntrustedUnit()
+                + ", getEntrustedUnitAddress()=" + getEntrustedUnitAddress()
+                + ", getEntrustedUserPhone()=" + getEntrustedUserPhone()
+                + ", getEntrustedUserEmail()=" + getEntrustedUserEmail()
+                + ", getInspectedUnit()=" + getInspectedUnit()
+                + ", getInspectedUnitAddress()=" + getInspectedUnitAddress()
+                + ", getInspectedUser()=" + getInspectedUser()
+                + ", getInspectedUserPhone()=" + getInspectedUserPhone()
+                + ", getInspectedUserEmail()=" + getInspectedUserEmail()
+                + ", getSampleAddress()=" + getSampleAddress()
+                + ", getSampleName()=" + getSampleName() + ", getSampleLink()="
+                + getSampleLink() + ", getSampleTrademark()="
+                + getSampleTrademark() + ", getSampleCirculate()="
+                + getSampleCirculate() + ", getSampleCirculateDate()="
+                + getSampleCirculateDate() + ", getSampleDate()="
+                + getSampleDate() + ", getSampleWay()=" + getSampleWay()
+                + ", getSpecificationModel()=" + getSpecificationModel()
+                + ", getExecuteStandard()=" + getExecuteStandard()
+                + ", getSampleNames()=" + getSampleNames()
+                + ", getProcessingTechnology()=" + getProcessingTechnology()
+                + ", getClosedStatus()=" + getClosedStatus()
+                + ", getSampleNumber()=" + getSampleNumber()
+                + ", getSampleStatus()=" + getSampleStatus()
+                + ", getSampleBasenumber()=" + getSampleBasenumber()
+                + ", getSaveWay()=" + getSaveWay() + ", getProductionUnit()="
+                + getProductionUnit() + ", getProductionAddress()="
+                + getProductionAddress() + ", getProductionUser()="
+                + getProductionUser() + ", getProductionPhone()="
+                + getProductionPhone() + ", getCost()=" + getCost()
+                + ", getRemarks()=" + getRemarks() + ", getDataRemarks()="
+                + getDataRemarks() + ", getResponsiblePerson()="
+                + getResponsiblePerson() + ", getSampleHolder()="
+                + getSampleHolder() + ", getReceiveUser()=" + getReceiveUser()
+                + ", getReceiveDate()=" + getReceiveDate()
+                + ", getArrangeFinishDate()=" + getArrangeFinishDate()
+                + ", getFinishDate()=" + getFinishDate() + ", getProtocolId()="
+                + getProtocolId() + ", getSubpackage()=" + getSubpackage()
+                + ", getResult()=" + getResult() + ", getDetermine()="
+                + getDetermine() + ", getApprovalUser()=" + getApprovalUser()
+                + ", getExamineUser()=" + getExamineUser() + ", getDrawUser()="
+                + getDrawUser() + ", getPrincipalInspector()="
+                + getPrincipalInspector() + ", getStatus()=" + getStatus()
+                + ", getCreatedAt()=" + getCreatedAt() + ", getReportStatus()="
+                + getReportStatus() + ", getLiuyangCount()=" + getLiuyangCount()
+                + ", getFoodDalei()=" + getFoodDalei() + ", getFoodCiyalei()="
+                + getFoodCiyalei() + ", getFoodXilei()=" + getFoodXilei()
+                + ", getQianfaDate()=" + getQianfaDate()
+                + ", getSampleLeixing()=" + getSampleLeixing()
+                + ", getZhibaoqi()=" + getZhibaoqi() + ", getLicence()="
+                + getLicence() + ", getReportProcessId()="
+                + getReportProcessId() + ", getAppendix()=" + getAppendix()
+                + ", getFoodYalei()=" + getFoodYalei()
+                + ", getPackageClassify()=" + getPackageClassify()
+                + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
+                + ", toString()=" + super.toString() + "]";
     }
+
+  
+
+    
 }
