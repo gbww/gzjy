@@ -1,5 +1,6 @@
 package com.gzjy.checkitems.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -295,13 +296,26 @@ public class CheckItemsController {
 		if(records ==null || records.size()==0) {			
 			return Response.fail("Param Invalid");
 		}
+        SimpleDateFormat sf_format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 		try {
 			for(HashMap<String, String> record: records) {
 				CheckItemsCatalogMapping model = new CheckItemsCatalogMapping();				
 				model.setId(ShortUUID.getInstance().generateShortID());
 				model.setCatalogId(record.get("catalogId"));
 				model.setCheckItemId(record.get("checkItemId"));
-				model.setLaboratory(record.get("laboratory"));
+				model.setName(record.get("name"));
+				model.setMethod(record.get("method"));
+				model.setUnit(record.get("unit"));
+				model.setStandardValue(record.get("standardValue"));
+				model.setDetectionLimit(record.get("detectionLimit"));
+				model.setQuantitationLimit(record.get("quantitationLimit"));
+				model.setDevice(record.get("device"));
+				model.setDefaultPrice(Double.parseDouble(record.get("defaultPrice")));
+				model.setCreatedAt(sf_format.parse(record.get("createdAt")));
+				model.setUpdatedAt(sf_format.parse(record.get("updatedAt")));
+				model.setDepartment(record.get("department"));
+				model.setSubpackage(record.get("subpackage"));
+				model.setLaw(record.get("law"));				
 				checkItemsCatalogMappingService.insert(model);
 			}			
 			return Response.success("success");
@@ -330,11 +344,7 @@ public class CheckItemsController {
 		}
 	}
 	
-	/**
-	 * 上传模板文件
-	 * @param file
-	 * @return
-	 */
+	
 	@RequestMapping(value = "/checkitems/import", method = RequestMethod.POST)
 	@Privileges(name = "CHECKITEM-IMPORT", scope = { 1 })
 	public Response multiImport(@RequestParam("file") MultipartFile file) {

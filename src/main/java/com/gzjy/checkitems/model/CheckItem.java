@@ -27,6 +27,11 @@ public class CheckItem {
     private Date updatedAt;	
     //默认分配的部门
     private String department;
+    //分包
+    private String subpackage;
+    //依据法律法规
+    private String law;
+    
     
 	public String getId() {
 		return id;
@@ -99,5 +104,17 @@ public class CheckItem {
 	}
 	public void setDepartment(String department) {
 		this.department = department;
-	}	
+	}
+	public String getSubpackage() {
+		return subpackage;
+	}
+	public void setSubpackage(String subpackage) {
+		this.subpackage = subpackage;
+	}
+	public String getLaw() {
+		return law;
+	}
+	public void setLaw(String law) {
+		this.law = law;
+	}		
 }
