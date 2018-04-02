@@ -22,7 +22,9 @@ import com.github.pagehelper.ISelect;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gzjy.checkitems.mapper.CheckItemMapper;
+import com.gzjy.checkitems.mapper.CheckItemsCatalogMappingMapper;
 import com.gzjy.checkitems.model.CheckItem;
+import com.gzjy.checkitems.model.CheckItemsCatalogMapping;
 import com.gzjy.checkitems.service.CheckItemService;
 import com.gzjy.common.ShortUUID;
 import com.gzjy.common.exception.BizException;
@@ -38,6 +40,9 @@ public class CheckItemServiceImpl implements CheckItemService {
 	
 	@Autowired
 	private CheckItemMapper checkItemMapper;	
+	
+	@Autowired
+	private CheckItemsCatalogMappingMapper checkItemsCatalogMappingMapper;
 	
 	private static Logger logger = LoggerFactory.getLogger(CheckItemServiceImpl.class);
 
@@ -100,26 +105,29 @@ public class CheckItemServiceImpl implements CheckItemService {
 			}
 			Sheet sheet = wb.getSheetAt(0);	
 			if(sheet.getRow(0).getPhysicalNumberOfCells()<8) {
-				throw new BizException("文件少于8列，格式不对");
+				throw new BizException("文件少于12列，格式不对");
 			}
-			List<CheckItem> dataList = new ArrayList<CheckItem>();			
+			List<CheckItemsCatalogMapping> dataList = new ArrayList<CheckItemsCatalogMapping>();			
 			for(int rowNum=0; rowNum< sheet.getLastRowNum()+1; rowNum++) {				
 				Row row = sheet.getRow(rowNum);
-				CheckItem item = new CheckItem();
-				item.setId(ShortUUID.getInstance().generateShortID());
-				item.setName(row.getCell(0)+"");
-				item.setMethod(row.getCell(1)+"");
-				item.setUnit(row.getCell(2)+"");
-				item.setStandardValue(row.getCell(3)+"");
-				item.setDetectionLimit(row.getCell(4)+"");
-				item.setQuantitationLimit(row.getCell(5)+"");
-				item.setDevice(row.getCell(6)+"");
-				item.setDefaultPrice(Double.parseDouble(row.getCell(7)+""));
-				item.setCreatedAt(new Date());	
-				item.setDepartment(row.getCell(8)+"");
-				dataList.add(item);
+				CheckItemsCatalogMapping item_mapping = new CheckItemsCatalogMapping();
+				item_mapping.setId(ShortUUID.getInstance().generateShortID());
+				item_mapping.setCatalogId(row.getCell(0)+"");
+				item_mapping.setName(row.getCell(1)+"");
+				item_mapping.setMethod(row.getCell(2)+"");
+				item_mapping.setUnit(row.getCell(3)+"");
+				item_mapping.setStandardValue(row.getCell(4)+"");
+				item_mapping.setDetectionLimit(row.getCell(5)+"");
+				item_mapping.setQuantitationLimit(row.getCell(6)+"");
+				item_mapping.setDevice(row.getCell(7)+"");
+				item_mapping.setDefaultPrice(Double.parseDouble(row.getCell(8)+""));
+				item_mapping.setCreatedAt(new Date());	
+				item_mapping.setDepartment(row.getCell(9)+"");
+				item_mapping.setSubpackage(row.getCell(10)+"");
+				item_mapping.setLaw(row.getCell(11)+"");
+				dataList.add(item_mapping);
 			}
-			checkItemMapper.importData(dataList);
+			checkItemsCatalogMappingMapper.importData(dataList);
 			removeRepeatData();
 			wb.close();
 		} catch (Exception e) {

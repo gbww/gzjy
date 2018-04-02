@@ -128,5 +128,20 @@
 		where id = #{id,jdbcType=VARCHAR}
 	</delete>
 
+	<insert id="importData" parameterType="java.util.List">
+		insert into check_item_catalog_mapping (id, catalog_id, check_item_id, name, method, unit, standard_value,
+		detection_limit,
+		quantitation_limit, device, default_price,created_at,updated_at,
+		department,subpackage,law)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.id},#{item.catalogId},#{item.checkItemId},#{item.name},#{item.method},#{item.unit},#{item.standardValue},
+			#{item.detectionLimit},#{item.quantitationLimit},#{item.device},#{item.defaultPrice},
+			#{item.createdAt}, #{item.updatedAt},#{item.department}, #{item.subpackage},
+			#{item.law})
+		</foreach>
+	</insert>
+
 
 </mapper>
