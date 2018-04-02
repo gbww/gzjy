@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gzjy.unit.mapper.GzUnitMapper" >
+  <resultMap id="BaseResultMap" type="com.gzjy.unit.model.GzUnit" >
+    <id column="unit_name" property="unitName" jdbcType="VARCHAR" />
+    <result column="unit_desc" property="unitDesc" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    unit_name, unit_desc
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from gz_unit
+    where unit_name = #{unitName,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from gz_unit
+		<where>
+			<foreach collection="filters.keys" item="key" separator="and">
+				<if test="null!=filters[key]">
+					${key} LIKE CONCAT('%',#{filters[${key}]},'%' )
+				</if>
+			</foreach>
+		</where>
+		order by ${orderby}
+	</select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from gz_unit
+    where unit_name = #{unitName,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzjy.unit.model.GzUnit" >
+    insert into gz_unit (unit_name, unit_desc)
+    values (#{unitName,jdbcType=VARCHAR}, #{unitDesc,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gzjy.unit.model.GzUnit" >
+    insert into gz_unit
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="unitName != null" >
+        unit_name,
+      </if>
+      <if test="unitDesc != null" >
+        unit_desc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="unitName != null" >
+        #{unitName,jdbcType=VARCHAR},
+      </if>
+      <if test="unitDesc != null" >
+        #{unitDesc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gzjy.unit.model.GzUnit" >
+    update gz_unit
+    <set >
+      <if test="unitDesc != null" >
+        unit_desc = #{unitDesc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where unit_name = #{unitName,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gzjy.unit.model.GzUnit" >
+    update gz_unit
+    set unit_desc = #{unitDesc,jdbcType=VARCHAR}
+    where unit_name = #{unitName,jdbcType=VARCHAR}
+  </update>
+</mapper>
