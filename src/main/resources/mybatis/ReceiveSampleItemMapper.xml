@@ -195,7 +195,19 @@
     order by ${orderby}
   </select>
   
-  
+  <select id="select" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from receive_sample_item
+    <where>
+			<foreach collection="filters.keys" item="key" separator="and">
+				<if test="null!=filters[key]">
+					${key} LIKE CONCAT('%',#{filters[${key}]},'%' )
+				</if>
+			</foreach>
+		</where>
+		order by ${orderby}
+  </select>
   
   
   
@@ -223,6 +235,8 @@
     </where>
     order by ${orderby}
   </select>
+  
+  
   <!--  根据接样ID查询检验项列表 -->
    <select id="selectByReceiveSampleId" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 

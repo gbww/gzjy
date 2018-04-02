@@ -328,6 +328,25 @@ public class ReceiveSampleService {
         return list;
     }
     
+    
+    public PageInfo<ReceiveSampleItem> selectUnderDetectionReceiveSampleItems(Integer pageNum, Integer pageSize,String order,Map<String, Object> filter) {
+        User u=userClient.getCurrentUser();
+       boolean superUser= u.getRole().isSuperAdmin();
+       if(!superUser) {
+           String name=u.getName();
+           filter.put("test_room", name);
+       }   
+        List<ReceiveSampleItem> list = new ArrayList<ReceiveSampleItem>();
+        PageInfo<ReceiveSampleItem> pages = new PageInfo<ReceiveSampleItem>(list);
+        pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
+            @Override
+            public void doSelect() {
+                receiveSampleItemMapper.select(filter, order);
+            }
+        });
+        return pages;
+    }
+    
 
 	public ReceiveSample getReceiveSample(String id) {
 

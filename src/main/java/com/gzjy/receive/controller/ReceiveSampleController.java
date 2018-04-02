@@ -63,7 +63,7 @@ import net.sf.jasperreports.swing.JRViewer;
  * @updated 2017年9月3日
  */
 @RestController
-@RequestMapping(value = "v1/ahgz")
+@RequestMapping(value = "v1/ahgz/")
 public class ReceiveSampleController {
 
 	private static Logger logger = LoggerFactory.getLogger(ReceiveSampleService.class);
@@ -116,8 +116,24 @@ public class ReceiveSampleController {
 		Boolean flag = receiveSampleService.addReceiveSample(receiveSample);
 		return Response.success(flag);
 	}
+	
+	   // 更新接样基本信息
+    @Privileges(name = "SAMPLE-UPDATESAMPLE", scope = { 1 })
+    @RequestMapping(value = "/sample", method = RequestMethod.PUT)
+    public Response updateSample(@Validated(value = { Update.class }) @RequestBody ReceiveSample receiveSample,
+            BindingResult result) {
+        if (result.hasErrors()) {
+            return Response.fail(result.getFieldError().getDefaultMessage());
+        }
+        if (StringUtils.isBlank(receiveSample.getReceiveSampleId())) {
+            return Response.fail("接收样品编号不能为空");
+        }
+        receiveSample = receiveSampleService.updateReceiveSample(receiveSample);
+        
+        return Response.success(receiveSample);
+    }
 
-	// 变更接样中检验项基本信息（添加检验项和编辑检验项）
+	// 变更接样中检验项基本信息（添加检验项）
 	@Privileges(name = "SAMPLE-ADDITEM", scope = { 1 })
 	@RequestMapping(value = "/sample/item/{receiveSampleId}", method = RequestMethod.POST)
 	public Response addItem(@PathVariable("receiveSampleId") String receiveSample,
@@ -134,10 +150,30 @@ public class ReceiveSampleController {
 
 		return Response.success("操作成功：" + flag);
 	}
+	
+	// 更新接样中检验项基本信息
+	//@Privileges(name = "SAMPLE-ADDITEM", scope = { 1 })
+    @RequestMapping(value = "/sample/item/{receiveSampleId}", method = RequestMethod.POST)
+    public Response updateItem(@PathVariable("receiveSampleId") String receiveSample,
+            @Validated(value = { Add.class }) @RequestBody List<ReceiveSampleItem> items, BindingResult result) {
+        if (result.hasErrors()) {
+            return Response.fail(result.getFieldError().getDefaultMessage());
+        }
+        for (ReceiveSampleItem item : items) {
+            if (!item.getReceiveSampleId().equals(receiveSample)) {
+                return Response.fail("接样单ID存在异常");
+            }
+        }
+        boolean flag = receiveSampleService.addReceiveSampleItems(items);
 
+        return Response.success("操作成功：" + flag);
+    }
+	
+	
+	//设置检测项结果
 	@Privileges(name = "SAMPLE-UPDATEITEMRESULT", scope = { 1 })
 	@RequestMapping(value = "/sample/item/result", method = RequestMethod.POST)
-	public Response updateItemResoult(@Validated(value = { Update.class }) @RequestBody List<ReceiveSampleItem> items,
+	public Response setItemResoult(@Validated(value = { Update.class }) @RequestBody List<ReceiveSampleItem> items,
 			BindingResult result) {
 		if (result.hasErrors()) {
 			return Response.fail(result.getFieldError().getDefaultMessage());
@@ -146,7 +182,7 @@ public class ReceiveSampleController {
 		boolean flag = receiveSampleService.updateSampleItemsResoult(items);
 		for (ReceiveSampleItem item : items) {
 		    if(receiveSampleService.checkReceiveSampleIsFinished(item.getReceiveSampleId())) { //如果接样单的检测项都完成了结果录入
-		        receiveSampleService.setStatus(item.getReceiveSampleId(), 2);
+		        receiveSampleService.setStatus(item.getReceiveSampleId(), 1);
 		    }
         }
 
@@ -189,21 +225,7 @@ public class ReceiveSampleController {
 		return Response.success(receiveSampleService.deleteReceiveSampleItems(items));
 	}
 
-	// 更新接样基本信息
-	@Privileges(name = "SAMPLE-UPDATESAMPLE", scope = { 1 })
-	@RequestMapping(value = "/sample", method = RequestMethod.PUT)
-	public Response updateSample(@Validated(value = { Update.class }) @RequestBody ReceiveSample receiveSample,
-			BindingResult result) {
-		if (result.hasErrors()) {
-			return Response.fail(result.getFieldError().getDefaultMessage());
-		}
-		if (StringUtils.isBlank(receiveSample.getReceiveSampleId())) {
-			return Response.fail("接收样品编号不能为空");
-		}
-		receiveSample = receiveSampleService.updateReceiveSample(receiveSample);
-		
-		return Response.success(receiveSample);
-	}
+
 
 	// 查询接样信息
 	@RequestMapping(value = "/sample", method = RequestMethod.GET)
@@ -524,14 +546,33 @@ public class ReceiveSampleController {
 		return Response.success(receiveSampleService.getReceiveSample(id));
 	}
 
-	// 根据接样ID获得接样对应的检验项信息
+	// 根据接样ID获得接样对应的检验项信息列表
 	@RequestMapping(value = "/sample/items/{id}", method = RequestMethod.GET)
 	public Response getItems(@PathVariable(name = "id") String id) {
 
 		return Response.success(receiveSampleService.getItemsByReceiveSampleId(id));
 	}
+	
+	//查询所有未分配的检测项
+	@RequestMapping(value = "/sample/items/unassigned", method = RequestMethod.GET)
+    public Response getUnassignedItems(@RequestParam(name = "order", required = false) String order,
+           @RequestParam(name = "reportId", required = false) String reportId,
+           @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
+           @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+	    Map<String, Object> filter = new HashMap<String, Object>();
+	    if(!StringUtils.isBlank(reportId)) {
+	        filter.put("report_id", reportId);
+	    }
+	    if (StringUtils.isBlank(order)) {
+            order = "updated_at desc";
+        }
+        return Response.success(receiveSampleService.selectUnderDetectionReceiveSampleItems(pageNum, pageSize, order, filter));
+    }
+	
+	
+	
 
-	// 根据ID获得单个检验项信息
+	// 根据检测项ID获得单个检验项信息
 	@RequestMapping(value = "/sample/items/item/{id}", method = RequestMethod.GET)
 	public Response getItem(@PathVariable(name = "id") String itemId) {
 

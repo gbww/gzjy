@@ -38,4 +38,6 @@ public interface ReceiveSampleItemMapper {
     
     
     List<ReceiveSampleItem> selectDoingItems(String receiveSampleId);
+    
+    List<ReceiveSampleItem> select(@Param("filters") Map<String, Object> filter,@Param("orderby")String order);
 }
