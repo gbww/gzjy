@@ -135,7 +135,7 @@ public class ReceiveSampleController {
 
 	// 变更接样中检验项基本信息（添加检验项）
 	@Privileges(name = "SAMPLE-ADDITEM", scope = { 1 })
-	@RequestMapping(value = "/sample/item/{receiveSampleId}", method = RequestMethod.POST)
+	@RequestMapping(value = "/sample/item/add/{receiveSampleId}", method = RequestMethod.POST)
 	public Response addItem(@PathVariable("receiveSampleId") String receiveSample,
 			@Validated(value = { Add.class }) @RequestBody List<ReceiveSampleItem> items, BindingResult result) {
 		if (result.hasErrors()) {
@@ -153,7 +153,7 @@ public class ReceiveSampleController {
 	
 	// 更新接样中检验项基本信息
 	//@Privileges(name = "SAMPLE-ADDITEM", scope = { 1 })
-    @RequestMapping(value = "/sample/item/{receiveSampleId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/sample/item/update/{receiveSampleId}", method = RequestMethod.POST)
     public Response updateItem(@PathVariable("receiveSampleId") String receiveSample,
             @Validated(value = { Add.class }) @RequestBody List<ReceiveSampleItem> items, BindingResult result) {
         if (result.hasErrors()) {
