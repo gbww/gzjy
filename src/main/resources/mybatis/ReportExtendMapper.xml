@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzjy.receive.mapper.ReportExtendMapper">
+
+
+	<resultMap id="BaseResultMap" type="com.gzjy.receive.model.ReportExtend">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="report_id" jdbcType="VARCHAR" property="reportId" />
+		<result column="template_id" jdbcType="VARCHAR" property="templateId" />
+		<result column="template_name" jdbcType="VARCHAR" property="templateName" />
+		<result column="template_desc" jdbcType="VARCHAR" property="templateDesc" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, report_id, template_id, template_name, template_desc
+	</sql>
+
+	<select id="selectAll" resultMap="BaseResultMap">		
+		select
+		<include refid="Base_Column_List" />
+		from report_extend		
+	</select>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from report_extend
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+
+	<insert id="insert" parameterType="com.gzjy.receive.model.ReportExtend">
+		insert into report_extend(id, report_id, template_id, template_name, template_desc)
+		values (
+		#{id,jdbcType=VARCHAR},
+		#{reportId,jdbcType=VARCHAR},
+		#{templateId,jdbcType=VARCHAR},
+		#{templateName,jdbcType=VARCHAR},
+		#{templateDesc,jdbcType=VARCHAR}
+		)
+	</insert>	
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.gzjy.receive.model.ReportExtend">
+		update report_extend
+		<set>
+			<if test="reportId != null">
+				report_id = #{reportId,jdbcType=VARCHAR},
+			</if>
+			<if test="templateId != null">
+				template_id = #{templateId,jdbcType=VARCHAR},
+			</if>
+			<if test="templateName != null">
+				template_name = #{templateName,jdbcType=VARCHAR},
+			</if>
+			<if test="templateDesc != null">
+				template_desc = #{templateDesc,jdbcType=VARCHAR},
+			</if>			
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		report_extend
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+
+</mapper>

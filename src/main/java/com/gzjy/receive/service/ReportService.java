@@ -17,9 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gzjy.contract.model.ContractTask;
 import com.gzjy.receive.mapper.ReceiveSampleMapper;
+import com.gzjy.receive.mapper.ReportExtendMapper;
 import com.gzjy.receive.model.ReceiveSample;
+import com.gzjy.receive.model.ReceiveSampleTask;
+import com.gzjy.receive.model.ReportExtend;
 import com.gzjy.user.UserService;
 import com.gzjy.user.model.User;
 
@@ -32,7 +34,20 @@ public class ReportService {
 	UserService userService;
 	@Autowired
 	ReceiveSampleMapper receiveSampleMapper;
+	@Autowired
+	ReportExtendMapper reportExtendMapper;
 
+	/**
+	 * 编辑报告
+	 * @param receiveSampleId
+	 */
+	@Transactional
+	public void editReceiveSample(ReceiveSample receiveSample, ReportExtend reportExtend) {
+		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
+		reportExtendMapper.updateByPrimaryKeySelective(reportExtend);
+	}
+
+	
 	/**
 	 * 启动报告流程引擎
 	 * @param receiveSampleId
@@ -59,9 +74,9 @@ public class ReportService {
 	 * @param isHandle(0表示查詢未完成任務，1表示查詢已完成任務)
 	 * @return ArrayList<ContractTask>
 	 */	
-	public ArrayList<ContractTask> getContractTaskByUserId(String isHandle) {
+	public ArrayList<ReceiveSampleTask> getContractTaskByUserId(String isHandle) {
 		String userId = userService.getCurrentUser().getId();
-		ArrayList<ContractTask> taskList = new ArrayList<ContractTask>();
+		ArrayList<ReceiveSampleTask> taskList = new ArrayList<ReceiveSampleTask>();
 		if ("0".equals(isHandle)) {
 			logger.info("查询未完成任务");
 			TaskService taskService = processEngine.getTaskService();
@@ -69,7 +84,7 @@ public class ReportService {
 			for (Task task : tasks) {
 				logger.info("ID:" + task.getId() + ",任务名称:" + task.getName() + ",执行人:" + task.getAssignee() + ",开始时间:"
 							+ task.getCreateTime());
-				ContractTask contractTask = new ContractTask();
+				ReceiveSampleTask contractTask = new ReceiveSampleTask();
 				contractTask.setId(task.getId());
 				contractTask.setName(task.getName());
 				contractTask.setAssignee(task.getAssignee());
@@ -86,7 +101,7 @@ public class ReportService {
 			for (HistoricTaskInstance task : tasks) {
 				logger.info("ID:" + task.getId() + ",任务名称:" + task.getName() + ",执行人:" + task.getAssignee() + ",开始时间:"
 						+ task.getCreateTime());
-				ContractTask contractTask = new ContractTask();
+				ReceiveSampleTask contractTask = new ReceiveSampleTask();
 				contractTask.setId(task.getId());
 				contractTask.setName(task.getName());
 				contractTask.setAssignee(task.getAssignee());

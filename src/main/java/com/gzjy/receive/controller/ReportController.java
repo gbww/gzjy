@@ -6,13 +6,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gzjy.common.Response;
-import com.gzjy.contract.model.ContractTask;
+import com.gzjy.receive.model.ReceiveSample;
+import com.gzjy.receive.model.ReceiveSampleTask;
+import com.gzjy.receive.model.ReportExtend;
 import com.gzjy.receive.service.ReportService;
 
 @RestController
@@ -20,11 +23,22 @@ import com.gzjy.receive.service.ReportService;
 
 public class ReportController {
 	private static Logger logger = LoggerFactory.getLogger(ReportService.class);
-
-	/*@Autowired
-	private UserService userService;*/
+	
 	@Autowired
 	private ReportService reportService;
+	
+	
+	@RequestMapping(value = "/edit", method = RequestMethod.POST)
+	public Response editReport(@RequestBody(required = true) ReceiveSample receiveSample,
+			@RequestBody(required = true)ReportExtend reportExtend) throws Exception{
+		try {
+			reportService.editReceiveSample(receiveSample, reportExtend);
+			return Response.success("success");
+		} catch (Exception e) {
+			logger.error(e + "");
+			return Response.fail(e.getMessage());
+		}
+	}
 	
 	/**
 	 * 启动报告流程引擎接口
@@ -53,7 +67,7 @@ public class ReportController {
 	@RequestMapping(value = "/process", method = RequestMethod.GET)
 	public Response getTaskByUser(@RequestParam(required = true, defaultValue="0") String isHandle) throws Exception{
 		try {
-			ArrayList<ContractTask> result = reportService.getContractTaskByUserId(isHandle);
+			ArrayList<ReceiveSampleTask> result = reportService.getContractTaskByUserId(isHandle);
 			return Response.success(result);
 		} catch (Exception e) {
 			logger.error(e + "");
@@ -67,6 +81,7 @@ public class ReportController {
 	 * @param taskId  任务编号
 	 * @param receiveSampleId 收样单编号
 	 * @param examinePersonId 审核人编号
+	 * @param comment 评论意见
 	 * @return
 	 */
 	@RequestMapping(value = "/process/task/edit/{taskId}", method = RequestMethod.GET)
@@ -88,6 +103,8 @@ public class ReportController {
 	 * @param taskId  任务编号
 	 * @param receiveSampleId 收样单编号
 	 * @param approvePersonId 批准人编号
+	 * @param pass 是否通过
+	 * @param comment 评论意见
 	 * @return
 	 */
 	@RequestMapping(value = "/process/task/examine/{taskId}", method = RequestMethod.GET)
@@ -109,7 +126,8 @@ public class ReportController {
 	 * 执行合同流程中批准任务
 	 * @param taskId  任务编号
 	 * @param receiveSampleId 收样单编号
-	 * @param printPersonId 打印人编号
+	 * @param pass 是否通过
+	 * @param comment 评论意见
 	 * @return
 	 */
 	@RequestMapping(value = "/process/task/approve/{taskId}", method = RequestMethod.GET)
@@ -124,24 +142,6 @@ public class ReportController {
 			logger.error(e + "");
 			return Response.fail(e.getMessage());
 		}
-	}
+	}	
 	
-	/**
-	 * 执行合同流程中打印任务
-	 * @param taskId  任务编号
-	 * @param receiveSampleId 收样单编号
-	 * @return
-	 *//*
-	@RequestMapping(value = "/process/task/print/{taskId}", method = RequestMethod.GET)
-	public Response completePrintTask(@PathVariable String taskId,
-			@RequestParam(required = true) String receiveSampleId,
-			@RequestParam(required = true) boolean pass) {		
-		try {
-			reportService.doPrintTask(taskId, receiveSampleId, pass);
-			return Response.success("success");
-		} catch (Exception e) {
-			logger.error(e + "");
-			return Response.fail(e.getMessage());
-		}
-	}*/
 }
