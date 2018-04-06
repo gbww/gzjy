@@ -48,11 +48,10 @@ public class ReportService {
 		variables.put("editPersion", user.getId());
 		String processId = runtimeService.startProcessInstanceByKey("ReportProcess", variables).getId();
 		// 流程启动成功之后将返回的流程ID回填到合同receive_sample表中
-		/*ReceiveSample receiveSample = new ReceiveSample();
-		receiveSample.setReceiveSampleId(receiveSampleId);
-		receiveSample.setReportStatus(1);
+		ReceiveSample receiveSample = new ReceiveSample();
+		receiveSample.setReceiveSampleId(receiveSampleId);		
 		receiveSample.setReportProcessId(processId);
-		receiveSampleMapper.updateByPrimaryKey(receiveSample);*/
+		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
 	}
 
 	/**
@@ -105,6 +104,7 @@ public class ReportService {
 	 * 执行报告中的编辑任务
 	 * @param taskId  任务编号
 	 */
+	@Transactional
 	public void doEditTask(String taskId, String receiveSampleId, String examinePersonId, String comment) {
 		TaskService taskService = processEngine.getTaskService();
 		RuntimeService runtimeService = processEngine.getRuntimeService();
@@ -113,9 +113,15 @@ public class ReportService {
 		runtimeService.setVariable(task.getExecutionId(), "examinePersonId", examinePersonId);
 		//执行任务过程中需要设置标记位方便流程引擎区分
 		runtimeService.setVariable(task.getExecutionId(), "tag", 2);
+		ReceiveSample receiveSample = new ReceiveSample();
+		receiveSample.setReceiveSampleId(receiveSampleId);
+		//设置合同状态为待审核
+		receiveSample.setReportStatus(2);
+		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
 //		ReceiveSample receiveSample = receiveSampleMapper.selectByPrimaryKey(receiveSampleId);
 //		taskService.addComment(taskId,null, comment);
-		taskService.complete(taskId);		
+		taskService.complete(taskId);	
+		
 	}
 	
 	/**
@@ -135,8 +141,17 @@ public class ReportService {
 		}else {
 			runtimeService.setVariable(task.getExecutionId(), "tag", 1);
 		}
+		//设置合同状态为待批准
+		ReceiveSample receiveSample = new ReceiveSample();
+		receiveSample.setReceiveSampleId(receiveSampleId);				
+		if(pass) {
+			receiveSample.setReportStatus(4);
+		}else {
+			receiveSample.setReportStatus(2);
+		}		
+		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
 //		taskService.addComment(taskId, null, comment);
-		taskService.complete(taskId);
+		taskService.complete(taskId);		
 	}
 	
 	
@@ -155,6 +170,14 @@ public class ReportService {
 		}else {
 			runtimeService.setVariable(task.getExecutionId(), "tag", 2);
 		}
+		ReceiveSample receiveSample = new ReceiveSample();
+		receiveSample.setReceiveSampleId(receiveSampleId);	
+		if(pass) {
+			receiveSample.setReportStatus(3);
+		}else {
+			receiveSample.setReportStatus(1);
+		}	
+		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
 //		taskService.addComment(taskId, null, comment);
 		taskService.complete(taskId);
 	}
