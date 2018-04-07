@@ -131,7 +131,7 @@ public class ReportService {
 		ReceiveSample receiveSample = new ReceiveSample();
 		receiveSample.setReceiveSampleId(receiveSampleId);
 		//设置合同状态为待审核
-		receiveSample.setReportStatus(2);
+		receiveSample.setReportStatus(1);
 		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
 //		ReceiveSample receiveSample = receiveSampleMapper.selectByPrimaryKey(receiveSampleId);
 //		taskService.addComment(taskId,null, comment);
@@ -160,9 +160,9 @@ public class ReportService {
 		ReceiveSample receiveSample = new ReceiveSample();
 		receiveSample.setReceiveSampleId(receiveSampleId);				
 		if(pass) {
-			receiveSample.setReportStatus(4);
-		}else {
 			receiveSample.setReportStatus(2);
+		}else {
+			receiveSample.setReportStatus(0);
 		}		
 		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
 //		taskService.addComment(taskId, null, comment);

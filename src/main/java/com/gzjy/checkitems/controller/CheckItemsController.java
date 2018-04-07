@@ -285,6 +285,26 @@ public class CheckItemsController {
 		}
 	}
 	
+	
+	/**
+	 * 修改自定义检验项
+	 * @param record
+	 * @return
+	 */
+	@RequestMapping(value = "/checkitemscatalog/item/mapping", method = RequestMethod.PUT)
+	@Privileges(name = "CHECKITEM-MAPPING-ADD", scope = { 1 })
+	public Response updateCheckItemMapping(@RequestBody CheckItemsCatalogMapping record) {
+		
+		try {
+			checkItemsCatalogMappingService.updateByPrimaryKeySelective(record);
+			return Response.success("success");
+		}
+		catch (Exception e) {
+			System.out.println(e);
+			return Response.fail(e.getMessage());
+		}
+	}
+	
 	/**
 	 * 批量插入数据到检验项关系表中
 	 * @param record
