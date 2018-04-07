@@ -16,4 +16,6 @@ public interface CheckItemsCatalogMappingMapper {
 	int deleteByPrimaryKey(String id);
 	List<HashMap<String, Object>> selectCheckItemsById(@Param("catalogId")String catalogId);
 	int importData(List<CheckItemsCatalogMapping> data);
+	List<String> selectDistinctIds();
+	int deleteByIds(@Param("idList")List<String> idList);
 }

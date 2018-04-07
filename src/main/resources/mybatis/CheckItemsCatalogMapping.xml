@@ -142,6 +142,19 @@
 			#{item.law})
 		</foreach>
 	</insert>
+	
+	<select id="selectDistinctIds" resultType="string">
+		SELECT max(id) FROM
+		check_item_catalog_mapping GROUP BY name,method,unit,standard_value,detection_limit,
+		quantitation_limit, device, default_price, department,subpackage,law
+	</select>
 
+	<delete id="deleteByIds">
+		delete from check_item where id not in
+		<foreach item="item" index="index" collection="idList" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
 
 </mapper>
