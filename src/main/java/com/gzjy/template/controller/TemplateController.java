@@ -105,6 +105,9 @@ public class TemplateController {
 	@Privileges(name = "TEMPLATE-UPLOAD", scope = { 1 })
 	public Response uploadTemplate(@RequestParam("file") MultipartFile file, 
 			@RequestParam String name, @RequestParam String description, @RequestParam String category) {
+		if(!file.getOriginalFilename().endsWith(".jrxml")) {
+			return Response.fail("模板文件仅支持.jrxml后缀文件");
+		}
 		try {
 			templateService.uploadFile(file, name, description, category);
 			return Response.success("success");

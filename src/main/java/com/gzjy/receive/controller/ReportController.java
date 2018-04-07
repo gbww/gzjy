@@ -172,7 +172,6 @@ public class ReportController {
 
 	/**
 	 * 查看报告列表
-	 * 
 	 * @return
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
@@ -228,7 +227,7 @@ public class ReportController {
 		if (!StringUtils.isBlank(checkType)) {
 			filter.put("check_type", checkType);
 		}
-		if (reportStatus != null && reportStatus != 5) { // 所有的不加登录人的过滤
+		if (reportStatus != null && reportStatus != 5) { 
 			filter.put("report_status", reportStatus);
 			User u = userService.getCurrentUser();
 			boolean superUser = u.getRole().isSuperAdmin();
@@ -265,8 +264,7 @@ public class ReportController {
 	}
 
 	/**
-	 * 查看报告详情
-	 * 
+	 * 查看报告中的检验项
 	 * @return
 	 */
 	@RequestMapping(value = "/list/{receiveSampleId}", method = RequestMethod.GET)
