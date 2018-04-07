@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gzjy.common.Response;
 import com.gzjy.common.annotation.Privileges;
 import com.gzjy.common.exception.BizException;
+import com.gzjy.receive.mapper.ReportExtendMapper;
 import com.gzjy.receive.model.ReceiveSample;
 import com.gzjy.receive.model.ReceiveSampleItem;
 import com.gzjy.receive.model.ReceiveSampleTask;
@@ -42,7 +43,8 @@ public class ReportController {
 	UserService userService;
 	@Autowired
 	ReceiveSampleService receiveSampleService;
-	
+	@Autowired
+	ReportExtendMapper reportExtendMapper;
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	public Response editReport(@RequestBody(required = true) ReceiveSample receiveSample,
@@ -95,15 +97,10 @@ public class ReportController {
 
 	/**
 	 * 执行合同流程中编辑任务
-	 * 
-	 * @param taskId
-	 *            任务编号
-	 * @param receiveSampleId
-	 *            收样单编号
-	 * @param examinePersonId
-	 *            审核人编号
-	 * @param comment
-	 *            评论意见
+	 * @param taskId   任务编号
+	 * @param receiveSampleId   收样单编号
+	 * @param examinePersonId   审核人编号
+	 * @param comment           评论意见
 	 * @return
 	 */
 	@RequestMapping(value = "/process/task/edit/{taskId}", method = RequestMethod.GET)
@@ -181,90 +178,90 @@ public class ReportController {
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
 	public Response listReports(@RequestParam(name = "receiveSampleId", required = false) String id,
-	        @RequestParam(name = "reportId", required = false) String reportId,
-	        @RequestParam(name = "entrustedUnit", required = false) String entrustedUnit,
-	        @RequestParam(name = "inspectedUnit", required = false) String inspectedUnit,
-	        @RequestParam(name = "sampleName", required = false) String sampleName,
-	        @RequestParam(name = "executeStandard", required = false) String executeStandard,
-	        @RequestParam(name = "productionUnit", required = false) String productionUnit,
-	        @RequestParam(name = "sampleType", required = false) String sampleType,
-	        @RequestParam(name = "checkType", required = false) String checkType,
-	        @RequestParam(name = "reportStatus", required = false) Integer reportStatus,
-	        @RequestParam(name = "order", required = false) String order,
-	        @RequestParam(name = "status", defaultValue = "5") int status,
-	        @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,	            
-	        @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
-	        @RequestParam(value = "startTime", required = false) String startTime,
-	        @RequestParam(value = "endTime", required = false) String endTime){
-		
-	    Map<String, Object> filter = new HashMap<String, Object>();
-	    if (StringUtils.isBlank(startTime)) {
-	        startTime = null;
-	    }
-	    if (StringUtils.isBlank(endTime)) {
-	        endTime=null;
-	    }
-	    if(!StringUtils.isBlank(reportId)) {
-	        filter.put("report_id", reportId);
-	    }
-	    if(!StringUtils.isBlank(inspectedUnit)) {
-	        filter.put("inspected_unit", inspectedUnit);
-	    }
-	    if(!StringUtils.isBlank(sampleName)) {
-	        filter.put("sample_name", sampleName);
-	    }
-	    if(!StringUtils.isBlank(executeStandard)) {
-	        filter.put("execute_standard", executeStandard);
-	    }
-	    if(!StringUtils.isBlank(productionUnit)) {
-	        filter.put("production_unit", productionUnit);
-	    }
-	    if (!StringUtils.isBlank(id)) {
-	        filter.put("receive_sample_id", id);
-	    }
-	    if (!StringUtils.isBlank(entrustedUnit)) {
-	        filter.put("entrusted_unit", entrustedUnit);
-	    }
-	    if (!StringUtils.isBlank(sampleType)) {
-	        filter.put("sample_type", sampleType);
-	    }
-	    if (!StringUtils.isBlank(checkType)) {
-	        filter.put("check_type", checkType);
-	    }
-	    if (reportStatus!=null&&reportStatus!=5) {  //所有的不加登录人的过滤
-	        filter.put("report_status", reportStatus);
-	        User u=userService.getCurrentUser();
-	        boolean superUser= u.getRole().isSuperAdmin();
-	        if(!superUser) {
-	            String name=u.getName();               
-	            if(reportStatus==0) {
-	                filter.put("draw_user", name);
-	            }
-	            if(reportStatus==1) {
-	                filter.put("examine_user", name);
-	            }
-	            if(reportStatus==2) {
-	                filter.put("approval_user", name);
-	            }                             
-	        }
-	    }
-	    if (StringUtils.isBlank(order)) {
-	       order = "created_at desc";
-	    }
-	    if (status != 5) {
-	       filter.put("status", status);
-	    }
-	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	    Date start = null;
-	    Date end = null;
-	    try {
-	        start = startTime == null ? null : sdf.parse(startTime);
-	        end = endTime == null ? null : sdf.parse(endTime);
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        throw new BizException("输入的时间格式不合法！");
-	    }
-	    return Response.success(receiveSampleService.select(pageNum, pageSize, order, filter, start, end));
+			@RequestParam(name = "reportId", required = false) String reportId,
+			@RequestParam(name = "entrustedUnit", required = false) String entrustedUnit,
+			@RequestParam(name = "inspectedUnit", required = false) String inspectedUnit,
+			@RequestParam(name = "sampleName", required = false) String sampleName,
+			@RequestParam(name = "executeStandard", required = false) String executeStandard,
+			@RequestParam(name = "productionUnit", required = false) String productionUnit,
+			@RequestParam(name = "sampleType", required = false) String sampleType,
+			@RequestParam(name = "checkType", required = false) String checkType,
+			@RequestParam(name = "reportStatus", required = false) Integer reportStatus,
+			@RequestParam(name = "order", required = false) String order,
+			@RequestParam(name = "status", defaultValue = "5") int status,
+			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
+			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+			@RequestParam(value = "startTime", required = false) String startTime,
+			@RequestParam(value = "endTime", required = false) String endTime) {
+
+		Map<String, Object> filter = new HashMap<String, Object>();
+		if (StringUtils.isBlank(startTime)) {
+			startTime = null;
+		}
+		if (StringUtils.isBlank(endTime)) {
+			endTime = null;
+		}
+		if (!StringUtils.isBlank(reportId)) {
+			filter.put("report_id", reportId);
+		}
+		if (!StringUtils.isBlank(inspectedUnit)) {
+			filter.put("inspected_unit", inspectedUnit);
+		}
+		if (!StringUtils.isBlank(sampleName)) {
+			filter.put("sample_name", sampleName);
+		}
+		if (!StringUtils.isBlank(executeStandard)) {
+			filter.put("execute_standard", executeStandard);
+		}
+		if (!StringUtils.isBlank(productionUnit)) {
+			filter.put("production_unit", productionUnit);
+		}
+		if (!StringUtils.isBlank(id)) {
+			filter.put("receive_sample_id", id);
+		}
+		if (!StringUtils.isBlank(entrustedUnit)) {
+			filter.put("entrusted_unit", entrustedUnit);
+		}
+		if (!StringUtils.isBlank(sampleType)) {
+			filter.put("sample_type", sampleType);
+		}
+		if (!StringUtils.isBlank(checkType)) {
+			filter.put("check_type", checkType);
+		}
+		if (reportStatus != null && reportStatus != 5) { // 所有的不加登录人的过滤
+			filter.put("report_status", reportStatus);
+			User u = userService.getCurrentUser();
+			boolean superUser = u.getRole().isSuperAdmin();
+			if (!superUser) {
+				String name = u.getName();
+				if (reportStatus == 0) {
+					filter.put("draw_user", name);
+				}
+				if (reportStatus == 1) {
+					filter.put("examine_user", name);
+				}
+				if (reportStatus == 2) {
+					filter.put("approval_user", name);
+				}
+			}
+		}
+		if (StringUtils.isBlank(order)) {
+			order = "created_at desc";
+		}
+		if (status != 5) {
+			filter.put("status", status);
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date start = null;
+		Date end = null;
+		try {
+			start = startTime == null ? null : sdf.parse(startTime);
+			end = endTime == null ? null : sdf.parse(endTime);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new BizException("输入的时间格式不合法！");
+		}
+		return Response.success(receiveSampleService.select(pageNum, pageSize, order, filter, start, end));
 	}
 
 	/**
@@ -274,15 +271,13 @@ public class ReportController {
 	 */
 	@RequestMapping(value = "/list/{receiveSampleId}", method = RequestMethod.GET)
 	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
-	public Response detailReport(@PathVariable(name = "receiveSampleId", required = true)String receiveSampleId){
+	public Response detailReport(@PathVariable(name = "receiveSampleId", required = true) String receiveSampleId) {
 		try {
 			List<ReceiveSampleItem> getReceiveSampleItemList = reportService.getReceiveSampleItemList(receiveSampleId);
 			return Response.success(getReceiveSampleItemList);
 		} catch (Exception e) {
 			logger.error(e + "");
 			return Response.fail(e.getMessage());
-		}		
+		}
 	}
-
-	
 }
