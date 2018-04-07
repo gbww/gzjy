@@ -74,18 +74,21 @@ public UserSign upload(MultipartFile file) throws IOException {
         UserSign oldsign = new UserSign();
         
         oldsign=fileMapper.selectByPrimaryKey(currentUser.getId());
-        if(oldsign!=null) {
-            epicNFSClient.deleteRemoteFile(oldsign.getPath());
-            fileMapper.updateByPrimaryKey(sign);
-            epicNFSClient.upload(file.getInputStream(),
-                    sign.getPath());
+        InputStream in=file.getInputStream();
+        try {
+            if (oldsign != null) {
+                epicNFSClient.deleteRemoteFile(oldsign.getPath());
+                fileMapper.updateByPrimaryKey(sign);
+                epicNFSClient.upload(in, sign.getPath());
+            } else {
+
+                fileMapper.insert(sign);
+                epicNFSClient.upload(in, sign.getPath());
+            } 
+        } finally {
+            if(in!=null)
+                in.close();
         }
-        else {
-          
-            fileMapper.insert(sign);
-            epicNFSClient.upload(file.getInputStream(),
-                    sign.getPath());
-        }          
         epicNFSClient.close();
         return sign;
     }

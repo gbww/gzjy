@@ -13,17 +13,17 @@
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
                         connectionURL="jdbc:mysql://127.0.0.1:3306/ahgz_lims?useUnicode=true&amp;characterEncoding=UTF-8"
                         userId="root" password="123"/>
-        <javaModelGenerator targetPackage="com.gzjy.client.model"
-                            targetProject="E:\project\gzjy-app\src\main\java">
+        <javaModelGenerator targetPackage="com.gzjy.samplemanager.model"
+                            targetProject="E:\project\gzjy\src\main\java">
             <property name="enableSubPackages" value="false" />
             <property name="trimStrings" value="true" />
         </javaModelGenerator>
         <sqlMapGenerator targetPackage="mybatis"
-                         targetProject="E:\project\gzjy-app\src\main\resources"/>
-        <javaClientGenerator targetPackage="com.gzjy.client.mapper"
-                             targetProject="E:\project\gzjy-app\src\main\java"
+                         targetProject="E:\project\gzjy\src\main\resources"/>
+        <javaClientGenerator targetPackage="com.gzjy.samplemanager.mapper"
+                             targetProject="E:\project\gzjy\src\main\java"
                              type="XMLMAPPER"/>
-           <table schema="ahgz_lims" tableName="scheduler_report" domainObjectName="SchedulerReport"	
+           <table schema="ahgz_lims" tableName="sample_exchange" domainObjectName="SampleExchange"	
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false"
                enableSelectByExample="false"/> 

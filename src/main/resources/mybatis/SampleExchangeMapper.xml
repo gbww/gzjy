@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gzjy.samplemanager.mapper.SampleExchangeMapper" >
+  <resultMap id="BaseResultMap" type="com.gzjy.samplemanager.model.SampleExchange" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="sample_id" property="sampleId" jdbcType="VARCHAR" />
+    <result column="report_id" property="reportId" jdbcType="VARCHAR" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="CHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.gzjy.samplemanager.model.SampleExchange" extends="BaseResultMap" >
+    <result column="desc" property="desc" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, sample_id, report_id, location, user_id, user_name, created_at
+  </sql>
+  <sql id="Blob_Column_List" >
+    desc
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from sample_exchange
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  
+  
+    <select id="select" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from sample_exchange
+    <where>
+			<foreach collection="filters.keys" item="key" separator="and">
+				<if test="null!=filters[key]">
+					${key} LIKE CONCAT('%',#{filters[${key}]},'%' )
+				</if>
+			</foreach>
+		</where>
+		order by ${orderby}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from sample_exchange
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzjy.samplemanager.model.SampleExchange" >
+    insert into sample_exchange (id, sample_id, report_id, 
+      location, user_id, user_name, 
+      created_at, desc)
+    values (#{id,jdbcType=CHAR}, #{sampleId,jdbcType=VARCHAR}, #{reportId,jdbcType=VARCHAR}, 
+      #{location,jdbcType=VARCHAR}, #{userId,jdbcType=CHAR}, #{userName,jdbcType=VARCHAR}, 
+      #{createdAt,jdbcType=TIMESTAMP}, #{desc,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gzjy.samplemanager.model.SampleExchange" >
+    insert into sample_exchange
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="sampleId != null" >
+        sample_id,
+      </if>
+      <if test="reportId != null" >
+        report_id,
+      </if>
+      <if test="location != null" >
+        location,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="createdAt != null" >
+        created_at,
+      </if>
+      <if test="desc != null" >
+        desc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="sampleId != null" >
+        #{sampleId,jdbcType=VARCHAR},
+      </if>
+      <if test="reportId != null" >
+        #{reportId,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null" >
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=CHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null" >
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="desc != null" >
+        #{desc,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gzjy.samplemanager.model.SampleExchange" >
+    update sample_exchange
+    <set >
+      <if test="sampleId != null" >
+        sample_id = #{sampleId,jdbcType=VARCHAR},
+      </if>
+      <if test="reportId != null" >
+        report_id = #{reportId,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null" >
+        location = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=CHAR},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null" >
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="desc != null" >
+        desc = #{desc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.gzjy.samplemanager.model.SampleExchange" >
+    update sample_exchange
+    set sample_id = #{sampleId,jdbcType=VARCHAR},
+      report_id = #{reportId,jdbcType=VARCHAR},
+      location = #{location,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=CHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      desc = #{desc,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gzjy.samplemanager.model.SampleExchange" >
+    update sample_exchange
+    set sample_id = #{sampleId,jdbcType=VARCHAR},
+      report_id = #{reportId,jdbcType=VARCHAR},
+      location = #{location,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=CHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

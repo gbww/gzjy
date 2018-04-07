@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gzjy.samplemanager.mapper.SampleManagerMapper" >
+  <resultMap id="BaseResultMap" type="com.gzjy.samplemanager.model.SampleManager" >
+    <id column="sample_id" property="sampleId" jdbcType="CHAR" />
+    <result column="report_id" property="reportId" jdbcType="CHAR" />
+    <result column="sample_name" property="sampleName" jdbcType="VARCHAR" />
+    <result column="manager_type" property="managerType" jdbcType="VARCHAR" />
+    <result column="zhibaoqi" property="zhibaoqi" jdbcType="INTEGER" />
+    <result column="sample_circulate_date" property="sampleCirculateDate" jdbcType="TIMESTAMP" />
+    <result column="expiry_time" property="expiryTime" jdbcType="TIMESTAMP" />
+    <result column="receive_date" property="receiveDate" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sample_id, report_id, sample_name, manager_type, zhibaoqi, sample_circulate_date, 
+    expiry_time, receive_date, status, created_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from sample_manager
+    where sample_id = #{sampleId,jdbcType=CHAR}
+  </select>
+  
+  <select id="select" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from sample_manager
+    <where>
+			<foreach collection="filters.keys" item="key" separator="and">
+				<if test="null!=filters[key]">
+					${key} LIKE CONCAT('%',#{filters[${key}]},'%' )
+				</if>
+			</foreach>
+		</where>
+		order by ${orderby}
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from sample_manager
+    where sample_id = #{sampleId,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzjy.samplemanager.model.SampleManager" >
+    insert into sample_manager (sample_id, report_id, sample_name, 
+      manager_type, zhibaoqi, sample_circulate_date, 
+      expiry_time, receive_date, status, 
+      created_at)
+    values (#{sampleId,jdbcType=CHAR}, #{reportId,jdbcType=CHAR}, #{sampleName,jdbcType=VARCHAR}, 
+      #{managerType,jdbcType=VARCHAR}, #{zhibaoqi,jdbcType=INTEGER}, #{sampleCirculateDate,jdbcType=TIMESTAMP}, 
+      #{expiryTime,jdbcType=TIMESTAMP}, #{receiveDate,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, 
+      #{createdAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gzjy.samplemanager.model.SampleManager" >
+    insert into sample_manager
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sampleId != null" >
+        sample_id,
+      </if>
+      <if test="reportId != null" >
+        report_id,
+      </if>
+      <if test="sampleName != null" >
+        sample_name,
+      </if>
+      <if test="managerType != null" >
+        manager_type,
+      </if>
+      <if test="zhibaoqi != null" >
+        zhibaoqi,
+      </if>
+      <if test="sampleCirculateDate != null" >
+        sample_circulate_date,
+      </if>
+      <if test="expiryTime != null" >
+        expiry_time,
+      </if>
+      <if test="receiveDate != null" >
+        receive_date,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createdAt != null" >
+        created_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sampleId != null" >
+        #{sampleId,jdbcType=CHAR},
+      </if>
+      <if test="reportId != null" >
+        #{reportId,jdbcType=CHAR},
+      </if>
+      <if test="sampleName != null" >
+        #{sampleName,jdbcType=VARCHAR},
+      </if>
+      <if test="managerType != null" >
+        #{managerType,jdbcType=VARCHAR},
+      </if>
+      <if test="zhibaoqi != null" >
+        #{zhibaoqi,jdbcType=INTEGER},
+      </if>
+      <if test="sampleCirculateDate != null" >
+        #{sampleCirculateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expiryTime != null" >
+        #{expiryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="receiveDate != null" >
+        #{receiveDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null" >
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gzjy.samplemanager.model.SampleManager" >
+    update sample_manager
+    <set >
+      <if test="reportId != null" >
+        report_id = #{reportId,jdbcType=CHAR},
+      </if>
+      <if test="sampleName != null" >
+        sample_name = #{sampleName,jdbcType=VARCHAR},
+      </if>
+      <if test="managerType != null" >
+        manager_type = #{managerType,jdbcType=VARCHAR},
+      </if>
+      <if test="zhibaoqi != null" >
+        zhibaoqi = #{zhibaoqi,jdbcType=INTEGER},
+      </if>
+      <if test="sampleCirculateDate != null" >
+        sample_circulate_date = #{sampleCirculateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expiryTime != null" >
+        expiry_time = #{expiryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="receiveDate != null" >
+        receive_date = #{receiveDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null" >
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where sample_id = #{sampleId,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gzjy.samplemanager.model.SampleManager" >
+    update sample_manager
+    set report_id = #{reportId,jdbcType=CHAR},
+      sample_name = #{sampleName,jdbcType=VARCHAR},
+      manager_type = #{managerType,jdbcType=VARCHAR},
+      zhibaoqi = #{zhibaoqi,jdbcType=INTEGER},
+      sample_circulate_date = #{sampleCirculateDate,jdbcType=TIMESTAMP},
+      expiry_time = #{expiryTime,jdbcType=TIMESTAMP},
+      receive_date = #{receiveDate,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP}
+    where sample_id = #{sampleId,jdbcType=CHAR}
+  </update>
+</mapper>

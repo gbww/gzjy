@@ -1,118 +1,97 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.gzjy.receive.mapper.ReceiveSampleMapper">
-	<resultMap id="BaseResultMap" type="com.gzjy.receive.model.ReceiveSample">
-		<id column="receive_sample_id" property="receiveSampleId" jdbcType="CHAR" />
-		<result column="report_id" property="reportId" jdbcType="CHAR" />
-		<result column="sample_type" property="sampleType" jdbcType="VARCHAR" />
-		<result column="check_type" property="checkType" jdbcType="VARCHAR" />
-		<result column="entrusted_unit" property="entrustedUnit"
-			jdbcType="VARCHAR" />
-		<result column="entrusted_unit_address" property="entrustedUnitAddress"
-			jdbcType="VARCHAR" />
-		<result column="entrusted_user_phone" property="entrustedUserPhone"
-			jdbcType="VARCHAR" />
-		<result column="entrusted_user_email" property="entrustedUserEmail"
-			jdbcType="VARCHAR" />
-		<result column="inspected_unit" property="inspectedUnit"
-			jdbcType="VARCHAR" />
-		<result column="inspected_unit_address" property="inspectedUnitAddress"
-			jdbcType="VARCHAR" />
-		<result column="inspected_user" property="inspectedUser"
-			jdbcType="VARCHAR" />
-		<result column="inspected_user_phone" property="inspectedUserPhone"
-			jdbcType="VARCHAR" />
-		<result column="inspected_user_email" property="inspectedUserEmail"
-			jdbcType="VARCHAR" />
-		<result column="sample_address" property="sampleAddress"
-			jdbcType="VARCHAR" />
-		<result column="sample_name" property="sampleName" jdbcType="VARCHAR" />
-		<result column="sample_link" property="sampleLink" jdbcType="VARCHAR" />
-		<result column="sample_trademark" property="sampleTrademark"
-			jdbcType="VARCHAR" />
-		<result column="sample_circulate" property="sampleCirculate"
-			jdbcType="VARCHAR" />
-		<result column="sample_circulate_date" property="sampleCirculateDate"
-			jdbcType="TIMESTAMP" />
-		<result column="sample_date" property="sampleDate" jdbcType="TIMESTAMP" />
-		<result column="sample_way" property="sampleWay" jdbcType="VARCHAR" />
-		<result column="specification_model" property="specificationModel"
-			jdbcType="VARCHAR" />
-		<result column="execute_standard" property="executeStandard"
-			jdbcType="VARCHAR" />
-		<result column="sample_names" property="sampleNames" jdbcType="VARCHAR" />
-		<result column="processing_technology" property="processingTechnology"
-			jdbcType="VARCHAR" />
-		<result column="closed_status" property="closedStatus"
-			jdbcType="VARCHAR" />
-		<result column="sample_number" property="sampleNumber"
-			jdbcType="VARCHAR" />
-		<result column="sample_status" property="sampleStatus"
-			jdbcType="VARCHAR" />
-		<result column="sample_basenumber" property="sampleBasenumber"
-			jdbcType="VARCHAR" />
-		<result column="save_way" property="saveWay" jdbcType="VARCHAR" />
-		<result column="production_unit" property="productionUnit"
-			jdbcType="VARCHAR" />
-		<result column="production_address" property="productionAddress"
-			jdbcType="VARCHAR" />
-		<result column="production_user" property="productionUser"
-			jdbcType="VARCHAR" />
-		<result column="production_phone" property="productionPhone"
-			jdbcType="VARCHAR" />
-		<result column="cost" property="cost" jdbcType="VARCHAR" />
-		<result column="remarks" property="remarks" jdbcType="VARCHAR" />
-		<result column="data_remarks" property="dataRemarks" jdbcType="VARCHAR" />
-		<result column="responsible_person" property="responsiblePerson"
-			jdbcType="VARCHAR" />
-		<result column="sample_holder" property="sampleHolder"
-			jdbcType="VARCHAR" />
-		<result column="receive_user" property="receiveUser" jdbcType="VARCHAR" />
-		<result column="receive_date" property="receiveDate" jdbcType="TIMESTAMP" />
-		<result column="arrange_finish_date" property="arrangeFinishDate"
-			jdbcType="TIMESTAMP" />
-		<result column="finish_date" property="finishDate" jdbcType="TIMESTAMP" />
-		<result column="protocol_id" property="protocolId" jdbcType="VARCHAR" />
-		<result column="subpackage" property="subpackage" jdbcType="VARCHAR" />
-		<result column="result" property="result" jdbcType="VARCHAR" />
-		<result column="determine" property="determine" jdbcType="VARCHAR" />
-		<result column="approval_user" property="approvalUser"
-			jdbcType="VARCHAR" />
-		<result column="examine_user" property="examineUser" jdbcType="VARCHAR" />
-		<result column="draw_user" property="drawUser" jdbcType="VARCHAR" />
-		<result column="principal_inspector" property="principalInspector"
-			jdbcType="VARCHAR" />
-		<result column="status" property="status" jdbcType="INTEGER" />
-		<result column="report_status" property="reportStatus"
-			jdbcType="INTEGER" />
-		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
-	</resultMap>
-	<sql id="Base_Column_List">
-		receive_sample_id, report_id, sample_type, check_type, entrusted_unit,
-		entrusted_unit_address,
-		entrusted_user_phone, entrusted_user_email, inspected_unit, inspected_unit_address,
-		inspected_user, inspected_user_phone, inspected_user_email,
-		sample_address, sample_name,
-		sample_link, sample_trademark, sample_circulate, sample_circulate_date,
-		sample_date,
-		sample_way, specification_model, execute_standard, sample_names,
-		processing_technology,
-		closed_status, sample_number, sample_status, sample_basenumber, save_way,
-		production_unit,
-		production_address, production_user, production_phone, cost, remarks, data_remarks,
-		responsible_person, sample_holder, receive_user, receive_date,
-		arrange_finish_date,
-		finish_date, protocol_id, subpackage, result, determine, approval_user,
-		examine_user,
-		draw_user, principal_inspector, status, report_status, created_at
-	</sql>
- <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+<mapper namespace="com.gzjy.receive.mapper.ReceiveSampleMapper" >
+  <resultMap id="BaseResultMap" type="com.gzjy.receive.model.ReceiveSample" >
+    <id column="receive_sample_id" property="receiveSampleId" jdbcType="CHAR" />
+    <result column="report_id" property="reportId" jdbcType="CHAR" />
+    <result column="sample_type" property="sampleType" jdbcType="VARCHAR" />
+    <result column="check_type" property="checkType" jdbcType="VARCHAR" />
+    <result column="entrusted_unit" property="entrustedUnit" jdbcType="VARCHAR" />
+    <result column="entrusted_unit_address" property="entrustedUnitAddress" jdbcType="VARCHAR" />
+    <result column="entrusted_user_phone" property="entrustedUserPhone" jdbcType="VARCHAR" />
+    <result column="entrusted_user_email" property="entrustedUserEmail" jdbcType="VARCHAR" />
+    <result column="inspected_unit" property="inspectedUnit" jdbcType="VARCHAR" />
+    <result column="inspected_unit_address" property="inspectedUnitAddress" jdbcType="VARCHAR" />
+    <result column="inspected_user" property="inspectedUser" jdbcType="VARCHAR" />
+    <result column="inspected_user_phone" property="inspectedUserPhone" jdbcType="VARCHAR" />
+    <result column="inspected_user_email" property="inspectedUserEmail" jdbcType="VARCHAR" />
+    <result column="sample_address" property="sampleAddress" jdbcType="VARCHAR" />
+    <result column="sample_name" property="sampleName" jdbcType="VARCHAR" />
+    <result column="sample_link" property="sampleLink" jdbcType="VARCHAR" />
+    <result column="sample_trademark" property="sampleTrademark" jdbcType="VARCHAR" />
+    <result column="sample_circulate" property="sampleCirculate" jdbcType="VARCHAR" />
+    <result column="sample_circulate_date" property="sampleCirculateDate" jdbcType="TIMESTAMP" />
+    <result column="sample_date" property="sampleDate" jdbcType="TIMESTAMP" />
+    <result column="sample_way" property="sampleWay" jdbcType="VARCHAR" />
+    <result column="specification_model" property="specificationModel" jdbcType="VARCHAR" />
+    <result column="execute_standard" property="executeStandard" jdbcType="VARCHAR" />
+    <result column="sample_names" property="sampleNames" jdbcType="VARCHAR" />
+    <result column="processing_technology" property="processingTechnology" jdbcType="VARCHAR" />
+    <result column="closed_status" property="closedStatus" jdbcType="VARCHAR" />
+    <result column="sample_number" property="sampleNumber" jdbcType="INTEGER" />
+    <result column="sample_unit" property="sampleUnit" jdbcType="VARCHAR" />
+    <result column="sample_status" property="sampleStatus" jdbcType="VARCHAR" />
+    <result column="sample_basenumber" property="sampleBasenumber" jdbcType="VARCHAR" />
+    <result column="save_way" property="saveWay" jdbcType="VARCHAR" />
+    <result column="production_unit" property="productionUnit" jdbcType="VARCHAR" />
+    <result column="production_address" property="productionAddress" jdbcType="VARCHAR" />
+    <result column="production_user" property="productionUser" jdbcType="VARCHAR" />
+    <result column="production_phone" property="productionPhone" jdbcType="VARCHAR" />
+    <result column="cost" property="cost" jdbcType="VARCHAR" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="data_remarks" property="dataRemarks" jdbcType="VARCHAR" />
+    <result column="responsible_person" property="responsiblePerson" jdbcType="VARCHAR" />
+    <result column="sample_holder" property="sampleHolder" jdbcType="VARCHAR" />
+    <result column="receive_user" property="receiveUser" jdbcType="VARCHAR" />
+    <result column="receive_date" property="receiveDate" jdbcType="TIMESTAMP" />
+    <result column="arrange_finish_date" property="arrangeFinishDate" jdbcType="TIMESTAMP" />
+    <result column="finish_date" property="finishDate" jdbcType="TIMESTAMP" />
+    <result column="protocol_id" property="protocolId" jdbcType="VARCHAR" />
+    <result column="subpackage" property="subpackage" jdbcType="VARCHAR" />
+    <result column="result" property="result" jdbcType="VARCHAR" />
+    <result column="determine" property="determine" jdbcType="VARCHAR" />
+    <result column="approval_user" property="approvalUser" jdbcType="VARCHAR" />
+    <result column="examine_user" property="examineUser" jdbcType="VARCHAR" />
+    <result column="draw_user" property="drawUser" jdbcType="VARCHAR" />
+    <result column="principal_inspector" property="principalInspector" jdbcType="VARCHAR" />
+    <result column="liuyang_count" property="liuyangCount" jdbcType="INTEGER" />
+    <result column="food_dalei" property="foodDalei" jdbcType="VARCHAR" />
+    <result column="food_yalei" property="foodYalei" jdbcType="VARCHAR" />
+    <result column="food_ciyalei" property="foodCiyalei" jdbcType="VARCHAR" />
+    <result column="food_xilei" property="foodXilei" jdbcType="VARCHAR" />
+    <result column="qianfa_date" property="qianfaDate" jdbcType="TIMESTAMP" />
+    <result column="sample_leixing" property="sampleLeixing" jdbcType="VARCHAR" />
+    <result column="package_classify" property="packageClassify" jdbcType="VARCHAR" />
+    <result column="zhibaoqi" property="zhibaoqi" jdbcType="INTEGER" />
+    <result column="licence" property="licence" jdbcType="VARCHAR" />
+    <result column="report_process_id" property="reportProcessId" jdbcType="VARCHAR" />
+    <result column="appendix" property="appendix" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="report_status" property="reportStatus" jdbcType="INTEGER" />
+    <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    receive_sample_id, report_id, sample_type, check_type, entrusted_unit, entrusted_unit_address, 
+    entrusted_user_phone, entrusted_user_email, inspected_unit, inspected_unit_address, 
+    inspected_user, inspected_user_phone, inspected_user_email, sample_address, sample_name, 
+    sample_link, sample_trademark, sample_circulate, sample_circulate_date, sample_date, 
+    sample_way, specification_model, execute_standard, sample_names, processing_technology, 
+    closed_status, sample_number, sample_unit, sample_status, sample_basenumber, save_way, 
+    production_unit, production_address, production_user, production_phone, cost, remarks, 
+    data_remarks, responsible_person, sample_holder, receive_user, receive_date, arrange_finish_date, 
+    finish_date, protocol_id, subpackage, result, determine, approval_user, examine_user, 
+    draw_user, principal_inspector, liuyang_count, food_dalei, food_yalei, food_ciyalei, 
+    food_xilei, qianfa_date, sample_leixing, package_classify, zhibaoqi, licence, report_process_id, 
+    appendix, status, report_status, created_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from receive_sample
     where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}
   </select>
-	<select id="selectTest" resultMap="BaseResultMap">
+  
+  <select id="selectTest" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
 		from receive_sample
@@ -167,11 +146,15 @@
 		</where>
 		order by ${orderby}
 	</select>
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-		delete from receive_sample
-		where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}
-	</delete>
-	<insert id="insert" parameterType="com.gzjy.receive.model.ReceiveSample" >
+  <select id="selectAllItem" parameterType="com.gzjy.receive.model.ReceiveSample" resultType="hashmap">
+		select A.*,B.* from receive_sample A, receive_sample_item B where A.receive_sample_id = B.receive_sample_id		
+	</select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from receive_sample
+    where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzjy.receive.model.ReceiveSample" >
     insert into receive_sample (receive_sample_id, report_id, sample_type, 
       check_type, entrusted_unit, entrusted_unit_address, 
       entrusted_user_phone, entrusted_user_email, 
@@ -181,19 +164,20 @@
       sample_trademark, sample_circulate, sample_circulate_date, 
       sample_date, sample_way, specification_model, 
       execute_standard, sample_names, processing_technology, 
-      closed_status, sample_number, sample_status, 
-      sample_basenumber, save_way, production_unit, 
-      production_address, production_user, production_phone, 
-      cost, responsible_person, sample_holder, 
+      closed_status, sample_number, sample_unit, 
+      sample_status, sample_basenumber, save_way, 
+      production_unit, production_address, production_user, 
+      production_phone, cost, remarks, 
+      data_remarks, responsible_person, sample_holder, 
       receive_user, receive_date, arrange_finish_date, 
       finish_date, protocol_id, subpackage, 
       result, determine, approval_user, 
       examine_user, draw_user, principal_inspector, 
-      liuyang_count, food_dalei,food_yalei, food_ciyalei, 
-      food_xilei, qianfa_date, sample_leixing, package_classify,
-      zhibaoqi, licence, report_process_id, 
-      appendix, status, report_status, 
-      created_at, remarks, data_remarks
+      liuyang_count, food_dalei, food_yalei, 
+      food_ciyalei, food_xilei, qianfa_date, 
+      sample_leixing, package_classify, zhibaoqi, 
+      licence, report_process_id, appendix, 
+      status, report_status, created_at
       )
     values (#{receiveSampleId,jdbcType=CHAR}, #{reportId,jdbcType=CHAR}, #{sampleType,jdbcType=VARCHAR}, 
       #{checkType,jdbcType=VARCHAR}, #{entrustedUnit,jdbcType=VARCHAR}, #{entrustedUnitAddress,jdbcType=VARCHAR}, 
@@ -204,22 +188,22 @@
       #{sampleTrademark,jdbcType=VARCHAR}, #{sampleCirculate,jdbcType=VARCHAR}, #{sampleCirculateDate,jdbcType=TIMESTAMP}, 
       #{sampleDate,jdbcType=TIMESTAMP}, #{sampleWay,jdbcType=VARCHAR}, #{specificationModel,jdbcType=VARCHAR}, 
       #{executeStandard,jdbcType=VARCHAR}, #{sampleNames,jdbcType=VARCHAR}, #{processingTechnology,jdbcType=VARCHAR}, 
-      #{closedStatus,jdbcType=VARCHAR}, #{sampleNumber,jdbcType=VARCHAR}, #{sampleStatus,jdbcType=VARCHAR}, 
-      #{sampleBasenumber,jdbcType=VARCHAR}, #{saveWay,jdbcType=VARCHAR}, #{productionUnit,jdbcType=VARCHAR}, 
-      #{productionAddress,jdbcType=VARCHAR}, #{productionUser,jdbcType=VARCHAR}, #{productionPhone,jdbcType=VARCHAR}, 
-      #{cost,jdbcType=VARCHAR}, #{responsiblePerson,jdbcType=VARCHAR}, #{sampleHolder,jdbcType=VARCHAR}, 
+      #{closedStatus,jdbcType=VARCHAR}, #{sampleNumber,jdbcType=INTEGER}, #{sampleUnit,jdbcType=VARCHAR}, 
+      #{sampleStatus,jdbcType=VARCHAR}, #{sampleBasenumber,jdbcType=VARCHAR}, #{saveWay,jdbcType=VARCHAR}, 
+      #{productionUnit,jdbcType=VARCHAR}, #{productionAddress,jdbcType=VARCHAR}, #{productionUser,jdbcType=VARCHAR}, 
+      #{productionPhone,jdbcType=VARCHAR}, #{cost,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, 
+      #{dataRemarks,jdbcType=VARCHAR}, #{responsiblePerson,jdbcType=VARCHAR}, #{sampleHolder,jdbcType=VARCHAR}, 
       #{receiveUser,jdbcType=VARCHAR}, #{receiveDate,jdbcType=TIMESTAMP}, #{arrangeFinishDate,jdbcType=TIMESTAMP}, 
       #{finishDate,jdbcType=TIMESTAMP}, #{protocolId,jdbcType=VARCHAR}, #{subpackage,jdbcType=VARCHAR}, 
       #{result,jdbcType=VARCHAR}, #{determine,jdbcType=VARCHAR}, #{approvalUser,jdbcType=VARCHAR}, 
       #{examineUser,jdbcType=VARCHAR}, #{drawUser,jdbcType=VARCHAR}, #{principalInspector,jdbcType=VARCHAR}, 
-      #{liuyangCount,jdbcType=VARCHAR}, #{foodDalei,jdbcType=VARCHAR},#{foodYalei,jdbcType=VARCHAR}, #{foodCiyalei,jdbcType=VARCHAR}, 
-      #{foodXilei,jdbcType=VARCHAR}, #{qianfaDate,jdbcType=TIMESTAMP}, #{sampleLeixing,jdbcType=VARCHAR}, #{packageClassify,jdbcType=VARCHAR},
-      #{zhibaoqi,jdbcType=INTEGER}, #{licence,jdbcType=VARCHAR}, #{reportProcessId,jdbcType=VARCHAR}, 
-      #{appendix,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{reportStatus,jdbcType=INTEGER}, 
-      #{createdAt,jdbcType=TIMESTAMP}, #{remarks,jdbcType=LONGVARCHAR}, #{dataRemarks,jdbcType=LONGVARCHAR}
+      #{liuyangCount,jdbcType=INTEGER}, #{foodDalei,jdbcType=VARCHAR}, #{foodYalei,jdbcType=VARCHAR}, 
+      #{foodCiyalei,jdbcType=VARCHAR}, #{foodXilei,jdbcType=VARCHAR}, #{qianfaDate,jdbcType=TIMESTAMP}, 
+      #{sampleLeixing,jdbcType=VARCHAR}, #{packageClassify,jdbcType=VARCHAR}, #{zhibaoqi,jdbcType=INTEGER}, 
+      #{licence,jdbcType=VARCHAR}, #{reportProcessId,jdbcType=VARCHAR}, #{appendix,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{reportStatus,jdbcType=INTEGER}, #{createdAt,jdbcType=TIMESTAMP}
       )
   </insert>
-  
   <insert id="insertSelective" parameterType="com.gzjy.receive.model.ReceiveSample" >
     insert into receive_sample
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -304,6 +288,9 @@
       <if test="sampleNumber != null" >
         sample_number,
       </if>
+      <if test="sampleUnit != null" >
+        sample_unit,
+      </if>
       <if test="sampleStatus != null" >
         sample_status,
       </if>
@@ -327,6 +314,12 @@
       </if>
       <if test="cost != null" >
         cost,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+      <if test="dataRemarks != null" >
+        data_remarks,
       </if>
       <if test="responsiblePerson != null" >
         responsible_person,
@@ -415,12 +408,6 @@
       <if test="createdAt != null" >
         created_at,
       </if>
-      <if test="remarks != null" >
-        remarks,
-      </if>
-      <if test="dataRemarks != null" >
-        data_remarks,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="receiveSampleId != null" >
@@ -502,7 +489,10 @@
         #{closedStatus,jdbcType=VARCHAR},
       </if>
       <if test="sampleNumber != null" >
-        #{sampleNumber,jdbcType=VARCHAR},
+        #{sampleNumber,jdbcType=INTEGER},
+      </if>
+      <if test="sampleUnit != null" >
+        #{sampleUnit,jdbcType=VARCHAR},
       </if>
       <if test="sampleStatus != null" >
         #{sampleStatus,jdbcType=VARCHAR},
@@ -527,6 +517,12 @@
       </if>
       <if test="cost != null" >
         #{cost,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="dataRemarks != null" >
+        #{dataRemarks,jdbcType=VARCHAR},
       </if>
       <if test="responsiblePerson != null" >
         #{responsiblePerson,jdbcType=VARCHAR},
@@ -571,12 +567,12 @@
         #{principalInspector,jdbcType=VARCHAR},
       </if>
       <if test="liuyangCount != null" >
-        #{liuyangCount,jdbcType=VARCHAR},
+        #{liuyangCount,jdbcType=INTEGER},
       </if>
       <if test="foodDalei != null" >
         #{foodDalei,jdbcType=VARCHAR},
       </if>
-       <if test="foodYalei != null" >
+      <if test="foodYalei != null" >
         #{foodYalei,jdbcType=VARCHAR},
       </if>
       <if test="foodCiyalei != null" >
@@ -615,16 +611,9 @@
       <if test="createdAt != null" >
         #{createdAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="remarks != null" >
-        #{remarks,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="dataRemarks != null" >
-        #{dataRemarks,jdbcType=LONGVARCHAR},
-      </if>
     </trim>
   </insert>
-  
-    <update id="updateByPrimaryKeySelective" parameterType="com.gzjy.receive.model.ReceiveSample" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.gzjy.receive.model.ReceiveSample" >
     update receive_sample
     <set >
       <if test="reportId != null" >
@@ -703,7 +692,10 @@
         closed_status = #{closedStatus,jdbcType=VARCHAR},
       </if>
       <if test="sampleNumber != null" >
-        sample_number = #{sampleNumber,jdbcType=VARCHAR},
+        sample_number = #{sampleNumber,jdbcType=INTEGER},
+      </if>
+      <if test="sampleUnit != null" >
+        sample_unit = #{sampleUnit,jdbcType=VARCHAR},
       </if>
       <if test="sampleStatus != null" >
         sample_status = #{sampleStatus,jdbcType=VARCHAR},
@@ -728,6 +720,12 @@
       </if>
       <if test="cost != null" >
         cost = #{cost,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="dataRemarks != null" >
+        data_remarks = #{dataRemarks,jdbcType=VARCHAR},
       </if>
       <if test="responsiblePerson != null" >
         responsible_person = #{responsiblePerson,jdbcType=VARCHAR},
@@ -772,7 +770,7 @@
         principal_inspector = #{principalInspector,jdbcType=VARCHAR},
       </if>
       <if test="liuyangCount != null" >
-        liuyang_count = #{liuyangCount,jdbcType=VARCHAR},
+        liuyang_count = #{liuyangCount,jdbcType=INTEGER},
       </if>
       <if test="foodDalei != null" >
         food_dalei = #{foodDalei,jdbcType=VARCHAR},
@@ -792,7 +790,7 @@
       <if test="sampleLeixing != null" >
         sample_leixing = #{sampleLeixing,jdbcType=VARCHAR},
       </if>
-       <if test="packageClassify != null" >
+      <if test="packageClassify != null" >
         package_classify = #{packageClassify,jdbcType=VARCHAR},
       </if>
       <if test="zhibaoqi != null" >
@@ -815,12 +813,6 @@
       </if>
       <if test="createdAt != null" >
         created_at = #{createdAt,jdbcType=TIMESTAMP},
-      </if>
-      <if test="remarks != null" >
-        remarks = #{remarks,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="dataRemarks != null" >
-        data_remarks = #{dataRemarks,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}
@@ -852,7 +844,8 @@
       sample_names = #{sampleNames,jdbcType=VARCHAR},
       processing_technology = #{processingTechnology,jdbcType=VARCHAR},
       closed_status = #{closedStatus,jdbcType=VARCHAR},
-      sample_number = #{sampleNumber,jdbcType=VARCHAR},
+      sample_number = #{sampleNumber,jdbcType=INTEGER},
+      sample_unit = #{sampleUnit,jdbcType=VARCHAR},
       sample_status = #{sampleStatus,jdbcType=VARCHAR},
       sample_basenumber = #{sampleBasenumber,jdbcType=VARCHAR},
       save_way = #{saveWay,jdbcType=VARCHAR},
@@ -861,6 +854,8 @@
       production_user = #{productionUser,jdbcType=VARCHAR},
       production_phone = #{productionPhone,jdbcType=VARCHAR},
       cost = #{cost,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      data_remarks = #{dataRemarks,jdbcType=VARCHAR},
       responsible_person = #{responsiblePerson,jdbcType=VARCHAR},
       sample_holder = #{sampleHolder,jdbcType=VARCHAR},
       receive_user = #{receiveUser,jdbcType=VARCHAR},
@@ -875,7 +870,7 @@
       examine_user = #{examineUser,jdbcType=VARCHAR},
       draw_user = #{drawUser,jdbcType=VARCHAR},
       principal_inspector = #{principalInspector,jdbcType=VARCHAR},
-      liuyang_count = #{liuyangCount,jdbcType=VARCHAR},
+      liuyang_count = #{liuyangCount,jdbcType=INTEGER},
       food_dalei = #{foodDalei,jdbcType=VARCHAR},
       food_yalei = #{foodYalei,jdbcType=VARCHAR},
       food_ciyalei = #{foodCiyalei,jdbcType=VARCHAR},
@@ -889,13 +884,7 @@
       appendix = #{appendix,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       report_status = #{reportStatus,jdbcType=INTEGER},
-      created_at = #{createdAt,jdbcType=TIMESTAMP},
-      remarks = #{remarks,jdbcType=LONGVARCHAR},
-      data_remarks = #{dataRemarks,jdbcType=LONGVARCHAR}
+      created_at = #{createdAt,jdbcType=TIMESTAMP}
     where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}
   </update>
-			
-	<select id="selectAllItem" parameterType="com.gzjy.receive.model.ReceiveSample" resultType="hashmap">
-		select A.*,B.* from receive_sample A, receive_sample_item B where A.receive_sample_id = B.receive_sample_id		
-	</select>
 </mapper>

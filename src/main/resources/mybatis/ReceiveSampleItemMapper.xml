@@ -225,6 +225,9 @@
     	<when test="key=='receive_sample_id'">
     	 a.receive_sample_id LIKE CONCAT('%',#{filters[${key}]},'%' )
     	</when>
+    	<when test="key=='report_id'">
+    	 a.report_id LIKE CONCAT('%',#{filters[${key}]},'%' )
+    	</when>
         <otherwise>
         <if test="null!=filters[key]">
          ${key} LIKE CONCAT('%',#{filters[${key}]},'%' )

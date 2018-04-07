@@ -553,7 +553,7 @@ public class ReceiveSampleController {
 		return Response.success(receiveSampleService.getItemsByReceiveSampleId(id));
 	}
 	
-	//查询所有未分配的检测项
+	//查询当前用户本部门所有未分配的检测项
 	@RequestMapping(value = "/sample/items/unassigned", method = RequestMethod.GET)
     public Response getUnassignedItems(@RequestParam(name = "order", required = false) String order,
            @RequestParam(name = "reportId", required = false) String reportId,
@@ -641,6 +641,10 @@ public class ReceiveSampleController {
         else
             return Response.success(receiveSampleService.selectUnderDetection(pageNum, pageSize, order, filter));
     }
+    
+    
+    
+    
 
 	/**
 	 * 通过模板导出报告(excel or pdf)并下载

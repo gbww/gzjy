@@ -72,11 +72,14 @@ public class ReceiveSample implements Serializable{
     //封样状态
     private String closedStatus;
     //样品数
-    private String sampleNumber;
+    private Integer sampleNumber;
+    
+  //抽样单位
+    private String sampleUnit;
     //样品状态
     private String sampleStatus;
     //抽样基数
-    private String sampleBasenumber;
+    private Integer sampleBasenumber;
     //保存条件
     private String saveWay;
     //生产单位
@@ -125,7 +128,7 @@ public class ReceiveSample implements Serializable{
     //主检人    
     private String principalInspector;
    //留样数量
-    private String liuyangCount;
+    private Integer liuyangCount;
     //食品大类
     private String foodDalei;
     //食品亚类
@@ -370,13 +373,7 @@ public class ReceiveSample implements Serializable{
         this.closedStatus = closedStatus == null ? null : closedStatus.trim();
     }
 
-    public String getSampleNumber() {
-        return sampleNumber;
-    }
-
-    public void setSampleNumber(String sampleNumber) {
-        this.sampleNumber = sampleNumber == null ? null : sampleNumber.trim();
-    }
+  
 
     public String getSampleStatus() {
         return sampleStatus;
@@ -386,13 +383,7 @@ public class ReceiveSample implements Serializable{
         this.sampleStatus = sampleStatus == null ? null : sampleStatus.trim();
     }
 
-    public String getSampleBasenumber() {
-        return sampleBasenumber;
-    }
-
-    public void setSampleBasenumber(String sampleBasenumber) {
-        this.sampleBasenumber = sampleBasenumber == null ? null : sampleBasenumber.trim();
-    }
+   
 
     public String getSaveWay() {
         return saveWay;
@@ -595,13 +586,7 @@ public class ReceiveSample implements Serializable{
         this.reportStatus = reportStatus;
     }
     
-    public String getLiuyangCount() {
-        return liuyangCount;
-    }
-
-    public void setLiuyangCount(String liuyangCount) {
-        this.liuyangCount = liuyangCount;
-    }
+   
 
     public String getFoodDalei() {
         return foodDalei;
@@ -695,108 +680,36 @@ public class ReceiveSample implements Serializable{
         this.packageClassify = packageClassify;
     }
 
-    @Override
-    public String toString() {
-        return "ReceiveSample [receiveSampleId=" + receiveSampleId
-                + ", reportId=" + reportId + ", sampleType=" + sampleType
-                + ", checkType=" + checkType + ", entrustedUnit="
-                + entrustedUnit + ", entrustedUnitAddress="
-                + entrustedUnitAddress + ", entrustedUserPhone="
-                + entrustedUserPhone + ", entrustedUserEmail="
-                + entrustedUserEmail + ", inspectedUnit=" + inspectedUnit
-                + ", inspectedUnitAddress=" + inspectedUnitAddress
-                + ", inspectedUser=" + inspectedUser + ", inspectedUserPhone="
-                + inspectedUserPhone + ", inspectedUserEmail="
-                + inspectedUserEmail + ", sampleAddress=" + sampleAddress
-                + ", sampleName=" + sampleName + ", sampleLink=" + sampleLink
-                + ", sampleTrademark=" + sampleTrademark + ", sampleCirculate="
-                + sampleCirculate + ", sampleCirculateDate="
-                + sampleCirculateDate + ", sampleDate=" + sampleDate
-                + ", sampleWay=" + sampleWay + ", specificationModel="
-                + specificationModel + ", executeStandard=" + executeStandard
-                + ", sampleNames=" + sampleNames + ", processingTechnology="
-                + processingTechnology + ", closedStatus=" + closedStatus
-                + ", sampleNumber=" + sampleNumber + ", sampleStatus="
-                + sampleStatus + ", sampleBasenumber=" + sampleBasenumber
-                + ", saveWay=" + saveWay + ", productionUnit=" + productionUnit
-                + ", productionAddress=" + productionAddress
-                + ", productionUser=" + productionUser + ", productionPhone="
-                + productionPhone + ", cost=" + cost + ", remarks=" + remarks
-                + ", dataRemarks=" + dataRemarks + ", responsiblePerson="
-                + responsiblePerson + ", sampleHolder=" + sampleHolder
-                + ", receiveUser=" + receiveUser + ", receiveDate="
-                + receiveDate + ", arrangeFinishDate=" + arrangeFinishDate
-                + ", finishDate=" + finishDate + ", protocolId=" + protocolId
-                + ", subpackage=" + subpackage + ", result=" + result
-                + ", determine=" + determine + ", approvalUser=" + approvalUser
-                + ", examineUser=" + examineUser + ", drawUser=" + drawUser
-                + ", principalInspector=" + principalInspector
-                + ", liuyangCount=" + liuyangCount + ", foodDalei=" + foodDalei
-                + ", foodYalei=" + foodYalei + ", foodCiyalei=" + foodCiyalei
-                + ", foodXilei=" + foodXilei + ", qianfaDate=" + qianfaDate
-                + ", sampleLeixing=" + sampleLeixing + ", packageClassify="
-                + packageClassify + ", zhibaoqi=" + zhibaoqi + ", licence="
-                + licence + ", reportProcessId=" + reportProcessId
-                + ", appendix=" + appendix + ", status=" + status
-                + ", createdAt=" + createdAt + ", reportStatus=" + reportStatus
-                + ", getReceiveSampleId()=" + getReceiveSampleId()
-                + ", getReportId()=" + getReportId() + ", getSampleType()="
-                + getSampleType() + ", getCheckType()=" + getCheckType()
-                + ", getEntrustedUnit()=" + getEntrustedUnit()
-                + ", getEntrustedUnitAddress()=" + getEntrustedUnitAddress()
-                + ", getEntrustedUserPhone()=" + getEntrustedUserPhone()
-                + ", getEntrustedUserEmail()=" + getEntrustedUserEmail()
-                + ", getInspectedUnit()=" + getInspectedUnit()
-                + ", getInspectedUnitAddress()=" + getInspectedUnitAddress()
-                + ", getInspectedUser()=" + getInspectedUser()
-                + ", getInspectedUserPhone()=" + getInspectedUserPhone()
-                + ", getInspectedUserEmail()=" + getInspectedUserEmail()
-                + ", getSampleAddress()=" + getSampleAddress()
-                + ", getSampleName()=" + getSampleName() + ", getSampleLink()="
-                + getSampleLink() + ", getSampleTrademark()="
-                + getSampleTrademark() + ", getSampleCirculate()="
-                + getSampleCirculate() + ", getSampleCirculateDate()="
-                + getSampleCirculateDate() + ", getSampleDate()="
-                + getSampleDate() + ", getSampleWay()=" + getSampleWay()
-                + ", getSpecificationModel()=" + getSpecificationModel()
-                + ", getExecuteStandard()=" + getExecuteStandard()
-                + ", getSampleNames()=" + getSampleNames()
-                + ", getProcessingTechnology()=" + getProcessingTechnology()
-                + ", getClosedStatus()=" + getClosedStatus()
-                + ", getSampleNumber()=" + getSampleNumber()
-                + ", getSampleStatus()=" + getSampleStatus()
-                + ", getSampleBasenumber()=" + getSampleBasenumber()
-                + ", getSaveWay()=" + getSaveWay() + ", getProductionUnit()="
-                + getProductionUnit() + ", getProductionAddress()="
-                + getProductionAddress() + ", getProductionUser()="
-                + getProductionUser() + ", getProductionPhone()="
-                + getProductionPhone() + ", getCost()=" + getCost()
-                + ", getRemarks()=" + getRemarks() + ", getDataRemarks()="
-                + getDataRemarks() + ", getResponsiblePerson()="
-                + getResponsiblePerson() + ", getSampleHolder()="
-                + getSampleHolder() + ", getReceiveUser()=" + getReceiveUser()
-                + ", getReceiveDate()=" + getReceiveDate()
-                + ", getArrangeFinishDate()=" + getArrangeFinishDate()
-                + ", getFinishDate()=" + getFinishDate() + ", getProtocolId()="
-                + getProtocolId() + ", getSubpackage()=" + getSubpackage()
-                + ", getResult()=" + getResult() + ", getDetermine()="
-                + getDetermine() + ", getApprovalUser()=" + getApprovalUser()
-                + ", getExamineUser()=" + getExamineUser() + ", getDrawUser()="
-                + getDrawUser() + ", getPrincipalInspector()="
-                + getPrincipalInspector() + ", getStatus()=" + getStatus()
-                + ", getCreatedAt()=" + getCreatedAt() + ", getReportStatus()="
-                + getReportStatus() + ", getLiuyangCount()=" + getLiuyangCount()
-                + ", getFoodDalei()=" + getFoodDalei() + ", getFoodCiyalei()="
-                + getFoodCiyalei() + ", getFoodXilei()=" + getFoodXilei()
-                + ", getQianfaDate()=" + getQianfaDate()
-                + ", getSampleLeixing()=" + getSampleLeixing()
-                + ", getZhibaoqi()=" + getZhibaoqi() + ", getLicence()="
-                + getLicence() + ", getReportProcessId()="
-                + getReportProcessId() + ", getAppendix()=" + getAppendix()
-                + ", getFoodYalei()=" + getFoodYalei()
-                + ", getPackageClassify()=" + getPackageClassify()
-                + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
-                + ", toString()=" + super.toString() + "]";
+    public Integer getSampleNumber() {
+        return sampleNumber;
+    }
+
+    public void setSampleNumber(Integer sampleNumber) {
+        this.sampleNumber = sampleNumber;
+    }
+
+    public String getSampleUnit() {
+        return sampleUnit;
+    }
+
+    public void setSampleUnit(String sampleUnit) {
+        this.sampleUnit = sampleUnit;
+    }
+
+    public Integer getSampleBasenumber() {
+        return sampleBasenumber;
+    }
+
+    public void setSampleBasenumber(Integer sampleBasenumber) {
+        this.sampleBasenumber = sampleBasenumber;
+    }
+
+    public Integer getLiuyangCount() {
+        return liuyangCount;
+    }
+
+    public void setLiuyangCount(Integer liuyangCount) {
+        this.liuyangCount = liuyangCount;
     }
 
   

@@ -8,11 +8,13 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,6 +24,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.net.util.Base64;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -33,12 +36,17 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.openid4java.consumer.SampleConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.ISelect;
 import com.github.pagehelper.PageHelper;
@@ -46,6 +54,8 @@ import com.github.pagehelper.PageInfo;
 import com.gzjy.common.exception.BizException;
 import com.gzjy.common.util.TransBeanToMap;
 import com.gzjy.common.util.UUID;
+import com.gzjy.common.util.fs.EpicNFSClient;
+import com.gzjy.common.util.fs.EpicNFSService;
 import com.gzjy.receive.mapper.ReceiveSampleItemMapper;
 import com.gzjy.receive.mapper.ReceiveSampleMapper;
 import com.gzjy.receive.model.ReceiveSample;
@@ -53,7 +63,8 @@ import com.gzjy.receive.model.ReceiveSampleItem;
 import com.gzjy.receive.model.SampleItemCountView;
 import com.gzjy.user.UserService;
 import com.gzjy.user.mapper.UserSignMapper;
-import com.gzjy.user.model.User; 
+import com.gzjy.user.model.User;
+import com.gzjy.user.model.UserSign; 
 /**
  * @author xuewenlong@cmss.chinamobile.com
  * @updated 2017年9月3日
@@ -71,6 +82,8 @@ public class ReceiveSampleService {
 	private UserSignMapper userSignMapper;
 	@Autowired
     private UserService userClient;
+	@Autowired
+	private EpicNFSService epicNFSService;
 	
 	@Transactional
 	public Boolean addReceiveSample(ReceiveSample record) {
@@ -333,8 +346,8 @@ public class ReceiveSampleService {
         User u=userClient.getCurrentUser();
        boolean superUser= u.getRole().isSuperAdmin();
        if(!superUser) {
-           String name=u.getName();
-           filter.put("test_room", name);
+           String department=u.getOrganization().getName();
+           filter.put("test_room", department);
        }   
         List<ReceiveSampleItem> list = new ArrayList<ReceiveSampleItem>();
         PageInfo<ReceiveSampleItem> pages = new PageInfo<ReceiveSampleItem>(list);
@@ -390,6 +403,88 @@ public class ReceiveSampleService {
         return false;
 
     }
+	
+	@Transactional
+	public void upload(MultipartFile file,String receiveSampleId) throws IOException {
+	   
+	  // 使用文件系统      
+	        if (file.getSize() / (1024 * 1024) > 10) {
+	                throw new BizException("文件[" + file.getOriginalFilename()
+	                        + "]过大，请上传大小不超过10M的文件");
+	            }
+	        EpicNFSClient epicNFSClient = epicNFSService.getClient("gzjy");
+	        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+	        Calendar cal=Calendar.getInstance();
+	       
+	        String curDate = simpleDateFormat.format(cal.getTime());  
+	        
+	        String parentPath = "receive"+"/"+curDate ;
+	        if (!epicNFSClient.hasRemoteDir(parentPath)) {
+	            epicNFSClient.createRemoteDir(parentPath);
+	        }	        
+	        String filePath=parentPath+"/"+file.getOriginalFilename();
+	       ReceiveSample sample=receiveSampleMapper.selectByPrimaryKey(receiveSampleId);
+	        if(sample!=null) {
+	            ReceiveSample record=new ReceiveSample();
+                record.setAppendix(filePath);
+                record.setReceiveSampleId(sample.getReceiveSampleId());	           	                
+	                receiveSampleMapper.updateByPrimaryKeySelective(record);
+	                InputStream in=file.getInputStream();
+	                try {
+                        epicNFSClient.upload(in,
+                                filePath);
+                    } catch (Exception e) {                       
+                        e.printStackTrace();
+                    } finally {
+                        if(in!=null)
+                            in.close();
+                    }
+	        }	        
+	        epicNFSClient.close();       	
+	    }
+	
+	 @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	    public ResponseEntity<byte[]> download(String path) throws IOException {
+	        EpicNFSClient epicNFSClient = null;
+	        InputStream inputStream = null;
+	        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+	        try {
+	            epicNFSClient = epicNFSService.getClient("gzjy");
+	            inputStream = epicNFSClient.download(path);
+	            byte[] buffer = new byte[1024];
+	            int len = -1;
+	            while ((len = inputStream.read(buffer)) != -1) {
+	                outputStream.write(buffer, 0, len);
+	            }
+	        } catch (IOException e) {
+	            throw new BizException("文件下载失败");
+	        } finally {
+	            try {
+	                if (outputStream != null) {
+	                    outputStream.close();
+	                }
+	                if (inputStream != null) {
+	                    inputStream.close();
+	                    inputStream = null;
+	                }
+	                if (epicNFSClient != null) {
+	                    epicNFSClient.close();
+	                }
+	            } catch (IOException e) {
+	                throw new BizException("IO流关闭失败");
+	            }
+	        }
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+	       
+	        headers.setContentDispositionFormData("attachment",
+	                path);        
+	        return new ResponseEntity<byte[]>(Base64.encodeBase64(outputStream.toByteArray()), headers,
+	                HttpStatus.CREATED);
+	    }
+	
+	
+	
 
 	
 	
