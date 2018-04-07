@@ -376,4 +376,22 @@ public class CheckItemsController {
 			return Response.fail(e.getMessage());
 		}
 	}
+	
+	
+	/**
+	 * 自定义检验项的批量导入（excel文件导入）
+	 * @param file
+	 * @return
+	 */
+	@RequestMapping(value = "/checkitemscatalog/item/mapping/import", method = RequestMethod.POST)
+	@Privileges(name = "CHECKITEM-IMPORT", scope = { 1 })
+	public Response checkitemscatalogMultiImport(@RequestParam("file") MultipartFile file) {
+		try {
+			checkItemsCatalogMappingService.importFile(file);
+			return Response.success("success");
+		}
+		catch (Exception e) {
+			return Response.fail(e.getMessage());
+		}
+	}
 }

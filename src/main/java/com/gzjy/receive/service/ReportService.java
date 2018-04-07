@@ -17,9 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gzjy.receive.mapper.ReceiveSampleItemMapper;
 import com.gzjy.receive.mapper.ReceiveSampleMapper;
 import com.gzjy.receive.mapper.ReportExtendMapper;
 import com.gzjy.receive.model.ReceiveSample;
+import com.gzjy.receive.model.ReceiveSampleItem;
 import com.gzjy.receive.model.ReceiveSampleTask;
 import com.gzjy.receive.model.ReportExtend;
 import com.gzjy.user.UserService;
@@ -36,7 +38,10 @@ public class ReportService {
 	ReceiveSampleMapper receiveSampleMapper;
 	@Autowired
 	ReportExtendMapper reportExtendMapper;
-
+	@Autowired
+	ReceiveSampleService receiveSampleService;
+	@Autowired
+	ReceiveSampleItemMapper receiveSampleItemMapper;
 	/**
 	 * 编辑报告
 	 * @param receiveSampleId
@@ -47,6 +52,7 @@ public class ReportService {
 		reportExtendMapper.updateByPrimaryKeySelective(reportExtend);
 	}
 
+	
 	
 	/**
 	 * 启动报告流程引擎
@@ -215,4 +221,13 @@ public class ReportService {
 		}
 		taskService.complete(taskId);
 	}*/
+	
+	/**
+	 * 根据receiveSampleId查询检验项列表
+	 * @param receiveSampleId
+	 * @return List<ReceiveSampleItem>
+	 */
+	public List<ReceiveSampleItem> getReceiveSampleItemList(String receiveSampleId) {
+		 return receiveSampleItemMapper.selectByReceiveSampleId(receiveSampleId);
+	}
 }
