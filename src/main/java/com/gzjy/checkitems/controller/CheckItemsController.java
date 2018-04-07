@@ -293,8 +293,7 @@ public class CheckItemsController {
 	 */
 	@RequestMapping(value = "/checkitemscatalog/item/mapping", method = RequestMethod.PUT)
 	@Privileges(name = "CHECKITEM-MAPPING-ADD", scope = { 1 })
-	public Response updateCheckItemMapping(@RequestBody CheckItemsCatalogMapping record) {
-		
+	public Response updateCheckItemMapping(@RequestBody CheckItemsCatalogMapping record) {		
 		try {
 			checkItemsCatalogMappingService.updateByPrimaryKeySelective(record);
 			return Response.success("success");
