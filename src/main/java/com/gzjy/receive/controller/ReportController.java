@@ -3,6 +3,8 @@ package com.gzjy.receive.controller;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.github.pagehelper.PageInfo;
 import com.gzjy.common.Response;
+import com.gzjy.common.ShortUUID;
 import com.gzjy.common.annotation.Privileges;
 import com.gzjy.receive.mapper.ReportExtendMapper;
 import com.gzjy.receive.model.ReceiveSample;
@@ -376,6 +379,78 @@ public class ReportController {
 		try {
 			record.setQianfaDate(myFmt2.parse(qianfaDate));
 			reportService.updateReceiveSample(record);
+			return Response.success("success");
+		} catch (Exception e) {
+			logger.error(e + "");
+			return Response.fail(e.getMessage());
+		}
+	}
+	
+	/**
+	 * 指定报告对应魔板
+	 * @return
+	 */
+	@RequestMapping(value = "/template/bind", method = RequestMethod.POST)
+	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
+	public Response receiveBindTemplate(
+			@RequestParam(name = "reportId", required = true) String reportId,
+			@RequestParam(name = "templateId", required = true) String templateId,
+			@RequestParam(name = "templateName", required = true) String templateName,
+			@RequestParam(name = "templateDesc", required = false) String templateDesc) {
+		 
+		ReportExtend record = new ReportExtend();
+		record.setId(ShortUUID.getInstance().generateShortID());
+		record.setReportId(reportId);
+		record.setTemplateId(templateId);
+		record.setTemplateName(templateName);
+		record.setTemplateDesc(templateDesc);
+		try {
+			reportService.insertReportExtend(record);
+			return Response.success("success");
+		} catch (Exception e) {
+			logger.error(e + "");
+			return Response.fail(e.getMessage());
+		}
+	}
+	
+	
+	/**
+	 * 修改报告对应魔板
+	 * @return
+	 */
+	@RequestMapping(value = "/template/bind/{id}", method = RequestMethod.PUT)
+	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
+	public Response receiveBindTemplateEdit(
+			@PathVariable(name = "id", required = true) String id,
+			@RequestParam(name = "reportId", required = true) String reportId,
+			@RequestParam(name = "templateId", required = true) String templateId,
+			@RequestParam(name = "templateName", required = true) String templateName,
+			@RequestParam(name = "templateDesc", required = false) String templateDesc) {
+		 
+		ReportExtend record = new ReportExtend();
+		record.setId(id);
+		record.setReportId(reportId);
+		record.setTemplateId(templateId);
+		record.setTemplateName(templateName);
+		record.setTemplateDesc(templateDesc);
+		try {
+			reportService.updateReportExtend(record);
+			return Response.success("success");
+		} catch (Exception e) {
+			logger.error(e + "");
+			return Response.fail(e.getMessage());
+		}
+	}
+	
+	/**
+	 * 删除报告对应魔板
+	 * @return
+	 */
+	@RequestMapping(value = "/template/bind/{id}", method = RequestMethod.DELETE)
+	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
+	public Response receiveBindTemplateEdit(@PathVariable(name = "id", required = true) String id){
+		try {
+			reportService.deleteReportExtend(id);
 			return Response.success("success");
 		} catch (Exception e) {
 			logger.error(e + "");

@@ -255,6 +255,19 @@ public class ReportService {
 		 receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
 	}
 	
+	
+	public void insertReportExtend(ReportExtend record) {
+		reportExtendMapper.insert(record);
+	}
+	
+	public void updateReportExtend(ReportExtend record) {
+		reportExtendMapper.updateByPrimaryKeySelective(record);
+	}
+	
+	public void deleteReportExtend(String id) {
+		reportExtendMapper.deleteByPrimaryKey(id);
+	}
+	
 	/**
 	 * 多条件查询报告
 	 */
