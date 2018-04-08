@@ -269,7 +269,7 @@ public class ReportController {
 	 */
 	@RequestMapping(value = "/list/{receiveSampleId}", method = RequestMethod.GET)
 	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
-	public Response detailReport(@PathVariable(name = "receiveSampleId", required = true) String receiveSampleId) {
+	public Response detailReportItem(@PathVariable(name = "receiveSampleId", required = true) String receiveSampleId) {
 		try {
 			List<ReceiveSampleItem> getReceiveSampleItemList = reportService.getReceiveSampleItemList(receiveSampleId);
 			return Response.success(getReceiveSampleItemList);
@@ -278,4 +278,23 @@ public class ReportController {
 			return Response.fail(e.getMessage());
 		}
 	}
+	
+	/**
+	 * 查看报告中的检验项
+	 * @return
+	 */
+	@RequestMapping(value = "/item/{receiveSampleItemId}", method = RequestMethod.GET)
+	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
+	public Response detailReport(@PathVariable(name = "receiveSampleItemId", required = true) String receiveSampleItemId) {
+		ReceiveSampleItem record = new ReceiveSampleItem();
+		record.setId(receiveSampleItemId);
+		try {
+			reportService.updateReceiveSample(record);
+			return Response.success("success");
+		} catch (Exception e) {
+			logger.error(e + "");
+			return Response.fail(e.getMessage());
+		}
+	}
+	
 }

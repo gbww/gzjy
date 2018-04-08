@@ -230,4 +230,13 @@ public class ReportService {
 	public List<ReceiveSampleItem> getReceiveSampleItemList(String receiveSampleId) {
 		 return receiveSampleItemMapper.selectByReceiveSampleId(receiveSampleId);
 	}
+	
+	/**
+	 * 修改ReceiveSampleItem
+	 * @param receiveSampleId
+	 * @return List<ReceiveSampleItem>
+	 */
+	public void updateReceiveSample(ReceiveSampleItem receiveSampleItem) {
+		 receiveSampleItemMapper.updateByPrimaryKeySelective(receiveSampleItem);
+	}
 }
