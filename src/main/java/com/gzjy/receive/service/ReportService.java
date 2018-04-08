@@ -1,6 +1,8 @@
 package com.gzjy.receive.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,12 +13,16 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.github.pagehelper.PageInfo;
+import com.gzjy.common.exception.BizException;
 import com.gzjy.receive.mapper.ReceiveSampleItemMapper;
 import com.gzjy.receive.mapper.ReceiveSampleMapper;
 import com.gzjy.receive.mapper.ReportExtendMapper;
@@ -236,7 +242,94 @@ public class ReportService {
 	 * @param receiveSampleId
 	 * @return List<ReceiveSampleItem>
 	 */
-	public void updateReceiveSample(ReceiveSampleItem receiveSampleItem) {
+	public void updateReceiveSampleItem(ReceiveSampleItem receiveSampleItem) {
 		 receiveSampleItemMapper.updateByPrimaryKeySelective(receiveSampleItem);
+	}
+	
+	/**
+	 * 修改ReceiveSample
+	 * @param receiveSampleId
+	 * @return List<ReceiveSampleItem>
+	 */
+	public void updateReceiveSample(ReceiveSample receiveSample) {
+		 receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
+	}
+	
+	/**
+	 * 多条件查询报告
+	 */
+	public PageInfo<ReceiveSample> getReportByCondition(String id, String reportId, String entrustedUnit, String inspectedUnit,
+			 String sampleName, String executeStandard, String productionUnit, String sampleType,
+			 String checkType, Integer reportStatus, String order, int status, Integer pageNum,
+			 Integer pageSize, String startTime, String endTime) 
+	{
+		Map<String, Object> filter = new HashMap<String, Object>();
+		if (StringUtils.isBlank(startTime)) {
+			startTime = null;
+		}
+		if (StringUtils.isBlank(endTime)) {
+			endTime = null;
+		}
+		if (!StringUtils.isBlank(reportId)) {
+			filter.put("report_id", reportId);
+		}
+		if (!StringUtils.isBlank(inspectedUnit)) {
+			filter.put("inspected_unit", inspectedUnit);
+		}
+		if (!StringUtils.isBlank(sampleName)) {
+			filter.put("sample_name", sampleName);
+		}
+		if (!StringUtils.isBlank(executeStandard)) {
+			filter.put("execute_standard", executeStandard);
+		}
+		if (!StringUtils.isBlank(productionUnit)) {
+			filter.put("production_unit", productionUnit);
+		}
+		if (!StringUtils.isBlank(id)) {
+			filter.put("receive_sample_id", id);
+		}
+		if (!StringUtils.isBlank(entrustedUnit)) {
+			filter.put("entrusted_unit", entrustedUnit);
+		}
+		if (!StringUtils.isBlank(sampleType)) {
+			filter.put("sample_type", sampleType);
+		}
+		if (!StringUtils.isBlank(checkType)) {
+			filter.put("check_type", checkType);
+		}
+		if (reportStatus != null && reportStatus != 5) { 
+			filter.put("report_status", reportStatus);
+			User u = userService.getCurrentUser();
+			boolean superUser = u.getRole().isSuperAdmin();
+			if (!superUser) {
+				String name = u.getName();
+				if (reportStatus == 0) {
+					filter.put("draw_user", name);
+				}
+				if (reportStatus == 1) {
+					filter.put("examine_user", name);
+				}
+				if (reportStatus == 2) {
+					filter.put("approval_user", name);
+				}
+			}
+		}
+		if (StringUtils.isBlank(order)) {
+			order = "created_at desc";
+		}
+		if (status != 5) {
+			filter.put("status", status);
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date start = null;
+		Date end = null;
+		try {
+			start = startTime == null ? null : sdf.parse(startTime);
+			end = endTime == null ? null : sdf.parse(endTime);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new BizException("输入的时间格式不合法！");
+		}
+		return receiveSampleService.select(pageNum, pageSize, order, filter, start, end);
 	}
 }
