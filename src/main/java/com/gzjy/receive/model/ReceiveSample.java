@@ -72,14 +72,14 @@ public class ReceiveSample implements Serializable{
     //封样状态
     private String closedStatus;
     //样品数
-    private Integer sampleNumber;
+    private String sampleNumber;
     
   //抽样单位
     private String sampleUnit;
     //样品状态
     private String sampleStatus;
     //抽样基数
-    private Integer sampleBasenumber;
+    private String sampleBasenumber;
     //保存条件
     private String saveWay;
     //生产单位
@@ -128,7 +128,7 @@ public class ReceiveSample implements Serializable{
     //主检人    
     private String principalInspector;
    //留样数量
-    private Integer liuyangCount;
+    private String liuyangCount;
     //食品大类
     private String foodDalei;
     //食品亚类
@@ -680,13 +680,7 @@ public class ReceiveSample implements Serializable{
         this.packageClassify = packageClassify;
     }
 
-    public Integer getSampleNumber() {
-        return sampleNumber;
-    }
 
-    public void setSampleNumber(Integer sampleNumber) {
-        this.sampleNumber = sampleNumber;
-    }
 
     public String getSampleUnit() {
         return sampleUnit;
@@ -696,21 +690,31 @@ public class ReceiveSample implements Serializable{
         this.sampleUnit = sampleUnit;
     }
 
-    public Integer getSampleBasenumber() {
+    public String getSampleNumber() {
+        return sampleNumber;
+    }
+
+    public void setSampleNumber(String sampleNumber) {
+        this.sampleNumber = sampleNumber;
+    }
+
+    public String getSampleBasenumber() {
         return sampleBasenumber;
     }
 
-    public void setSampleBasenumber(Integer sampleBasenumber) {
+    public void setSampleBasenumber(String sampleBasenumber) {
         this.sampleBasenumber = sampleBasenumber;
     }
 
-    public Integer getLiuyangCount() {
+    public String getLiuyangCount() {
         return liuyangCount;
     }
 
-    public void setLiuyangCount(Integer liuyangCount) {
+    public void setLiuyangCount(String liuyangCount) {
         this.liuyangCount = liuyangCount;
     }
+
+
 
   
 

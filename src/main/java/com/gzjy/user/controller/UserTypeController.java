@@ -22,6 +22,7 @@ import com.github.pagehelper.PageInfo;
 import com.gzjy.common.Add;
 import com.gzjy.common.Response;
 import com.gzjy.common.Update;
+import com.gzjy.common.exception.BizException;
 import com.gzjy.user.UserTypeServiceImpl;
 import com.gzjy.user.model.UserType;
 
@@ -43,9 +44,18 @@ public class UserTypeController {
         if (result.hasErrors()) {
             return Response.fail(result.getFieldError().getDefaultMessage());
         }
+        Map<String,Object>filter=new HashMap<String, Object>();
+        filter.put("type", record.getType());
+        filter.put("name", record.getName());
+        if(userTypeService.select(filter, "created_at desc").size()==0) {
+            record = userTypeService.add(record);
+            return Response.success(record);
+        }
+        else {
+            return Response.fail("用户已经存在");
+        }
+       
         
-        record = userTypeService.add(record);
-        return Response.success(record);
     }
     
     @RequestMapping(value = "/update", method = RequestMethod.PUT)

@@ -28,7 +28,7 @@
     <result column="sample_names" property="sampleNames" jdbcType="VARCHAR" />
     <result column="processing_technology" property="processingTechnology" jdbcType="VARCHAR" />
     <result column="closed_status" property="closedStatus" jdbcType="VARCHAR" />
-    <result column="sample_number" property="sampleNumber" jdbcType="INTEGER" />
+    <result column="sample_number" property="sampleNumber" jdbcType="VARCHAR" />
     <result column="sample_unit" property="sampleUnit" jdbcType="VARCHAR" />
     <result column="sample_status" property="sampleStatus" jdbcType="VARCHAR" />
     <result column="sample_basenumber" property="sampleBasenumber" jdbcType="VARCHAR" />
@@ -54,7 +54,7 @@
     <result column="examine_user" property="examineUser" jdbcType="VARCHAR" />
     <result column="draw_user" property="drawUser" jdbcType="VARCHAR" />
     <result column="principal_inspector" property="principalInspector" jdbcType="VARCHAR" />
-    <result column="liuyang_count" property="liuyangCount" jdbcType="INTEGER" />
+    <result column="liuyang_count" property="liuyangCount" jdbcType="VARCHAR" />
     <result column="food_dalei" property="foodDalei" jdbcType="VARCHAR" />
     <result column="food_yalei" property="foodYalei" jdbcType="VARCHAR" />
     <result column="food_ciyalei" property="foodCiyalei" jdbcType="VARCHAR" />
@@ -188,7 +188,7 @@
       #{sampleTrademark,jdbcType=VARCHAR}, #{sampleCirculate,jdbcType=VARCHAR}, #{sampleCirculateDate,jdbcType=TIMESTAMP}, 
       #{sampleDate,jdbcType=TIMESTAMP}, #{sampleWay,jdbcType=VARCHAR}, #{specificationModel,jdbcType=VARCHAR}, 
       #{executeStandard,jdbcType=VARCHAR}, #{sampleNames,jdbcType=VARCHAR}, #{processingTechnology,jdbcType=VARCHAR}, 
-      #{closedStatus,jdbcType=VARCHAR}, #{sampleNumber,jdbcType=INTEGER}, #{sampleUnit,jdbcType=VARCHAR}, 
+      #{closedStatus,jdbcType=VARCHAR}, #{sampleNumber,jdbcType=VARCHAR}, #{sampleUnit,jdbcType=VARCHAR}, 
       #{sampleStatus,jdbcType=VARCHAR}, #{sampleBasenumber,jdbcType=VARCHAR}, #{saveWay,jdbcType=VARCHAR}, 
       #{productionUnit,jdbcType=VARCHAR}, #{productionAddress,jdbcType=VARCHAR}, #{productionUser,jdbcType=VARCHAR}, 
       #{productionPhone,jdbcType=VARCHAR}, #{cost,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, 
@@ -197,7 +197,7 @@
       #{finishDate,jdbcType=TIMESTAMP}, #{protocolId,jdbcType=VARCHAR}, #{subpackage,jdbcType=VARCHAR}, 
       #{result,jdbcType=VARCHAR}, #{determine,jdbcType=VARCHAR}, #{approvalUser,jdbcType=VARCHAR}, 
       #{examineUser,jdbcType=VARCHAR}, #{drawUser,jdbcType=VARCHAR}, #{principalInspector,jdbcType=VARCHAR}, 
-      #{liuyangCount,jdbcType=INTEGER}, #{foodDalei,jdbcType=VARCHAR}, #{foodYalei,jdbcType=VARCHAR}, 
+      #{liuyangCount,jdbcType=VARCHAR}, #{foodDalei,jdbcType=VARCHAR}, #{foodYalei,jdbcType=VARCHAR}, 
       #{foodCiyalei,jdbcType=VARCHAR}, #{foodXilei,jdbcType=VARCHAR}, #{qianfaDate,jdbcType=TIMESTAMP}, 
       #{sampleLeixing,jdbcType=VARCHAR}, #{packageClassify,jdbcType=VARCHAR}, #{zhibaoqi,jdbcType=INTEGER}, 
       #{licence,jdbcType=VARCHAR}, #{reportProcessId,jdbcType=VARCHAR}, #{appendix,jdbcType=VARCHAR}, 
@@ -489,7 +489,7 @@
         #{closedStatus,jdbcType=VARCHAR},
       </if>
       <if test="sampleNumber != null" >
-        #{sampleNumber,jdbcType=INTEGER},
+        #{sampleNumber,jdbcType=VARCHAR},
       </if>
       <if test="sampleUnit != null" >
         #{sampleUnit,jdbcType=VARCHAR},
@@ -567,7 +567,7 @@
         #{principalInspector,jdbcType=VARCHAR},
       </if>
       <if test="liuyangCount != null" >
-        #{liuyangCount,jdbcType=INTEGER},
+        #{liuyangCount,jdbcType=VARCHAR},
       </if>
       <if test="foodDalei != null" >
         #{foodDalei,jdbcType=VARCHAR},
@@ -692,7 +692,7 @@
         closed_status = #{closedStatus,jdbcType=VARCHAR},
       </if>
       <if test="sampleNumber != null" >
-        sample_number = #{sampleNumber,jdbcType=INTEGER},
+        sample_number = #{sampleNumber,jdbcType=VARCHAR},
       </if>
       <if test="sampleUnit != null" >
         sample_unit = #{sampleUnit,jdbcType=VARCHAR},
@@ -770,7 +770,7 @@
         principal_inspector = #{principalInspector,jdbcType=VARCHAR},
       </if>
       <if test="liuyangCount != null" >
-        liuyang_count = #{liuyangCount,jdbcType=INTEGER},
+        liuyang_count = #{liuyangCount,jdbcType=VARCHAR},
       </if>
       <if test="foodDalei != null" >
         food_dalei = #{foodDalei,jdbcType=VARCHAR},
@@ -844,7 +844,7 @@
       sample_names = #{sampleNames,jdbcType=VARCHAR},
       processing_technology = #{processingTechnology,jdbcType=VARCHAR},
       closed_status = #{closedStatus,jdbcType=VARCHAR},
-      sample_number = #{sampleNumber,jdbcType=INTEGER},
+      sample_number = #{sampleNumber,jdbcType=VARCHAR},
       sample_unit = #{sampleUnit,jdbcType=VARCHAR},
       sample_status = #{sampleStatus,jdbcType=VARCHAR},
       sample_basenumber = #{sampleBasenumber,jdbcType=VARCHAR},
@@ -870,7 +870,7 @@
       examine_user = #{examineUser,jdbcType=VARCHAR},
       draw_user = #{drawUser,jdbcType=VARCHAR},
       principal_inspector = #{principalInspector,jdbcType=VARCHAR},
-      liuyang_count = #{liuyangCount,jdbcType=INTEGER},
+      liuyang_count = #{liuyangCount,jdbcType=VARCHAR},
       food_dalei = #{foodDalei,jdbcType=VARCHAR},
       food_yalei = #{foodYalei,jdbcType=VARCHAR},
       food_ciyalei = #{foodCiyalei,jdbcType=VARCHAR},
