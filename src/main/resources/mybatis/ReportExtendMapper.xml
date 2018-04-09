@@ -28,6 +28,14 @@
 		from report_extend
 		where id = #{id,jdbcType=VARCHAR}
 	</select>
+	
+	<select id="selectByReportId" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from report_extend
+		where report_id = #{id,jdbcType=VARCHAR}
+	</select>
 
 	<insert id="insert" parameterType="com.gzjy.receive.model.ReportExtend">
 		insert into report_extend(id, report_id, template_id, template_name, template_desc)

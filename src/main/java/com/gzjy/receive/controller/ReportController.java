@@ -1,9 +1,16 @@
 package com.gzjy.receive.controller;
 
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +25,8 @@ import com.github.pagehelper.PageInfo;
 import com.gzjy.common.Response;
 import com.gzjy.common.ShortUUID;
 import com.gzjy.common.annotation.Privileges;
+import com.gzjy.common.util.fs.EpicNFSClient;
+import com.gzjy.common.util.fs.EpicNFSService;
 import com.gzjy.receive.mapper.ReportExtendMapper;
 import com.gzjy.receive.model.ReceiveSample;
 import com.gzjy.receive.model.ReceiveSampleItem;
@@ -26,6 +35,10 @@ import com.gzjy.receive.model.ReportExtend;
 import com.gzjy.receive.service.ReceiveSampleService;
 import com.gzjy.receive.service.ReportService;
 import com.gzjy.user.UserService;
+
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
 
 @RestController
 @RequestMapping(value = "v1/ahgz/report")
@@ -41,6 +54,10 @@ public class ReportController {
 	ReceiveSampleService receiveSampleService;
 	@Autowired
 	ReportExtendMapper reportExtendMapper;
+	@Autowired
+	private DataSource dataSource; 
+	@Autowired
+	private EpicNFSService epicNFSService;
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	public Response editReport(@RequestBody(required = true) ReceiveSample receiveSample,
@@ -457,5 +474,44 @@ public class ReportController {
 			return Response.fail(e.getMessage());
 		}
 	}
+	
+	/**
+	 * 报告的导出pdf
+	 * @return
+	 */
+	@RequestMapping(value = "/export", method = RequestMethod.GET)
+	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
+	public Response exportReport(@RequestParam(name = "receiveSampleId", required = true) String receiveSampleId,
+			HttpServletResponse response){
+		try {
+			ReceiveSample result = receiveSampleService.getReceiveSample(receiveSampleId);
+			if(result==null) {
+				return Response.fail("未查询到对应的报告信息");
+			}
+			ReportExtend reportExtend = reportExtendMapper.selectByReportId(receiveSampleId);
+			String templateDir = "/var/lib/docs/gzjy/template/"+reportExtend.getTemplateName();			
+			//设定报表所需要的外部参数内容
+		    Map<String, Object> rptParameters = new HashMap<String, Object>();		    
+		    rptParameters.put("receiveSampleId", receiveSampleId);
+		    //传入报表源文件绝对路径，外部参数对象，DB连接，得到JasperPring对象
+		    JasperPrint jasperPrint = JasperFillManager.fillReport(templateDir, rptParameters, dataSource.getConnection());
+		    response.reset();
+			response.setContentType("application/octet-stream;charset=UTF-8");
+			response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(receiveSampleId+".pdf", "UTF-8"));
+			OutputStream out = response.getOutputStream();
+			JasperExportManager.exportReportToPdfStream(jasperPrint, out);
+			if(out!=null) {
+				out.close();
+			}
+		    logger.info("Export success!!");
+			return Response.success("success");
+		} catch (Exception e) {
+			logger.error(e + "");
+			return Response.fail(e.getMessage());
+		}finally {
+			
+		}
+	}
+	
 	
 }

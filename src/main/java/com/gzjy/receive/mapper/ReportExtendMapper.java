@@ -18,5 +18,5 @@ public interface ReportExtendMapper {
 
     List<ReportExtend> selectAll();
     
-    
+    ReportExtend selectByReportId(String reportId);
 }
