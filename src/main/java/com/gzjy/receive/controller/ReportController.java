@@ -60,10 +60,9 @@ public class ReportController {
 	private EpicNFSService epicNFSService;
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
-	public Response editReport(@RequestBody(required = true) ReceiveSample receiveSample,
-			@RequestBody(required = true) ReportExtend reportExtend) throws Exception {
+	public Response editReport(@RequestBody(required = true) ReceiveSample receiveSample) throws Exception {
 		try {
-			reportService.editReceiveSample(receiveSample, reportExtend);
+			reportService.editReceiveSample(receiveSample);
 			return Response.success("success");
 		} catch (Exception e) {
 			logger.error(e + "");
@@ -342,7 +341,7 @@ public class ReportController {
 
 		PageInfo<ReceiveSample> result = reportService.getReportByCondition(
 				id,reportId,entrustedUnit,inspectedUnit,sampleName,executeStandard,productionUnit,
-				sampleType,checkType,5,order,status,pageNum,pageSize,startTime,endTime);
+				sampleType,checkType,null,order,status,pageNum,pageSize,startTime,endTime);
 		return Response.success(result);
 	}
 	

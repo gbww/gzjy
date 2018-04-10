@@ -53,9 +53,8 @@ public class ReportService {
 	 * @param receiveSampleId
 	 */
 	@Transactional
-	public void editReceiveSample(ReceiveSample receiveSample, ReportExtend reportExtend) {
+	public void editReceiveSample(ReceiveSample receiveSample) {
 		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
-		reportExtendMapper.updateByPrimaryKeySelective(reportExtend);
 	}
 
 	
