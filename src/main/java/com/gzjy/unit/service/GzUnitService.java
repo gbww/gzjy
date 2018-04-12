@@ -50,7 +50,7 @@ public class GzUnitService {
         if(StringUtils.isBlank(record.getUnitName())) {
             throw new BizException("单位名称为空");
         }
-        if(isExist(record.getUnitName())) {
+        if(!isExist(record.getUnitName())) {
             throw new BizException("单位名称不存在");
         }
         unitMapper.updateByPrimaryKeySelective(record);

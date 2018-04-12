@@ -205,10 +205,10 @@ public class ReceiveSampleService {
 
 	@Transactional
 	public ReceiveSample updateReceiveSample(ReceiveSample record) {
-		ReceiveSample exitrecord = receiveSampleMapper.selectByPrimaryKey(record.getReceiveSampleId());
+		ReceiveSample existRecord = receiveSampleMapper.selectByPrimaryKey(record.getReceiveSampleId());
 	     
 	        
-		if (exitrecord != null) {
+		if (existRecord != null) {
 		    if(!StringUtils.isBlank(record.getDrawUser())){
                 if(!userClient.nameExist(record.getDrawUser()))
                     throw new BizException("编制人在数据库中不存在");
@@ -220,6 +220,10 @@ public class ReceiveSampleService {
             if(!StringUtils.isBlank(record.getApprovalUser())){
                 if(!userClient.nameExist(record.getApprovalUser()))
                     throw new BizException("批准人在数据库中不存在");
+            }
+            
+            if(!StringUtils.isBlank(record.getAppendix())) {
+                deleteAttachment(existRecord.getAppendix());
             }
 			receiveSampleMapper.updateByPrimaryKeySelective(record);
 		}
@@ -405,10 +409,11 @@ public class ReceiveSampleService {
     }
 	
 	@Transactional
-	public void upload(MultipartFile file,String receiveSampleId) throws IOException {
+	public Boolean upload(MultipartFile file,String receiveSampleId) throws IOException {
 	   
 	  // 使用文件系统      
 	        if (file.getSize() / (1024 * 1024) > 10) {
+	          
 	                throw new BizException("文件[" + file.getOriginalFilename()
 	                        + "]过大，请上传大小不超过10M的文件");
 	            }
@@ -425,6 +430,9 @@ public class ReceiveSampleService {
 	        String filePath=parentPath+"/"+file.getOriginalFilename();
 	       ReceiveSample sample=receiveSampleMapper.selectByPrimaryKey(receiveSampleId);
 	        if(sample!=null) {
+	            if(!StringUtils.isBlank(sample.getAppendix())) {
+	                deleteAttachment(sample.getAppendix());
+	            }
 	            ReceiveSample record=new ReceiveSample();
                 record.setAppendix(filePath);
                 record.setReceiveSampleId(sample.getReceiveSampleId());	           	                
@@ -435,13 +443,35 @@ public class ReceiveSampleService {
                                 filePath);
                     } catch (Exception e) {                       
                         e.printStackTrace();
+                       
                     } finally {
                         if(in!=null)
                             in.close();
+                        epicNFSClient.close();     
                     }
-	        }	        
-	        epicNFSClient.close();       	
+	                return true;
+	        }
+	        else
+	            return false;
+	        
+	       
+	         	
 	    }
+	
+	public void deleteAttachment(String path) {
+	    EpicNFSClient epicNFSClient = null;
+	    epicNFSClient = epicNFSService.getClient("gzjy");
+	    try {
+            epicNFSClient.deleteFile(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	    finally {
+	        if (epicNFSClient != null) {
+                epicNFSClient.close();
+            }
+        }
+	}
 	
 	 @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 	    public ResponseEntity<byte[]> download(String path) throws IOException {

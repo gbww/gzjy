@@ -27,6 +27,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.gzjy.common.Add;
 import com.gzjy.common.Response;
@@ -52,11 +54,9 @@ import com.gzjy.receive.service.ReceiveSampleService;
 import com.gzjy.user.UserService;
 import com.gzjy.user.model.User;
 
-import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.swing.JRViewer;
 
 /**
  * @author xuewenlong@cmss.chinamobile.com
@@ -641,6 +641,47 @@ public class ReceiveSampleController {
         else
             return Response.success(receiveSampleService.selectUnderDetection(pageNum, pageSize, order, filter));
     }
+    
+    
+ // 上传
+    @RequestMapping(value = "/attachment/upload", method = RequestMethod.POST)
+    public void uploadReceiveAppendix(@RequestParam("file") MultipartFile file,
+             @RequestParam(name = "receiveSampleId", required = false) String receiveSampleId            
+            ) {
+        
+            try {
+                receiveSampleService.upload(file, receiveSampleId);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            finally {
+                try {
+                    if(file.getInputStream()!=null) {
+                        file.getInputStream().close();
+                    }
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                    
+            }
+               
+    }
+    
+    // 下载
+    @RequestMapping(value = "/attachment/download", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> download(  @RequestParam(name = "path", required = true)String path           
+            ) {
+        try {
+            return   receiveSampleService.download(path);
+          } catch (IOException e) {
+            return null;
+          }
+       
+               
+    }
+    
     
     
     

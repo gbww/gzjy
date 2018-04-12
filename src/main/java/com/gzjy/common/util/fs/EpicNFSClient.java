@@ -62,6 +62,17 @@ public class EpicNFSClient {
       throw new BizException("文件系统中找不到下载文件");
     }
   }
+  
+  public void deleteFile(String filePath) throws IOException {
+      filePath = preDealPath(filePath);
+      File file = new File(localPaht, filePath);
+      if (file.exists()) {
+          file.delete();
+       
+      } else {
+        throw new BizException("文件系统中找不到下载文件");
+      }
+    }
 
   /**
    * 关闭ftp连接，调用后，本实例所有方法失效
