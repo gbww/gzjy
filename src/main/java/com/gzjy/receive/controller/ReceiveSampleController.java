@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -54,9 +55,18 @@ import com.gzjy.receive.service.ReceiveSampleService;
 import com.gzjy.user.UserService;
 import com.gzjy.user.model.User;
 
+import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
+import net.sf.jasperreports.export.ExporterInput;
+import net.sf.jasperreports.export.OutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import xue.model.StudentBeanFactory;
+import xue.model.StudentScore;
 
 /**
  * @author xuewenlong@cmss.chinamobile.com
@@ -100,6 +110,14 @@ public class ReceiveSampleController {
 	       
 	       //执行结束
 	       System.out.println("Export success!!");
+	       //使用javabean作为数据源
+	       ArrayList<StudentScore> stulist=new ArrayList<StudentScore>();
+	       stulist=StudentBeanFactory.getBeanCollection();
+	       Map<String, Object> par = new HashMap<String, Object>();
+	       JRDataSource data= new JRBeanCollectionDataSource(stulist);  
+	       JasperPrint jasperPrint1 = JasperFillManager.fillReport("F:/412.jasper", par,data);
+	       JasperExportManager.exportReportToHtmlFile(jasperPrint1,"F:/a412.html");
+     
 	}
 
 	// 添加接样基本信息
@@ -671,21 +689,18 @@ public class ReceiveSampleController {
     
     // 下载
     @RequestMapping(value = "/attachment/download", method = RequestMethod.GET)
-    public ResponseEntity<byte[]> download(  @RequestParam(name = "path", required = true)String path           
+    public Response download(  @RequestParam(name = "path", required = true)String path,HttpServletResponse response           
             ) {
         try {
-            return   receiveSampleService.download(path);
+         
+              receiveSampleService.download(path, response);
           } catch (IOException e) {
-            return null;
+        
           }
-       
-               
+        return Response.success(true);
     }
-    
-    
-    
-    
-    
+        
+ 
 
 	/**
 	 * 通过模板导出报告(excel or pdf)并下载

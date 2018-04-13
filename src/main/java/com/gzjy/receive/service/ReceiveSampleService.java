@@ -5,10 +5,13 @@
 package com.gzjy.receive.service;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -22,9 +25,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.net.util.Base64;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -39,9 +42,6 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -63,8 +63,7 @@ import com.gzjy.receive.model.ReceiveSampleItem;
 import com.gzjy.receive.model.SampleItemCountView;
 import com.gzjy.user.UserService;
 import com.gzjy.user.mapper.UserSignMapper;
-import com.gzjy.user.model.User;
-import com.gzjy.user.model.UserSign; 
+import com.gzjy.user.model.User; 
 /**
  * @author xuewenlong@cmss.chinamobile.com
  * @updated 2017年9月3日
@@ -474,28 +473,35 @@ public class ReceiveSampleService {
 	}
 	
 	 @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-	    public ResponseEntity<byte[]> download(String path) throws IOException {
+	    public HttpServletResponse  download(String path,HttpServletResponse response) throws IOException {
 	        EpicNFSClient epicNFSClient = null;
-	        InputStream inputStream = null;
-	        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+	        InputStream inputStream = null;	        
 	        try {
+	            
 	            epicNFSClient = epicNFSService.getClient("gzjy");
-	            inputStream = epicNFSClient.download(path);
-	            byte[] buffer = new byte[1024];
-	            int len = -1;
-	            while ((len = inputStream.read(buffer)) != -1) {
+	           String realPath= epicNFSClient.getPath(path);
+	           File file = new File(realPath);
+	           String filename = file.getName();
+	           inputStream =  new BufferedInputStream(epicNFSClient.download(path));
+	           OutputStream  outputStream = new BufferedOutputStream(response.getOutputStream());
+	           byte[] buffer = new byte[1024];
+	           int len = -1;
+	           while ((len = inputStream.read(buffer)) != -1) {
 	                outputStream.write(buffer, 0, len);
 	            }
+	           
+	           response.addHeader("Content-Disposition", "attachment;filename=" + new String(filename.getBytes()));
+	           response.addHeader("Content-Length", "" + file.length());
+	           response.setContentType("application/octet-stream");
+	           outputStream.flush();
+	           outputStream.close();
 	        } catch (IOException e) {
 	            throw new BizException("文件下载失败");
 	        } finally {
 	            try {
-	                if (outputStream != null) {
-	                    outputStream.close();
-	                }
 	                if (inputStream != null) {
 	                    inputStream.close();
-	                    inputStream = null;
+	                    
 	                }
 	                if (epicNFSClient != null) {
 	                    epicNFSClient.close();
@@ -504,13 +510,8 @@ public class ReceiveSampleService {
 	                throw new BizException("IO流关闭失败");
 	            }
 	        }
-	        HttpHeaders headers = new HttpHeaders();
-	        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+	        return response;
 	       
-	        headers.setContentDispositionFormData("attachment",
-	                path);        
-	        return new ResponseEntity<byte[]>(Base64.encodeBase64(outputStream.toByteArray()), headers,
-	                HttpStatus.CREATED);
 	    }
 	
 	
