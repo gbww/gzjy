@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -156,6 +157,19 @@ public class ReceiveSampleService {
 				continue;
 			}
 			if (StringUtils.isBlank(item.getId())) {  //添加检测项
+			    ReceiveSample receive= receiveSampleMapper.selectByPrimaryKey(item.getReceiveSampleId());
+			    if(receive==null) {			        
+			        System.out.println("接样单ID不存在");
+                    logger.error("接样单ID不存在");
+                    throw new BizException("抽样单ID不存在");
+			    }
+			    else {
+			        if(receive.getStatus()==1) {  //抽样单处于完成状态了
+			            receive.setStatus(0);
+			            receiveSampleMapper.updateByPrimaryKeySelective(receive);
+			        }
+			        
+			    }
 				item.setId(UUID.random());
 				 item.setUpdatedAt(new Date());
 				 if(item.getStatus()==null){
@@ -163,6 +177,8 @@ public class ReceiveSampleService {
 				     
 				 }
 				receiveSampleItemMapper.insert(item);
+				
+				
 			} else {
 				ReceiveSampleItem exitItem = receiveSampleItemMapper.selectByPrimaryKey(item.getId());
 				if (exitItem != null) {
@@ -490,9 +506,9 @@ public class ReceiveSampleService {
 	                outputStream.write(buffer, 0, len);
 	            }
 	           
-	           response.addHeader("Content-Disposition", "attachment;filename=" + new String(filename.getBytes()));
+	           response.addHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(filename, "UTF-8"));
 	           response.addHeader("Content-Length", "" + file.length());
-	           response.setContentType("application/octet-stream");
+	           response.setContentType("application/octet-stream;charset=UTF-8");
 	           outputStream.flush();
 	           outputStream.close();
 	        } catch (IOException e) {

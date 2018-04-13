@@ -73,7 +73,7 @@ import xue.model.StudentScore;
  * @updated 2017年9月3日
  */
 @RestController
-@RequestMapping(value = "v1/ahgz/")
+@RequestMapping(value = "v1/ahgz/receive")
 public class ReceiveSampleController {
 
 	private static Logger logger = LoggerFactory.getLogger(ReceiveSampleService.class);
@@ -414,7 +414,7 @@ public class ReceiveSampleController {
 	
 		
 	
-	//查看报告列表
+/*	//查看报告列表
 	@RequestMapping(value = "/sample/reports", method = RequestMethod.GET)
 	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
     public Response listReports(@RequestParam(name = "receiveSampleId", required = false) String id,
@@ -506,7 +506,7 @@ public class ReceiveSampleController {
         }
 
         return Response.success(receiveSampleService.select(pageNum, pageSize, order, filter, start, end));
-    }
+    }*/
     
 	
 	
@@ -524,7 +524,7 @@ public class ReceiveSampleController {
 		return Response.success(receiveSampleService.selectTest(pageNum, pageSize, filter));
 	}
 	
-	
+	//按照部门查询每种状态的检测项数量
     @RequestMapping(value = "/sample/items/countByDepartment", method = RequestMethod.GET)
     public Response selectCountItemByDepartment(@RequestParam(name = "order", required = false) String order,
             @RequestParam(value = "startTime", required = false) String startTime,
@@ -692,7 +692,7 @@ public class ReceiveSampleController {
     public Response download(  @RequestParam(name = "path", required = true)String path,HttpServletResponse response           
             ) {
         try {
-         
+              response.reset();
               receiveSampleService.download(path, response);
           } catch (IOException e) {
         
@@ -709,7 +709,7 @@ public class ReceiveSampleController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value = "/sample/items/report/{id}", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/sample/items/report/{id}", method = RequestMethod.GET)
 	public Response getReport(HttpServletResponse response, @PathVariable(name = "id") String id,
 			@RequestParam(required = true) String templateFileName, @RequestParam(required = true) String type) {
 		EpicNFSClient client = epicNFSService.getClient("gzjy");
@@ -787,12 +787,12 @@ public class ReceiveSampleController {
 		return null;
 	}
 
-	/**
+	*//**
 	 * 
 	 * @param response
 	 * @param id
 	 * @return
-	 */
+	 *//*
 	@RequestMapping(value = "/sample/export", method = RequestMethod.GET)
 	public Response exportExcel(HttpServletResponse response, @RequestParam(required = false) String templateFileName) {
 		ReceiveSample receiveSample = new ReceiveSample();
@@ -833,5 +833,5 @@ public class ReceiveSampleController {
 			}
 		}		
 		return Response.success(data);
-	}	
+	}	*/
 }
