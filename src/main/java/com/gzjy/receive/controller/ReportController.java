@@ -399,7 +399,8 @@ public class ReportController {
 			logger.error(e + "");
 			return Response.fail(e.getMessage());
 		}
-	}
+	}	
+	
 	
 	/**
 	 * 修改报告中的签发日期
