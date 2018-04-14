@@ -384,10 +384,10 @@ public class ReportController {
 	}
 	
 	/**
-	 * 查看报告中的检验项
+	 * 修改报告中的检验项
 	 * @return
 	 */
-	@RequestMapping(value = "/item/{receiveSampleItemId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/item/{receiveSampleItemId}", method = RequestMethod.PUT)
 	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
 	public Response detailReport(@PathVariable(name = "receiveSampleItemId", required = true) String receiveSampleItemId) {
 		ReceiveSampleItem record = new ReceiveSampleItem();
