@@ -65,8 +65,8 @@ import net.sf.jasperreports.export.ExporterInput;
 import net.sf.jasperreports.export.OutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
-import xue.model.StudentBeanFactory;
-import xue.model.StudentScore;
+//import xue.model.StudentBeanFactory;
+//import xue.model.StudentScore;
 
 /**
  * @author xuewenlong@cmss.chinamobile.com
@@ -111,12 +111,12 @@ public class ReceiveSampleController {
 	       //执行结束
 	       System.out.println("Export success!!");
 	       //使用javabean作为数据源
-	       ArrayList<StudentScore> stulist=new ArrayList<StudentScore>();
+	      /* ArrayList<StudentScore> stulist=new ArrayList<StudentScore>();
 	       stulist=StudentBeanFactory.getBeanCollection();
 	       Map<String, Object> par = new HashMap<String, Object>();
 	       JRDataSource data= new JRBeanCollectionDataSource(stulist);  
 	       JasperPrint jasperPrint1 = JasperFillManager.fillReport("F:/412.jasper", par,data);
-	       JasperExportManager.exportReportToHtmlFile(jasperPrint1,"F:/a412.html");
+	       JasperExportManager.exportReportToHtmlFile(jasperPrint1,"F:/a412.html");*/
      
 	}
 

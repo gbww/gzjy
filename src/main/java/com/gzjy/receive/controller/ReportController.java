@@ -69,6 +69,27 @@ public class ReportController {
 			return Response.fail(e.getMessage());
 		}
 	}
+	
+	/**
+	 * 根据receiveSampleId获取报告详情
+	 * @param receiveSampleId
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/{receiveSampleId}", method = RequestMethod.GET)
+	public Response reportDetail(@PathVariable(required = true) String receiveSampleId) throws Exception {
+		try {
+			ReceiveSample receiveSample=reportService.getReceiveSample(receiveSampleId);
+			ReportExtend reportExtend=reportExtendMapper.selectByReportId(receiveSample.getReportId());
+			Map<String, Object> result = new HashMap<String, Object>();
+			result.put("receiveSample", receiveSample);
+			result.put("reportExtend", reportExtend);
+			return Response.success(result);
+		} catch (Exception e) {
+			logger.error(e + "");
+			return Response.fail(e.getMessage());
+		}
+	}
 
 	/**
 	 * 启动报告流程引擎接口
@@ -408,20 +429,10 @@ public class ReportController {
 	 */
 	@RequestMapping(value = "/template/bind", method = RequestMethod.POST)
 	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
-	public Response receiveBindTemplate(
-			@RequestParam(name = "reportId", required = true) String reportId,
-			@RequestParam(name = "templateId", required = true) String templateId,
-			@RequestParam(name = "templateName", required = true) String templateName,
-			@RequestParam(name = "templateDesc", required = false) String templateDesc) {
-		 
-		ReportExtend record = new ReportExtend();
-		record.setId(ShortUUID.getInstance().generateShortID());
-		record.setReportId(reportId);
-		record.setTemplateId(templateId);
-		record.setTemplateName(templateName);
-		record.setTemplateDesc(templateDesc);
+	public Response receiveBindTemplate(@RequestBody ReportExtend reportExtend) {
+		reportExtend.setId(ShortUUID.getInstance().generateShortID());		
 		try {
-			reportService.insertReportExtend(record);
+			reportService.insertReportExtend(reportExtend);
 			return Response.success("success");
 		} catch (Exception e) {
 			logger.error(e + "");

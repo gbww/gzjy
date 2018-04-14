@@ -57,6 +57,10 @@ public class ReportService {
 		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
 	}
 
+	public ReceiveSample getReceiveSample(String receiveSampleId) {
+		return receiveSampleMapper.selectByPrimaryKey(receiveSampleId);
+	}
+
 	
 	
 	/**
