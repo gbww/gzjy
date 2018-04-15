@@ -326,10 +326,10 @@ public class ReportService {
 		}
 		if (!StringUtils.isBlank(checkType)) {
 			filter.put("check_type", checkType);
-		}
+		}		
 		if (reportStatus != null && reportStatus != 5) { 
 			filter.put("report_status", reportStatus);
-			User u = userService.getCurrentUser();
+			/*User u = userService.getCurrentUser();
 			boolean superUser = u.getRole().isSuperAdmin();
 			if (!superUser) {
 				String name = u.getName();
@@ -342,7 +342,7 @@ public class ReportService {
 				if (reportStatus == 2) {
 					filter.put("approval_user", name);
 				}
-			}
+			}*/
 		}
 		if (StringUtils.isBlank(order)) {
 			order = "created_at desc";
