@@ -133,9 +133,12 @@
 		from receive_sample
 		<where>
 			<foreach collection="filters.keys" item="key" separator="and">
-				<if test="null!=filters[key]">
+				<if test="null!=filters[key] and 'report_status'!=key">
 					${key} LIKE CONCAT('%',#{filters[${key}]},'%' )
-				</if>
+				</if>	
+				<if test="null!=filters[key] and 'report_status'==key">
+					${key} = #{filters[${key}]}
+				</if>			
 			</foreach>
 			<if test="timeStart != null">
 				and created_at &gt;= #{timeStart,jdbcType=TIMESTAMP}
