@@ -119,7 +119,7 @@ public class ReportController {
 	@RequestMapping(value = "/process", method = RequestMethod.GET)
 	public Response getTaskByUser(@RequestParam(required = true, defaultValue = "0") String isHandle) throws Exception {
 		try {
-			ArrayList<ReceiveSampleTask> result = reportService.getContractTaskByUserId(isHandle);
+			ArrayList<ReceiveSampleTask> result = reportService.getContractTaskByUserName(isHandle);
 			return Response.success(result);
 		} catch (Exception e) {
 			logger.error(e + "");

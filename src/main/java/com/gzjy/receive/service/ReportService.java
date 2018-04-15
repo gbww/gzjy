@@ -89,7 +89,7 @@ public class ReportService {
 	 * @param isHandle(0表示查詢未完成任務，1表示查詢已完成任務)
 	 * @return ArrayList<ContractTask>
 	 */	
-	public ArrayList<ReceiveSampleTask> getContractTaskByUserId(String isHandle) {
+	public ArrayList<ReceiveSampleTask> getContractTaskByUserName(String isHandle) {
 		String userName = userService.getCurrentUser().getName();
 		ArrayList<ReceiveSampleTask> taskList = new ArrayList<ReceiveSampleTask>();
 		if ("0".equals(isHandle)) {
