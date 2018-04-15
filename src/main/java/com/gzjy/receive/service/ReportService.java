@@ -12,6 +12,7 @@ import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -19,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.github.pagehelper.PageInfo;
 import com.gzjy.common.exception.BizException;
@@ -90,12 +90,12 @@ public class ReportService {
 	 * @return ArrayList<ContractTask>
 	 */	
 	public ArrayList<ReceiveSampleTask> getContractTaskByUserId(String isHandle) {
-		String userId = userService.getCurrentUser().getId();
+		String userName = userService.getCurrentUser().getName();
 		ArrayList<ReceiveSampleTask> taskList = new ArrayList<ReceiveSampleTask>();
 		if ("0".equals(isHandle)) {
 			logger.info("查询未完成任务");
 			TaskService taskService = processEngine.getTaskService();
-			List<Task> tasks = taskService.createTaskQuery().taskAssignee(userId).list();
+			List<Task> tasks = taskService.createTaskQuery().taskAssignee(userName).list();
 			for (Task task : tasks) {
 				logger.info("ID:" + task.getId() + ",任务名称:" + task.getName() + ",执行人:" + task.getAssignee() + ",开始时间:"
 							+ task.getCreateTime());
@@ -111,8 +111,8 @@ public class ReportService {
 		} else {
 			HistoryService historyService = processEngine.getHistoryService();
 			List<HistoricTaskInstance> tasks = historyService.createHistoricTaskInstanceQuery().finished()
-					.taskAssignee(userId).list();
-			logger.info("历史任务:" + tasks.size() + " userId:" + userId);
+					.taskAssignee(userName).list();
+			logger.info("历史任务:" + tasks.size() + " userId:" + userName);
 			for (HistoricTaskInstance task : tasks) {
 				logger.info("ID:" + task.getId() + ",任务名称:" + task.getName() + ",执行人:" + task.getAssignee() + ",开始时间:"
 						+ task.getCreateTime());
@@ -129,18 +129,28 @@ public class ReportService {
 		return taskList;
 	}
 
+	/**
+	 * 根据任务编号获取报告评论意见
+	 */	
+	public List<Comment> getCommentByTaskId(String taskId) {		
+		TaskService taskService = processEngine.getTaskService();
+		List<Comment> commentResult =taskService.getTaskComments(taskId);
+		return commentResult;
+	}
+
+	
 	
 	/**
 	 * 执行报告中的编辑任务
 	 * @param taskId  任务编号
 	 */
 	@Transactional
-	public void doEditTask(String taskId, String receiveSampleId, String examinePersonId, String comment) {
+	public void doEditTask(String taskId, String receiveSampleId, String examinePersonName, String comment, String reportProcessId) {
 		TaskService taskService = processEngine.getTaskService();
 		RuntimeService runtimeService = processEngine.getRuntimeService();
 		Task task = (Task) taskService.createTaskQuery().taskId(taskId).list().get(0);
 		//执行任务过程中动态指定审核人
-		runtimeService.setVariable(task.getExecutionId(), "examinePersonId", examinePersonId);
+		runtimeService.setVariable(task.getExecutionId(), "examinePersonId", examinePersonName);
 		//执行任务过程中需要设置标记位方便流程引擎区分
 		runtimeService.setVariable(task.getExecutionId(), "tag", 2);
 		ReceiveSample receiveSample = new ReceiveSample();
@@ -148,10 +158,10 @@ public class ReportService {
 		//设置合同状态为待审核
 		receiveSample.setReportStatus(1);
 		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
-//		ReceiveSample receiveSample = receiveSampleMapper.selectByPrimaryKey(receiveSampleId);
-//		taskService.addComment(taskId,null, comment);
-		taskService.complete(taskId);	
-		
+		if(comment!=null) {
+			taskService.addComment(taskId,reportProcessId, comment);
+		}		
+		taskService.complete(taskId);			
 	}
 	
 	/**
@@ -159,7 +169,7 @@ public class ReportService {
 	 * @param taskId  任务编号
 	 */
 	@Transactional
-	public void doExamineTask(String taskId, String receiveSampleId,String approvePersonId, boolean pass, String comment) {
+	public void doExamineTask(String taskId, String receiveSampleId,String approvePersonName, boolean pass, String comment, String reportProcessId) {
 		TaskService taskService = processEngine.getTaskService();
 		RuntimeService runtimeService = processEngine.getRuntimeService();
 		Task task = (Task) taskService.createTaskQuery().taskId(taskId).list().get(0);
@@ -167,7 +177,7 @@ public class ReportService {
 		if (pass) {
 			runtimeService.setVariable(task.getExecutionId(), "tag", 3);
 			//执行任务过程中动态指定批准人
-			runtimeService.setVariable(task.getExecutionId(), "approvePersonId", approvePersonId);
+			runtimeService.setVariable(task.getExecutionId(), "approvePersonId", approvePersonName);
 		}else {
 			runtimeService.setVariable(task.getExecutionId(), "tag", 1);
 		}
@@ -180,7 +190,9 @@ public class ReportService {
 			receiveSample.setReportStatus(0);
 		}		
 		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
-//		taskService.addComment(taskId, null, comment);
+		if(comment!=null) {
+			taskService.addComment(taskId, reportProcessId, comment);
+		}
 		taskService.complete(taskId);		
 	}
 	
@@ -190,7 +202,7 @@ public class ReportService {
 	 * @param taskId  任务编号
 	 */
 	@Transactional
-	public void doApproveTask(String taskId, String receiveSampleId, boolean pass,String comment) {
+	public void doApproveTask(String taskId, String receiveSampleId, boolean pass,String comment, String reportProcessId) {
 		TaskService taskService = processEngine.getTaskService();
 		RuntimeService runtimeService = processEngine.getRuntimeService();
 		Task task = (Task) taskService.createTaskQuery().taskId(taskId).list().get(0);
@@ -208,7 +220,9 @@ public class ReportService {
 			receiveSample.setReportStatus(1);
 		}	
 		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
-//		taskService.addComment(taskId, null, comment);
+		if(comment!=null) {
+			taskService.addComment(taskId, reportProcessId, comment);
+		}
 		taskService.complete(taskId);
 	}
 	

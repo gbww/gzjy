@@ -12,6 +12,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
+import org.activiti.engine.task.Comment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,7 +126,24 @@ public class ReportController {
 			return Response.fail(e.getMessage());
 		}
 	}
-
+	
+	/**
+	 * 根据任务编号获取评论意见
+	 * @param taskId
+	 * @return List<Comment>
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/process/task/{taskId}/comments", method = RequestMethod.GET)
+	public Response getCommentsByTaskId(@PathVariable String taskId) throws Exception {
+		try {
+			List<Comment> result = reportService.getCommentByTaskId(taskId);
+			return Response.success(result);
+		} catch (Exception e) {
+			logger.error(e + "");
+			return Response.fail(e.getMessage());
+		}
+	}
+	
 	/**
 	 * 执行合同流程中编辑任务
 	 * @param taskId            任务编号
@@ -136,9 +154,10 @@ public class ReportController {
 	 */
 	@RequestMapping(value = "/process/task/edit/{taskId}", method = RequestMethod.GET)
 	public Response completeEditTask(@PathVariable String taskId, @RequestParam(required = true) String receiveSampleId,
-			@RequestParam(required = true) String examinePersonId, @RequestParam(required = false) String comment) {
+			@RequestParam(required = true) String examinePersonName, @RequestParam(required = false) String comment,
+			@RequestParam(required = true)String reportProcessId) {
 		try {
-			reportService.doEditTask(taskId, receiveSampleId, examinePersonId, comment);
+			reportService.doEditTask(taskId, receiveSampleId, examinePersonName, comment, receiveSampleId);
 			return Response.success("success");
 		} catch (Exception e) {
 			logger.error(e + "");
@@ -158,10 +177,10 @@ public class ReportController {
 	@RequestMapping(value = "/process/task/examine/{taskId}", method = RequestMethod.GET)
 	public Response completeExamineTask(@PathVariable String taskId,
 			@RequestParam(required = true) String receiveSampleId,
-			@RequestParam(required = true) String approvePersonId, @RequestParam(required = true) boolean pass,
-			@RequestParam(required = false) String comment) {
+			@RequestParam(required = true) String approvePersonName, @RequestParam(required = true) boolean pass,
+			@RequestParam(required = false) String comment, @RequestParam(required = true)String reportProcessId) {
 		try {
-			reportService.doExamineTask(taskId, receiveSampleId, approvePersonId, pass, comment);
+			reportService.doExamineTask(taskId, receiveSampleId, approvePersonName, pass, comment, reportProcessId);
 			return Response.success("success");
 		} catch (Exception e) {
 			logger.error(e + "");
@@ -180,9 +199,9 @@ public class ReportController {
 	@RequestMapping(value = "/process/task/approve/{taskId}", method = RequestMethod.GET)
 	public Response completeApproveTask(@PathVariable String taskId,
 			@RequestParam(required = true) String receiveSampleId, @RequestParam(required = true) boolean pass,
-			@RequestParam(required = false) String comment) {
+			@RequestParam(required = false) String comment, @RequestParam(required = true)String reportProcessId) {
 		try {
-			reportService.doApproveTask(taskId, receiveSampleId, pass, comment);
+			reportService.doApproveTask(taskId, receiveSampleId, pass, comment, reportProcessId);
 			return Response.success("success");
 		} catch (Exception e) {
 			logger.error(e + "");
