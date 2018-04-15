@@ -75,7 +75,7 @@ public class ReportService {
 		// 设定流程标记tag=1
 		variables.put("tag", 1);
 		// 启动流程引擎时首先要指定编辑人，默认是当前用户
-		variables.put("editPersion", user.getId());
+		variables.put("editPersion", user.getName());
 		String processId = runtimeService.startProcessInstanceByKey("ReportProcess", variables).getId();
 		// 流程启动成功之后将返回的流程ID回填到合同receive_sample表中
 		ReceiveSample receiveSample = new ReceiveSample();
