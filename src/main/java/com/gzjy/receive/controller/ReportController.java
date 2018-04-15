@@ -157,7 +157,7 @@ public class ReportController {
 			@RequestParam(required = true) String examinePersonName, @RequestParam(required = false) String comment,
 			@RequestParam(required = true)String reportProcessId) {
 		try {
-			reportService.doEditTask(taskId, receiveSampleId, examinePersonName, comment, receiveSampleId);
+			reportService.doEditTask(taskId, receiveSampleId, examinePersonName, comment, reportProcessId);
 			return Response.success("success");
 		} catch (Exception e) {
 			logger.error(e + "");
@@ -213,7 +213,7 @@ public class ReportController {
 	 * 查看待编辑报告列表
 	 */
 	@RequestMapping(value = "/list/edit", method = RequestMethod.GET)
-	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
+//	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
 	public Response getEditListReports(
 			@RequestParam(name = "receiveSampleId", required = false) String id,
 			@RequestParam(name = "reportId", required = false) String reportId,
@@ -243,7 +243,7 @@ public class ReportController {
 	 * 查看待审核报告列表
 	 */
 	@RequestMapping(value = "/list/examine", method = RequestMethod.GET)
-	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
+//	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
 	public Response getExamineListReports(
 			@RequestParam(name = "receiveSampleId", required = false) String id,
 			@RequestParam(name = "reportId", required = false) String reportId,
@@ -272,7 +272,7 @@ public class ReportController {
 	 * 查看待批准报告列表
 	 */
 	@RequestMapping(value = "/list/approve", method = RequestMethod.GET)
-	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
+//	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
 	public Response getApproveListReports(
 			@RequestParam(name = "receiveSampleId", required = false) String id,
 			@RequestParam(name = "reportId", required = false) String reportId,
@@ -301,7 +301,7 @@ public class ReportController {
 	 * 查看待打印报告列表
 	 */
 	@RequestMapping(value = "/list/print", method = RequestMethod.GET)
-	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
+//	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
 	public Response getPrintListReports(
 			@RequestParam(name = "receiveSampleId", required = false) String id,
 			@RequestParam(name = "reportId", required = false) String reportId,
@@ -331,7 +331,7 @@ public class ReportController {
 	 * 查看已完成报告列表
 	 */
 	@RequestMapping(value = "/list/finish", method = RequestMethod.GET)
-	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
+//	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
 	public Response getFinishListReports(
 			@RequestParam(name = "receiveSampleId", required = false) String id,
 			@RequestParam(name = "reportId", required = false) String reportId,
@@ -360,7 +360,7 @@ public class ReportController {
 	 * 查看所有报告列表
 	 */
 	@RequestMapping(value = "/list/all", method = RequestMethod.GET)
-	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
+//	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
 	public Response getAllListReports(
 			@RequestParam(name = "receiveSampleId", required = false) String id,
 			@RequestParam(name = "reportId", required = false) String reportId,
@@ -391,7 +391,7 @@ public class ReportController {
 	 * @return
 	 */
 	@RequestMapping(value = "/list/{receiveSampleId}", method = RequestMethod.GET)
-	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
+//	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
 	public Response detailReportItem(@PathVariable(name = "receiveSampleId", required = true) String receiveSampleId) {
 		try {
 			List<ReceiveSampleItem> getReceiveSampleItemList = reportService.getReceiveSampleItemList(receiveSampleId);
@@ -407,7 +407,7 @@ public class ReportController {
 	 * @return
 	 */
 	@RequestMapping(value = "/item/{receiveSampleItemId}", method = RequestMethod.PUT)
-	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
+//	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
 	public Response detailReport(@PathVariable(name = "receiveSampleItemId", required = true) String receiveSampleItemId) {
 		ReceiveSampleItem record = new ReceiveSampleItem();
 		record.setId(receiveSampleItemId);
@@ -426,7 +426,7 @@ public class ReportController {
 	 * @return
 	 */
 	@RequestMapping(value = "/{receiveSampleItemId}/property/qianfa", method = RequestMethod.PUT)
-	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
+//	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
 	public Response updateQianfa(
 			@PathVariable(name = "receiveSampleItemId", required = true) String receiveSampleItemId,
 			@RequestParam(required = true)String qianfaDate) {
@@ -448,7 +448,7 @@ public class ReportController {
 	 * @return
 	 */
 	@RequestMapping(value = "/template/bind", method = RequestMethod.POST)
-	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
+//	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
 	public Response receiveBindTemplate(@RequestBody ReportExtend reportExtend) {
 		reportExtend.setId(ShortUUID.getInstance().generateShortID());		
 		try {
@@ -466,7 +466,7 @@ public class ReportController {
 	 * @return
 	 */
 	@RequestMapping(value = "/template/bind/{id}", method = RequestMethod.PUT)
-	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
+//	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
 	public Response receiveBindTemplateEdit(
 			@PathVariable(name = "id", required = true) String id,
 			@RequestParam(name = "reportId", required = true) String reportId,
@@ -494,7 +494,7 @@ public class ReportController {
 	 * @return
 	 */
 	@RequestMapping(value = "/template/bind/{id}", method = RequestMethod.DELETE)
-	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
+//	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
 	public Response receiveBindTemplateEdit(@PathVariable(name = "id", required = true) String id){
 		try {
 			reportService.deleteReportExtend(id);
@@ -510,7 +510,7 @@ public class ReportController {
 	 * @return
 	 */
 	@RequestMapping(value = "/export", method = RequestMethod.GET)
-	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
+//	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
 	public Response exportReport(@RequestParam(name = "receiveSampleId", required = true) String receiveSampleId,
 			HttpServletResponse response){
 		try {
