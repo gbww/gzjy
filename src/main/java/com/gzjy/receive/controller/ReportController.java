@@ -1,5 +1,6 @@
 package com.gzjy.receive.controller;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -35,6 +36,7 @@ import com.gzjy.receive.model.ReceiveSampleTask;
 import com.gzjy.receive.model.ReportExtend;
 import com.gzjy.receive.service.ReceiveSampleService;
 import com.gzjy.receive.service.ReportService;
+import com.gzjy.template.mapper.TemplateMapper;
 import com.gzjy.user.UserService;
 
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -55,6 +57,8 @@ public class ReportController {
 	ReceiveSampleService receiveSampleService;
 	@Autowired
 	ReportExtendMapper reportExtendMapper;
+	@Autowired
+	TemplateMapper templateMapper;
 	@Autowired
 	private DataSource dataSource; 
 	@Autowired
@@ -406,13 +410,15 @@ public class ReportController {
 	 * 修改报告中的检验项
 	 * @return
 	 */
-	@RequestMapping(value = "/item/{receiveSampleItemId}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/item/{receiveSampleItemId}", method = RequestMethod.POST)
 //	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
-	public Response detailReport(@PathVariable(name = "receiveSampleItemId", required = true) String receiveSampleItemId) {
-		ReceiveSampleItem record = new ReceiveSampleItem();
-		record.setId(receiveSampleItemId);
+	public Response detailReport(@RequestBody List<ReceiveSampleItem> items) {
+		
+		
 		try {
+		    for(ReceiveSampleItem record:items) {
 			reportService.updateReceiveSampleItem(record);
+		    }
 			return Response.success("success");
 		} catch (Exception e) {
 			logger.error(e + "");
@@ -513,13 +519,16 @@ public class ReportController {
 //	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
 	public Response exportReport(@RequestParam(name = "receiveSampleId", required = true) String receiveSampleId,
 			HttpServletResponse response){
-		try {
+	    OutputStream out=null;
+	    try {
 			ReceiveSample result = receiveSampleService.getReceiveSample(receiveSampleId);
 			if(result==null) {
 				return Response.fail("未查询到对应的报告信息");
 			}
 			ReportExtend reportExtend = reportExtendMapper.selectByReportId(receiveSampleId);
-			String templateDir = "/var/lib/docs/gzjy/template/"+reportExtend.getTemplateName();			
+			String templateName=templateMapper.selectById(reportExtend.getTemplateId()).getExcelName();
+			
+			String templateDir = "/var/lib/docs/gzjy/template/"+templateName ;			
 			//设定报表所需要的外部参数内容
 		    Map<String, Object> rptParameters = new HashMap<String, Object>();		    
 		    rptParameters.put("receiveSampleId", receiveSampleId);
@@ -527,21 +536,69 @@ public class ReportController {
 		    JasperPrint jasperPrint = JasperFillManager.fillReport(templateDir, rptParameters, dataSource.getConnection());
 		    response.reset();
 			response.setContentType("application/octet-stream;charset=UTF-8");
+			//response.setDateHeader("Expires", 0); // 清除页面缓存
 			response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(receiveSampleId+".pdf", "UTF-8"));
-			OutputStream out = response.getOutputStream();
+			 out = response.getOutputStream();
 			JasperExportManager.exportReportToPdfStream(jasperPrint, out);
-			if(out!=null) {
-				out.close();
-			}
+			out.flush();		
 		    logger.info("Export success!!");
 			return Response.success("success");
 		} catch (Exception e) {
 			logger.error(e + "");
 			return Response.fail(e.getMessage());
 		}finally {
-			
+		    if(out!=null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
 		}
 	}
+	
+	
+	
+	   /**
+     * 报告的html
+     * @return
+     */
+    @RequestMapping(value = "/exportHtml", method = RequestMethod.GET)
+//  @Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
+    public Response viewReportHtml(@RequestParam(name = "receiveSampleId", required = true) String receiveSampleId,
+            HttpServletResponse response){
+        try {
+            ReceiveSample result = receiveSampleService.getReceiveSample(receiveSampleId);
+            if(result==null) {
+                return Response.fail("未查询到对应的报告信息");
+            }
+            ReportExtend reportExtend = reportExtendMapper.selectByReportId(receiveSampleId);
+            String templateDir = "/var/lib/docs/gzjy/template/"+reportExtend.getTemplateName();         
+            //设定报表所需要的外部参数内容
+            Map<String, Object> rptParameters = new HashMap<String, Object>();          
+            rptParameters.put("receiveSampleId", receiveSampleId);
+            //传入报表源文件绝对路径，外部参数对象，DB连接，得到JasperPring对象
+            JasperPrint jasperPrint = JasperFillManager.fillReport(templateDir, rptParameters, dataSource.getConnection());
+            response.reset();
+            response.setContentType("text/html;charset=UTF-8");
+            //response.setDateHeader("Expires", 0); // 清除页面缓存
+            response.setHeader("Content-disposition", "inline;filename=" + URLEncoder.encode(receiveSampleId+".pdf", "UTF-8"));
+            OutputStream out = response.getOutputStream();
+            JasperExportManager.exportReportToPdfStream(jasperPrint, out);
+         
+            if(out!=null) {
+                out.close();
+            }
+            logger.info("Export success!!");
+            return Response.success("success");
+        } catch (Exception e) {
+            logger.error(e + "");
+            return Response.fail(e.getMessage());
+        }finally {
+            
+        }
+    }
 	
 	
 }
