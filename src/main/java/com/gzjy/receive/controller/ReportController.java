@@ -27,6 +27,7 @@ import com.github.pagehelper.PageInfo;
 import com.gzjy.common.Response;
 import com.gzjy.common.ShortUUID;
 import com.gzjy.common.annotation.Privileges;
+import com.gzjy.common.exception.BizException;
 import com.gzjy.common.util.fs.EpicNFSClient;
 import com.gzjy.common.util.fs.EpicNFSService;
 import com.gzjy.receive.mapper.ReportExtendMapper;
@@ -42,6 +43,11 @@ import com.gzjy.user.UserService;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.export.HtmlExporter;
+import net.sf.jasperreports.engine.export.JRXmlExporter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleHtmlExporterOutput;
+import net.sf.jasperreports.export.SimpleXmlExporterOutput;
 
 @RestController
 @RequestMapping(value = "v1/ahgz/report")
@@ -566,7 +572,7 @@ public class ReportController {
      */
     @RequestMapping(value = "/exportHtml", method = RequestMethod.GET)
 //  @Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
-    public Response viewReportHtml(@RequestParam(name = "receiveSampleId", required = true) String receiveSampleId,
+    public Response viewReportHtml(@RequestParam(name = "receiveSampleId", required = true) String receiveSampleId,@RequestParam(name = "type", required = true) String type,
             HttpServletResponse response){
         try {
             ReceiveSample result = receiveSampleService.getReceiveSample(receiveSampleId);
@@ -574,19 +580,43 @@ public class ReportController {
                 return Response.fail("未查询到对应的报告信息");
             }
             ReportExtend reportExtend = reportExtendMapper.selectByReportId(receiveSampleId);
-            String templateDir = "/var/lib/docs/gzjy/template/"+reportExtend.getTemplateName();         
+           if(reportExtend==null) {
+               throw new BizException("报告模板不存在");
+           }
+            String templateName=templateMapper.selectById(reportExtend.getTemplateId()).getExcelName(); 
+            String templateDir = "/var/lib/docs/gzjy/template/"+templateName ;               
+            
             //设定报表所需要的外部参数内容
             Map<String, Object> rptParameters = new HashMap<String, Object>();          
             rptParameters.put("receiveSampleId", receiveSampleId);
             //传入报表源文件绝对路径，外部参数对象，DB连接，得到JasperPring对象
             JasperPrint jasperPrint = JasperFillManager.fillReport(templateDir, rptParameters, dataSource.getConnection());
             response.reset();
-            response.setContentType("text/html;charset=UTF-8");
-            //response.setDateHeader("Expires", 0); // 清除页面缓存
-            response.setHeader("Content-disposition", "inline;filename=" + URLEncoder.encode(receiveSampleId+".pdf", "UTF-8"));
+            
             OutputStream out = response.getOutputStream();
-            JasperExportManager.exportReportToPdfStream(jasperPrint, out);
-         
+           if(type.equals("xml")) {
+               response.setContentType("text/html;charset=UTF-8");
+               //response.setDateHeader("Expires", 0); // 清除页面缓存
+               response.setHeader("Content-disposition", "inline;filename=" + URLEncoder.encode(receiveSampleId+".xml", "UTF-8"));
+            JasperExportManager.exportReportToXmlStream(jasperPrint, out);
+           }
+           else if(type.equals("html")) {
+               response.setContentType("text/html;charset=UTF-8");
+               //response.setDateHeader("Expires", 0); // 清除页面缓存
+               response.setHeader("Content-disposition", "inline;filename=" + URLEncoder.encode(receiveSampleId+".html", "UTF-8"));
+               HtmlExporter exporter = new HtmlExporter();              
+               exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+               exporter.setExporterOutput(new SimpleHtmlExporterOutput(out));         
+               exporter.exportReport();
+               
+           }
+           else if(type.equals("pdf")) {
+               response.setContentType("application/pdf;charset=UTF-8");
+               //response.setDateHeader("Expires", 0); // 清除页面缓存
+               response.setHeader("Content-disposition", "inline;filename=" + URLEncoder.encode(receiveSampleId+".pdf", "UTF-8"));
+               JasperExportManager.exportReportToPdfStream(jasperPrint, out);
+           }
+            out.flush();
             if(out!=null) {
                 out.close();
             }
