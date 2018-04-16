@@ -531,7 +531,10 @@ public class ReportController {
 			if(result==null) {
 				return Response.fail("未查询到对应的报告信息");
 			}
-			ReportExtend reportExtend = reportExtendMapper.selectByReportId(receiveSampleId);
+			ReportExtend reportExtend = reportExtendMapper.selectByReportId(result.getReportId());
+			  if(reportExtend==null) {
+	               throw new BizException("报告模板不存在");
+	           }
 			String templateName=templateMapper.selectById(reportExtend.getTemplateId()).getExcelName();
 			
 			String templateDir = "/var/lib/docs/gzjy/template/"+templateName ;			
@@ -567,23 +570,24 @@ public class ReportController {
 	
 	
 	   /**
-     * 报告的html
+     * 预览报告
      * @return
      */
-    @RequestMapping(value = "/exportHtml", method = RequestMethod.GET)
+    @RequestMapping(value = "/preview", method = RequestMethod.GET)
 //  @Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
-    public Response viewReportHtml(@RequestParam(name = "receiveSampleId", required = true) String receiveSampleId,@RequestParam(name = "type", required = true) String type,
+    public Response viewReport(@RequestParam(name = "receiveSampleId", required = true) String receiveSampleId,@RequestParam(name = "type", required = true) String type,
             HttpServletResponse response){
         try {
             ReceiveSample result = receiveSampleService.getReceiveSample(receiveSampleId);
             if(result==null) {
                 return Response.fail("未查询到对应的报告信息");
             }
-            ReportExtend reportExtend = reportExtendMapper.selectByReportId(receiveSampleId);
+            ReportExtend reportExtend = reportExtendMapper.selectByReportId(result.getReportId());
+            
            if(reportExtend==null) {
                throw new BizException("报告模板不存在");
            }
-            String templateName=templateMapper.selectById(reportExtend.getTemplateId()).getExcelName(); 
+           String templateName=templateMapper.selectById(reportExtend.getTemplateId()).getExcelName();
             String templateDir = "/var/lib/docs/gzjy/template/"+templateName ;               
             
             //设定报表所需要的外部参数内容

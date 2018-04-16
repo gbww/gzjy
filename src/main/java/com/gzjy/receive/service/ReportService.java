@@ -88,7 +88,7 @@ public class ReportService {
 	}
 
 	/**
-	 * 根据用户ID获取当前用户任务
+	 * 根据用户name获取当前用户任务
 	 * @param isHandle(0表示查詢未完成任務，1表示查詢已完成任務)
 	 * @return ArrayList<ContractTask>
 	 */	
