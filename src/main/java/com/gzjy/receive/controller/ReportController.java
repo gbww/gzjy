@@ -3,6 +3,7 @@ package com.gzjy.receive.controller;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import org.activiti.engine.task.Comment;
+import org.bouncycastle.util.encoders.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +25,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.github.pagehelper.PageInfo;
 import com.gzjy.common.Response;
 import com.gzjy.common.ShortUUID;
-import com.gzjy.common.annotation.Privileges;
 import com.gzjy.common.exception.BizException;
-import com.gzjy.common.util.fs.EpicNFSClient;
 import com.gzjy.common.util.fs.EpicNFSService;
 import com.gzjy.receive.mapper.ReportExtendMapper;
 import com.gzjy.receive.model.ReceiveSample;
@@ -40,20 +41,21 @@ import com.gzjy.receive.service.ReportService;
 import com.gzjy.template.mapper.TemplateMapper;
 import com.gzjy.user.UserService;
 
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.export.HtmlExporter;
-import net.sf.jasperreports.engine.export.JRXmlExporter;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleHtmlExporterOutput;
-import net.sf.jasperreports.export.SimpleXmlExporterOutput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 
 @RestController
 @RequestMapping(value = "v1/ahgz/report")
 
 public class ReportController {
-	private static Logger logger = LoggerFactory.getLogger(ReportService.class);
+	private static Logger logger = LoggerFactory.getLogger(ReportController.class);
 
 	@Autowired
 	private ReportService reportService;
@@ -610,7 +612,10 @@ public class ReportController {
                response.setHeader("Content-disposition", "inline;filename=" + URLEncoder.encode(receiveSampleId+".html", "UTF-8"));
                HtmlExporter exporter = new HtmlExporter();              
                exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-               exporter.setExporterOutput(new SimpleHtmlExporterOutput(out));         
+               exporter.setExporterOutput(new SimpleHtmlExporterOutput(out));   
+               
+            
+            
                exporter.exportReport();
                
            }
@@ -620,6 +625,7 @@ public class ReportController {
                response.setHeader("Content-disposition", "inline;filename=" + URLEncoder.encode(receiveSampleId+".pdf", "UTF-8"));
                JasperExportManager.exportReportToPdfStream(jasperPrint, out);
            }
+           
             out.flush();
             if(out!=null) {
                 out.close();
@@ -633,6 +639,90 @@ public class ReportController {
             
         }
     }
+    
+    
+    /**
+  * 批量预览pdf报告
+  * @return
+  */
+ @RequestMapping(value = "/preview", method = RequestMethod.POST)
+//@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
+ public Response batchviewReport(@RequestBody() List<String> receiveSampleIds,
+         HttpServletResponse response){
+     List<JasperPrint> prints=new ArrayList<JasperPrint>();
+     OutputStream out=null;
+     for(String id:receiveSampleIds) {
+         ReceiveSample node = receiveSampleService.getReceiveSample(id);
+         if(node==null) {
+             logger.error("抽验单编号："+id+"不存在");
+         }
+         else {
+             ReportExtend reportExtend = reportExtendMapper.selectByReportId(node.getReportId());
+             
+             if(reportExtend==null) {
+                 logger.error("抽验单编号："+id+"的模板不存在");
+             }
+             else {
+                 String templateName=templateMapper.selectById(reportExtend.getTemplateId()).getExcelName();
+                 String templateDir = "/var/lib/docs/gzjy/template/"+templateName ; 
+                 Map<String, Object> rptParameters = new HashMap<String, Object>();          
+                 rptParameters.put("receiveSampleId", id);
+                 //传入报表源文件绝对路径，外部参数对象，DB连接，得到JasperPring对象
+                 JasperPrint jasperPrint=new JasperPrint();
+                  try {
+                    jasperPrint = JasperFillManager.fillReport(templateDir, rptParameters, dataSource.getConnection());
+                } catch (Exception e) {                   
+                    e.printStackTrace();
+                    return Response.fail(e.getMessage());
+                } 
+                  prints.add(jasperPrint);
+             }
+         }
+     }
+     if(prints.size()==0) {
+         logger.error("没有打印的报告");
+         return Response.fail("没有打印的报告");
+     }
+     else {
+          
+         try {
+             response.reset();
+             response.setContentType("application/pdf;charset=UTF-8");
+             //response.setContentType("arraybuffer;charset=UTF-8");
+             //response.setDateHeader("Expires", 0); // 清除页面缓存
+             response.setHeader("Content-disposition", "inline;filename=" + URLEncoder.encode(UUID.randomUUID()+".pdf", "UTF-8"));
+             out = response.getOutputStream();
+            JRPdfExporter exporter = new JRPdfExporter();
+            exporter.setExporterInput(SimpleExporterInput.getInstance(prints));
+            exporter.setExporterOutput(
+                    new SimpleOutputStreamExporterOutput(out));
+            exporter.exportReport();
+            out.flush();
+           
+            logger.info("batchExport success!!");
+            return Response.success("success");
+        } catch (Exception e) {
+            logger.error(e + "");
+            return Response.fail(e.getMessage());
+        }
+         finally {
+             if (out != null) {
+                 try {
+                    out.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+             } 
+        }
+         
+     }
+ }
+     
+   
+     
+ 
+ 
 	
 	
 }

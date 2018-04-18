@@ -93,17 +93,19 @@ public class ReceiveSampleController {
 	    Map<String, Object> rptParameters = new HashMap<String, Object>();
 	       //rptParameters.put("name", "薛文龙");
 	      // rptParameters.put("age", "12");
-	    rptParameters.put("id", "F201233");
+	    rptParameters.put("receiveSampleId", "F22121");
 	       
 	       //传入报表源文件绝对路径，外部参数对象，DB连接，得到JasperPring对象
 	      // JasperPrint jasperPrint = JasperFillManager.fillReport("F:/Blank_A4.jasper", rptParameters, new JREmptyDataSource());
-	       JasperPrint jasperPrint = JasperFillManager.fillReport("F:/Coffee1.jasper", rptParameters, dataSource.getConnection());
+	       JasperPrint jasperPrint = JasperFillManager.fillReport("E:/var/lib/docs/gzjy/template/standard.jasper", rptParameters, dataSource.getConnection());
 	       
-	       JasperExportManager.exportReportToHtmlFile(jasperPrint,"F:/a4.html");
+	       JasperExportManager.exportReportToHtmlFile(jasperPrint,"F:/standard.html");
 	      
-	       
+	       JasperExportManager.exportReportToPdfFile(jasperPrint, "F:/standard.xml");
+	       String xmlexport =JasperExportManager.exportReportToXml(jasperPrint);
+	       System.out.println(xmlexport);
 	       //导出PDF文件
-	       JasperExportManager.exportReportToPdfFile(jasperPrint, "F:/a4.pdf");
+	       JasperExportManager.exportReportToPdfFile(jasperPrint, "F:/standard.pdf");
 	       
 	       //导入HTML文件
 	      // JasperExportManager.exportReportToHtmlFile(jasperPrint, "D:/temp/jasper_test/test.html");
