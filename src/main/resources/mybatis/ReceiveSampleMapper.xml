@@ -67,6 +67,7 @@
     <result column="report_process_id" property="reportProcessId" jdbcType="VARCHAR" />
     <result column="appendix" property="appendix" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="devices" property="devices" jdbcType="VARCHAR" />
     <result column="report_status" property="reportStatus" jdbcType="INTEGER" />
     <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -82,7 +83,7 @@
     finish_date, protocol_id, subpackage, result, determine, approval_user, examine_user, 
     draw_user, principal_inspector, liuyang_count, food_dalei, food_yalei, food_ciyalei, 
     food_xilei, qianfa_date, sample_leixing, package_classify, zhibaoqi, licence, report_process_id, 
-    appendix, status, report_status, created_at
+    appendix, status,devices, report_status, created_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -180,7 +181,7 @@
       food_ciyalei, food_xilei, qianfa_date, 
       sample_leixing, package_classify, zhibaoqi, 
       licence, report_process_id, appendix, 
-      status, report_status, created_at
+      status, devices,report_status, created_at
       )
     values (#{receiveSampleId,jdbcType=CHAR}, #{reportId,jdbcType=CHAR}, #{sampleType,jdbcType=VARCHAR}, 
       #{checkType,jdbcType=VARCHAR}, #{entrustedUnit,jdbcType=VARCHAR}, #{entrustedUnitAddress,jdbcType=VARCHAR}, 
@@ -204,7 +205,7 @@
       #{foodCiyalei,jdbcType=VARCHAR}, #{foodXilei,jdbcType=VARCHAR}, #{qianfaDate,jdbcType=TIMESTAMP}, 
       #{sampleLeixing,jdbcType=VARCHAR}, #{packageClassify,jdbcType=VARCHAR}, #{zhibaoqi,jdbcType=INTEGER}, 
       #{licence,jdbcType=VARCHAR}, #{reportProcessId,jdbcType=VARCHAR}, #{appendix,jdbcType=VARCHAR}, 
-      #{status,jdbcType=INTEGER}, #{reportStatus,jdbcType=INTEGER}, #{createdAt,jdbcType=TIMESTAMP}
+      #{status,jdbcType=INTEGER},#{devices,jdbcType=VARCHAR}, #{reportStatus,jdbcType=INTEGER}, #{createdAt,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.gzjy.receive.model.ReceiveSample" >
@@ -404,6 +405,9 @@
       </if>
       <if test="status != null" >
         status,
+      </if>
+      <if test="devices != null" >
+        devices,
       </if>
       <if test="reportStatus != null" >
         report_status,
@@ -608,6 +612,9 @@
       <if test="status != null" >
         #{status,jdbcType=INTEGER},
       </if>
+      <if test="devices != null" >
+        #{devices,jdbcType=VARCHAR},
+      </if>
       <if test="reportStatus != null" >
         #{reportStatus,jdbcType=INTEGER},
       </if>
@@ -811,6 +818,9 @@
       <if test="status != null" >
         status = #{status,jdbcType=INTEGER},
       </if>
+      <if test="devices != null" >
+        devices = #{devices,jdbcType=VARCHAR},
+      </if>
       <if test="reportStatus != null" >
         report_status = #{reportStatus,jdbcType=INTEGER},
       </if>
@@ -886,6 +896,7 @@
       report_process_id = #{reportProcessId,jdbcType=VARCHAR},
       appendix = #{appendix,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
+      devices = #{devices,jdbcType=VARCHAR},
       report_status = #{reportStatus,jdbcType=INTEGER},
       created_at = #{createdAt,jdbcType=TIMESTAMP}
     where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}

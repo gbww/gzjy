@@ -158,6 +158,16 @@ public class ReceiveSample implements Serializable{
     private Date createdAt;
     //报告状态（0:待编辑，1：待审核、2待批准、3、待打印，4、完成）5作为查询时判断是否是全部查询的判断
     private Integer reportStatus;
+    //主要设备
+    private String devices;
+
+    public String getDevices() {
+        return devices;
+    }
+
+    public void setDevices(String devices) {
+        this.devices = devices;
+    }
 
     public String getReceiveSampleId() {
         return receiveSampleId;
