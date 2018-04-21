@@ -15,6 +15,7 @@ import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -427,5 +428,10 @@ public class ReportService {
 			throw new BizException("输入的时间格式不合法！");
 		}
 		return receiveSampleService.select(pageNum, pageSize, order, filter, start, end);
+	}
+	
+	
+	public int mutiUpdateReportStatusByReceiveSampleIdList(String reportStatus,List<String> receiveSampleIdList) {
+		return receiveSampleMapper.mutiUpdateReportStatusByReceiveSampleIdList(reportStatus, receiveSampleIdList);
 	}
 }

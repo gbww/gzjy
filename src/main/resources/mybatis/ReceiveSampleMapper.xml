@@ -830,6 +830,22 @@
     </set>
     where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}
   </update>
+  
+  
+  <update id="mutiUpdateReportStatusByReceiveSampleIdList" >
+    update receive_sample
+    <set >
+      <if test="reportStatus != null" >
+        report_status = #{reportStatus,jdbcType=CHAR},
+      </if>      
+    </set>
+    where receive_sample_id in 
+    <foreach collection="receiveSampleIdList" item="receiveSampleId" index="index"
+           open="(" close=")" separator=",">
+           #{receiveSampleId}
+    </foreach>
+  </update>
+  
   <update id="updateByPrimaryKey" parameterType="com.gzjy.receive.model.ReceiveSample" >
     update receive_sample
     set report_id = #{reportId,jdbcType=CHAR},
