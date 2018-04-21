@@ -156,6 +156,24 @@ public class ReportController {
 		}
 	}
 	
+	
+	/**
+	 * 根据流程引擎编号processId获取评论意见
+	 * @param processId
+	 * @return List<Comment>
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/process/task/{processId}/comments/all", method = RequestMethod.GET)
+	public Response getCommentsByProcessId(@PathVariable String processId) throws Exception {
+		try {
+			List<Comment> result = reportService.getCommentByProcessId(processId);
+			return Response.success(result);
+		} catch (Exception e) {
+			logger.error(e + "");
+			return Response.fail(e.getMessage());
+		}
+	}
+	
 	/**
 	 * 执行合同流程中编辑任务
 	 * @param taskId            任务编号
@@ -244,10 +262,18 @@ public class ReportController {
 			@RequestParam(value = "startTime", required = false) String startTime,
 			@RequestParam(value = "endTime", required = false) String endTime) {
 
-		PageInfo<ReceiveSample> result = reportService.getReportByCondition(
+		PageInfo<ReceiveSample> reports = reportService.getReportByCondition(
 				id,reportId,entrustedUnit,inspectedUnit,sampleName,executeStandard,productionUnit,
-				sampleType,checkType,0,order,status,pageNum,pageSize,startTime,endTime);
-		return Response.success(result);
+				sampleType,checkType,0,order,status,pageNum,pageSize,startTime,endTime,"draw_user");
+		List<Object> data= new ArrayList<Object>();
+		for(ReceiveSample receiveSample : reports.getList()) {
+			HashMap<String, Object> result = new HashMap<String, Object>();
+			HashMap<Integer, ArrayList<ReceiveSampleTask>> task = reportService.getAllContractTaskByUserName(receiveSample.getReportProcessId());
+			result.put("report",receiveSample);
+			result.put("task",task);
+			data.add(result);
+		}
+		return Response.success(data);
 	}
 	
 	
@@ -274,10 +300,18 @@ public class ReportController {
 			@RequestParam(value = "startTime", required = false) String startTime,
 			@RequestParam(value = "endTime", required = false) String endTime) {
 
-		PageInfo<ReceiveSample> result = reportService.getReportByCondition(
+		PageInfo<ReceiveSample> reports = reportService.getReportByCondition(
 				id,reportId,entrustedUnit,inspectedUnit,sampleName,executeStandard,productionUnit,
-				sampleType,checkType,1,order,status,pageNum,pageSize,startTime,endTime);
-		return Response.success(result);
+				sampleType,checkType,1,order,status,pageNum,pageSize,startTime,endTime, "examine_user");
+		List<Object> data= new ArrayList<Object>();
+		for(ReceiveSample receiveSample : reports.getList()) {
+			HashMap<String, Object> result = new HashMap<String, Object>();
+			HashMap<Integer, ArrayList<ReceiveSampleTask>> task = reportService.getAllContractTaskByUserName(receiveSample.getReportProcessId());
+			result.put("report",receiveSample);
+			result.put("task",task);
+			data.add(result);
+		}
+		return Response.success(data);
 	}
 	
 	/**
@@ -305,7 +339,7 @@ public class ReportController {
 
 		PageInfo<ReceiveSample> result = reportService.getReportByCondition(
 				id,reportId,entrustedUnit,inspectedUnit,sampleName,executeStandard,productionUnit,
-				sampleType,checkType,2,order,status,pageNum,pageSize,startTime,endTime);
+				sampleType,checkType,2,order,status,pageNum,pageSize,startTime,endTime,"approval_user");
 		return Response.success(result);
 	}
 	
@@ -334,7 +368,7 @@ public class ReportController {
 
 		PageInfo<ReceiveSample> result = reportService.getReportByCondition(
 				id,reportId,entrustedUnit,inspectedUnit,sampleName,executeStandard,productionUnit,
-				sampleType,checkType,3,order,status,pageNum,pageSize,startTime,endTime);
+				sampleType,checkType,3,order,status,pageNum,pageSize,startTime,endTime,"");
 		return Response.success(result);
 	}
 	
@@ -364,7 +398,7 @@ public class ReportController {
 
 		PageInfo<ReceiveSample> result = reportService.getReportByCondition(
 				id,reportId,entrustedUnit,inspectedUnit,sampleName,executeStandard,productionUnit,
-				sampleType,checkType,4,order,status,pageNum,pageSize,startTime,endTime);
+				sampleType,checkType,4,order,status,pageNum,pageSize,startTime,endTime, "");
 		return Response.success(result);
 	}
 	
@@ -393,7 +427,7 @@ public class ReportController {
 
 		PageInfo<ReceiveSample> result = reportService.getReportByCondition(
 				id,reportId,entrustedUnit,inspectedUnit,sampleName,executeStandard,productionUnit,
-				sampleType,checkType,null,order,status,pageNum,pageSize,startTime,endTime);
+				sampleType,checkType,null,order,status,pageNum,pageSize,startTime,endTime,"");
 		return Response.success(result);
 	}
 	

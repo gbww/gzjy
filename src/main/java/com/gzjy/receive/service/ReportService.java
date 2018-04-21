@@ -77,9 +77,7 @@ public class ReportService {
 		// 启动流程引擎时首先要指定编辑人，默认是当前用户
 		variables.put("editPersion", user.getName());
 		String processId = runtimeService.startProcessInstanceByKey("ReportProcess", variables).getId();
-		logger.info("***************************************");
-		logger.info("processId="+processId);
-		logger.info("***************************************");
+//		String processId = runtimeService.startProcessInstanceById("ReportProcess", receiveSampleId, variables).getId();		
 		// 流程启动成功之后将返回的流程ID回填到合同receive_sample表中
 		ReceiveSample receiveSample = new ReceiveSample();
 		receiveSample.setReceiveSampleId(receiveSampleId);		
@@ -131,6 +129,46 @@ public class ReportService {
 		}
 		return taskList;
 	}
+	
+	/**
+	 * 根据用户name获取当前用户任务(已完成/未完成)
+	 * @return ArrayList<ContractTask>
+	 */	
+	public HashMap<Integer, ArrayList<ReceiveSampleTask>> getAllContractTaskByUserName(String processId) {
+		String userName = userService.getCurrentUser().getName();
+		ArrayList<ReceiveSampleTask> taskListReady = new ArrayList<ReceiveSampleTask>();
+		ArrayList<ReceiveSampleTask> taskListComplete = new ArrayList<ReceiveSampleTask>();
+		TaskService taskService = processEngine.getTaskService();
+		List<Task> tasksReady = taskService.createTaskQuery().taskAssignee(userName).processDefinitionId(processId).list();
+		for (Task task : tasksReady) {
+			ReceiveSampleTask contractTask = new ReceiveSampleTask();
+			contractTask.setId(task.getId());
+			contractTask.setName(task.getName());
+			contractTask.setAssignee(task.getAssignee());
+			contractTask.setCreateTime(task.getCreateTime());
+			contractTask.setProcessInstanceId(task.getProcessInstanceId());
+			contractTask.setExecutionId(task.getExecutionId());
+			taskListReady.add(contractTask);
+		}		
+		HistoryService historyService = processEngine.getHistoryService();
+		List<HistoricTaskInstance> tasksComplete = historyService.createHistoricTaskInstanceQuery().finished()
+					.taskAssignee(userName).processDefinitionId(processId).list();			
+		for (HistoricTaskInstance task : tasksComplete) {				
+			ReceiveSampleTask contractTask = new ReceiveSampleTask();
+			contractTask.setId(task.getId());
+			contractTask.setName(task.getName());
+			contractTask.setAssignee(task.getAssignee());
+			contractTask.setCreateTime(task.getCreateTime());
+			contractTask.setProcessInstanceId(task.getProcessInstanceId());
+			contractTask.setExecutionId(task.getExecutionId());
+			taskListComplete.add(contractTask);
+		}
+		HashMap<Integer, ArrayList<ReceiveSampleTask>> result = new HashMap<Integer, ArrayList<ReceiveSampleTask>>();
+		result.put(0, taskListReady);
+		result.put(1, taskListComplete);
+		return result;
+	}
+
 
 	/**
 	 * 根据任务编号获取报告评论意见
@@ -139,6 +177,26 @@ public class ReportService {
 		TaskService taskService = processEngine.getTaskService();
 		List<Comment> commentResult =taskService.getTaskComments(taskId);
 		return commentResult;
+	}
+	
+	/**
+	 * 根据任务processId获取报告评论意见
+	 */	
+	public List<Comment> getCommentByProcessId(String processId) {	
+		List <Comment>list = new ArrayList<Comment>();
+		TaskService taskService=processEngine.getTaskService();	
+		/*HistoryService historyService=processEngine.getHistoryService();
+		List<HistoricTaskInstance> htiList =historyService.createHistoricTaskInstanceQuery().processInstanceId(processId).list();		
+		//遍历集合，获取每个任务ID
+		if(htiList!=null && htiList.size()>0){
+			for(HistoricTaskInstance hti:htiList){
+				String htaskId = hti.getId();				
+				List <Comment>taskList = taskService.getTaskComments(htaskId);//对用历史完成后的任务ID
+				list.addAll(taskList);
+			}
+		}*/
+		list = taskService.getProcessInstanceComments(processId);		
+		return list;
 	}
 
 	
@@ -294,7 +352,7 @@ public class ReportService {
 	public PageInfo<ReceiveSample> getReportByCondition(String id, String reportId, String entrustedUnit, String inspectedUnit,
 			 String sampleName, String executeStandard, String productionUnit, String sampleType,
 			 String checkType, Integer reportStatus, String order, int status, Integer pageNum,
-			 Integer pageSize, String startTime, String endTime) 
+			 Integer pageSize, String startTime, String endTime,String statusUser) 
 	{
 		Map<String, Object> filter = new HashMap<String, Object>();
 		if (StringUtils.isBlank(startTime)) {
@@ -353,6 +411,11 @@ public class ReportService {
 		if (status != 5) {
 			filter.put("status", status);
 		}
+		//指定查询当前用户的编辑任务
+		if (!statusUser.equals("")) {
+			User user = userService.getCurrentUser();
+			filter.put(statusUser, user.getName());
+		}		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date start = null;
 		Date end = null;
