@@ -310,9 +310,9 @@ public class CheckItemsController {
 	 * @param record
 	 * @return
 	 */
-	@RequestMapping(value = "/checkitemscatalog/item/mapping", method = RequestMethod.GET)
+	@RequestMapping(value = "/checkitemscatalog/item/mapping/{catalogId}", method = RequestMethod.GET)
 	@Privileges(name = "CHECKITEM-MAPPING-ADD", scope = { 1 })
-	public Response getCheckItemMappingList(@RequestParam String catalogId) {		
+	public Response getCheckItemMappingList(@PathVariable String catalogId) {		
 		try {
 			List<HashMap<String, Object>> data = checkItemsCatalogMappingService.selectCheckItemsById(catalogId);
 			return Response.success(data);
