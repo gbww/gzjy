@@ -35,4 +35,6 @@ public interface ReceiveSampleMapper {
     List<ReceiveSample>  selectUnderDetection(@Param("user")String testUser,@Param("filters") Map<String, Object> filter,@Param("orderby")String order);
     
     int mutiUpdateReportStatusByReceiveSampleIdList(@Param("reportStatus")String reportStatus,@Param("receiveSampleIdList")List<String> receiveSampleIdList);
+    
+    
 }

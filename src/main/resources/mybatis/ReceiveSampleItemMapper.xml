@@ -269,6 +269,12 @@
 		GROUP BY test_room ,status  
 		order by ${orderby}
 	</select>
+	
+	<select id="selectCountGroupByUser" parameterType="java.lang.String" resultType="hashmap">
+		select count(test_user) as total,test_user from receive_sample_item where 
+		receive_sample_id=#{receiveSampleId,jdbcType=VARCHAR}
+		GROUP BY test_user 		
+	</select>
   
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >

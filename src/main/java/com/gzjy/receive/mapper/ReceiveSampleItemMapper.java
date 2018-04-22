@@ -1,6 +1,7 @@
 package com.gzjy.receive.mapper;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,4 +41,6 @@ public interface ReceiveSampleItemMapper {
     List<ReceiveSampleItem> selectDoingItems(String receiveSampleId);
     
     List<ReceiveSampleItem> select(@Param("filters") Map<String, Object> filter,@Param("orderby")String order);
+    
+    List<HashMap<String,String>> selectCountGroupByUser(@Param("receiveSampleId")String receiveSampleId);
 }

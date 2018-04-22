@@ -84,7 +84,18 @@ public class ReportService {
 		receiveSample.setReceiveSampleId(receiveSampleId);		
 		receiveSample.setReportProcessId(processId);
 		//同时将编辑人回填到数据库中
-		receiveSample.setDrawUser(user.getName());
+		List<HashMap<String,String>> data=receiveSampleItemMapper.selectCountGroupByUser(receiveSampleId);
+		System.out.println(data);
+		int max=0;
+		String draw_user = null;
+		for(HashMap<String,String> map:data) {
+			String total = String.valueOf(map.get("total"));
+			if(Integer.parseInt(total)>max) {
+				max = Integer.parseInt(total);
+				draw_user = map.get("test_user");
+			}
+		}
+		receiveSample.setDrawUser(draw_user);
 		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
 	}
 
@@ -225,7 +236,7 @@ public class ReportService {
 		receiveSample.setReportStatus(1);
 		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
 		if(comment!=null) {
-			taskService.addComment(taskId,reportProcessId, comment);
+			taskService.addComment(taskId,reportProcessId, "编辑意见:"+comment);
 		}		
 		taskService.complete(taskId);			
 	}
@@ -258,7 +269,7 @@ public class ReportService {
 		}		
 		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
 		if(comment!=null) {
-			taskService.addComment(taskId, reportProcessId, comment);
+			taskService.addComment(taskId, reportProcessId, "审核意见:"+comment);
 		}
 		taskService.complete(taskId);		
 	}
@@ -288,7 +299,7 @@ public class ReportService {
 		}	
 		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
 		if(comment!=null) {
-			taskService.addComment(taskId, reportProcessId, comment);
+			taskService.addComment(taskId, reportProcessId, "批准意见:"+comment);
 		}
 		taskService.complete(taskId);
 	}
