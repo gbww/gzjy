@@ -236,7 +236,7 @@
     	</choose>    			
 		</foreach>
     </where>
-    order by ${orderby}
+    order by a.${orderby}
   </select>
   
   
