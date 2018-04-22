@@ -78,11 +78,12 @@ public class ReportService {
 		// 启动流程引擎时首先要指定编辑人，默认是当前用户
 		variables.put("editPersion", user.getName());
 		String processId = runtimeService.startProcessInstanceByKey("ReportProcess", variables).getId();
-//		String processId = runtimeService.startProcessInstanceById("ReportProcess", receiveSampleId, variables).getId();		
 		// 流程启动成功之后将返回的流程ID回填到合同receive_sample表中
 		ReceiveSample receiveSample = new ReceiveSample();
 		receiveSample.setReceiveSampleId(receiveSampleId);		
 		receiveSample.setReportProcessId(processId);
+		//同时将编辑人回填到数据库中
+		receiveSample.setDrawUser(user.getName());
 		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
 	}
 
@@ -217,6 +218,8 @@ public class ReportService {
 		runtimeService.setVariable(task.getExecutionId(), "tag", 2);
 		ReceiveSample receiveSample = new ReceiveSample();
 		receiveSample.setReceiveSampleId(receiveSampleId);
+		//将审核人信息回填到数据库
+		receiveSample.setExamineUser(examinePersonName);
 		//设置合同状态为待审核
 		receiveSample.setReportStatus(1);
 		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
@@ -245,9 +248,10 @@ public class ReportService {
 		}
 		//设置合同状态为待批准
 		ReceiveSample receiveSample = new ReceiveSample();
-		receiveSample.setReceiveSampleId(receiveSampleId);				
+		receiveSample.setReceiveSampleId(receiveSampleId);			
 		if(pass) {
 			receiveSample.setReportStatus(2);
+			receiveSample.setApprovalUser(approvePersonName);
 		}else {
 			receiveSample.setReportStatus(0);
 		}		
