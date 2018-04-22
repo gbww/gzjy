@@ -143,10 +143,10 @@
 		from receive_sample
 		<where>
 			<foreach collection="filters.keys" item="key" separator="and">
-				<if test="null!=filters[key] and 'report_status'!=key">
+				<if test="null!=filters[key] and 'report_status'!=key and 'status'!=key">
 					${key} LIKE CONCAT('%',#{filters[${key}]},'%' )
 				</if>	
-				<if test="null!=filters[key] and 'report_status'==key">
+				<if test="null!=filters[key] and 'report_status'==key or 'status'==key">
 					${key} = #{filters[${key}]}
 				</if>			
 			</foreach>

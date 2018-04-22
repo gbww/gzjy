@@ -141,7 +141,7 @@ public class ReportService {
 		ArrayList<ReceiveSampleTask> taskListReady = new ArrayList<ReceiveSampleTask>();
 		ArrayList<ReceiveSampleTask> taskListComplete = new ArrayList<ReceiveSampleTask>();
 		TaskService taskService = processEngine.getTaskService();
-		List<Task> tasksReady = taskService.createTaskQuery().taskAssignee(userName).processDefinitionId(processId).list();
+		List<Task> tasksReady = taskService.createTaskQuery().taskAssignee(userName).processInstanceId(processId).list();
 		for (Task task : tasksReady) {
 			ReceiveSampleTask contractTask = new ReceiveSampleTask();
 			contractTask.setId(task.getId());
@@ -154,7 +154,7 @@ public class ReportService {
 		}		
 		HistoryService historyService = processEngine.getHistoryService();
 		List<HistoricTaskInstance> tasksComplete = historyService.createHistoricTaskInstanceQuery().finished()
-					.taskAssignee(userName).processDefinitionId(processId).list();			
+					.taskAssignee(userName).processInstanceId(processId).list();			
 		for (HistoricTaskInstance task : tasksComplete) {				
 			ReceiveSampleTask contractTask = new ReceiveSampleTask();
 			contractTask.setId(task.getId());
