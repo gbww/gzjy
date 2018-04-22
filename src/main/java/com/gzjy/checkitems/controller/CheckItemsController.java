@@ -230,7 +230,7 @@ public class CheckItemsController {
 	
 	
 	/**
-	 * 检验项的查询
+	 * 检验项的详情
 	 * @param record
 	 * @return
 	 */
@@ -298,6 +298,24 @@ public class CheckItemsController {
 		try {
 			checkItemsCatalogMappingService.updateByPrimaryKeySelective(record);
 			return Response.success("success");
+		}
+		catch (Exception e) {
+			System.out.println(e);
+			return Response.fail(e.getMessage());
+		}
+	}
+	
+	/**
+	 * 查询自定义检验项
+	 * @param record
+	 * @return
+	 */
+	@RequestMapping(value = "/checkitemscatalog/item/mapping", method = RequestMethod.GET)
+	@Privileges(name = "CHECKITEM-MAPPING-ADD", scope = { 1 })
+	public Response getCheckItemMappingList(@RequestParam String catalogId) {		
+		try {
+			List<HashMap<String, Object>> data = checkItemsCatalogMappingService.selectCheckItemsById(catalogId);
+			return Response.success(data);
 		}
 		catch (Exception e) {
 			System.out.println(e);

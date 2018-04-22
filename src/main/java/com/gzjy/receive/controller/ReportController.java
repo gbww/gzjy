@@ -222,7 +222,7 @@ public class ReportController {
 	@RequestMapping(value = "/process/task/examine/{taskId}", method = RequestMethod.GET)
 	public Response completeExamineTask(@PathVariable String taskId,
 			@RequestParam(required = true) String receiveSampleId,
-			@RequestParam(required = true) String approvePersonName, @RequestParam(required = true) boolean pass,
+			@RequestParam(required = false) String approvePersonName, @RequestParam(required = true) boolean pass,
 			@RequestParam(required = false) String comment, @RequestParam(required = true) String reportProcessId) {
 		try {
 			reportService.doExamineTask(taskId, receiveSampleId, approvePersonName, pass, comment, reportProcessId);
