@@ -355,10 +355,19 @@ public class ReportController {
 			@RequestParam(value = "startTime", required = false) String startTime,
 			@RequestParam(value = "endTime", required = false) String endTime) {
 
-		PageInfo<ReceiveSample> result = reportService.getReportByCondition(id, reportId, entrustedUnit, inspectedUnit,
+		PageInfo<ReceiveSample> reports = reportService.getReportByCondition(id, reportId, entrustedUnit, inspectedUnit,
 				sampleName, executeStandard, productionUnit, sampleType, checkType, 2, order, status, pageNum, pageSize,
 				startTime, endTime, "approval_user");
-		return Response.success(result);
+		List<Object> data = new ArrayList<Object>();
+		for (ReceiveSample receiveSample : reports.getList()) {
+			HashMap<String, Object> result = new HashMap<String, Object>();
+			HashMap<Integer, ArrayList<ReceiveSampleTask>> task = reportService
+					.getAllContractTaskByUserName(receiveSample.getReportProcessId());
+			result.put("report", receiveSample);
+			result.put("task", task);
+			data.add(result);
+		}
+		return Response.success(data);
 	}
 
 	/**
