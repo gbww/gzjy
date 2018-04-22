@@ -77,7 +77,8 @@ public class ReportService {
 		variables.put("tag", 1);
 		// 启动流程引擎时首先要指定编辑人，默认是当前用户
 		variables.put("editPersion", user.getName());
-		String processId = runtimeService.startProcessInstanceByKey("ReportProcess", variables).getId();
+//		String processId = runtimeService.startProcessInstanceByKey("ReportProcess", variables).getId();
+		String processId = runtimeService.startProcessInstanceByKey("ReportProcess", receiveSampleId, variables).getId();
 		// 流程启动成功之后将返回的流程ID回填到合同receive_sample表中
 		ReceiveSample receiveSample = new ReceiveSample();
 		receiveSample.setReceiveSampleId(receiveSampleId);		
@@ -92,7 +93,7 @@ public class ReportService {
 	 * @param isHandle(0表示查詢未完成任務，1表示查詢已完成任務)
 	 * @return ArrayList<ContractTask>
 	 */	
-	public ArrayList<ReceiveSampleTask> getContractTaskByUserName(String isHandle) {
+	public ArrayList<ReceiveSampleTask> getReportTaskByUserName(String isHandle) {
 		String userName = userService.getCurrentUser().getName();
 		ArrayList<ReceiveSampleTask> taskList = new ArrayList<ReceiveSampleTask>();
 		if ("0".equals(isHandle)) {
@@ -136,34 +137,34 @@ public class ReportService {
 	 * 根据用户name获取当前用户任务(已完成/未完成)
 	 * @return ArrayList<ContractTask>
 	 */	
-	public HashMap<Integer, ArrayList<ReceiveSampleTask>> getAllContractTaskByUserName(String processId) {
+	public HashMap<Integer, ArrayList<ReceiveSampleTask>> getAllReportTaskByUserName(String processId) {
 		String userName = userService.getCurrentUser().getName();
 		ArrayList<ReceiveSampleTask> taskListReady = new ArrayList<ReceiveSampleTask>();
 		ArrayList<ReceiveSampleTask> taskListComplete = new ArrayList<ReceiveSampleTask>();
 		TaskService taskService = processEngine.getTaskService();
 		List<Task> tasksReady = taskService.createTaskQuery().taskAssignee(userName).processInstanceId(processId).list();
 		for (Task task : tasksReady) {
-			ReceiveSampleTask contractTask = new ReceiveSampleTask();
-			contractTask.setId(task.getId());
-			contractTask.setName(task.getName());
-			contractTask.setAssignee(task.getAssignee());
-			contractTask.setCreateTime(task.getCreateTime());
-			contractTask.setProcessInstanceId(task.getProcessInstanceId());
-			contractTask.setExecutionId(task.getExecutionId());
-			taskListReady.add(contractTask);
+			ReceiveSampleTask receiveSampleTask = new ReceiveSampleTask();
+			receiveSampleTask.setId(task.getId());
+			receiveSampleTask.setName(task.getName());
+			receiveSampleTask.setAssignee(task.getAssignee());
+			receiveSampleTask.setCreateTime(task.getCreateTime());
+			receiveSampleTask.setProcessInstanceId(task.getProcessInstanceId());
+			receiveSampleTask.setExecutionId(task.getExecutionId());
+			taskListReady.add(receiveSampleTask);
 		}		
 		HistoryService historyService = processEngine.getHistoryService();
 		List<HistoricTaskInstance> tasksComplete = historyService.createHistoricTaskInstanceQuery().finished()
 					.taskAssignee(userName).processInstanceId(processId).list();			
 		for (HistoricTaskInstance task : tasksComplete) {				
-			ReceiveSampleTask contractTask = new ReceiveSampleTask();
-			contractTask.setId(task.getId());
-			contractTask.setName(task.getName());
-			contractTask.setAssignee(task.getAssignee());
-			contractTask.setCreateTime(task.getCreateTime());
-			contractTask.setProcessInstanceId(task.getProcessInstanceId());
-			contractTask.setExecutionId(task.getExecutionId());
-			taskListComplete.add(contractTask);
+			ReceiveSampleTask receiveSampleTask = new ReceiveSampleTask();
+			receiveSampleTask.setId(task.getId());
+			receiveSampleTask.setName(task.getName());
+			receiveSampleTask.setAssignee(task.getAssignee());
+			receiveSampleTask.setCreateTime(task.getCreateTime());
+			receiveSampleTask.setProcessInstanceId(task.getProcessInstanceId());
+			receiveSampleTask.setExecutionId(task.getExecutionId());
+			taskListComplete.add(receiveSampleTask);
 		}
 		HashMap<Integer, ArrayList<ReceiveSampleTask>> result = new HashMap<Integer, ArrayList<ReceiveSampleTask>>();
 		result.put(0, taskListReady);

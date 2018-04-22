@@ -134,7 +134,7 @@ public class ReportController {
 	@RequestMapping(value = "/process", method = RequestMethod.GET)
 	public Response getTaskByUser(@RequestParam(required = true, defaultValue = "0") String isHandle) throws Exception {
 		try {
-			ArrayList<ReceiveSampleTask> result = reportService.getContractTaskByUserName(isHandle);
+			ArrayList<ReceiveSampleTask> result = reportService.getReportTaskByUserName(isHandle);
 			return Response.success(result);
 		} catch (Exception e) {
 			logger.error(e + "");
@@ -288,7 +288,7 @@ public class ReportController {
 		for (ReceiveSample receiveSample : reports.getList()) {
 			HashMap<String, Object> result = new HashMap<String, Object>();
 			HashMap<Integer, ArrayList<ReceiveSampleTask>> task = reportService
-					.getAllContractTaskByUserName(receiveSample.getReportProcessId());
+					.getAllReportTaskByUserName(receiveSample.getReportProcessId());
 			result.put("report", receiveSample);
 			result.put("task", task);
 			data.add(result);
@@ -325,7 +325,7 @@ public class ReportController {
 		for (ReceiveSample receiveSample : reports.getList()) {
 			HashMap<String, Object> result = new HashMap<String, Object>();
 			HashMap<Integer, ArrayList<ReceiveSampleTask>> task = reportService
-					.getAllContractTaskByUserName(receiveSample.getReportProcessId());
+					.getAllReportTaskByUserName(receiveSample.getReportProcessId());
 			result.put("report", receiveSample);
 			result.put("task", task);
 			data.add(result);
@@ -362,7 +362,7 @@ public class ReportController {
 		for (ReceiveSample receiveSample : reports.getList()) {
 			HashMap<String, Object> result = new HashMap<String, Object>();
 			HashMap<Integer, ArrayList<ReceiveSampleTask>> task = reportService
-					.getAllContractTaskByUserName(receiveSample.getReportProcessId());
+					.getAllReportTaskByUserName(receiveSample.getReportProcessId());
 			result.put("report", receiveSample);
 			result.put("task", task);
 			data.add(result);
