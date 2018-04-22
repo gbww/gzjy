@@ -282,7 +282,7 @@ public class ReportController {
 			@RequestParam(value = "endTime", required = false) String endTime) {
 
 		PageInfo<ReceiveSample> reports = reportService.getReportByCondition(id, reportId, entrustedUnit, inspectedUnit,
-				sampleName, executeStandard, productionUnit, sampleType, checkType, 0, order, 0, pageNum, pageSize,
+				sampleName, executeStandard, productionUnit, sampleType, checkType, 0, order, 1, pageNum, pageSize,
 				startTime, endTime, "draw_user");
 		List<Object> data = new ArrayList<Object>();
 		for (ReceiveSample receiveSample : reports.getList()) {
@@ -319,7 +319,7 @@ public class ReportController {
 			@RequestParam(value = "endTime", required = false) String endTime) {
 
 		PageInfo<ReceiveSample> reports = reportService.getReportByCondition(id, reportId, entrustedUnit, inspectedUnit,
-				sampleName, executeStandard, productionUnit, sampleType, checkType, 1, order, 0, pageNum, pageSize,
+				sampleName, executeStandard, productionUnit, sampleType, checkType, 1, order, 1, pageNum, pageSize,
 				startTime, endTime, "examine_user");
 		List<Object> data = new ArrayList<Object>();
 		for (ReceiveSample receiveSample : reports.getList()) {
@@ -356,7 +356,7 @@ public class ReportController {
 			@RequestParam(value = "endTime", required = false) String endTime) {
 
 		PageInfo<ReceiveSample> reports = reportService.getReportByCondition(id, reportId, entrustedUnit, inspectedUnit,
-				sampleName, executeStandard, productionUnit, sampleType, checkType, 2, order, 0, pageNum, pageSize,
+				sampleName, executeStandard, productionUnit, sampleType, checkType, 2, order, 1, pageNum, pageSize,
 				startTime, endTime, "approval_user");
 		List<Object> data = new ArrayList<Object>();
 		for (ReceiveSample receiveSample : reports.getList()) {
@@ -421,7 +421,7 @@ public class ReportController {
 			@RequestParam(value = "endTime", required = false) String endTime) {
 
 		PageInfo<ReceiveSample> result = reportService.getReportByCondition(id, reportId, entrustedUnit, inspectedUnit,
-				sampleName, executeStandard, productionUnit, sampleType, checkType, 4, order, status, pageNum, pageSize,
+				sampleName, executeStandard, productionUnit, sampleType, checkType, 4, order, 1, pageNum, pageSize,
 				startTime, endTime, "");
 		return Response.success(result);
 	}
@@ -449,7 +449,7 @@ public class ReportController {
 			@RequestParam(value = "endTime", required = false) String endTime) {
 
 		PageInfo<ReceiveSample> result = reportService.getReportByCondition(id, reportId, entrustedUnit, inspectedUnit,
-				sampleName, executeStandard, productionUnit, sampleType, checkType, null, order, status, pageNum,
+				sampleName, executeStandard, productionUnit, sampleType, checkType, null, order, 1, pageNum,
 				pageSize, startTime, endTime, "");
 		return Response.success(result);
 	}
