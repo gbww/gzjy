@@ -1,7 +1,6 @@
 package com.gzjy.contract.service.impl;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
@@ -37,8 +36,10 @@ import com.gzjy.contract.model.Contract;
 import com.gzjy.contract.model.ContractComment;
 import com.gzjy.contract.model.ContractSample;
 import com.gzjy.contract.model.ContractStatus;
+import com.gzjy.contract.model.ContractTask;
 import com.gzjy.contract.model.Sample;
 import com.gzjy.contract.service.ContractService;
+import com.gzjy.receive.model.ReceiveSampleTask;
 import com.gzjy.receive.service.ReceiveSampleService;
 import com.gzjy.user.UserService;
 import com.gzjy.user.model.User;
@@ -307,4 +308,45 @@ public class ContractServiceImpl implements ContractService {
 	public String getAppendixById(String id) {
 		return contractMapper.getAppendixById(id);
 	}
+	
+	/**
+	 * 根据用户name获取当前用户任务(已完成/未完成)
+	 * @return ArrayList<ContractTask>
+	 */	
+	public HashMap<Integer, ArrayList<ContractTask>> getAllContractTaskByUserName(String processId) {
+		String userId = userService.getCurrentUser().getId();
+		ArrayList<ContractTask> taskListReady = new ArrayList<ContractTask>();
+		ArrayList<ContractTask> taskListComplete = new ArrayList<ContractTask>();
+		TaskService taskService = processEngine.getTaskService();
+		List<Task> tasksReady = taskService.createTaskQuery().taskAssignee(userId).processDefinitionId(processId).list();
+		for (Task task : tasksReady) {
+			ContractTask contractTask = new ContractTask();
+			contractTask.setId(task.getId());
+			contractTask.setName(task.getName());
+			contractTask.setAssignee(task.getAssignee());
+			contractTask.setCreateTime(task.getCreateTime());
+			contractTask.setProcessInstanceId(task.getProcessInstanceId());
+			contractTask.setExecutionId(task.getExecutionId());
+			taskListReady.add(contractTask);
+		}		
+		HistoryService historyService = processEngine.getHistoryService();
+		List<HistoricTaskInstance> tasksComplete = historyService.createHistoricTaskInstanceQuery().finished()
+					.taskAssignee(userId).processDefinitionId(processId).list();			
+		for (HistoricTaskInstance task : tasksComplete) {				
+			ContractTask contractTask = new ContractTask();
+			contractTask.setId(task.getId());
+			contractTask.setName(task.getName());
+			contractTask.setAssignee(task.getAssignee());
+			contractTask.setCreateTime(task.getCreateTime());
+			contractTask.setProcessInstanceId(task.getProcessInstanceId());
+			contractTask.setExecutionId(task.getExecutionId());
+			taskListComplete.add(contractTask);
+		}
+		HashMap<Integer, ArrayList<ContractTask>> result = new HashMap<Integer, ArrayList<ContractTask>>();
+		result.put(0, taskListReady);
+		result.put(1, taskListComplete);
+		return result;
+	}
+	
+	
 }

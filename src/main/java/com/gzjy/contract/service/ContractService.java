@@ -2,6 +2,7 @@ package com.gzjy.contract.service;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.activiti.engine.history.HistoricTaskInstance;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.github.pagehelper.PageInfo;
 import com.gzjy.contract.model.Contract;
 import com.gzjy.contract.model.ContractSample;
+import com.gzjy.contract.model.ContractTask;
 
 public interface ContractService {
 	
@@ -54,5 +56,7 @@ public interface ContractService {
 	public void deleteAppendix(String contractId, String filename);
 	
 	public String getAppendixById(String id);	
+	
+	public HashMap<Integer, ArrayList<ContractTask>> getAllContractTaskByUserName(String processId);
 	
 }

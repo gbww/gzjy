@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -519,5 +520,5 @@ public class ContractController {
 			logger.error(e + "");
 			return Response.fail(e.getMessage());
 		}
-	}
+	}	
 }
