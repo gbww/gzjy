@@ -99,7 +99,12 @@ public class ReceiveSampleService {
             if(!userClient.nameExist(record.getApprovalUser()))
                 throw new BizException("批准人在数据库中不存在");
         }
-	    
+	    if(receiveSampleMapper.selectByPrimaryKey(record.getReceiveSampleId())!=null){
+	        throw new BizException("抽样单ID已经存在");
+	    }
+	    if(receiveSampleMapper.selectByReportId(record.getReportId()).size()>0){
+            throw new BizException("报告编号已经存在");
+        }
 	   
 	    
 	    
@@ -328,12 +333,6 @@ public class ReceiveSampleService {
     
     public PageInfo<ReceiveSample> selectUnderDetection(Integer pageNum, Integer pageSize,String order,Map<String, Object> filter) {
         User u=userClient.getCurrentUser();
-      /* boolean superUser= u.getRole().isSuperAdmin();
-       String user=null;
-       if(!superUser) {
-           String name=u.getName();
-           filter.put("test_user", name);
-       }  */  
         List<ReceiveSample> list = new ArrayList<ReceiveSample>();
         PageInfo<ReceiveSample> pages = new PageInfo<ReceiveSample>(list);
         pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
@@ -346,13 +345,7 @@ public class ReceiveSampleService {
     }
     
     public List<ReceiveSample> selectUnderDetectionForNOPage(String order,Map<String, Object> filter) {
-        User u=userClient.getCurrentUser();
-      /* boolean superUser= u.getRole().isSuperAdmin();
-       String user=null;
-       if(!superUser) {
-           String name=u.getName();
-           filter.put("test_user", name);
-       }  */  
+        User u=userClient.getCurrentUser(); 
         List<ReceiveSample> list = new ArrayList<ReceiveSample>();
       
         list=receiveSampleMapper.selectUnderDetection(u.getName(), filter,order);

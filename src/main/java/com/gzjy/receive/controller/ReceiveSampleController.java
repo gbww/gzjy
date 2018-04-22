@@ -577,12 +577,20 @@ public class ReceiveSampleController {
 	@RequestMapping(value = "/sample/items/unassigned", method = RequestMethod.GET)
     public Response getUnassignedItems(@RequestParam(name = "order", required = false) String order,
            @RequestParam(name = "reportId", required = false) String reportId,
+           @RequestParam(name = "name", required = false) String name,   //项目名称
+           @RequestParam(name = "method", required = false) String method,
            @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 	    Map<String, Object> filter = new HashMap<String, Object>();
 	    if(!StringUtils.isBlank(reportId)) {
 	        filter.put("report_id", reportId);
 	    }
+	    if(!StringUtils.isBlank(name)) {
+            filter.put("name", name);
+        }
+	    if(!StringUtils.isBlank(method)) {
+            filter.put("method", method);
+        }
 	    if (StringUtils.isBlank(order)) {
             order = "updated_at desc";
         }

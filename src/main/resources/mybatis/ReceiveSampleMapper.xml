@@ -92,6 +92,15 @@
     where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}
   </select>
   
+    <select id="selectByReportId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from receive_sample
+    where report_id = #{reportId,jdbcType=CHAR}
+  </select>
+  
+  
+  
   <select id="selectTest" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />

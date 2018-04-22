@@ -25,6 +25,8 @@ public interface ReceiveSampleMapper {
     
     List<ReceiveSample>selectTest(@Param("filters") Map<String, Object> filter);
     
+    List<ReceiveSample> selectByReportId(String reportId);
+    
     List<ReceiveSample> selectAll(@Param("filters") Map<String, Object> filter,@Param("orderby")String order,@Param("timeStart") Timestamp timeStart, 
             @Param("timeEnd") Timestamp timeEnd);
     
