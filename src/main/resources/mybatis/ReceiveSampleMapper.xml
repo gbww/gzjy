@@ -159,6 +159,35 @@
 		</where>
 		order by ${orderby}
 	</select>
+	
+	<select id="selectAllCompareReportStaus" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from receive_sample
+		<where>
+			<foreach collection="filters.keys" item="key" separator="and">
+				<if test="null!=filters[key] and 'report_status'!=key and 'status'!=key">
+					${key} LIKE CONCAT('%',#{filters[${key}]},'%' )
+				</if>	
+				<if test="null!=filters[key] and 'status'==key">
+					${key} = #{filters[${key}]}
+				</if>	
+				<if test="null!=filters[key] and 'report_status'==key ">
+					${key} > #{filters[${key}]}
+				</if>		
+			</foreach>
+			<if test="timeStart != null">
+				and created_at &gt;= #{timeStart,jdbcType=TIMESTAMP}
+			</if>
+			<if test="timeEnd != null">
+				and created_at &lt;= #{timeEnd,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+		order by ${orderby}
+	</select>
+	
+	
+	
   <select id="selectAllItem" parameterType="com.gzjy.receive.model.ReceiveSample" resultType="hashmap">
 		select A.*,B.* from receive_sample A, receive_sample_item B where A.receive_sample_id = B.receive_sample_id		
 	</select>

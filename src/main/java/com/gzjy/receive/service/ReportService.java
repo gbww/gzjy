@@ -148,39 +148,38 @@ public class ReportService {
 	 * 根据用户name获取当前用户任务(已完成/未完成)
 	 * @return ArrayList<ContractTask>
 	 */	
-	public HashMap<Integer, ArrayList<ReceiveSampleTask>> getAllReportTaskByUserName(String processId) {
+	public ArrayList<ReceiveSampleTask> getAllReportTaskByUserName(String processId,String isHandle) {
 		String userName = userService.getCurrentUser().getName();
-		ArrayList<ReceiveSampleTask> taskListReady = new ArrayList<ReceiveSampleTask>();
-		ArrayList<ReceiveSampleTask> taskListComplete = new ArrayList<ReceiveSampleTask>();
+		ArrayList<ReceiveSampleTask> taskList = new ArrayList<ReceiveSampleTask>();
 		TaskService taskService = processEngine.getTaskService();
-		List<Task> tasksReady = taskService.createTaskQuery().taskAssignee(userName).processInstanceId(processId).list();
-		for (Task task : tasksReady) {
-			ReceiveSampleTask receiveSampleTask = new ReceiveSampleTask();
-			receiveSampleTask.setId(task.getId());
-			receiveSampleTask.setName(task.getName());
-			receiveSampleTask.setAssignee(task.getAssignee());
-			receiveSampleTask.setCreateTime(task.getCreateTime());
-			receiveSampleTask.setProcessInstanceId(task.getProcessInstanceId());
-			receiveSampleTask.setExecutionId(task.getExecutionId());
-			taskListReady.add(receiveSampleTask);
-		}		
-		HistoryService historyService = processEngine.getHistoryService();
-		List<HistoricTaskInstance> tasksComplete = historyService.createHistoricTaskInstanceQuery().finished()
-					.taskAssignee(userName).processInstanceId(processId).list();			
-		for (HistoricTaskInstance task : tasksComplete) {				
-			ReceiveSampleTask receiveSampleTask = new ReceiveSampleTask();
-			receiveSampleTask.setId(task.getId());
-			receiveSampleTask.setName(task.getName());
-			receiveSampleTask.setAssignee(task.getAssignee());
-			receiveSampleTask.setCreateTime(task.getCreateTime());
-			receiveSampleTask.setProcessInstanceId(task.getProcessInstanceId());
-			receiveSampleTask.setExecutionId(task.getExecutionId());
-			taskListComplete.add(receiveSampleTask);
+		if ("0".equals(isHandle)) {
+			List<Task> tasksReady = taskService.createTaskQuery().taskAssignee(userName).processInstanceId(processId).list();
+			for (Task task : tasksReady) {
+				ReceiveSampleTask receiveSampleTask = new ReceiveSampleTask();
+				receiveSampleTask.setId(task.getId());
+				receiveSampleTask.setName(task.getName());
+				receiveSampleTask.setAssignee(task.getAssignee());
+				receiveSampleTask.setCreateTime(task.getCreateTime());
+				receiveSampleTask.setProcessInstanceId(task.getProcessInstanceId());
+				receiveSampleTask.setExecutionId(task.getExecutionId());
+				taskList.add(receiveSampleTask);
+			}		
+		}else {
+			HistoryService historyService = processEngine.getHistoryService();
+			List<HistoricTaskInstance> tasksComplete = historyService.createHistoricTaskInstanceQuery().finished()
+						.taskAssignee(userName).processInstanceId(processId).list();			
+			for (HistoricTaskInstance task : tasksComplete) {				
+				ReceiveSampleTask receiveSampleTask = new ReceiveSampleTask();
+				receiveSampleTask.setId(task.getId());
+				receiveSampleTask.setName(task.getName());
+				receiveSampleTask.setAssignee(task.getAssignee());
+				receiveSampleTask.setCreateTime(task.getCreateTime());
+				receiveSampleTask.setProcessInstanceId(task.getProcessInstanceId());
+				receiveSampleTask.setExecutionId(task.getExecutionId());
+				taskList.add(receiveSampleTask);
+			}
 		}
-		HashMap<Integer, ArrayList<ReceiveSampleTask>> result = new HashMap<Integer, ArrayList<ReceiveSampleTask>>();
-		result.put(0, taskListReady);
-		result.put(1, taskListComplete);
-		return result;
+		return taskList;
 	}
 
 
@@ -369,7 +368,7 @@ public class ReportService {
 	public PageInfo<ReceiveSample> getReportByCondition(String id, String reportId, String entrustedUnit, String inspectedUnit,
 			 String sampleName, String executeStandard, String productionUnit, String sampleType,
 			 String checkType, Integer reportStatus, String order, int status, Integer pageNum,
-			 Integer pageSize, String startTime, String endTime,String statusUser) 
+			 Integer pageSize, String startTime, String endTime,String statusUser, String isHandle) 
 	{
 		Map<String, Object> filter = new HashMap<String, Object>();
 		if (StringUtils.isBlank(startTime)) {
@@ -443,7 +442,12 @@ public class ReportService {
 			e.printStackTrace();
 			throw new BizException("输入的时间格式不合法！");
 		}
-		return receiveSampleService.select(pageNum, pageSize, order, filter, start, end);
+		if(isHandle.equals("0")) {
+			return receiveSampleService.select(pageNum, pageSize, order, filter, start, end);
+		}else {
+			return receiveSampleService.selectAllCompareReportStaus(pageNum, pageSize, order, filter, start, end);
+		}
+		
 	}
 	
 	

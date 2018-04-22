@@ -269,6 +269,23 @@ public class ReceiveSampleService {
 	
 	
 	@Transactional
+	public PageInfo<ReceiveSample> selectAllCompareReportStaus(Integer pageNum, Integer pageSize, String order, Map<String, Object> filter,Date timeStart,Date timeEnd) {
+
+		List<ReceiveSample> list = new ArrayList<ReceiveSample>();
+		PageInfo<ReceiveSample> pages = new PageInfo<ReceiveSample>(list);
+		Timestamp start = timeStart == null ? null : new Timestamp(timeStart.getTime());
+        Timestamp end = timeEnd == null ? null : new Timestamp(timeEnd.getTime());
+		pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
+			@Override
+			public void doSelect() {
+				receiveSampleMapper.selectAllCompareReportStaus(filter, order,start,end);
+			}
+		});
+		return pages;
+	}
+	
+	
+	@Transactional
     public List<ReceiveSample> selectNoPage( String order, Map<String, Object> filter,Date timeStart,Date timeEnd) {
 
         List<ReceiveSample> list = new ArrayList<ReceiveSample>();

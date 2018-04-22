@@ -279,21 +279,26 @@ public class ReportController {
 			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
 			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value = "startTime", required = false) String startTime,
-			@RequestParam(value = "endTime", required = false) String endTime) {
+			@RequestParam(value = "endTime", required = false) String endTime,
+			@RequestParam(value = "isHandle", required = false, defaultValue="0") String isHandle) {
 
 		PageInfo<ReceiveSample> reports = reportService.getReportByCondition(id, reportId, entrustedUnit, inspectedUnit,
 				sampleName, executeStandard, productionUnit, sampleType, checkType, 0, order, 1, pageNum, pageSize,
-				startTime, endTime, "draw_user");
+				startTime, endTime, "draw_user",isHandle);
 		List<Object> data = new ArrayList<Object>();
 		for (ReceiveSample receiveSample : reports.getList()) {
 			HashMap<String, Object> result = new HashMap<String, Object>();
-			HashMap<Integer, ArrayList<ReceiveSampleTask>> task = reportService
-					.getAllReportTaskByUserName(receiveSample.getReportProcessId());
+			ArrayList<ReceiveSampleTask> task = reportService
+					.getAllReportTaskByUserName(receiveSample.getReportProcessId(), isHandle);
 			result.put("report", receiveSample);
-			result.put("task", task);
+			result.put("task", task);			
 			data.add(result);
 		}
-		return Response.success(data);
+		Map<String,Object> info = new HashMap<String,Object>();
+		info.put("total", reports.getTotal());
+		info.put("pages", reports.getPages());
+		info.put("list", data);
+		return Response.success(info);
 	}
 
 	/**
@@ -316,21 +321,26 @@ public class ReportController {
 			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
 			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value = "startTime", required = false) String startTime,
-			@RequestParam(value = "endTime", required = false) String endTime) {
+			@RequestParam(value = "endTime", required = false) String endTime,
+			@RequestParam(value = "isHandle", required = false, defaultValue="0") String isHandle) {
 
 		PageInfo<ReceiveSample> reports = reportService.getReportByCondition(id, reportId, entrustedUnit, inspectedUnit,
 				sampleName, executeStandard, productionUnit, sampleType, checkType, 1, order, 1, pageNum, pageSize,
-				startTime, endTime, "examine_user");
+				startTime, endTime, "examine_user",isHandle);
 		List<Object> data = new ArrayList<Object>();
 		for (ReceiveSample receiveSample : reports.getList()) {
 			HashMap<String, Object> result = new HashMap<String, Object>();
-			HashMap<Integer, ArrayList<ReceiveSampleTask>> task = reportService
-					.getAllReportTaskByUserName(receiveSample.getReportProcessId());
+			ArrayList<ReceiveSampleTask> task = reportService
+					.getAllReportTaskByUserName(receiveSample.getReportProcessId(),isHandle);
 			result.put("report", receiveSample);
-			result.put("task", task);
+			result.put("task", task);			
 			data.add(result);
 		}
-		return Response.success(data);
+		Map<String,Object> info = new HashMap<String,Object>();
+		info.put("total", reports.getTotal());
+		info.put("pages", reports.getPages());
+		info.put("list", data);
+		return Response.success(info);
 	}
 
 	/**
@@ -353,21 +363,26 @@ public class ReportController {
 			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
 			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value = "startTime", required = false) String startTime,
-			@RequestParam(value = "endTime", required = false) String endTime) {
+			@RequestParam(value = "endTime", required = false) String endTime,
+			@RequestParam(value = "isHandle", required = false, defaultValue="0") String isHandle) {
 
 		PageInfo<ReceiveSample> reports = reportService.getReportByCondition(id, reportId, entrustedUnit, inspectedUnit,
 				sampleName, executeStandard, productionUnit, sampleType, checkType, 2, order, 1, pageNum, pageSize,
-				startTime, endTime, "approval_user");
+				startTime, endTime, "approval_user",isHandle);
 		List<Object> data = new ArrayList<Object>();
 		for (ReceiveSample receiveSample : reports.getList()) {
 			HashMap<String, Object> result = new HashMap<String, Object>();
-			HashMap<Integer, ArrayList<ReceiveSampleTask>> task = reportService
-					.getAllReportTaskByUserName(receiveSample.getReportProcessId());
+			ArrayList<ReceiveSampleTask> task = reportService
+					.getAllReportTaskByUserName(receiveSample.getReportProcessId(), isHandle);
 			result.put("report", receiveSample);
-			result.put("task", task);
+			result.put("task", task);			
 			data.add(result);
 		}
-		return Response.success(data);
+		Map<String,Object> info = new HashMap<String,Object>();
+		info.put("total", reports.getTotal());
+		info.put("pages", reports.getPages());
+		info.put("list", data);
+		return Response.success(info);
 	}
 
 	/**
@@ -390,11 +405,12 @@ public class ReportController {
 			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
 			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value = "startTime", required = false) String startTime,
-			@RequestParam(value = "endTime", required = false) String endTime) {
+			@RequestParam(value = "endTime", required = false) String endTime,
+			@RequestParam(value = "isHandle", required = false, defaultValue="0") String isHandle) {
 
 		PageInfo<ReceiveSample> result = reportService.getReportByCondition(id, reportId, entrustedUnit, inspectedUnit,
 				sampleName, executeStandard, productionUnit, sampleType, checkType, 3, order, status, pageNum, pageSize,
-				startTime, endTime, "");
+				startTime, endTime, "",isHandle);
 		return Response.success(result);
 	}
 
@@ -422,7 +438,7 @@ public class ReportController {
 
 		PageInfo<ReceiveSample> result = reportService.getReportByCondition(id, reportId, entrustedUnit, inspectedUnit,
 				sampleName, executeStandard, productionUnit, sampleType, checkType, 4, order, 1, pageNum, pageSize,
-				startTime, endTime, "");
+				startTime, endTime, "","0");
 		return Response.success(result);
 	}
 
@@ -450,7 +466,7 @@ public class ReportController {
 
 		PageInfo<ReceiveSample> result = reportService.getReportByCondition(id, reportId, entrustedUnit, inspectedUnit,
 				sampleName, executeStandard, productionUnit, sampleType, checkType, null, order, 1, pageNum,
-				pageSize, startTime, endTime, "");
+				pageSize, startTime, endTime, "","0");
 		return Response.success(result);
 	}
 

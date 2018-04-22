@@ -36,5 +36,7 @@ public interface ReceiveSampleMapper {
     
     int mutiUpdateReportStatusByReceiveSampleIdList(@Param("reportStatus")String reportStatus,@Param("receiveSampleIdList")List<String> receiveSampleIdList);
     
+    List<ReceiveSample> selectAllCompareReportStaus(@Param("filters") Map<String, Object> filter,@Param("orderby")String order,@Param("timeStart") Timestamp timeStart, 
+            @Param("timeEnd") Timestamp timeEnd);
     
 }
