@@ -57,7 +57,7 @@ public class CheckItemsCatalogMappingServiceImpl implements CheckItemsCatalogMap
 		return checkItemsCatalogMappingMapper.selectCheckItemsById(catalogId);
 	}
 
-	public void importFile(MultipartFile file) {
+	public void importFile(MultipartFile file, String catalogId) {
 		EpicNFSClient client = epicNFSService.getClient("gzjy");
 		// 建立远程存放excel模板文件目录
 		if (!client.hasRemoteDir("temp")) {
@@ -80,15 +80,15 @@ public class CheckItemsCatalogMappingServiceImpl implements CheckItemsCatalogMap
 				wb = new HSSFWorkbook(inputStream);
 			}
 			Sheet sheet = wb.getSheetAt(0);
-			if (sheet.getRow(0).getPhysicalNumberOfCells() < 8) {
-				throw new BizException("文件少于12列，格式不对");
+			if (sheet.getRow(0).getPhysicalNumberOfCells() < 11) {
+				throw new BizException("文件少于11列，格式不对");
 			}
 			List<CheckItemsCatalogMapping> dataList = new ArrayList<CheckItemsCatalogMapping>();
 			for (int rowNum = 1; rowNum < sheet.getLastRowNum() + 1; rowNum++) {
 				Row row = sheet.getRow(rowNum);
 				CheckItemsCatalogMapping item_mapping = new CheckItemsCatalogMapping();
 				item_mapping.setId(ShortUUID.getInstance().generateShortID());
-				item_mapping.setCatalogId(row.getCell(0) + "");
+				item_mapping.setCatalogId(catalogId);
 				item_mapping.setName(row.getCell(1) + "");
 				item_mapping.setMethod(row.getCell(2) + "");
 				item_mapping.setUnit(row.getCell(3) + "");

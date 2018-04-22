@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -384,9 +385,10 @@ public class CheckItemsController {
 	 */
 	@RequestMapping(value = "/checkitemscatalog/item/mapping/import", method = RequestMethod.POST)
 	@Privileges(name = "CHECKITEM-IMPORT", scope = { 1 })
-	public Response checkitemscatalogMultiImport(@RequestParam("file") MultipartFile file) {
+	public Response checkitemscatalogMultiImport(@RequestParam("file") MultipartFile file,
+			@RequestParam(name="catalogId",required = true) String catalogId) {
 		try {
-			checkItemsCatalogMappingService.importFile(file);
+			checkItemsCatalogMappingService.importFile(file, catalogId);
 			return Response.success("success");
 		}
 		catch (Exception e) {

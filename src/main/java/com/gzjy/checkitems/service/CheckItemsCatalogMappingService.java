@@ -13,5 +13,5 @@ public interface CheckItemsCatalogMappingService {
 	int updateByPrimaryKeySelective(CheckItemsCatalogMapping record);
 	int deleteByPrimaryKey(String id);
 	List<HashMap<String, Object>> selectCheckItemsById(String catalogId);
-	public void importFile(MultipartFile file);
+	public void importFile(MultipartFile file,String catalogId);
 }
