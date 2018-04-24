@@ -89,30 +89,30 @@ public class CheckItemsCatalogMappingServiceImpl implements CheckItemsCatalogMap
 				CheckItemsCatalogMapping item_mapping = new CheckItemsCatalogMapping();
 				item_mapping.setId(ShortUUID.getInstance().generateShortID());
 				item_mapping.setCatalogId(catalogId);
-				item_mapping.setName(row.getCell(1) + "");
-				item_mapping.setMethod(row.getCell(2) + "");
-				item_mapping.setUnit(row.getCell(3) + "");
-				item_mapping.setStandardValue(row.getCell(4) + "");
-				item_mapping.setDetectionLimit(row.getCell(5) + "");
-				item_mapping.setQuantitationLimit(row.getCell(6) + "");
-				item_mapping.setDevice(row.getCell(7) + "");
-				item_mapping.setDefaultPrice(Double.parseDouble(row.getCell(8) + ""));
+				item_mapping.setName(row.getCell(0) + "");
+				item_mapping.setMethod(row.getCell(1) + "");
+				item_mapping.setUnit(row.getCell(2) + "");
+				item_mapping.setStandardValue(row.getCell(3) + "");
+				item_mapping.setDetectionLimit(row.getCell(4) + "");
+				item_mapping.setQuantitationLimit(row.getCell(5) + "");
+				item_mapping.setDevice(row.getCell(6) + "");
+				item_mapping.setDefaultPrice(Double.parseDouble(row.getCell(7) + ""));
 				item_mapping.setCreatedAt(new Date());
-				item_mapping.setDepartment(row.getCell(9) + "");
-				item_mapping.setSubpackage(row.getCell(10) + "");
-				item_mapping.setLaw(row.getCell(11) + "");
+				item_mapping.setDepartment(row.getCell(8) + "");
+				item_mapping.setSubpackage(row.getCell(9) + "");
+				item_mapping.setLaw(row.getCell(10) + "");
 				dataList.add(item_mapping);
 			}
+			checkItemsCatalogMappingMapper.importData(dataList);
 			//删除重复选项
-			/*checkItemsCatalogMappingMapper.importData(dataList);
-			List<String> idList = checkItemsCatalogMappingMapper.selectDistinctIds();
+			/*List<String> idList = checkItemsCatalogMappingMapper.selectDistinctIds();
 			if (idList != null && idList.size() > 0) {
 				checkItemsCatalogMappingMapper.deleteByIds(idList);
 			}*/
 			wb.close();
 		} catch (Exception e) {
 			logger.info("文件导入异常:" + e);
-			throw new BizException("文件导入异常" + e);
+			throw new BizException("文件导入异常,请仔细检测导入文件格式");
 		} finally {
 			// 删除文件
 			try {
