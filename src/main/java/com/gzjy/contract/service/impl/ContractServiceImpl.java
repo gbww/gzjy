@@ -39,7 +39,6 @@ import com.gzjy.contract.model.ContractStatus;
 import com.gzjy.contract.model.ContractTask;
 import com.gzjy.contract.model.Sample;
 import com.gzjy.contract.service.ContractService;
-import com.gzjy.receive.model.ReceiveSampleTask;
 import com.gzjy.receive.service.ReceiveSampleService;
 import com.gzjy.user.UserService;
 import com.gzjy.user.model.User;
@@ -68,17 +67,14 @@ public class ContractServiceImpl implements ContractService {
 	private static Logger logger = LoggerFactory.getLogger(ReceiveSampleService.class);
 
 	public Contract selectByPrimaryKey(String id) {
-		// TODO Auto-generated method stub
 		return contractMapper.selectByPrimaryKey(id);
 	}
 
 	public int insert(Contract record) {
-		// TODO Auto-generated method stub
 		return contractMapper.insertSelective(record);
 	}
 
 	public int deleteByPrimaryKey(String id) {
-		// TODO Auto-generated method stub
 		return contractMapper.deleteByPrimaryKey(id);
 	}
 
@@ -96,9 +92,7 @@ public class ContractServiceImpl implements ContractService {
 	 * @return
 	 */
 	public void deploymentProcess(String contractId, ArrayList<String> approveUsers, String updateContractUser) {
-//		RepositoryService repositoryService = processEngine.getRepositoryService();
 		RuntimeService runtimeService = processEngine.getRuntimeService();
-//		repositoryService.createDeployment().addClasspathResource("processes/ContractProcess.bpmn").deploy();
 		Map<String, Object> variables = new HashMap<String, Object>();
 		variables.put("approve_users", approveUsers);
 		variables.put("resultCount", 0);
@@ -174,7 +168,6 @@ public class ContractServiceImpl implements ContractService {
 
 	/**
 	 * 执行合同流程中的修改合同任务
-	 * 
 	 * @param task
 	 * @param approve
 	 */
@@ -187,13 +180,13 @@ public class ContractServiceImpl implements ContractService {
 		taskService.complete(taskId);
 	}
 
-	public PageInfo<Contract> getPageList(Integer pageNum, Integer pageSize, String detectProject, String type) {
+	public PageInfo<Contract> getPageList(Integer pageNum, Integer pageSize, String detectProject, String type, List<Integer> status) {
 		List<Contract> list = new ArrayList<Contract>();
 		PageInfo<Contract> pages = new PageInfo<Contract>(list);
 		pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
 			@Override
 			public void doSelect() {
-				contractMapper.selectAll(detectProject, type);
+				contractMapper.selectAll(detectProject, type, status);
 			}
 		});
 		return pages;

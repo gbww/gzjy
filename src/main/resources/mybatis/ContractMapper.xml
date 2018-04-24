@@ -116,6 +116,12 @@
 			<if test="type != null">
 				type = #{type}
 			</if>
+			<if test="status != null">
+				and status in 
+				<foreach collection="status" index="index" item="item" open="(" separator="," close=")">  
+			        #{item}  
+			    </foreach>  
+			</if>
 		</where>
 		order by created_at desc
 	</select>	

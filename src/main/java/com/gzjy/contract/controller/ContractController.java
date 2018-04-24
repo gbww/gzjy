@@ -217,8 +217,22 @@ public class ContractController {
 			@RequestParam(required = false, defaultValue = "10") Integer pageSize,
 			@RequestParam(required = false) String type,
 			@RequestParam(required = false, defaultValue="0") String isHandle) {
+		
+		List<Integer> status =new ArrayList<Integer>();
+		for(int i=0;i<4;i++) {
+			status.add(i);
+		}		
+		//如果是未完成
+		if(isHandle.equals("0")) {
+			status.remove(3);
+			status.remove(0);
+		}else {
+			status.remove(2);
+			status.remove(1);
+			status.remove(0);
+		}
 		try {
-			PageInfo<Contract> contractList = contractService.getPageList(pageNum, pageSize, detectProject, type);
+			PageInfo<Contract> contractList = contractService.getPageList(pageNum, pageSize, detectProject, type, status);
 			List<Object> data = new ArrayList<Object>();
 			for (Contract contract : contractList.getList()) {
 				HashMap<String, Object> result = new HashMap<String, Object>();

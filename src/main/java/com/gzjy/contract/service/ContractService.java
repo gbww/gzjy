@@ -19,8 +19,8 @@ public interface ContractService {
 	
 	Contract selectByPrimaryKey(String id);
 	
-	PageInfo<Contract> getPageList(Integer pageNum, Integer pageSize, String name,String type);
-	
+	PageInfo<Contract> getPageList(Integer pageNum, Integer pageSize, String name,String type, List<Integer> status);
+
 	int insert(Contract record);
 	
 	int deleteByPrimaryKey(String id);
