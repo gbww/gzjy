@@ -310,43 +310,41 @@ public class ContractServiceImpl implements ContractService {
 	}
 	
 	/**
-	 * 根据用户name获取当前用户任务(已完成/未完成)
+	 * 根据processId用户任务(已完成/未完成)
 	 * @return ArrayList<ContractTask>
 	 */	
-	public HashMap<Integer, ArrayList<ContractTask>> getAllContractTaskByUserName(String processId) {
+	public ArrayList<ContractTask> getAllContractTaskByUserName(String processId, String isHandle) {
 		String userId = userService.getCurrentUser().getId();
-		ArrayList<ContractTask> taskListReady = new ArrayList<ContractTask>();
-		ArrayList<ContractTask> taskListComplete = new ArrayList<ContractTask>();
-		TaskService taskService = processEngine.getTaskService();
-		List<Task> tasksReady = taskService.createTaskQuery().taskAssignee(userId).processDefinitionId(processId).list();
-		for (Task task : tasksReady) {
-			ContractTask contractTask = new ContractTask();
-			contractTask.setId(task.getId());
-			contractTask.setName(task.getName());
-			contractTask.setAssignee(task.getAssignee());
-			contractTask.setCreateTime(task.getCreateTime());
-			contractTask.setProcessInstanceId(task.getProcessInstanceId());
-			contractTask.setExecutionId(task.getExecutionId());
-			taskListReady.add(contractTask);
-		}		
-		HistoryService historyService = processEngine.getHistoryService();
-		List<HistoricTaskInstance> tasksComplete = historyService.createHistoricTaskInstanceQuery().finished()
-					.taskAssignee(userId).processDefinitionId(processId).list();			
-		for (HistoricTaskInstance task : tasksComplete) {				
-			ContractTask contractTask = new ContractTask();
-			contractTask.setId(task.getId());
-			contractTask.setName(task.getName());
-			contractTask.setAssignee(task.getAssignee());
-			contractTask.setCreateTime(task.getCreateTime());
-			contractTask.setProcessInstanceId(task.getProcessInstanceId());
-			contractTask.setExecutionId(task.getExecutionId());
-			taskListComplete.add(contractTask);
+		ArrayList<ContractTask> taskList= new ArrayList<ContractTask>();
+		if(isHandle.equals("0")) {
+			TaskService taskService = processEngine.getTaskService();
+			List<Task> tasksReady = taskService.createTaskQuery().taskAssignee(userId).processDefinitionId(processId).list();
+			for (Task task : tasksReady) {
+				ContractTask contractTask = new ContractTask();
+				contractTask.setId(task.getId());
+				contractTask.setName(task.getName());
+				contractTask.setAssignee(task.getAssignee());
+				contractTask.setCreateTime(task.getCreateTime());
+				contractTask.setProcessInstanceId(task.getProcessInstanceId());
+				contractTask.setExecutionId(task.getExecutionId());
+				taskList.add(contractTask);
+			}		
 		}
-		HashMap<Integer, ArrayList<ContractTask>> result = new HashMap<Integer, ArrayList<ContractTask>>();
-		result.put(0, taskListReady);
-		result.put(1, taskListComplete);
-		return result;
+		else {
+			HistoryService historyService = processEngine.getHistoryService();
+			List<HistoricTaskInstance> tasksComplete = historyService.createHistoricTaskInstanceQuery().finished()
+						.taskAssignee(userId).processDefinitionId(processId).list();			
+			for (HistoricTaskInstance task : tasksComplete) {				
+				ContractTask contractTask = new ContractTask();
+				contractTask.setId(task.getId());
+				contractTask.setName(task.getName());
+				contractTask.setAssignee(task.getAssignee());
+				contractTask.setCreateTime(task.getCreateTime());
+				contractTask.setProcessInstanceId(task.getProcessInstanceId());
+				contractTask.setExecutionId(task.getExecutionId());
+				taskList.add(contractTask);
+			}
+		}
+		return taskList;
 	}
-	
-	
 }

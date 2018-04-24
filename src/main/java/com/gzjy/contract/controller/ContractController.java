@@ -9,12 +9,12 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -215,10 +215,23 @@ public class ContractController {
 	public Response getContractList(@RequestParam(required = false) String detectProject,
 			@RequestParam(required = false, defaultValue = "1") Integer pageNum,
 			@RequestParam(required = false, defaultValue = "10") Integer pageSize,
-			@RequestParam(required = false) String type) {
+			@RequestParam(required = false) String type,
+			@RequestParam(required = false, defaultValue="0") String isHandle) {
 		try {
-			PageInfo<Contract> result = contractService.getPageList(pageNum, pageSize, detectProject, type);
-			return Response.success(result);
+			PageInfo<Contract> contractList = contractService.getPageList(pageNum, pageSize, detectProject, type);
+			List<Object> data = new ArrayList<Object>();
+			for (Contract contract : contractList.getList()) {
+				HashMap<String, Object> result = new HashMap<String, Object>();
+				ArrayList<ContractTask> task = contractService.getAllContractTaskByUserName(contract.getProcessId(), isHandle);
+				result.put("contract", contract);
+				result.put("task", task);			
+				data.add(result);
+			}
+			Map<String,Object> info = new HashMap<String,Object>();
+			info.put("total", contractList.getTotal());
+			info.put("pages", contractList.getPages());
+			info.put("list", data);
+			return Response.success(info);
 		} catch (Exception e) {
 			logger.error(e + "");
 			return Response.fail(e.getMessage());

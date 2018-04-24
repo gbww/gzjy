@@ -57,6 +57,6 @@ public interface ContractService {
 	
 	public String getAppendixById(String id);	
 	
-	public HashMap<Integer, ArrayList<ContractTask>> getAllContractTaskByUserName(String processId);
+	public ArrayList<ContractTask> getAllContractTaskByUserName(String processId, String isHandle);
 	
 }
