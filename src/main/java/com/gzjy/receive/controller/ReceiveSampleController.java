@@ -574,11 +574,12 @@ public class ReceiveSampleController {
 	}
 	
 	//查询当前用户本部门所有未分配的检测项
-	@RequestMapping(value = "/sample/items/unassigned", method = RequestMethod.GET)
-    public Response getUnassignedItems(@RequestParam(name = "order", required = false) String order,
+	@RequestMapping(value = "/sample/items/assign", method = RequestMethod.GET)
+    public Response getDepartmentItems(@RequestParam(name = "order", required = false) String order,
            @RequestParam(name = "reportId", required = false) String reportId,
            @RequestParam(name = "name", required = false) String name,   //项目名称
            @RequestParam(name = "method", required = false) String method,
+           @RequestParam(name = "status", defaultValue = "0") Integer status,  //5代表所有
            @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 	    Map<String, Object> filter = new HashMap<String, Object>();
@@ -591,10 +592,13 @@ public class ReceiveSampleController {
 	    if(!StringUtils.isBlank(method)) {
             filter.put("method", method);
         }
+	    if (status != 5) {
+            filter.put("status", status);
+        }
 	    if (StringUtils.isBlank(order)) {
             order = "updated_at desc";
         }
-        return Response.success(receiveSampleService.selectUnderDetectionReceiveSampleItems(pageNum, pageSize, order, filter));
+        return Response.success(receiveSampleService.selectUnderDepartmentReceiveSampleItems(pageNum, pageSize, order, filter));
     }
 	
 	

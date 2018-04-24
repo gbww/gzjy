@@ -371,7 +371,7 @@ public class ReceiveSampleService {
     }
     
     
-    public PageInfo<ReceiveSampleItem> selectUnderDetectionReceiveSampleItems(Integer pageNum, Integer pageSize,String order,Map<String, Object> filter) {
+    public PageInfo<ReceiveSampleItem> selectUnderDepartmentReceiveSampleItems(Integer pageNum, Integer pageSize,String order,Map<String, Object> filter) {
         User u=userClient.getCurrentUser();
        boolean superUser= u.getRole().isSuperAdmin();
        if(!superUser) {

@@ -16,6 +16,7 @@ import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Param;
+import org.apache.poi.util.SystemOutLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +76,7 @@ public class ReportService {
 		Map<String, Object> variables = new HashMap<String, Object>();
 		// 设定流程标记tag=1
 		variables.put("tag", 1);
-		// 启动流程引擎时首先要指定编辑人，默认是当前用户
+		// 启动流程引擎时首先要指定编制人，默认是当前用户
 		variables.put("editPersion", user.getName());
 //		String processId = runtimeService.startProcessInstanceByKey("ReportProcess", variables).getId();
 		String processId = runtimeService.startProcessInstanceByKey("ReportProcess", receiveSampleId, variables).getId();
@@ -83,7 +84,8 @@ public class ReportService {
 		ReceiveSample receiveSample = new ReceiveSample();
 		receiveSample.setReceiveSampleId(receiveSampleId);		
 		receiveSample.setReportProcessId(processId);
-		//同时将编辑人回填到数据库中
+		//同时将编制回填到数据库中
+		receiveSample.setDrawUser(user.getName());
 		List<HashMap<String,String>> data=receiveSampleItemMapper.selectCountGroupByUser(receiveSampleId);
 		System.out.println(data);
 		int max=0;
@@ -154,6 +156,8 @@ public class ReportService {
 		TaskService taskService = processEngine.getTaskService();
 		if ("0".equals(isHandle)) {
 			List<Task> tasksReady = taskService.createTaskQuery().taskAssignee(userName).processInstanceId(processId).list();
+			/*Task current = taskService.createTaskQuery().processInstanceId(processId).singleResult();
+			System.out.println(current.toString());*/
 			for (Task task : tasksReady) {
 				ReceiveSampleTask receiveSampleTask = new ReceiveSampleTask();
 				receiveSampleTask.setId(task.getId());
@@ -428,7 +432,7 @@ public class ReportService {
 			filter.put("status", status);
 		}
 		//指定查询当前用户的编辑任务
-		if (!statusUser.equals("")) {
+		if (!StringUtils.isBlank(statusUser)) {
 			User user = userService.getCurrentUser();
 			filter.put(statusUser, user.getName());
 		}		
