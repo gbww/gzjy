@@ -87,15 +87,15 @@ public class ReportService {
 		List<HashMap<String,String>> data=receiveSampleItemMapper.selectCountGroupByUser(receiveSampleId);
 		System.out.println(data);
 		int max=0;
-		String draw_user = null;
+		String principalInspector = null;
 		for(HashMap<String,String> map:data) {
 			String total = String.valueOf(map.get("total"));
 			if(Integer.parseInt(total)>max) {
 				max = Integer.parseInt(total);
-				draw_user = map.get("test_user");
+				principalInspector = map.get("test_user");
 			}
 		}
-		receiveSample.setDrawUser(draw_user);
+		receiveSample.setPrincipalInspector(principalInspector);
 		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
 	}
 
