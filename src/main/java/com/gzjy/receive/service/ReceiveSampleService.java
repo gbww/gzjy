@@ -173,6 +173,7 @@ public class ReceiveSampleService {
 			            receive.setStatus(0);
 			            receiveSampleMapper.updateByPrimaryKeySelective(receive);
 			        }
+			        item.setReportId(receive.getReportId());
 			        
 			    }
 				item.setId(UUID.random());
@@ -188,7 +189,7 @@ public class ReceiveSampleService {
 				ReceiveSampleItem exitItem = receiveSampleItemMapper.selectByPrimaryKey(item.getId());
 				if (exitItem != null) {
 				    item.setUpdatedAt(new Date());
-					receiveSampleItemMapper.updateByPrimaryKey(item);
+					receiveSampleItemMapper.updateByPrimaryKeySelective(item);
 				} else {
 					System.out.println("接样单中不存在此检验项ID");
 					logger.error("接样单中不存在此检验项ID");
@@ -213,6 +214,11 @@ public class ReceiveSampleService {
 	public int delete(String recordId) {
 		int i = 1;
 		try {
+		    ReceiveSample existRecord = receiveSampleMapper.selectByPrimaryKey(recordId);
+		    if(!StringUtils.isBlank(existRecord.getAppendix())) {
+                deleteAttachment(existRecord.getAppendix());
+            }
+		    
 			receiveSampleMapper.deleteByPrimaryKey(recordId);
 			receiveSampleItemMapper.deleteByReceiveSampleId(recordId);
 		} catch (Exception e) {
