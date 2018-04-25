@@ -224,6 +224,7 @@ public class ReportService {
 	 */
 	@Transactional
 	public void doEditTask(String taskId, String receiveSampleId, String examinePersonName, String comment, String reportProcessId) {
+		User user=userService.getCurrentUser();
 		TaskService taskService = processEngine.getTaskService();
 		RuntimeService runtimeService = processEngine.getRuntimeService();
 		Task task = (Task) taskService.createTaskQuery().taskId(taskId).list().get(0);
@@ -239,7 +240,7 @@ public class ReportService {
 		receiveSample.setReportStatus(1);
 		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
 		if(comment!=null) {
-			taskService.addComment(taskId,reportProcessId, "编辑意见:"+comment);
+			taskService.addComment(taskId,reportProcessId, "("+user.getName()+")编辑意见:"+comment);
 		}		
 		taskService.complete(taskId);			
 	}
@@ -251,6 +252,7 @@ public class ReportService {
 	@Transactional
 	public void doExamineTask(String taskId, String receiveSampleId,String approvePersonName, boolean pass, String comment, String reportProcessId) {
 		TaskService taskService = processEngine.getTaskService();
+		User user=userService.getCurrentUser();
 		RuntimeService runtimeService = processEngine.getRuntimeService();
 		Task task = (Task) taskService.createTaskQuery().taskId(taskId).list().get(0);
 		//执行任务过程中可能同意可能拒绝,故需要设置标记位方便流程引擎区分
@@ -271,8 +273,8 @@ public class ReportService {
 			receiveSample.setReportStatus(0);
 		}		
 		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
-		if(comment!=null) {
-			taskService.addComment(taskId, reportProcessId, "审核意见:"+comment);
+		if(comment!=null && (!StringUtils.isBlank(comment))) {
+			taskService.addComment(taskId, reportProcessId, "("+user.getName()+")审核意见:"+comment);
 		}
 		taskService.complete(taskId);		
 	}
@@ -285,6 +287,7 @@ public class ReportService {
 	@Transactional
 	public void doApproveTask(String taskId, String receiveSampleId, boolean pass,String comment, String reportProcessId) {
 		TaskService taskService = processEngine.getTaskService();
+		User user=userService.getCurrentUser();
 		RuntimeService runtimeService = processEngine.getRuntimeService();
 		Task task = (Task) taskService.createTaskQuery().taskId(taskId).list().get(0);
 		//执行任务过程中可能同意可能拒绝,故需要设置标记位方便流程引擎区分
@@ -302,14 +305,14 @@ public class ReportService {
 		}	
 		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
 		if(comment!=null) {
-			taskService.addComment(taskId, reportProcessId, "批准意见:"+comment);
+			taskService.addComment(taskId, reportProcessId, "("+user.getName()+")批准意见:"+comment);
 		}
 		taskService.complete(taskId);
 	}
 	
 	
 	/**
-	 * 执行报告中的批准任务
+	 * 执行报告中的打印任务
 	 * @param taskId  任务编号
 	 *//*
 	@Transactional
