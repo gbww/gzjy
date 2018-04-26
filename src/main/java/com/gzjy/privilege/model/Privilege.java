@@ -12,7 +12,9 @@ public class Privilege {
   public enum Category{
     USER("USER", "用户"), 
     ORGANIZATION("ORGANIZATION", "部门"),
-    ROLE("ROLE", "角色");
+    ROLE("ROLE", "角色"),
+    CONTRACT("CONTRACT", "合同"),
+    SAMPLE("SAMPLE", "接样");
       
     private String name;
     private String description;

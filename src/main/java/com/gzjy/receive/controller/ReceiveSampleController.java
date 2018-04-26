@@ -331,6 +331,7 @@ public class ReceiveSampleController {
 	
 	// 查询未分配的接样信息
     @RequestMapping(value = "/sample/listForDistribute", method = RequestMethod.GET)
+    @Privileges(name = "SAMPLE-DISTRIBUTE", scope = { 1 })
     public Response listSampleForDistribute(@RequestParam(name = "receiveSampleId", required = false) String id,
             @RequestParam(name = "reportId", required = false) String reportId,
             @RequestParam(name = "entrustedUnit", required = false) String entrustedUnit,
@@ -575,6 +576,7 @@ public class ReceiveSampleController {
 	
 	//查询当前用户本部门所有未分配的检测项
 	@RequestMapping(value = "/sample/items/assign", method = RequestMethod.GET)
+	@Privileges(name = "SAMPLE-DISTRIBUTE", scope = { 1 })
     public Response getDepartmentItems(@RequestParam(name = "order", required = false) String order,
            @RequestParam(name = "reportId", required = false) String reportId,
            @RequestParam(name = "name", required = false) String name,   //项目名称
@@ -619,9 +621,9 @@ public class ReceiveSampleController {
 		return Response.success(receiveSampleService.setStatus(receiveSampleId, status));
 	}
 
-	// 查询当前用户检验项信息(检测人员关心的检验项)
-	@Privileges(name = "SAMPLE-SELECTITEM", scope = { 1 })
+	// 查询当前用户检验项信息(检测人员关心的检验项)	
 	@RequestMapping(value = "/sampleItem", method = RequestMethod.GET)
+	@Privileges(name = "SAMPLE-ITEMS-INPUT-SELECT", scope = { 1 })
 	public Response listItemByCurrentUser(@RequestParam(name = "status", defaultValue = "0") int status,
 			@RequestParam(name = "order", required = false) String order,
 			 @RequestParam(name = "receiveSampleId", required = false) String receiveSampleId,
@@ -648,6 +650,7 @@ public class ReceiveSampleController {
 	
 	// 查询当前用户接样单信息(检测人员关心的接样单)
     @RequestMapping(value = "/sampleItem/sample", method = RequestMethod.GET)
+    @Privileges(name = "SAMPLE-ITEMS-INPUT-SELECT", scope = { 1 })
     public Response listReceiveItemByCurrentUser(@RequestParam(name = "status", defaultValue = "0") int status,
             @RequestParam(name = "order", required = false) String order,
              @RequestParam(name = "receiveSampleId", required = false) String receiveSampleId,

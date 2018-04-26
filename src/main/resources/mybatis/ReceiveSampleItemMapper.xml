@@ -240,6 +240,13 @@
   </select>
   
   
+  
+  <select id="getCountsByReceiveSampleId" resultType="java.lang.Integer" parameterType="java.lang.String" >
+    select 
+    count(*)
+    from receive_sample_item
+    where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}
+  </select>
   <!--  根据接样ID查询检验项列表 -->
    <select id="selectByReceiveSampleId" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 

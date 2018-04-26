@@ -31,6 +31,7 @@ import com.gzjy.common.Response;
 import com.gzjy.common.ShortUUID;
 import com.gzjy.common.exception.BizException;
 import com.gzjy.common.util.fs.EpicNFSService;
+import com.gzjy.receive.mapper.ReceiveSampleItemMapper;
 import com.gzjy.receive.mapper.ReportExtendMapper;
 import com.gzjy.receive.model.ReceiveSample;
 import com.gzjy.receive.model.ReceiveSampleItem;
@@ -617,6 +618,11 @@ public class ReportController {
 			String templateDir = "/var/lib/docs/gzjy/template/" + templateName;
 			// 设定报表所需要的外部参数内容
 			Map<String, Object> rptParameters = new HashMap<String, Object>();
+			if(templateName.contains("green")) {
+			    int count=receiveSampleService.getCountsByReceiveSampleId(receiveSampleId);
+			    rptParameters.put("items_count", count);
+			}
+			
 			rptParameters.put("receiveSampleId", receiveSampleId);
 			// 传入报表源文件绝对路径，外部参数对象，DB连接，得到JasperPring对象
 			JasperPrint jasperPrint = JasperFillManager.fillReport(templateDir, rptParameters,
@@ -670,6 +676,10 @@ public class ReportController {
 
 			// 设定报表所需要的外部参数内容
 			Map<String, Object> rptParameters = new HashMap<String, Object>();
+			if(templateName.contains("green")) {
+                int count=receiveSampleService.getCountsByReceiveSampleId(receiveSampleId);
+                rptParameters.put("items_count", count);
+            }
 			rptParameters.put("receiveSampleId", receiveSampleId);
 			// 传入报表源文件绝对路径，外部参数对象，DB连接，得到JasperPring对象
 			JasperPrint jasperPrint = JasperFillManager.fillReport(templateDir, rptParameters,
@@ -739,6 +749,10 @@ public class ReportController {
 					String templateName = templateMapper.selectById(reportExtend.getTemplateId()).getExcelName();
 					String templateDir = "/var/lib/docs/gzjy/template/" + templateName;
 					Map<String, Object> rptParameters = new HashMap<String, Object>();
+					if(templateName.contains("green")) {
+		                int count=receiveSampleService.getCountsByReceiveSampleId(id);
+		                rptParameters.put("items_count", count);
+		            }
 					rptParameters.put("receiveSampleId", id);
 					// 传入报表源文件绝对路径，外部参数对象，DB连接，得到JasperPring对象
 					JasperPrint jasperPrint = new JasperPrint();

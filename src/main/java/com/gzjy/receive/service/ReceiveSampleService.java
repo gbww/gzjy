@@ -415,6 +415,16 @@ public class ReceiveSampleService {
 		return record;
 
 	}
+	
+	
+	public int getCountsByReceiveSampleId(String receiveSampleId) {
+        if (StringUtils.isBlank(receiveSampleId)) {
+            throw new BizException("接样ID参数是空值");
+        }
+        return   receiveSampleItemMapper.getCountsByReceiveSampleId(receiveSampleId);
+         
+
+    }
 
 	public ReceiveSampleItem getItem(String itemId) {
 
