@@ -14,7 +14,8 @@ public class Privilege {
     ORGANIZATION("ORGANIZATION", "部门"),
     ROLE("ROLE", "角色"),
     CONTRACT("CONTRACT", "合同"),
-    SAMPLE("SAMPLE", "接样");
+    SAMPLE("SAMPLE", "接样"),
+	REPORT("REPORT", "报告");
       
     private String name;
     private String description;
@@ -38,8 +39,9 @@ public class Privilege {
     ORGANIZATION("ORGANIZATION", new String[]{"部门", "B"}),
     ROLE("ROLE", new String[]{"角色", "J"}),
     CONTRACT("CONTRACT", new String[]{"合同", "H"}),
-    SAMPLE("SAMPLE", new String[]{"接样", "S"});
-      
+    SAMPLE("SAMPLE", new String[]{"接样", "S"}),
+	REPORT("REPORT", new String[]{"报告", "R"});
+	 
     private String name;
     private String[] details;
 
