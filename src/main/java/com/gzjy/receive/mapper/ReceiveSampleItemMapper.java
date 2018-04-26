@@ -38,7 +38,7 @@ public interface ReceiveSampleItemMapper {
             @Param("timeEnd") Timestamp timeEnd);
     
     
-    List<ReceiveSampleItem> selectDoingItems(String receiveSampleId);
+    List<ReceiveSampleItem> selectDoingItems(@Param("receiveSampleId")String receiveSampleId);
     
     List<ReceiveSampleItem> select(@Param("filters") Map<String, Object> filter,@Param("orderby")String order);
     

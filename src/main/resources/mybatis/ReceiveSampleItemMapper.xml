@@ -162,11 +162,11 @@
     where id = #{id,jdbcType=CHAR}
   </select>
   
-  <select id="selectDoingItems" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="selectDoingItems" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />
     from receive_sample_item
-    where id = #{id,jdbcType=CHAR}
+    where receive_sample_id = #{receiveSampleId}
     and  status !=2
   </select>
   
