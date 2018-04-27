@@ -85,7 +85,7 @@ public class CheckItemsController {
 	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/children", method = RequestMethod.GET)
-	@Privileges(name = "CHECKITEM-CATALOG-CHILD-SELECT", scope = { 1 })
+	//@Privileges(name = "CHECKITEM-CATALOG-CHILD-SELECT", scope = { 1 })
 	public Response getCheckItemsCatalogChildren(@RequestParam(required = true) String parentId) {
 		try {
 			List<CheckItemsCatalog> result = checkItemsCatalogService.selectByParentId(parentId);

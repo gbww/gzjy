@@ -586,7 +586,7 @@ public class ReportController {
 	 * @return
 	 */
 	@RequestMapping(value = "/export", method = RequestMethod.GET)
-	@Privileges(name = "REPORT-PDF-EXPORT", scope = { 1 })
+	//@Privileges(name = "REPORT-PDF-EXPORT", scope = { 1 })
 	public Response exportReport(@RequestParam(name = "receiveSampleId", required = true) String receiveSampleId,
 			HttpServletResponse response) {
 		OutputStream out = null;
@@ -644,7 +644,7 @@ public class ReportController {
 	 * @return
 	 */
 	@RequestMapping(value = "/preview", method = RequestMethod.GET)
-	@Privileges(name = "REPORT-PREVIEW", scope = { 1 })
+	//@Privileges(name = "REPORT-PREVIEW", scope = { 1 })
 	public Response viewReport(@RequestParam(name = "receiveSampleId", required = true) String receiveSampleId,
 			@RequestParam(name = "type", required = true) String type, HttpServletResponse response) {
 		try {
@@ -718,7 +718,7 @@ public class ReportController {
 	 * @return
 	 */
 	@RequestMapping(value = "/preview", method = RequestMethod.POST)
-	@Privileges(name = "REPORT-MUTI-PREVIEW", scope = { 1 })
+	//@Privileges(name = "REPORT-MUTI-PREVIEW", scope = { 1 })
 	public Response batchviewReport(@RequestBody() List<String> receiveSampleIds, HttpServletResponse response) {
 		List<JasperPrint> prints = new ArrayList<JasperPrint>();
 		OutputStream out = null;
