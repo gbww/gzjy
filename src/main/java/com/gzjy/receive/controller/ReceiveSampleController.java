@@ -331,7 +331,7 @@ public class ReceiveSampleController {
 	
 	// 查询未分配的接样信息
     @RequestMapping(value = "/sample/listForDistribute", method = RequestMethod.GET)
-    @Privileges(name = "SAMPLE-DISTRIBUTE", scope = { 1 })
+    @Privileges(name = "SAMPLE-DISTRIBUTE-SELECT", scope = { 1 })
     public Response listSampleForDistribute(@RequestParam(name = "receiveSampleId", required = false) String id,
             @RequestParam(name = "reportId", required = false) String reportId,
             @RequestParam(name = "entrustedUnit", required = false) String entrustedUnit,
@@ -412,6 +412,37 @@ public class ReceiveSampleController {
 
         
     }
+    
+    
+    //查询当前用户本部门所有未分配的检测项
+    @RequestMapping(value = "/sample/items/assign", method = RequestMethod.GET)
+    @Privileges(name = "SAMPLE-DISTRIBUTE-SELECT", scope = { 1 })
+    public Response getDepartmentItems(@RequestParam(name = "order", required = false) String order,
+           @RequestParam(name = "reportId", required = false) String reportId,
+           @RequestParam(name = "name", required = false) String name,   //项目名称
+           @RequestParam(name = "method", required = false) String method,
+           @RequestParam(name = "status", defaultValue = "0") Integer status,  //5代表所有
+           @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
+           @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+        Map<String, Object> filter = new HashMap<String, Object>();
+        if(!StringUtils.isBlank(reportId)) {
+            filter.put("report_id", reportId);
+        }
+        if(!StringUtils.isBlank(name)) {
+            filter.put("name", name);
+        }
+        if(!StringUtils.isBlank(method)) {
+            filter.put("method", method);
+        }
+        if (status != 5) {
+            filter.put("status", status);
+        }
+        if (StringUtils.isBlank(order)) {
+            order = "updated_at desc";
+        }
+        return Response.success(receiveSampleService.selectUnderDepartmentReceiveSampleItems(pageNum, pageSize, order, filter));
+    }
+    
     
 	
 	
@@ -574,35 +605,7 @@ public class ReceiveSampleController {
 		return Response.success(receiveSampleService.getItemsByReceiveSampleId(id));
 	}
 	
-	//查询当前用户本部门所有未分配的检测项
-	@RequestMapping(value = "/sample/items/assign", method = RequestMethod.GET)
-	@Privileges(name = "SAMPLE-DISTRIBUTE", scope = { 1 })
-    public Response getDepartmentItems(@RequestParam(name = "order", required = false) String order,
-           @RequestParam(name = "reportId", required = false) String reportId,
-           @RequestParam(name = "name", required = false) String name,   //项目名称
-           @RequestParam(name = "method", required = false) String method,
-           @RequestParam(name = "status", defaultValue = "0") Integer status,  //5代表所有
-           @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
-           @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
-	    Map<String, Object> filter = new HashMap<String, Object>();
-	    if(!StringUtils.isBlank(reportId)) {
-	        filter.put("report_id", reportId);
-	    }
-	    if(!StringUtils.isBlank(name)) {
-            filter.put("name", name);
-        }
-	    if(!StringUtils.isBlank(method)) {
-            filter.put("method", method);
-        }
-	    if (status != 5) {
-            filter.put("status", status);
-        }
-	    if (StringUtils.isBlank(order)) {
-            order = "updated_at desc";
-        }
-        return Response.success(receiveSampleService.selectUnderDepartmentReceiveSampleItems(pageNum, pageSize, order, filter));
-    }
-	
+
 	
 	
 

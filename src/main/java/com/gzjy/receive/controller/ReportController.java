@@ -69,7 +69,6 @@ public class ReportController {
 	private DataSource dataSource;
 	@Autowired
 	private EpicNFSService epicNFSService;
-
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	@Privileges(name = "REPORT-EDIT", scope = { 1 })
 	public Response editReport(@RequestBody(required = true) ReceiveSample receiveSample) throws Exception {
@@ -131,7 +130,7 @@ public class ReportController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/process", method = RequestMethod.GET)
-	@Privileges(name = "REPORT-TASK-USER-GET", scope = { 1 })
+	//@Privileges(name = "REPORT-TASK-USER-GET", scope = { 1 })
 	public Response getTaskByUser(@RequestParam(required = true, defaultValue = "0") String isHandle) throws Exception {
 		try {
 			ArrayList<ReceiveSampleTask> result = reportService.getReportTaskByUserName(isHandle);
@@ -167,7 +166,7 @@ public class ReportController {
 	 * @return List<Comment>
 	 * @throws Exception
 	 */
-	@Privileges(name = "REPORT-TASK-COMMENT-GET", scope = { 1 })
+	//@Privileges(name = "REPORT-TASK-COMMENT-GET", scope = { 1 })
 	@RequestMapping(value = "/process/task/{processId}/comments/all", method = RequestMethod.GET)
 	public Response getCommentsByProcessId(@PathVariable String processId) throws Exception {
 		try {
@@ -500,7 +499,7 @@ public class ReportController {
 	 * @return
 	 */
 	@RequestMapping(value = "/{receiveSampleItemId}/property/qianfa", method = RequestMethod.PUT)
-	@Privileges(name = "REPORT-QIANFA-UPDATE", scope = { 1 })
+	//@Privileges(name = "REPORT-QIANFA-UPDATE", scope = { 1 })
 	public Response updateQianfa(
 			@PathVariable(name = "receiveSampleItemId", required = true) String receiveSampleItemId,
 			@RequestParam(required = true) String qianfaDate) {
@@ -523,7 +522,7 @@ public class ReportController {
 	 * @return
 	 */
 	@RequestMapping(value = "/template/bind", method = RequestMethod.POST)
-	@Privileges(name = "REPORT-TEMPLATE-BIND", scope = { 1 })
+	//@Privileges(name = "REPORT-TEMPLATE-BIND", scope = { 1 })
 	public Response receiveBindTemplate(@RequestBody ReportExtend reportExtend) {
 		reportExtend.setId(ShortUUID.getInstance().generateShortID());
 		try {
@@ -541,7 +540,7 @@ public class ReportController {
 	 * @return
 	 */
 	@RequestMapping(value = "/template/bind/{id}", method = RequestMethod.PUT)
-	@Privileges(name = "REPORT-TEMPLATE-UPDATE", scope = { 1 })
+	//@Privileges(name = "REPORT-TEMPLATE-UPDATE", scope = { 1 })
 	public Response receiveBindTemplateEdit(@PathVariable(name = "id", required = true) String id,
 			@RequestParam(name = "reportId", required = true) String reportId,
 			@RequestParam(name = "templateId", required = true) String templateId,
@@ -569,7 +568,7 @@ public class ReportController {
 	 * @return
 	 */
 	@RequestMapping(value = "/template/bind/{id}", method = RequestMethod.DELETE)
-	@Privileges(name = "REPORT-TEMPLATE-DELETE", scope = { 1 })
+	//@Privileges(name = "REPORT-TEMPLATE-DELETE", scope = { 1 })
 	public Response receiveBindTemplateEdit(@PathVariable(name = "id", required = true) String id) {
 		try {
 			reportService.deleteReportExtend(id);
@@ -797,7 +796,7 @@ public class ReportController {
 	 * @return
 	 */
 	@RequestMapping(value = "/status/muti", method = RequestMethod.GET)
-	@Privileges(name = "REPORT-MUTI-STATUS-UPDATE", scope = { 1 })
+	//@Privileges(name = "REPORT-MUTI-STATUS-UPDATE", scope = { 1 })
 	public Response viewReport(@RequestParam(name = "reportStatus", required = true) String reportStatus,
 			@RequestParam(name = "receiveSampleIdList", required = true) String receiveSampleIdList) {
 		String[] temp = receiveSampleIdList.split(";");
