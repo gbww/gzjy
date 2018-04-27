@@ -40,7 +40,7 @@ public class ClientController {
     
     
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    //@Privileges(name = "CLIENT-ADD", scope = { 1 })
+    @Privileges(name = "CLIENT-ADD", scope = { 1 })
     public Response add(@Validated(value = { Add.class }) @RequestBody GzClient record,
             BindingResult result) {
         if (result.hasErrors()) {
@@ -52,7 +52,7 @@ public class ClientController {
     }
     
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    //@Privileges(name = "CLIENT-UPDATE", scope = { 1 })
+    @Privileges(name = "CLIENT-UPDATE", scope = { 1 })
     public Response update(@Validated(value = { Update.class }) @RequestBody GzClient record,
             BindingResult result) {
         if (result.hasErrors()) {
@@ -65,7 +65,7 @@ public class ClientController {
     
     
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    //@Privileges(name = "CLIENT-DELETE", scope = { 1 })
+    @Privileges(name = "CLIENT-DELETE", scope = { 1 })
     public Response delete( @RequestBody List<Integer> ids,
             BindingResult result) {
         int record=0;
@@ -82,7 +82,7 @@ public class ClientController {
     }
     
     @RequestMapping(value = "/select", method = RequestMethod.GET)
-    //@Privileges(name = "CLIENT-SELECT", scope = { 1 })
+    @Privileges(name = "CLIENT-SELECT", scope = { 1 })
     public Response list( @RequestParam(name = "order", required = false) String order,
             @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {

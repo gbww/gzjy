@@ -72,7 +72,7 @@ public class GzUnitController {
     
     
     @RequestMapping(value = "/select", method = RequestMethod.GET)
-   // @Privileges(name = "GZUNIT-SELECT", scope = { 1 })
+    @Privileges(name = "GZUNIT-SELECT", scope = { 1 })
     public Response list( @RequestParam(name = "order", required = false) String order) {
         Map<String, Object> filter = new HashMap<String, Object>();           
         if (StringUtils.isBlank(order)) {

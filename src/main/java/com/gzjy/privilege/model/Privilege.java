@@ -15,7 +15,8 @@ public class Privilege {
     ROLE("ROLE", "角色"),
     CONTRACT("CONTRACT", "合同"),
     SAMPLE("SAMPLE", "接样"),
-	REPORT("REPORT", "报告");
+	REPORT("REPORT", "报告"),
+    GZUNIT("GZUNIT","单位");
       
     private String name;
     private String description;
@@ -40,7 +41,8 @@ public class Privilege {
     ROLE("ROLE", new String[]{"角色", "J"}),
     CONTRACT("CONTRACT", new String[]{"合同", "H"}),
     SAMPLE("SAMPLE", new String[]{"接样", "S"}),
-	REPORT("REPORT", new String[]{"报告", "R"});
+	REPORT("REPORT", new String[]{"报告", "R"}),
+    GZUNIT("GZUNIT",new String[]{"单位", "U"});
 	 
     private String name;
     private String[] details;
