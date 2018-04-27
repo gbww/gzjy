@@ -79,7 +79,7 @@
 	</insert>
 
 
-	<!-- <insert id="importData" parameterType="java.util.List">
+	<insert id="importData" parameterType="java.util.List">
 		insert into check_item (id, name, method, unit, standard_value,
 		detection_limit,
 		quantitation_limit, device, default_price,created_at,
@@ -92,7 +92,7 @@
 			#{item.createdAt}, #{item.department}, #{item.subpackage},
 			#{item.law})
 		</foreach>
-	</insert> -->
+	</insert>
 
 
 	<update id="updateByPrimaryKeySelective" parameterType="com.gzjy.checkitems.model.CheckItem">

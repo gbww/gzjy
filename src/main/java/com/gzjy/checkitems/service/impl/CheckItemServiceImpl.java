@@ -107,28 +107,31 @@ public class CheckItemServiceImpl implements CheckItemService {
 			if(sheet.getRow(0).getPhysicalNumberOfCells()<8) {
 				throw new BizException("文件少于12列，格式不对");
 			}
-			List<CheckItemsCatalogMapping> dataList = new ArrayList<CheckItemsCatalogMapping>();			
-			for(int rowNum=0; rowNum< sheet.getLastRowNum()+1; rowNum++) {				
+			List<CheckItem> dataList = new ArrayList<CheckItem>();			
+			for(int rowNum=1; rowNum< sheet.getLastRowNum()+1; rowNum++) {				
 				Row row = sheet.getRow(rowNum);
-				CheckItemsCatalogMapping item_mapping = new CheckItemsCatalogMapping();
-				item_mapping.setId(ShortUUID.getInstance().generateShortID());
-				item_mapping.setCatalogId(row.getCell(0)+"");
-				item_mapping.setName(row.getCell(1)+"");
-				item_mapping.setMethod(row.getCell(2)+"");
-				item_mapping.setUnit(row.getCell(3)+"");
-				item_mapping.setStandardValue(row.getCell(4)+"");
-				item_mapping.setDetectionLimit(row.getCell(5)+"");
-				item_mapping.setQuantitationLimit(row.getCell(6)+"");
-				item_mapping.setDevice(row.getCell(7)+"");
-				item_mapping.setDefaultPrice(Double.parseDouble(row.getCell(8)+""));
-				item_mapping.setCreatedAt(new Date());	
-				item_mapping.setDepartment(row.getCell(9)+"");
-				item_mapping.setSubpackage(row.getCell(10)+"");
-				item_mapping.setLaw(row.getCell(11)+"");
-				dataList.add(item_mapping);
+				if(row.getCell(0) ==null) {
+					//excel中有下拉框选择列，故要做出判断
+					break;
+				}
+				CheckItem item = new CheckItem();
+				item.setId(ShortUUID.getInstance().generateShortID());				
+				item.setName(row.getCell(0).toString().trim());
+				item.setMethod(row.getCell(1).toString().trim());
+				item.setUnit(row.getCell(2).toString().trim());
+				item.setStandardValue(row.getCell(3).toString().trim());
+				item.setDetectionLimit(row.getCell(4).toString().trim());
+				item.setQuantitationLimit(row.getCell(5).toString().trim());
+				item.setDevice(row.getCell(6).toString().trim());
+				item.setDefaultPrice(Double.parseDouble(row.getCell(7).toString().trim()));
+				item.setDepartment(row.getCell(8).toString().trim());
+				item.setSubpackage(row.getCell(9).toString().trim().substring(0, 1));
+				item.setLaw(row.getCell(10).toString().trim());
+				item.setCreatedAt(new Date());
+				dataList.add(item);				
 			}
-			checkItemsCatalogMappingMapper.importData(dataList);
-			removeRepeatData();
+			checkItemMapper.importData(dataList);
+//			removeRepeatData();
 			wb.close();
 		} catch (Exception e) {
 			logger.info("文件导入异常:"+e);

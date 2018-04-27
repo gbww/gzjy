@@ -389,7 +389,7 @@ public class CheckItemsController {
 	 * @return
 	 */
 	@RequestMapping(value = "/checkitems/import", method = RequestMethod.POST)
-	@Privileges(name = "CHECKITEM-IMPORT", scope = { 1 })
+//	@Privileges(name = "CHECKITEM-IMPORT", scope = { 1 })
 	public Response multiImport(@RequestParam("file") MultipartFile file) {
 		try {
 			checkItemService.importFile(file);
