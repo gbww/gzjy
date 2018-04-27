@@ -383,7 +383,11 @@ public class CheckItemsController {
 		}
 	}
 	
-	
+	/**
+	 * 检验项的批量导入
+	 * @param file
+	 * @return
+	 */
 	@RequestMapping(value = "/checkitems/import", method = RequestMethod.POST)
 	@Privileges(name = "CHECKITEM-IMPORT", scope = { 1 })
 	public Response multiImport(@RequestParam("file") MultipartFile file) {
