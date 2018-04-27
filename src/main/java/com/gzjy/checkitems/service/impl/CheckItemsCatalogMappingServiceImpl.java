@@ -89,6 +89,10 @@ public class CheckItemsCatalogMappingServiceImpl implements CheckItemsCatalogMap
 				CheckItemsCatalogMapping item_mapping = new CheckItemsCatalogMapping();
 				item_mapping.setId(ShortUUID.getInstance().generateShortID());
 				item_mapping.setCatalogId(catalogId);
+				if(row.getCell(0) ==null) {
+					//excel中有下拉框选择列，故要做出判断
+					break;
+				}
 				item_mapping.setName(row.getCell(0).toString().trim());
 				item_mapping.setMethod(row.getCell(1).toString().trim());
 				item_mapping.setUnit(row.getCell(2).toString().trim());
@@ -99,7 +103,7 @@ public class CheckItemsCatalogMappingServiceImpl implements CheckItemsCatalogMap
 				item_mapping.setDefaultPrice(Double.parseDouble(row.getCell(7).toString().trim()));
 				item_mapping.setCreatedAt(new Date());
 				item_mapping.setDepartment(row.getCell(8).toString().trim());
-				item_mapping.setSubpackage(row.getCell(9).toString().trim());
+				item_mapping.setSubpackage(row.getCell(9).toString().trim().substring(0, 1));
 				item_mapping.setLaw(row.getCell(10).toString().trim());
 				dataList.add(item_mapping);
 			}
