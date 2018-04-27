@@ -125,7 +125,6 @@ public class ContractController {
 
 	/**
 	 * 下载合同附件
-	 * 
 	 * @param Contract实体对象
 	 * @return
 	 */
@@ -149,7 +148,6 @@ public class ContractController {
 
 	/**
 	 * 删除合同附件
-	 * 
 	 * @return
 	 */
 	@RequestMapping(value = "/contract/{id}/appendix", method = RequestMethod.DELETE)
@@ -206,7 +204,6 @@ public class ContractController {
 
 	/**
 	 * 获取合同列表信息
-	 * 
 	 * @param Contract实体对象
 	 * @return
 	 */
@@ -216,7 +213,7 @@ public class ContractController {
 			@RequestParam(required = false, defaultValue = "1") Integer pageNum,
 			@RequestParam(required = false, defaultValue = "10") Integer pageSize,
 			@RequestParam(required = false) String type,
-			@RequestParam(required = false, defaultValue="0") String isHandle) {
+			@RequestParam(required = false, defaultValue="-1") String isHandle) {
 		
 		List<Integer> status =new ArrayList<Integer>();
 		for(int i=0;i<4;i++) {
@@ -226,7 +223,7 @@ public class ContractController {
 		if(isHandle.equals("0")) {
 			status.remove(3);
 			status.remove(0);
-		}else {
+		}else if(isHandle.equals("1")){
 			status.remove(2);
 			status.remove(1);
 			status.remove(0);
@@ -250,7 +247,8 @@ public class ContractController {
 			logger.error(e + "");
 			return Response.fail(e.getMessage());
 		}
-	}
+	}	
+	
 
 	/**
 	 * 通过ID获取合同信息

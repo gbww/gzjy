@@ -119,6 +119,7 @@ public class CheckItemsController {
 	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/{id}", method = RequestMethod.DELETE)
+	@Privileges(name = "CHECKITEM-CATALOG-RECURSION-DELETE", scope = { 1 })
 	public Response deleteCheckItemsCatalog(@PathVariable String id) {
 		try {
 			checkItemsCatalogService.deleteCheckItemsCatalog(id);
