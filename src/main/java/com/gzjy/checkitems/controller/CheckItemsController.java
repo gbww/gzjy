@@ -406,7 +406,6 @@ public class CheckItemsController {
 	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/item/mapping/import", method = RequestMethod.POST)
-	@Privileges(name = "CHECKITEM-IMPORT", scope = { 1 })
 	public Response checkitemscatalogMultiImport(@RequestParam("file") MultipartFile file,
 			@RequestParam(name="catalogId",required = true) String catalogId) {
 		try {
