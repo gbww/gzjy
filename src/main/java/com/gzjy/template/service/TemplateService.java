@@ -11,6 +11,7 @@ public interface TemplateService {
 	Template selectByName(String name);
 	int insert(Template record); 
 	int updateByPrimaryKeySelective(Template record);
+	public void ModifyTemplateFile(MultipartFile file, Template record);
 	void uploadFile(MultipartFile file, String name, String description,String category);
 	PageInfo<Template> getPageList(Integer pageNum, Integer pageSize, String name, String type, String category);
 	ArrayList<String> selectTypeByCagegory(String category);

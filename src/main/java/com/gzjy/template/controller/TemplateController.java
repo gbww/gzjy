@@ -67,10 +67,19 @@ public class TemplateController {
 	 * @return
 	 */
 	@Privileges(name = "TEMPLATE-UPDATE", scope = { 1 })
-	@RequestMapping(value = "/template", method = RequestMethod.PUT)
-	public Response updateTemplate(@RequestBody Template record) {		
+	@RequestMapping(value = "/template/{id}", method = RequestMethod.PUT)
+	public Response updateTemplate(@RequestParam("file") MultipartFile file,@PathVariable String id,
+			@RequestParam String name, @RequestParam String description, @RequestParam String category) {
+		if(!file.getOriginalFilename().endsWith(".jrxml")) {
+			return Response.fail("模板文件仅支持.jrxml后缀文件");
+		}
+		Template record = new Template();
+		record.setId(id);
+		record.setName(name);
+		record.setDescription(description);
+		record.setCategory(category);
 		try {			
-			templateService.updateByPrimaryKeySelective(record);
+			templateService.ModifyTemplateFile(file, record);			
 			return Response.success("success");
 		}
 		catch (Exception e) {

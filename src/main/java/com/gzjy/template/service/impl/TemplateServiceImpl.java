@@ -69,6 +69,23 @@ public class TemplateServiceImpl implements TemplateService {
 		}
 	}
 	
+	public void ModifyTemplateFile(MultipartFile file, Template record) {
+		EpicNFSClient client = epicNFSService.getClient("gzjy");		
+		String fileSuffix = ".jrxml";		
+		//存放在服务器的模板文件是随机生成的，避免重复
+		String excelName = ShortUUID.getInstance().generateShortID()+fileSuffix;
+		try {
+			client.upload(file.getInputStream(), "template/" + excelName);
+			client.close();	
+			logger.info("文件上传到服务器成功");			
+			record.setExcelName(excelName);
+			templateMapper.updateByPrimaryKeySelective(record);
+		} catch (Exception e) {
+			logger.info("文件上传失败:"+e);
+			throw new BizException("文件上传失败");
+		}
+	}
+	
 	public PageInfo<Template> getPageList(Integer pageNum, Integer pageSize, String name, String type, String category){
 		List<Template> list = new ArrayList<Template>();
 	    PageInfo<Template> pages = new PageInfo<Template>(list);

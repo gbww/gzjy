@@ -72,7 +72,10 @@
 			</if>
 			<if test="description != null">
 				description = #{description,jdbcType=VARCHAR},
-			</if>			
+			</if>	
+			<if test="excelName != null">
+				excel_name = #{excelName,jdbcType=VARCHAR},
+			</if>		
 		</set>
 		where id = #{id,jdbcType=VARCHAR}
 	</update>
