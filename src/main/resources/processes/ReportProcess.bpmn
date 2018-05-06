@@ -2,16 +2,16 @@
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
   <process id="ReportProcess" name="ReportProcess" isExecutable="true">
     <startEvent id="startevent1" name="Start"></startEvent>
-    <userTask id="eidt" name="编辑" activiti:assignee="${editPersion}"></userTask>
+    <userTask id="edit" name="编辑" activiti:assignee="${editPersion}"></userTask>
     <userTask id="approve" name="审核" activiti:assignee="${examinePersonId}"></userTask>
     <userTask id="pizhun" name="批准" activiti:assignee="${approvePersonId}"></userTask>
     <endEvent id="endevent1" name="End"></endEvent>
-    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="eidt"></sequenceFlow>
-    <sequenceFlow id="flow2" sourceRef="eidt" targetRef="approve"></sequenceFlow>
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="edit"></sequenceFlow>
+    <sequenceFlow id="flow2" sourceRef="edit" targetRef="approve"></sequenceFlow>
     <sequenceFlow id="flow3" sourceRef="approve" targetRef="exclusivegateway1"></sequenceFlow>
     <sequenceFlow id="flow4" sourceRef="pizhun" targetRef="exclusivegateway2"></sequenceFlow>
     <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
-    <sequenceFlow id="flow6" name="驳回" sourceRef="exclusivegateway1" targetRef="eidt">
+    <sequenceFlow id="flow6" name="驳回" sourceRef="exclusivegateway1" targetRef="edit">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${tag == 1}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="flow7" name="同意" sourceRef="exclusivegateway1" targetRef="pizhun">
@@ -30,7 +30,7 @@
       <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
         <omgdc:Bounds height="35.0" width="35.0" x="110.0" y="184.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="eidt" id="BPMNShape_eidt">
+      <bpmndi:BPMNShape bpmnElement="edit" id="BPMNShape_edit">
         <omgdc:Bounds height="55.0" width="105.0" x="242.0" y="174.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="approve" id="BPMNShape_approve">

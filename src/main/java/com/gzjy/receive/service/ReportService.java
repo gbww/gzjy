@@ -78,16 +78,15 @@ public class ReportService {
 		variables.put("tag", 1);
 		// 启动流程引擎时首先要指定编制人，默认是当前用户
 		variables.put("editPersion", user.getName());
-//		String processId = runtimeService.startProcessInstanceByKey("ReportProcess", variables).getId();
 		String processId = runtimeService.startProcessInstanceByKey("ReportProcess", receiveSampleId, variables).getId();
 		// 流程启动成功之后将返回的流程ID回填到合同receive_sample表中
 		ReceiveSample receiveSample = new ReceiveSample();
 		receiveSample.setReceiveSampleId(receiveSampleId);		
 		receiveSample.setReportProcessId(processId);
-		//同时将编制回填到数据库中
+		//同时将编制人回填到数据库中
 		receiveSample.setDrawUser(user.getName());
+		//将检验项分配最多的人指定为主检人
 		List<HashMap<String,String>> data=receiveSampleItemMapper.selectCountGroupByUser(receiveSampleId);
-		System.out.println(data);
 		int max=0;
 		String principalInspector = null;
 		for(HashMap<String,String> map:data) {
@@ -100,7 +99,30 @@ public class ReportService {
 		receiveSample.setPrincipalInspector(principalInspector);
 		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
 	}
-
+	
+	/**
+	 * 修改编制人
+	 * @param receiveSampleId
+	 * @throws Exception 
+	 */
+	@Transactional
+	public void modifyDrawUser(String receiveSampleId, String processId, String newDrawUser) throws Exception {
+		TaskService taskService = processEngine.getTaskService();
+		User user = userService.getCurrentUser();
+		List<Task> tasks =taskService.createTaskQuery().executionId(processId).
+				taskDefinitionKey("edit").taskAssignee(user.getName()).list();		
+		if(tasks.size()==0) {
+			throw new Exception("当前流程编制人已完成任务，无法修改");
+		}
+		for(Task task:tasks) {	
+			taskService.delegateTask(task.getId(), newDrawUser);
+		}
+		ReceiveSample receiveSample = new ReceiveSample();
+		receiveSample.setReceiveSampleId(receiveSampleId);
+		receiveSample.setDrawUser(newDrawUser);
+		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
+	}
+	
 	/**
 	 * 根据用户name获取当前用户任务
 	 * @param isHandle(0表示查詢未完成任務，1表示查詢已完成任務)

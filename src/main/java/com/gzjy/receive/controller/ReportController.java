@@ -812,5 +812,24 @@ public class ReportController {
 			return Response.fail(e.getMessage());
 		}
 	}
+	
+	/**
+	 * 修改编制人接口
+	 * @return
+	 */
+	@RequestMapping(value = "/drawuser/", method = RequestMethod.PUT)
+	//@Privileges(name = "REPORT-MUTI-STATUS-UPDATE", scope = { 1 })
+	public Response modifyDrawUser(
+			@RequestParam(required = true) String receiveSampleId,
+			@RequestParam(required = true) String processId,
+			@RequestParam(required = true) String newDrawUser) {
+		try {
+			reportService.modifyDrawUser(receiveSampleId, processId, newDrawUser);
+			return Response.success("success");
+		} catch (Exception e) {
+			logger.error(e + "");
+			return Response.fail(e.getMessage());
+		}
+	}
 
 }
