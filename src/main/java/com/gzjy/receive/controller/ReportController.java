@@ -817,7 +817,7 @@ public class ReportController {
 	 * 修改编制人接口
 	 * @return
 	 */
-	@RequestMapping(value = "/drawuser/", method = RequestMethod.PUT)
+	@RequestMapping(value = "/drawuser", method = RequestMethod.PUT)
 	//@Privileges(name = "REPORT-MUTI-STATUS-UPDATE", scope = { 1 })
 	public Response modifyDrawUser(
 			@RequestParam(required = true) String receiveSampleId,
