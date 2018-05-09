@@ -70,8 +70,8 @@ public class TemplateController {
 	@RequestMapping(value = "/template/{id}", method = RequestMethod.PUT)
 	public Response updateTemplate(@RequestParam("file") MultipartFile file,@PathVariable String id,
 			@RequestParam String name, @RequestParam String description, @RequestParam String category) {
-		if(!file.getOriginalFilename().endsWith(".jrxml")) {
-			return Response.fail("模板文件仅支持.jrxml后缀文件");
+		if((!file.getOriginalFilename().endsWith(".jrxml")) && (!file.getOriginalFilename().endsWith(".jasper"))) {
+			return Response.fail("模板文件格式有误");
 		}
 		Template record = new Template();
 		record.setId(id);
