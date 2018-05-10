@@ -114,7 +114,7 @@ public class TemplateServiceImpl implements TemplateService {
 	
 	public int deleteByPrimaryKey(String id) throws Exception {
 		Template data = templateMapper.selectById(id);
-		String filePath = "template/"+data.getExcelName();
+		String filePath = "/var/lib/docs/gzjy/template/"+data.getExcelName();
 		File file = new File(filePath);
 		if (file.exists() && file.isFile()) {
 			logger.info("File path:" + file.getAbsolutePath());
