@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,14 +69,15 @@ public class TemplateController {
 	@RequestMapping(value = "/template/{id}", method = RequestMethod.PUT)
 	public Response updateTemplate(@RequestParam("file") MultipartFile file,@PathVariable String id,
 			@RequestParam String name, @RequestParam String description, @RequestParam String category) {
-		if((!file.getOriginalFilename().endsWith(".jrxml")) && (!file.getOriginalFilename().endsWith(".jasper"))) {
-			return Response.fail("模板文件格式有误");
+		if(!file.getOriginalFilename().endsWith(".jasper")) {
+			return Response.fail("模板文件仅支持.jasper后缀文件");
 		}
 		Template record = new Template();
 		record.setId(id);
 		record.setName(name);
 		record.setDescription(description);
 		record.setCategory(category);
+		record.setExcelName(file.getOriginalFilename());
 		try {			
 			templateService.ModifyTemplateFile(file, record);			
 			return Response.success("success");
@@ -114,8 +114,8 @@ public class TemplateController {
 	@Privileges(name = "TEMPLATE-UPLOAD", scope = { 1 })
 	public Response uploadTemplate(@RequestParam("file") MultipartFile file, 
 			@RequestParam String name, @RequestParam String description, @RequestParam String category) {
-		if((!file.getOriginalFilename().endsWith(".jrxml")) && (!file.getOriginalFilename().endsWith(".jasper"))) {
-			return Response.fail("模板文件仅支持.jrxml后缀文件");
+		if(!file.getOriginalFilename().endsWith(".jasper")) {
+			return Response.fail("模板文件仅支持.jasper后缀文件");
 		}
 		try {
 			templateService.uploadFile(file, name, description, category);

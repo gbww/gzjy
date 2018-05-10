@@ -47,18 +47,16 @@ public class TemplateServiceImpl implements TemplateService {
 		// 建立远程存放excel模板文件目录
 		if (!client.hasRemoteDir("template")) {
 			client.createRemoteDir("template");
-		}
-		String fileSuffix = ".jrxml";		
-		//存放在服务器的模板文件是随机生成的，避免重复
-		String excelName = ShortUUID.getInstance().generateShortID()+fileSuffix;
+		}		
+		String fileName=file.getOriginalFilename();
 		try {
-			client.upload(file.getInputStream(), "template/" + excelName);
+			client.upload(file.getInputStream(), "template/" + fileName);
 			client.close();	
 			logger.info("文件上传到服务器成功");
 			Template record=new Template();
 			record.setId(ShortUUID.getInstance().generateShortID());
 			record.setName(name);
-			record.setExcelName(excelName);
+			record.setExcelName(fileName);
 			record.setCreatedAt(new Date());
 			record.setCategory(category);
 			record.setDescription(description);
@@ -71,13 +69,21 @@ public class TemplateServiceImpl implements TemplateService {
 	
 	public void ModifyTemplateFile(MultipartFile file, Template record) {
 		EpicNFSClient client = epicNFSService.getClient("gzjy");		
-		String fileSuffix = ".jrxml";		
-		//存放在服务器的模板文件是随机生成的，避免重复
-		String excelName = ShortUUID.getInstance().generateShortID()+fileSuffix;
-		try {
+		String excelName = file.getOriginalFilename();
+		try {			
+			Template oldTemplate = templateMapper.selectById(record.getId());
+			String filePath = "/var/lib/docs/gzjy/template/"+oldTemplate.getExcelName();
+			File oldFile = new File(filePath);
+			if (oldFile.exists() && oldFile.isFile()) {
+				logger.info("File path:" + oldFile.getAbsolutePath());
+				if (!oldFile.delete()) {
+					throw new Exception("模板文件删除失败");
+				}
+				logger.info("旧模板文件删除成功");
+			}
 			client.upload(file.getInputStream(), "template/" + excelName);
 			client.close();	
-			logger.info("文件上传到服务器成功");			
+			logger.info("新模板文件成功上传到服务器");			
 			record.setExcelName(excelName);
 			templateMapper.updateByPrimaryKeySelective(record);
 		} catch (Exception e) {
