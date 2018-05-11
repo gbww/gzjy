@@ -43,6 +43,10 @@ public class TemplateServiceImpl implements TemplateService {
 	}
 
 	public void uploadFile(MultipartFile file, String name, String description,String category) {
+		Template temp = templateMapper.selectByName(name);
+		if(temp!=null) {
+			throw new BizException("模板名称已存在");
+		}
 		EpicNFSClient client = epicNFSService.getClient("gzjy");
 		// 建立远程存放excel模板文件目录
 		if (!client.hasRemoteDir("template")) {
