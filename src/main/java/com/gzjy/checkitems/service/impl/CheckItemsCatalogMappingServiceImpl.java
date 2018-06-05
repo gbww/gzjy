@@ -97,8 +97,8 @@ public class CheckItemsCatalogMappingServiceImpl implements CheckItemsCatalogMap
 				item_mapping.setMethod(row.getCell(1).toString().trim());
 				item_mapping.setUnit(row.getCell(2).toString().trim());
 				item_mapping.setStandardValue(row.getCell(3).toString().trim());
-				item_mapping.setDetectionLimit(row.getCell(4).toString().trim());
-				item_mapping.setQuantitationLimit(row.getCell(5).toString().trim());
+				item_mapping.setDetectionLimit(row.getCell(4)!=null?row.getCell(4).toString().trim():"/");
+				item_mapping.setQuantitationLimit(row.getCell(5)!=null?row.getCell(5).toString().trim():"/");
 				item_mapping.setDevice(row.getCell(6).toString().trim());
 				item_mapping.setDefaultPrice(Double.parseDouble(row.getCell(7).toString().trim()));
 				item_mapping.setCreatedAt(new Date());
