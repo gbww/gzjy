@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -120,8 +121,8 @@ public class CheckItemServiceImpl implements CheckItemService {
 				item.setMethod(row.getCell(1).toString().trim());
 				item.setUnit(row.getCell(2).toString().trim());
 				item.setStandardValue(row.getCell(3).toString().trim());
-				item.setDetectionLimit(row.getCell(4).toString().trim());
-				item.setQuantitationLimit(row.getCell(5).toString().trim());
+				item.setDetectionLimit(row.getCell(4)!=null?row.getCell(4).toString().trim():"/");
+				item.setQuantitationLimit(row.getCell(5)!=null?row.getCell(5).toString().trim():"/");
 				item.setDevice(row.getCell(6).toString().trim());
 				item.setDefaultPrice(Double.parseDouble(row.getCell(7).toString().trim()));
 				item.setDepartment(row.getCell(8).toString().trim());
