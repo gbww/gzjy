@@ -402,7 +402,7 @@ public class ReceiveSampleService {
 		if (record != null) {
 			return record;
 		} else {
-			throw new BizException("查询失败，id输入有误");
+			return null;
 		}
 
 	}

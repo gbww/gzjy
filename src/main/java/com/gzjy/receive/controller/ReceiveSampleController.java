@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.github.pagehelper.PageInfo;
 import com.gzjy.common.Add;
 import com.gzjy.common.Response;
 import com.gzjy.common.ShortUUID;
@@ -629,8 +630,10 @@ public class ReceiveSampleController {
 	@Privileges(name = "SAMPLE-ITEMS-INPUT-SELECT", scope = { 1 })
 	public Response listItemByCurrentUser(@RequestParam(name = "status", defaultValue = "0") int status,
 			@RequestParam(name = "order", required = false) String order,
-			 @RequestParam(name = "receiveSampleId", required = false) String receiveSampleId,
+			@RequestParam(name = "receiveSampleId", required = false) String receiveSampleId,
 			@RequestParam(name = "reportId", required = false) String reportId,
+			@RequestParam(name = "name", required = false) String name,
+			@RequestParam(name = "method", required = false) String method,
 			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
 			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 		Map<String, Object> filter = new HashMap<String, Object>();
@@ -646,7 +649,21 @@ public class ReceiveSampleController {
 		if (!StringUtils.isBlank(reportId)) {
             filter.put("report_id", reportId);
         }
-		return Response.success(receiveSampleService.selectCurrentUserItems(pageNum, pageSize, order, filter));
+		if (!StringUtils.isBlank(name)) {
+            filter.put("name", name);
+        }
+		if (!StringUtils.isBlank(method)) {
+            filter.put("method", method);
+        }
+		PageInfo<ReceiveSampleItem> items=receiveSampleService.selectCurrentUserItems(pageNum, pageSize, order, filter);
+		for(ReceiveSampleItem item: items.getList()) {
+		    String id=item.getReceiveSampleId();
+		    ReceiveSample sample=new ReceiveSample();
+		     sample=receiveSampleService.getReceiveSample(id);
+		    item.setSample(sample);
+		}
+		
+		return Response.success(items);
 	}
 	
 	
@@ -665,7 +682,7 @@ public class ReceiveSampleController {
             filter.put("status", status);
         }
         if (StringUtils.isBlank(order)) {
-            order = "created_at desc";
+            order = "finish_date asc";
         }
         if (!StringUtils.isBlank(receiveSampleId)) {
             filter.put("receive_sample_id", receiveSampleId);
