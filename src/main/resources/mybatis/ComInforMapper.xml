@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gzjy.review.mapper.ComInforMapper" >
+  <resultMap id="BaseResultMap" type="com.gzjy.review.modle.ComInfor" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="com_name" property="comName" jdbcType="VARCHAR" />
+    <result column="com_type" property="comType" jdbcType="VARCHAR" />
+    <result column="com_principal" property="comPrincipal" jdbcType="VARCHAR" />
+    <result column="com_credit_code" property="comCreditCode" jdbcType="VARCHAR" />
+    <result column="com_ licence" property="comLicence" jdbcType="VARCHAR" />
+    <result column="com_address" property="comAddress" jdbcType="VARCHAR" />
+    <result column="com_scale" property="comScale" jdbcType="VARCHAR" />
+    <result column="com_scale_score" property="comScaleScore" jdbcType="INTEGER" />
+    <result column="com_variety" property="comVariety" jdbcType="VARCHAR" />
+    <result column="com_variety_score" property="comVarietyScore" jdbcType="INTEGER" />
+    <result column="com_telephone" property="comTelephone" jdbcType="VARCHAR" />
+    <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, com_name, com_type, com_principal, com_credit_code, "com_ licence", com_address, 
+    com_scale, com_scale_score, com_variety, com_variety_score, com_telephone, updated_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from com_infor
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from com_infor
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzjy.review.modle.ComInfor" >
+    insert into com_infor (id, com_name, com_type, 
+      com_principal, com_credit_code, "com_ licence", 
+      com_address, com_scale, com_scale_score, 
+      com_variety, com_variety_score, com_telephone, 
+      updated_at)
+    values (#{id,jdbcType=CHAR}, #{comName,jdbcType=VARCHAR}, #{comType,jdbcType=VARCHAR}, 
+      #{comPrincipal,jdbcType=VARCHAR}, #{comCreditCode,jdbcType=VARCHAR}, #{comLicence,jdbcType=VARCHAR}, 
+      #{comAddress,jdbcType=VARCHAR}, #{comScale,jdbcType=VARCHAR}, #{comScaleScore,jdbcType=INTEGER}, 
+      #{comVariety,jdbcType=VARCHAR}, #{comVarietyScore,jdbcType=INTEGER}, #{comTelephone,jdbcType=VARCHAR}, 
+      #{updatedAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gzjy.review.modle.ComInfor" >
+    insert into com_infor
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="comName != null" >
+        com_name,
+      </if>
+      <if test="comType != null" >
+        com_type,
+      </if>
+      <if test="comPrincipal != null" >
+        com_principal,
+      </if>
+      <if test="comCreditCode != null" >
+        com_credit_code,
+      </if>
+      <if test="comLicence != null" >
+        "com_ licence",
+      </if>
+      <if test="comAddress != null" >
+        com_address,
+      </if>
+      <if test="comScale != null" >
+        com_scale,
+      </if>
+      <if test="comScaleScore != null" >
+        com_scale_score,
+      </if>
+      <if test="comVariety != null" >
+        com_variety,
+      </if>
+      <if test="comVarietyScore != null" >
+        com_variety_score,
+      </if>
+      <if test="comTelephone != null" >
+        com_telephone,
+      </if>
+      <if test="updatedAt != null" >
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="comName != null" >
+        #{comName,jdbcType=VARCHAR},
+      </if>
+      <if test="comType != null" >
+        #{comType,jdbcType=VARCHAR},
+      </if>
+      <if test="comPrincipal != null" >
+        #{comPrincipal,jdbcType=VARCHAR},
+      </if>
+      <if test="comCreditCode != null" >
+        #{comCreditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="comLicence != null" >
+        #{comLicence,jdbcType=VARCHAR},
+      </if>
+      <if test="comAddress != null" >
+        #{comAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="comScale != null" >
+        #{comScale,jdbcType=VARCHAR},
+      </if>
+      <if test="comScaleScore != null" >
+        #{comScaleScore,jdbcType=INTEGER},
+      </if>
+      <if test="comVariety != null" >
+        #{comVariety,jdbcType=VARCHAR},
+      </if>
+      <if test="comVarietyScore != null" >
+        #{comVarietyScore,jdbcType=INTEGER},
+      </if>
+      <if test="comTelephone != null" >
+        #{comTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedAt != null" >
+        #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gzjy.review.modle.ComInfor" >
+    update com_infor
+    <set >
+      <if test="comName != null" >
+        com_name = #{comName,jdbcType=VARCHAR},
+      </if>
+      <if test="comType != null" >
+        com_type = #{comType,jdbcType=VARCHAR},
+      </if>
+      <if test="comPrincipal != null" >
+        com_principal = #{comPrincipal,jdbcType=VARCHAR},
+      </if>
+      <if test="comCreditCode != null" >
+        com_credit_code = #{comCreditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="comLicence != null" >
+        "com_ licence" = #{comLicence,jdbcType=VARCHAR},
+      </if>
+      <if test="comAddress != null" >
+        com_address = #{comAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="comScale != null" >
+        com_scale = #{comScale,jdbcType=VARCHAR},
+      </if>
+      <if test="comScaleScore != null" >
+        com_scale_score = #{comScaleScore,jdbcType=INTEGER},
+      </if>
+      <if test="comVariety != null" >
+        com_variety = #{comVariety,jdbcType=VARCHAR},
+      </if>
+      <if test="comVarietyScore != null" >
+        com_variety_score = #{comVarietyScore,jdbcType=INTEGER},
+      </if>
+      <if test="comTelephone != null" >
+        com_telephone = #{comTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedAt != null" >
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gzjy.review.modle.ComInfor" >
+    update com_infor
+    set com_name = #{comName,jdbcType=VARCHAR},
+      com_type = #{comType,jdbcType=VARCHAR},
+      com_principal = #{comPrincipal,jdbcType=VARCHAR},
+      com_credit_code = #{comCreditCode,jdbcType=VARCHAR},
+      "com_ licence" = #{comLicence,jdbcType=VARCHAR},
+      com_address = #{comAddress,jdbcType=VARCHAR},
+      com_scale = #{comScale,jdbcType=VARCHAR},
+      com_scale_score = #{comScaleScore,jdbcType=INTEGER},
+      com_variety = #{comVariety,jdbcType=VARCHAR},
+      com_variety_score = #{comVarietyScore,jdbcType=INTEGER},
+      com_telephone = #{comTelephone,jdbcType=VARCHAR},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

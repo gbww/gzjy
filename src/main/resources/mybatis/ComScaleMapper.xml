@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gzjy.review.mapper.ComScaleMapper" >
+  <resultMap id="BaseResultMap" type="com.gzjy.review.modle.ComScale" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="com_type" property="comType" jdbcType="VARCHAR" />
+    <result column="scale" property="scale" jdbcType="VARCHAR" />
+    <result column="score" property="score" jdbcType="DOUBLE" />
+    <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, com_type, scale, score, updated_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from com_scale
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from com_scale
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzjy.review.modle.ComScale" >
+    insert into com_scale (id, com_type, scale, 
+      score, updated_at)
+    values (#{id,jdbcType=CHAR}, #{comType,jdbcType=VARCHAR}, #{scale,jdbcType=VARCHAR}, 
+      #{score,jdbcType=DOUBLE}, #{updatedAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gzjy.review.modle.ComScale" >
+    insert into com_scale
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="comType != null" >
+        com_type,
+      </if>
+      <if test="scale != null" >
+        scale,
+      </if>
+      <if test="score != null" >
+        score,
+      </if>
+      <if test="updatedAt != null" >
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="comType != null" >
+        #{comType,jdbcType=VARCHAR},
+      </if>
+      <if test="scale != null" >
+        #{scale,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=DOUBLE},
+      </if>
+      <if test="updatedAt != null" >
+        #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gzjy.review.modle.ComScale" >
+    update com_scale
+    <set >
+      <if test="comType != null" >
+        com_type = #{comType,jdbcType=VARCHAR},
+      </if>
+      <if test="scale != null" >
+        scale = #{scale,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null" >
+        score = #{score,jdbcType=DOUBLE},
+      </if>
+      <if test="updatedAt != null" >
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gzjy.review.modle.ComScale" >
+    update com_scale
+    set com_type = #{comType,jdbcType=VARCHAR},
+      scale = #{scale,jdbcType=VARCHAR},
+      score = #{score,jdbcType=DOUBLE},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

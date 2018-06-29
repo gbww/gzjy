@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gzjy.review.mapper.ComProjectReviewMapper" >
+  <resultMap id="BaseResultMap" type="com.gzjy.review.modle.ComProjectReview" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="com_type" property="comType" jdbcType="VARCHAR" />
+    <result column="company_id" property="companyId" jdbcType="CHAR" />
+    <result column="review_report_id" property="reviewReportId" jdbcType="VARCHAR" />
+    <result column="project_id" property="projectId" jdbcType="VARCHAR" />
+    <result column="project_name" property="projectName" jdbcType="VARCHAR" />
+    <result column="score" property="score" jdbcType="DOUBLE" />
+    <result column="score_level" property="scoreLevel" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="advise" property="advise" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, com_type, company_id, review_report_id, project_id, project_name, score, score_level, 
+    remark, advise
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from com_project_review
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from com_project_review
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzjy.review.modle.ComProjectReview" >
+    insert into com_project_review (id, com_type, company_id, 
+      review_report_id, project_id, project_name, 
+      score, score_level, remark, 
+      advise)
+    values (#{id,jdbcType=CHAR}, #{comType,jdbcType=VARCHAR}, #{companyId,jdbcType=CHAR}, 
+      #{reviewReportId,jdbcType=VARCHAR}, #{projectId,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}, 
+      #{score,jdbcType=DOUBLE}, #{scoreLevel,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{advise,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gzjy.review.modle.ComProjectReview" >
+    insert into com_project_review
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="comType != null" >
+        com_type,
+      </if>
+      <if test="companyId != null" >
+        company_id,
+      </if>
+      <if test="reviewReportId != null" >
+        review_report_id,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="projectName != null" >
+        project_name,
+      </if>
+      <if test="score != null" >
+        score,
+      </if>
+      <if test="scoreLevel != null" >
+        score_level,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="advise != null" >
+        advise,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="comType != null" >
+        #{comType,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=CHAR},
+      </if>
+      <if test="reviewReportId != null" >
+        #{reviewReportId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null" >
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=DOUBLE},
+      </if>
+      <if test="scoreLevel != null" >
+        #{scoreLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="advise != null" >
+        #{advise,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gzjy.review.modle.ComProjectReview" >
+    update com_project_review
+    <set >
+      <if test="comType != null" >
+        com_type = #{comType,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null" >
+        company_id = #{companyId,jdbcType=CHAR},
+      </if>
+      <if test="reviewReportId != null" >
+        review_report_id = #{reviewReportId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null" >
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null" >
+        score = #{score,jdbcType=DOUBLE},
+      </if>
+      <if test="scoreLevel != null" >
+        score_level = #{scoreLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="advise != null" >
+        advise = #{advise,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gzjy.review.modle.ComProjectReview" >
+    update com_project_review
+    set com_type = #{comType,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=CHAR},
+      review_report_id = #{reviewReportId,jdbcType=VARCHAR},
+      project_id = #{projectId,jdbcType=VARCHAR},
+      project_name = #{projectName,jdbcType=VARCHAR},
+      score = #{score,jdbcType=DOUBLE},
+      score_level = #{scoreLevel,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      advise = #{advise,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>
