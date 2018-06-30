@@ -103,7 +103,7 @@ public class Contract {
     private String authType;
     //产品类别
     private String productType;
-    //企业提供的文本资料
+    //产于评审人员提供的文本资料
     private String enterpriseFile;
     //时限要求
     private String limitTime;
