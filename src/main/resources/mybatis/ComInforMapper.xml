@@ -185,4 +185,28 @@
       updated_at = #{updatedAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=CHAR}
   </update>
+
+  <select id="selectByFilters">
+    select
+    <include refid="Base_Column_List" />
+    from com_infor
+    <where>
+      <foreach collection="filterMaps.keys" item="key">
+        and ${key} in
+        <foreach collection="filterMaps.key" open="(" separator="," close=")" item="filter">
+          #{filter}
+        </foreach>
+      </foreach>
+    </where>
+
+  </select>
+  <delete id="deleteByKeys">
+    delete from com_infor
+    <where>
+      id in
+      <foreach collection="ids" item="id" open="(" separator="," close=")">
+        #{id}
+      </foreach>
+    </where>
+  </delete>
 </mapper>

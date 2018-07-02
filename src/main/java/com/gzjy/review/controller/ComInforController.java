@@ -1,6 +1,8 @@
 package com.gzjy.review.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.gzjy.common.Response;
+import com.gzjy.common.exception.BizException;
 import com.gzjy.review.modle.ComInfor;
 import com.gzjy.review.service.ComInforService;
 import org.slf4j.Logger;
@@ -28,17 +30,17 @@ public class ComInforController {
     /**
      * 分页查询企业信息
      * @param pageCount
-     * @param pageNum
+     * @param pageSize
      * @return
      */
     @RequestMapping(value = "/select/cominfors", method = RequestMethod.GET)
     public Response selectByPages(
             @RequestParam(name = "pageCount", defaultValue = "10") Integer pageCount,
-            @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum){
+            @RequestParam(name = "pageSize", defaultValue = "1") Integer pageSize){
 
+        PageInfo<ComInfor> comInfors = comInforService.selectByPages(pageCount,pageSize);
 
-
-        return Response.success(null);
+        return Response.success(comInfors);
     }
 
     /**
@@ -48,8 +50,8 @@ public class ComInforController {
      */
     @RequestMapping(value = "/select/{id}", method = RequestMethod.GET)
     public Response selectByPrimaryKey(@PathVariable(name = "id",required = true) String id){
-
-        return Response.success(null);
+        ComInfor comInfor = comInforService.selectByPrimaryKey(id);
+        return Response.success(comInfor);
     }
 
     /**
@@ -59,7 +61,10 @@ public class ComInforController {
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Response add(@RequestBody ComInfor comInfor){
-        return Response.success(null);
+
+        int n = comInforService.addComInfor(comInfor);
+
+        return Response.success(n);
     }
 
     /**
@@ -69,7 +74,9 @@ public class ComInforController {
      */
     @RequestMapping(value = "/update",method = RequestMethod.PUT)
     public Response update(@RequestBody ComInfor comInfor){
-        return  Response.success(null);
+        int n = comInforService.updateComInfor(comInfor);
+
+        return  Response.success(n);
     }
 
     /**
@@ -79,6 +86,11 @@ public class ComInforController {
      */
     @RequestMapping(value = "/delete")
     public Response delete(@RequestBody List<String> ids){
-        return Response.success(null);
+
+        if (ids == null || ids.size() == 0)
+            throw new BizException("企业唯一标识不能为空");
+
+        int n = comInforService.deleteCominfors(ids);
+        return Response.success(n);
     }
 }

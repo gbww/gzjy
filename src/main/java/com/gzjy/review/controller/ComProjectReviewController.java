@@ -34,7 +34,7 @@ public class ComProjectReviewController {
     @RequestMapping(value = "/select/infors", method = RequestMethod.GET)
     public Response selectByPages(
             @RequestParam(name = "pageCount", defaultValue = "10") Integer pageCount,
-            @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum){
+            @RequestParam(name = "pageSize", defaultValue = "1") Integer pageNum){
 
 
 
