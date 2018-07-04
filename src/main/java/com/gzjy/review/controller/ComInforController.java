@@ -39,7 +39,7 @@ public class ComInforController {
             @RequestParam(name = "pageSize", defaultValue = "1") Integer pageSize){
 
         PageInfo<ComInfor> comInfors = comInforService.selectByPages(pageCount,pageSize);
-
+        System.out.println(1);
         return Response.success(comInfors);
     }
 
