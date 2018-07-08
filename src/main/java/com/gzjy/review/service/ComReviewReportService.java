@@ -10,7 +10,7 @@ import com.gzjy.review.modle.ComReviewReport;
  */
 public interface ComReviewReportService {
 
-	String insertComReviewReport(ComReviewReport comReviewReport);
+	String insertComReviewReport(String companyId);
 
 	int update(ComReviewReport comReviewReport);
 

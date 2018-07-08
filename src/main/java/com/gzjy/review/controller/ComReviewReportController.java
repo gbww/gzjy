@@ -50,11 +50,11 @@ public class ComReviewReportController {
 	 * @param CompanyId 企业id
 	 * @return
 	 */
-	@RequestMapping(value = "/select/companyId", method = RequestMethod.GET)
+	@RequestMapping(value = "/select/{companyId}", method = RequestMethod.GET)
 	public Response selectByCompanyId(
 			@RequestParam(name = "pageCount", defaultValue = "10") Integer pageCount,
 			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
-			String companyId){
+			@PathVariable(name = "companyId",required = true) String companyId){
 
 		PageInfo<ComReviewReport> comReviewReport = comReviewReportService.selectByCompanyId(pageCount,pageNum,companyId);
 		return Response.success(comReviewReport);
@@ -64,15 +64,16 @@ public class ComReviewReportController {
 
 
 	/**
-	 * 添加企业评审报告信息
-	 * @param comReviewReport
+	 * 通过companyId  企业ID 初始化企业评审报告信息
+	 * 企业审核项目信息，并向前端返回创建的报告信息编号
+	 * @param companyId 企业ID
 	 * @return
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public Response add(@RequestBody ComReviewReport comReviewReport){
+	public Response add( String companyId){
 		try {
 
-			String reviewReportId=comReviewReportService.insertComReviewReport(comReviewReport);
+			String reviewReportId=comReviewReportService.insertComReviewReport(companyId);
 			return Response.success(reviewReportId);
 		}
 		catch (Exception e) {

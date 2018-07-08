@@ -43,14 +43,15 @@ public class ComReviewReportServiceImpl implements ComReviewReportService {
 
 	@Override
 	@Transactional
-	public String insertComReviewReport(ComReviewReport comReviewReport) {
+	public String insertComReviewReport(String companyId) {
 		//初始化报告表
-		//SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		ComReviewReport comReviewReport=new ComReviewReport();
 		 comReviewReport.setCheckDate(new Date());
+		 comReviewReport.setCompanyId(companyId);
 		comReviewReport.setReviewReportId(ShortUUID.getInstance().generateShortID());
 		comReviewReportMapper.insertSelective(comReviewReport);
 		//根据企业ID查询企业信息
-		ComInfor comInfor=comInforMapper.selectByPrimaryKey(comReviewReport.getCompanyId());
+		ComInfor comInfor=comInforMapper.selectByPrimaryKey(companyId);
 		//根据企业类型查询审核明细
 		List<ComProjectDetails>ComProjectDetails= comProjectDetailsMapper.selectByComType(comInfor.getComType());
 		List<ComProjectReview> comProjectReview=new ArrayList<ComProjectReview>();
