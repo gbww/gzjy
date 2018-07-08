@@ -13,11 +13,11 @@ import java.util.List;
 public interface ComInforService {
     /**
      * 分页查询企业信息
-     * @param pageCount
-     * @param pageSize
+     * @param pageNum 当前页数
+     * @param pageSize 每页数据条数
      * @return
      */
-    PageInfo<ComInfor> selectByPages(Integer pageCount, Integer pageSize);
+    PageInfo<ComInfor> selectByPages(Integer pageNum, Integer pageSize);
 
     /**
      * 根据主键查询企业信息

@@ -1,5 +1,6 @@
 package com.gzjy.review.service.impl;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,11 +27,11 @@ public class ComInforServiceImpl implements ComInforService {
     private ComInforMapper comInforMapper;
 
     @Override
-    public PageInfo<ComInfor> selectByPages(Integer pageCount, Integer pageSize) {
+    public PageInfo<ComInfor> selectByPages(Integer pageNum, Integer pageSize) {
 
         Map<String ,List<String>> filterMaps = new HashMap<>();
 
-        PageInfo<ComInfor> comInfors = PageHelper.startPage(pageCount, pageSize).doSelectPageInfo(
+        PageInfo<ComInfor> comInfors = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(
             () -> {
                 comInforMapper.selectByFilters(filterMaps);
             }
@@ -48,7 +49,7 @@ public class ComInforServiceImpl implements ComInforService {
     public int addComInfor(ComInfor comInfor) {
 
         comInfor.setId(ShortUUID.getInstance().generateShortID());
-
+        comInfor.setUpdatedAt(new Date());
         return comInforMapper.insertSelective(comInfor);
     }
 

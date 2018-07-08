@@ -14,7 +14,7 @@ public interface ComReviewReportService {
 
 	int update(ComReviewReport comReviewReport);
 
-	PageInfo<ComReviewReport> selectByCompanyId(Integer pageCount, Integer pageNum, String companyId);
+	PageInfo<ComReviewReport> selectByCompanyId(Integer pageNum, Integer pageSize, String companyId);
 
 	ComReviewReport selectByPrimaryKey(String reviewReportId);
 

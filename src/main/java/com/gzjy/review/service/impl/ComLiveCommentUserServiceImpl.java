@@ -67,10 +67,10 @@ public class ComLiveCommentUserServiceImpl implements ComLiveCommentUserService 
 	 * 分页查询参与评审人员信息
 	 */
 	@Override
-	public PageInfo<ComLiveCommentUser> selectByPages(Integer pageCount, Integer pageNum) {
+	public PageInfo<ComLiveCommentUser> selectByPages(Integer pageNum, Integer pageSize) {
 		List<ComLiveCommentUser> list = new ArrayList<ComLiveCommentUser>();
 		PageInfo<ComLiveCommentUser> pages = new PageInfo<ComLiveCommentUser>(list);
-		pages = PageHelper.startPage(pageNum, pageCount).doSelectPageInfo(new ISelect() {
+		pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
 			@Override
 			public void doSelect() {
 				comLiveCommentUserMapper.selectAll();

@@ -37,7 +37,7 @@ public interface ComLiveCommentUserService {
 	/**
 	 * 分页查询参与评审人员信息
 	 */
-	PageInfo<ComLiveCommentUser> selectByPages(Integer pageCount, Integer pageNum);
+	PageInfo<ComLiveCommentUser> selectByPages(Integer pageNum, Integer pageSize);
 
 
 	/**

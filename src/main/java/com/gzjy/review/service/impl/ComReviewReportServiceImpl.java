@@ -78,10 +78,10 @@ public class ComReviewReportServiceImpl implements ComReviewReportService {
 	}
 
 	@Override
-	public PageInfo<ComReviewReport> selectByCompanyId(Integer pageCount, Integer pageNum, String companyId) {
+	public PageInfo<ComReviewReport> selectByCompanyId(Integer pageNum, Integer pageSize , String companyId) {
 		List<ComReviewReport> list = new ArrayList<ComReviewReport>();
 		PageInfo<ComReviewReport> pages = new PageInfo<ComReviewReport>(list);
-		pages = PageHelper.startPage(pageNum, pageCount).doSelectPageInfo(new ISelect() {
+		pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
 			@Override
 			public void doSelect() {
 				comReviewReportMapper.selectByCompanyId(companyId);

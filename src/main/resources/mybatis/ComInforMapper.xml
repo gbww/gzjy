@@ -7,7 +7,7 @@
     <result column="com_type" property="comType" jdbcType="VARCHAR" />
     <result column="com_principal" property="comPrincipal" jdbcType="VARCHAR" />
     <result column="com_credit_code" property="comCreditCode" jdbcType="VARCHAR" />
-    <result column="com_ licence" property="comLicence" jdbcType="VARCHAR" />
+    <result column="com_licence" property="comLicence" jdbcType="VARCHAR" />
     <result column="com_address" property="comAddress" jdbcType="VARCHAR" />
     <result column="com_scale" property="comScale" jdbcType="VARCHAR" />
     <result column="com_scale_score" property="comScaleScore" jdbcType="INTEGER" />
@@ -17,7 +17,7 @@
     <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, com_name, com_type, com_principal, com_credit_code, "com_ licence", com_address, 
+    id, com_name, com_type, com_principal, com_credit_code, com_licence, com_address, 
     com_scale, com_scale_score, com_variety, com_variety_score, com_telephone, updated_at
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
@@ -32,7 +32,7 @@
   </delete>
   <insert id="insert" parameterType="com.gzjy.review.modle.ComInfor" >
     insert into com_infor (id, com_name, com_type, 
-      com_principal, com_credit_code, com_ licence, 
+      com_principal, com_credit_code, com_licence, 
       com_address, com_scale, com_scale_score, 
       com_variety, com_variety_score, com_telephone, 
       updated_at)

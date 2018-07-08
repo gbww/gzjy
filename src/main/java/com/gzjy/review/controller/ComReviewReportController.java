@@ -52,11 +52,11 @@ public class ComReviewReportController {
 	 */
 	@RequestMapping(value = "/selectByCompanyId/{companyId}", method = RequestMethod.GET)
 	public Response selectByCompanyId(
-			@RequestParam(name = "pageCount", defaultValue = "10") Integer pageCount,
-			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
+			 @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
+	            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
 			@PathVariable(name = "companyId",required = true) String companyId){
 
-		PageInfo<ComReviewReport> comReviewReport = comReviewReportService.selectByCompanyId(pageCount,pageNum,companyId);
+		PageInfo<ComReviewReport> comReviewReport = comReviewReportService.selectByCompanyId(pageNum,pageSize,companyId);
 		return Response.success(comReviewReport);
 
 	} 
