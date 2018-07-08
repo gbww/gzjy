@@ -59,8 +59,8 @@ public class ComInforServiceImpl implements ComInforService {
     }
 
     @Override
-    public int deleteCominfors(List<String> ids) {
-        return comInforMapper.deleteByKeys(ids);
+    public int deleteCominfors(String ids) {
+        return comInforMapper.deleteByPrimaryKey(ids);
     }
     
 }

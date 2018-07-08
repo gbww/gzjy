@@ -89,13 +89,10 @@ public class ComInforController {
 	 * @param ids 主键
 	 * @return
 	 */
-	@RequestMapping(value = "/delete",method = RequestMethod.DELETE)
-	public Response delete(@RequestBody List<String> ids){
+	@RequestMapping(value = "/delete/{id}",method = RequestMethod.DELETE)
+	public Response delete(@PathVariable(name = "id",required = true) String id){
 
-		if (ids == null || ids.size() == 0)
-			throw new BizException("企业唯一标识不能为空");
-
-		int n = comInforService.deleteCominfors(ids);
+		int n = comInforService.deleteCominfors(id);
 		return Response.success(n);
 	}
 }

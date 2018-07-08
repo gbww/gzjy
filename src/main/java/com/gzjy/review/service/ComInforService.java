@@ -45,5 +45,5 @@ public interface ComInforService {
      * @param ids
      * @return
      */
-    int deleteCominfors(List<String> ids);
+    int deleteCominfors(String ids);
 }

@@ -34,38 +34,6 @@ public class ComLiveCommentUserController {
 	private ComLiveCommentUserService comLiveCommentUserService;
 
 	/**
-	 * 分页查询参与评审人员信息
-	 * @param pageCount
-	 * @param pageNum
-	 * @return
-	 */
-	@RequestMapping(value = "/select/infors", method = RequestMethod.GET)
-	public Response selectByPages(
-			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
-			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize){
-
-		PageInfo<ComLiveCommentUser> comLiveCommentUser = comLiveCommentUserService.selectByPages(pageNum,pageSize);
-		return Response.success(comLiveCommentUser);
-	}
-
-	/**
-	 *  根据主键查询参与评审人员信息
-	 * @param id
-	 * @return
-	 */
-	@RequestMapping(value = "/select/{id}", method = RequestMethod.GET)
-	public Response selectByPrimaryKey(@PathVariable(name = "id",required = true) String id){
-
-		try {
-			ComLiveCommentUser item= comLiveCommentUserService.selectByPrimaryKey(id);
-			return Response.success(item);
-		}
-		catch (Exception e) {
-			throw new BizException(e.toString());
-		}
-	}
-
-	/**
 	 *  根据报告编号查询人员信息
 	 * @param reviewReportId 报告编号
 	 * @return
@@ -139,14 +107,31 @@ public class ComLiveCommentUserController {
 	}
 
 	/**
+	 * 批量删除参与评审人员信息
+	 * @param ids 主键
+	 * @return
+	 */
+	@RequestMapping(value = "/batchDelete",method = RequestMethod.DELETE)
+	public Response batchDelete(@RequestBody List<String> ids){
+		try {	
+			comLiveCommentUserService.batchDeleteByIds(ids);
+			return Response.success("success");	
+
+		}
+		catch (Exception e) {			
+			throw new BizException(e.toString());
+		}
+	}
+	
+	/**
 	 * 根据主键删除参与评审人员信息
 	 * @param ids 主键
 	 * @return
 	 */
-	@RequestMapping(value = "/delete",method = RequestMethod.DELETE)
-	public Response delete(@RequestBody List<String> ids){
+	@RequestMapping(value = "/delete/{id}",method = RequestMethod.DELETE)
+	public Response delete(@PathVariable(name="id",required=true) String id){
 		try {	
-			comLiveCommentUserService.batchDeleteById(ids);
+			comLiveCommentUserService.batchDeleteById(id);
 			return Response.success("success");	
 
 		}

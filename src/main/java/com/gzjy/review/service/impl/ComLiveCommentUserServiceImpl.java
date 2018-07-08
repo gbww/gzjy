@@ -49,7 +49,7 @@ public class ComLiveCommentUserServiceImpl implements ComLiveCommentUserService 
 	 * 根据主键批量删除参与评审人员信息
 	 */
 	@Override
-	public int batchDeleteById(List<String> ids) {
+	public int batchDeleteByIds(List<String> ids) {
 
 		return comLiveCommentUserMapper.batchDeleteById(ids);
 	}
@@ -100,4 +100,12 @@ public class ComLiveCommentUserServiceImpl implements ComLiveCommentUserService 
 
 		return comLiveCommentUserMapper.batchInsertUser(comLiveCommentUser);
 	}
+
+	@Override
+	public int batchDeleteById(String id) {
+		
+		return comLiveCommentUserMapper.deleteByPrimaryKey(id);
+	}
+	
+	
 }

@@ -27,7 +27,7 @@ public interface ComLiveCommentUserService {
 	/**
 	 * 根据主键批量删除参与评审人员信息
 	 */
-	int batchDeleteById(List<String> ids);
+	int batchDeleteByIds(List<String> ids);
 
 	/**
 	 *  根据主键查询参与评审人员信息
@@ -44,4 +44,11 @@ public interface ComLiveCommentUserService {
 	 * 根据报告编号查询人员信息
 	 */
 	List<ComLiveCommentUser> selectByReviewReportId(String reviewReportId);
+
+	/**
+	 * 根据主键删除单个数据
+	 * @param id
+	 * @return
+	 */
+	int batchDeleteById(String id);
 }
