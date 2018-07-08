@@ -1,200 +1,221 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.gzjy.review.mapper.ComReviewReportMapper" >
-  <resultMap id="BaseResultMap" type="com.gzjy.review.modle.ComReviewReport" >
-    <id column="review_report_id" property="reviewReportId" jdbcType="CHAR" />
-    <result column="company_id" property="companyId" jdbcType="CHAR" />
-    <result column="evaluate_product_type" property="evaluateProductType" jdbcType="VARCHAR" />
-    <result column="evaluate_stage" property="evaluateStage" jdbcType="VARCHAR" />
-    <result column="evaluate_sketch" property="evaluateSketch" jdbcType="VARCHAR" />
-    <result column="check_date" property="checkDate" jdbcType="TIMESTAMP" />
-    <result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
-    <result column="company_represent" property="companyRepresent" jdbcType="VARCHAR" />
-    <result column="review_result" property="reviewResult" jdbcType="VARCHAR" />
-    <result column="score" property="score" jdbcType="DOUBLE" />
-    <result column="fast_result" property="fastResult" jdbcType="VARCHAR" />
-    <result column="fuhe_user" property="fuheUser" jdbcType="VARCHAR" />
-    <result column="pizhun_user" property="pizhunUser" jdbcType="VARCHAR" />
-    <result column="report_status" property="reportStatus" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    review_report_id, company_id, evaluate_product_type, evaluate_stage, evaluate_sketch, 
-    check_date, end_date, company_represent, review_result, score, fast_result, fuhe_user, 
-    pizhun_user, report_status
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from com_review_report
-    where review_report_id = #{reviewReportId,jdbcType=CHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from com_review_report
-    where review_report_id = #{reviewReportId,jdbcType=CHAR}
-  </delete>
-  <insert id="insert" parameterType="com.gzjy.review.modle.ComReviewReport" >
-    insert into com_review_report (review_report_id, company_id, evaluate_product_type, 
-      evaluate_stage, evaluate_sketch, check_date, 
-      end_date, company_represent, review_result, 
-      score, fast_result, fuhe_user, 
-      pizhun_user, report_status)
-    values (#{reviewReportId,jdbcType=CHAR}, #{companyId,jdbcType=CHAR}, #{evaluateProductType,jdbcType=VARCHAR}, 
-      #{evaluateStage,jdbcType=VARCHAR}, #{evaluateSketch,jdbcType=VARCHAR}, #{checkDate,jdbcType=TIMESTAMP}, 
-      #{endDate,jdbcType=TIMESTAMP}, #{companyRepresent,jdbcType=VARCHAR}, #{reviewResult,jdbcType=VARCHAR}, 
-      #{score,jdbcType=DOUBLE}, #{fastResult,jdbcType=VARCHAR}, #{fuheUser,jdbcType=VARCHAR}, 
-      #{pizhunUser,jdbcType=VARCHAR}, #{reportStatus,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.gzjy.review.modle.ComReviewReport" >
-    insert into com_review_report
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="reviewReportId != null" >
-        review_report_id,
-      </if>
-      <if test="companyId != null" >
-        company_id,
-      </if>
-      <if test="evaluateProductType != null" >
-        evaluate_product_type,
-      </if>
-      <if test="evaluateStage != null" >
-        evaluate_stage,
-      </if>
-      <if test="evaluateSketch != null" >
-        evaluate_sketch,
-      </if>
-      <if test="checkDate != null" >
-        check_date,
-      </if>
-      <if test="endDate != null" >
-        end_date,
-      </if>
-      <if test="companyRepresent != null" >
-        company_represent,
-      </if>
-      <if test="reviewResult != null" >
-        review_result,
-      </if>
-      <if test="score != null" >
-        score,
-      </if>
-      <if test="fastResult != null" >
-        fast_result,
-      </if>
-      <if test="fuheUser != null" >
-        fuhe_user,
-      </if>
-      <if test="pizhunUser != null" >
-        pizhun_user,
-      </if>
-      <if test="reportStatus != null" >
-        report_status,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="reviewReportId != null" >
-        #{reviewReportId,jdbcType=CHAR},
-      </if>
-      <if test="companyId != null" >
-        #{companyId,jdbcType=CHAR},
-      </if>
-      <if test="evaluateProductType != null" >
-        #{evaluateProductType,jdbcType=VARCHAR},
-      </if>
-      <if test="evaluateStage != null" >
-        #{evaluateStage,jdbcType=VARCHAR},
-      </if>
-      <if test="evaluateSketch != null" >
-        #{evaluateSketch,jdbcType=VARCHAR},
-      </if>
-      <if test="checkDate != null" >
-        #{checkDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="endDate != null" >
-        #{endDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="companyRepresent != null" >
-        #{companyRepresent,jdbcType=VARCHAR},
-      </if>
-      <if test="reviewResult != null" >
-        #{reviewResult,jdbcType=VARCHAR},
-      </if>
-      <if test="score != null" >
-        #{score,jdbcType=DOUBLE},
-      </if>
-      <if test="fastResult != null" >
-        #{fastResult,jdbcType=VARCHAR},
-      </if>
-      <if test="fuheUser != null" >
-        #{fuheUser,jdbcType=VARCHAR},
-      </if>
-      <if test="pizhunUser != null" >
-        #{pizhunUser,jdbcType=VARCHAR},
-      </if>
-      <if test="reportStatus != null" >
-        #{reportStatus,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.gzjy.review.modle.ComReviewReport" >
-    update com_review_report
-    <set >
-      <if test="companyId != null" >
-        company_id = #{companyId,jdbcType=CHAR},
-      </if>
-      <if test="evaluateProductType != null" >
-        evaluate_product_type = #{evaluateProductType,jdbcType=VARCHAR},
-      </if>
-      <if test="evaluateStage != null" >
-        evaluate_stage = #{evaluateStage,jdbcType=VARCHAR},
-      </if>
-      <if test="evaluateSketch != null" >
-        evaluate_sketch = #{evaluateSketch,jdbcType=VARCHAR},
-      </if>
-      <if test="checkDate != null" >
-        check_date = #{checkDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="endDate != null" >
-        end_date = #{endDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="companyRepresent != null" >
-        company_represent = #{companyRepresent,jdbcType=VARCHAR},
-      </if>
-      <if test="reviewResult != null" >
-        review_result = #{reviewResult,jdbcType=VARCHAR},
-      </if>
-      <if test="score != null" >
-        score = #{score,jdbcType=DOUBLE},
-      </if>
-      <if test="fastResult != null" >
-        fast_result = #{fastResult,jdbcType=VARCHAR},
-      </if>
-      <if test="fuheUser != null" >
-        fuhe_user = #{fuheUser,jdbcType=VARCHAR},
-      </if>
-      <if test="pizhunUser != null" >
-        pizhun_user = #{pizhunUser,jdbcType=VARCHAR},
-      </if>
-      <if test="reportStatus != null" >
-        report_status = #{reportStatus,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where review_report_id = #{reviewReportId,jdbcType=CHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.gzjy.review.modle.ComReviewReport" >
-    update com_review_report
-    set company_id = #{companyId,jdbcType=CHAR},
-      evaluate_product_type = #{evaluateProductType,jdbcType=VARCHAR},
-      evaluate_stage = #{evaluateStage,jdbcType=VARCHAR},
-      evaluate_sketch = #{evaluateSketch,jdbcType=VARCHAR},
-      check_date = #{checkDate,jdbcType=TIMESTAMP},
-      end_date = #{endDate,jdbcType=TIMESTAMP},
-      company_represent = #{companyRepresent,jdbcType=VARCHAR},
-      review_result = #{reviewResult,jdbcType=VARCHAR},
-      score = #{score,jdbcType=DOUBLE},
-      fast_result = #{fastResult,jdbcType=VARCHAR},
-      fuhe_user = #{fuheUser,jdbcType=VARCHAR},
-      pizhun_user = #{pizhunUser,jdbcType=VARCHAR},
-      report_status = #{reportStatus,jdbcType=VARCHAR}
-    where review_report_id = #{reviewReportId,jdbcType=CHAR}
-  </update>
+<mapper namespace="com.gzjy.review.mapper.ComReviewReportMapper">
+	<resultMap id="BaseResultMap" type="com.gzjy.review.modle.ComReviewReport">
+		<id column="review_report_id" property="reviewReportId" jdbcType="CHAR" />
+		<result column="company_id" property="companyId" jdbcType="CHAR" />
+		<result column="evaluate_product_type" property="evaluateProductType"
+			jdbcType="VARCHAR" />
+		<result column="evaluate_stage" property="evaluateStage"
+			jdbcType="VARCHAR" />
+		<result column="evaluate_sketch" property="evaluateSketch"
+			jdbcType="VARCHAR" />
+		<result column="check_date" property="checkDate" jdbcType="TIMESTAMP" />
+		<result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+		<result column="company_represent" property="companyRepresent"
+			jdbcType="VARCHAR" />
+		<result column="review_result" property="reviewResult"
+			jdbcType="VARCHAR" />
+		<result column="score" property="score" jdbcType="DOUBLE" />
+		<result column="fast_result" property="fastResult" jdbcType="VARCHAR" />
+		<result column="fuhe_user" property="fuheUser" jdbcType="VARCHAR" />
+		<result column="pizhun_user" property="pizhunUser" jdbcType="VARCHAR" />
+		<result column="report_status" property="reportStatus"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		review_report_id, company_id, evaluate_product_type, evaluate_stage, evaluate_sketch,
+		check_date, end_date, company_represent, review_result, score,
+		fast_result, fuhe_user,
+		pizhun_user, report_status
+	</sql>
+
+	<select id="selectByCompanyId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from com_review_report
+		where company_id = #{companyId,jdbcType=CHAR}
+	</select>
+
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from com_review_report
+		where review_report_id = #{reviewReportId,jdbcType=CHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from com_review_report
+		where review_report_id = #{reviewReportId,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="com.gzjy.review.modle.ComReviewReport">
+		insert into com_review_report (review_report_id, company_id,
+		evaluate_product_type,
+		evaluate_stage, evaluate_sketch, check_date,
+		end_date, company_represent, review_result,
+		score, fast_result, fuhe_user,
+		pizhun_user, report_status)
+		values (#{reviewReportId,jdbcType=CHAR}, #{companyId,jdbcType=CHAR},
+		#{evaluateProductType,jdbcType=VARCHAR},
+		#{evaluateStage,jdbcType=VARCHAR}, #{evaluateSketch,jdbcType=VARCHAR},
+		#{checkDate,jdbcType=TIMESTAMP},
+		#{endDate,jdbcType=TIMESTAMP}, #{companyRepresent,jdbcType=VARCHAR},
+		#{reviewResult,jdbcType=VARCHAR},
+		#{score,jdbcType=DOUBLE}, #{fastResult,jdbcType=VARCHAR}, #{fuheUser,jdbcType=VARCHAR},
+		#{pizhunUser,jdbcType=VARCHAR}, #{reportStatus,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.gzjy.review.modle.ComReviewReport">
+		insert into com_review_report
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="reviewReportId != null">
+				review_report_id,
+			</if>
+			<if test="companyId != null">
+				company_id,
+			</if>
+			<if test="evaluateProductType != null">
+				evaluate_product_type,
+			</if>
+			<if test="evaluateStage != null">
+				evaluate_stage,
+			</if>
+			<if test="evaluateSketch != null">
+				evaluate_sketch,
+			</if>
+			<if test="checkDate != null">
+				check_date,
+			</if>
+			<if test="endDate != null">
+				end_date,
+			</if>
+			<if test="companyRepresent != null">
+				company_represent,
+			</if>
+			<if test="reviewResult != null">
+				review_result,
+			</if>
+			<if test="score != null">
+				score,
+			</if>
+			<if test="fastResult != null">
+				fast_result,
+			</if>
+			<if test="fuheUser != null">
+				fuhe_user,
+			</if>
+			<if test="pizhunUser != null">
+				pizhun_user,
+			</if>
+			<if test="reportStatus != null">
+				report_status,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="reviewReportId != null">
+				#{reviewReportId,jdbcType=CHAR},
+			</if>
+			<if test="companyId != null">
+				#{companyId,jdbcType=CHAR},
+			</if>
+			<if test="evaluateProductType != null">
+				#{evaluateProductType,jdbcType=VARCHAR},
+			</if>
+			<if test="evaluateStage != null">
+				#{evaluateStage,jdbcType=VARCHAR},
+			</if>
+			<if test="evaluateSketch != null">
+				#{evaluateSketch,jdbcType=VARCHAR},
+			</if>
+			<if test="checkDate != null">
+				#{checkDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endDate != null">
+				#{endDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="companyRepresent != null">
+				#{companyRepresent,jdbcType=VARCHAR},
+			</if>
+			<if test="reviewResult != null">
+				#{reviewResult,jdbcType=VARCHAR},
+			</if>
+			<if test="score != null">
+				#{score,jdbcType=DOUBLE},
+			</if>
+			<if test="fastResult != null">
+				#{fastResult,jdbcType=VARCHAR},
+			</if>
+			<if test="fuheUser != null">
+				#{fuheUser,jdbcType=VARCHAR},
+			</if>
+			<if test="pizhunUser != null">
+				#{pizhunUser,jdbcType=VARCHAR},
+			</if>
+			<if test="reportStatus != null">
+				#{reportStatus,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.gzjy.review.modle.ComReviewReport">
+		update com_review_report
+		<set>
+			<if test="companyId != null">
+				company_id = #{companyId,jdbcType=CHAR},
+			</if>
+			<if test="evaluateProductType != null">
+				evaluate_product_type = #{evaluateProductType,jdbcType=VARCHAR},
+			</if>
+			<if test="evaluateStage != null">
+				evaluate_stage = #{evaluateStage,jdbcType=VARCHAR},
+			</if>
+			<if test="evaluateSketch != null">
+				evaluate_sketch = #{evaluateSketch,jdbcType=VARCHAR},
+			</if>
+			<if test="checkDate != null">
+				check_date = #{checkDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endDate != null">
+				end_date = #{endDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="companyRepresent != null">
+				company_represent = #{companyRepresent,jdbcType=VARCHAR},
+			</if>
+			<if test="reviewResult != null">
+				review_result = #{reviewResult,jdbcType=VARCHAR},
+			</if>
+			<if test="score != null">
+				score = #{score,jdbcType=DOUBLE},
+			</if>
+			<if test="fastResult != null">
+				fast_result = #{fastResult,jdbcType=VARCHAR},
+			</if>
+			<if test="fuheUser != null">
+				fuhe_user = #{fuheUser,jdbcType=VARCHAR},
+			</if>
+			<if test="pizhunUser != null">
+				pizhun_user = #{pizhunUser,jdbcType=VARCHAR},
+			</if>
+			<if test="reportStatus != null">
+				report_status = #{reportStatus,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where review_report_id = #{reviewReportId,jdbcType=CHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.gzjy.review.modle.ComReviewReport">
+		update com_review_report
+		set company_id = #{companyId,jdbcType=CHAR},
+		evaluate_product_type = #{evaluateProductType,jdbcType=VARCHAR},
+		evaluate_stage = #{evaluateStage,jdbcType=VARCHAR},
+		evaluate_sketch = #{evaluateSketch,jdbcType=VARCHAR},
+		check_date = #{checkDate,jdbcType=TIMESTAMP},
+		end_date = #{endDate,jdbcType=TIMESTAMP},
+		company_represent = #{companyRepresent,jdbcType=VARCHAR},
+		review_result = #{reviewResult,jdbcType=VARCHAR},
+		score = #{score,jdbcType=DOUBLE},
+		fast_result = #{fastResult,jdbcType=VARCHAR},
+		fuhe_user = #{fuheUser,jdbcType=VARCHAR},
+		pizhun_user = #{pizhunUser,jdbcType=VARCHAR},
+		report_status = #{reportStatus,jdbcType=VARCHAR}
+		where review_report_id = #{reviewReportId,jdbcType=CHAR}
+	</update>
 </mapper>

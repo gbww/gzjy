@@ -1,7 +1,12 @@
 package com.gzjy.review.mapper;
 
-import com.gzjy.review.modle.ComVarietyFormats;
+import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
+
+import com.github.pagehelper.PageInfo;
+import com.gzjy.review.modle.ComVarietyFormats;
+@Mapper
 public interface ComVarietyFormatsMapper {
     int deleteByPrimaryKey(String id);
 
@@ -14,4 +19,6 @@ public interface ComVarietyFormatsMapper {
     int updateByPrimaryKeySelective(ComVarietyFormats record);
 
     int updateByPrimaryKey(ComVarietyFormats record);
+
+    List<ComVarietyFormats> selectALL();
 }

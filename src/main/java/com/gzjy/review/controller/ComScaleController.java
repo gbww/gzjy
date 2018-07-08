@@ -1,14 +1,17 @@
 package com.gzjy.review.controller;
 
-import com.gzjy.common.Response;
-import com.gzjy.review.modle.ComScale;
-import com.gzjy.review.service.ComScaleService;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.gzjy.common.Response;
+import com.gzjy.review.modle.ComScale;
+import com.gzjy.review.service.ComScaleService;
 
 
 /**
@@ -17,68 +20,30 @@ import java.util.List;
  * @Date: 2018/6/30 09:36
  */
 @RestController
-@RequestMapping({ "/v1/ahgz/company/commentuser" })
+@RequestMapping({ "/v1/ahgz/company/scale" })
 public class ComScaleController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ComScaleController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ComScaleController.class);
 
-    @Autowired
-    private ComScaleService comScaleService;
-
-    /**
-     * 分页查询企业规模信息
-     * @param pageCount
-     * @param pageNum
-     * @return
-     */
-    @RequestMapping(value = "/select/infors", method = RequestMethod.GET)
-    public Response selectByPages(
-            @RequestParam(name = "pageCount", defaultValue = "10") Integer pageCount,
-            @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum){
+	@Autowired
+	private ComScaleService comScaleService;
 
 
 
-        return Response.success(null);
-    }
+	/**
+	 * 查询所有企业规模信息
+	 * @param pageCount
+	 * @param pageNum
+	 * @return
+	 */
+	@RequestMapping(value = "/selectALL", method = RequestMethod.GET)
+	public Response selectALL(){
 
-    /**
-     *  根据主键查询企业规模信息
-     * @param id
-     * @return
-     */
-    @RequestMapping(value = "/select/{id}", method = RequestMethod.GET)
-    public Response selectByPrimaryKey(@PathVariable(name = "id",required = true) String id){
+		List<ComScale> comVarietyFormats = comScaleService.selectALL();
+		return Response.success(comVarietyFormats);
 
-        return Response.success(null);
-    }
 
-    /**
-     * 添加企业规模信息
-     * @param comScale
-     * @return
-     */
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public Response add(@RequestBody ComScale comScale){
-        return Response.success(null);
-    }
+	}
 
-    /**
-     * 修改企业规模信息
-     * @param comScale
-     * @return
-     */
-    @RequestMapping(value = "/update",method = RequestMethod.PUT)
-    public Response update(@RequestBody ComScale comScale){
-        return  Response.success(null);
-    }
 
-    /**
-     * 根据主键删除企业规模信息
-     * @param ids 主键
-     * @return
-     */
-    @RequestMapping(value = "/delete")
-    public Response delete(@RequestBody List<String> ids){
-        return Response.success(null);
-    }
 }

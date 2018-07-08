@@ -19,7 +19,7 @@ import java.util.List;
  * @Date: 2018/6/30 09:36
  */
 @RestController
-@RequestMapping({ "/v1/ahgz/company/nfor" })
+@RequestMapping({ "/v1/ahgz/company/info" })
 public class ComInforController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ComInforController.class);

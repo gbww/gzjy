@@ -1,23 +1,25 @@
 package com.gzjy.review.service.impl;
 
-import com.github.pagehelper.ISelect;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gzjy.common.ShortUUID;
 import com.gzjy.review.mapper.ComInforMapper;
 import com.gzjy.review.modle.ComInfor;
 import com.gzjy.review.service.ComInforService;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @Description:
  * @Auther: wuyongfa
  * @Date: 2018/6/3009:33
  */
+@Service
 public class ComInforServiceImpl implements ComInforService {
 
     @Autowired
@@ -59,4 +61,5 @@ public class ComInforServiceImpl implements ComInforService {
     public int deleteCominfors(List<String> ids) {
         return comInforMapper.deleteByKeys(ids);
     }
+    
 }

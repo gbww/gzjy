@@ -12,6 +12,12 @@
   <sql id="Base_Column_List" >
     id, com_type, liebie, com_variety, score, updated_at
   </sql>
+  <select id="selectALL" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from com_variety_formats
+    
+  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />

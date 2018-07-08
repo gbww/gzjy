@@ -1,117 +1,134 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.gzjy.review.mapper.ComProjectDetailsMapper" >
-  <resultMap id="BaseResultMap" type="com.gzjy.review.modle.ComProjectDetails" >
-    <id column="id" property="id" jdbcType="CHAR" />
-    <result column="com_type" property="comType" jdbcType="VARCHAR" />
-    <result column="project_name" property="projectName" jdbcType="VARCHAR" />
-    <result column="number_regulation" property="numberRegulation" jdbcType="VARCHAR" />
-    <result column="content" property="content" jdbcType="VARCHAR" />
-    <result column="standard_score" property="standardScore" jdbcType="DOUBLE" />
-    <result column="check_way" property="checkWay" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    id, com_type, project_name, number_regulation, content, standard_score, check_way
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from com_project_details
-    where id = #{id,jdbcType=CHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from com_project_details
-    where id = #{id,jdbcType=CHAR}
-  </delete>
-  <insert id="insert" parameterType="com.gzjy.review.modle.ComProjectDetails" >
-    insert into com_project_details (id, com_type, project_name, 
-      number_regulation, content, standard_score, 
-      check_way)
-    values (#{id,jdbcType=CHAR}, #{comType,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}, 
-      #{numberRegulation,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{standardScore,jdbcType=DOUBLE}, 
-      #{checkWay,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.gzjy.review.modle.ComProjectDetails" >
-    insert into com_project_details
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="comType != null" >
-        com_type,
-      </if>
-      <if test="projectName != null" >
-        project_name,
-      </if>
-      <if test="numberRegulation != null" >
-        number_regulation,
-      </if>
-      <if test="content != null" >
-        content,
-      </if>
-      <if test="standardScore != null" >
-        standard_score,
-      </if>
-      <if test="checkWay != null" >
-        check_way,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=CHAR},
-      </if>
-      <if test="comType != null" >
-        #{comType,jdbcType=VARCHAR},
-      </if>
-      <if test="projectName != null" >
-        #{projectName,jdbcType=VARCHAR},
-      </if>
-      <if test="numberRegulation != null" >
-        #{numberRegulation,jdbcType=VARCHAR},
-      </if>
-      <if test="content != null" >
-        #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="standardScore != null" >
-        #{standardScore,jdbcType=DOUBLE},
-      </if>
-      <if test="checkWay != null" >
-        #{checkWay,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.gzjy.review.modle.ComProjectDetails" >
-    update com_project_details
-    <set >
-      <if test="comType != null" >
-        com_type = #{comType,jdbcType=VARCHAR},
-      </if>
-      <if test="projectName != null" >
-        project_name = #{projectName,jdbcType=VARCHAR},
-      </if>
-      <if test="numberRegulation != null" >
-        number_regulation = #{numberRegulation,jdbcType=VARCHAR},
-      </if>
-      <if test="content != null" >
-        content = #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="standardScore != null" >
-        standard_score = #{standardScore,jdbcType=DOUBLE},
-      </if>
-      <if test="checkWay != null" >
-        check_way = #{checkWay,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=CHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.gzjy.review.modle.ComProjectDetails" >
-    update com_project_details
-    set com_type = #{comType,jdbcType=VARCHAR},
-      project_name = #{projectName,jdbcType=VARCHAR},
-      number_regulation = #{numberRegulation,jdbcType=VARCHAR},
-      content = #{content,jdbcType=VARCHAR},
-      standard_score = #{standardScore,jdbcType=DOUBLE},
-      check_way = #{checkWay,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=CHAR}
-  </update>
+<mapper namespace="com.gzjy.review.mapper.ComProjectDetailsMapper">
+	<resultMap id="BaseResultMap" type="com.gzjy.review.modle.ComProjectDetails">
+		<id column="id" property="id" jdbcType="CHAR" />
+		<result column="com_type" property="comType" jdbcType="VARCHAR" />
+		<result column="project_name" property="projectName" jdbcType="VARCHAR" />
+		<result column="number_regulation" property="numberRegulation"
+			jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="standard_score" property="standardScore"
+			jdbcType="DOUBLE" />
+		<result column="check_way" property="checkWay" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, com_type, project_name, number_regulation, content, standard_score,
+		check_way
+	</sql>
+
+	<select id="selectByComType" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from com_project_details
+		where com_type = #{comType,jdbcType=VARCHAR}
+
+	</select>
+
+
+
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from com_project_details
+		where id = #{id,jdbcType=CHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from com_project_details
+		where id = #{id,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="com.gzjy.review.modle.ComProjectDetails">
+		insert into com_project_details (id, com_type, project_name,
+		number_regulation, content, standard_score,
+		check_way)
+		values (#{id,jdbcType=CHAR}, #{comType,jdbcType=VARCHAR},
+		#{projectName,jdbcType=VARCHAR},
+		#{numberRegulation,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{standardScore,jdbcType=DOUBLE},
+		#{checkWay,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.gzjy.review.modle.ComProjectDetails">
+		insert into com_project_details
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="comType != null">
+				com_type,
+			</if>
+			<if test="projectName != null">
+				project_name,
+			</if>
+			<if test="numberRegulation != null">
+				number_regulation,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+			<if test="standardScore != null">
+				standard_score,
+			</if>
+			<if test="checkWay != null">
+				check_way,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=CHAR},
+			</if>
+			<if test="comType != null">
+				#{comType,jdbcType=VARCHAR},
+			</if>
+			<if test="projectName != null">
+				#{projectName,jdbcType=VARCHAR},
+			</if>
+			<if test="numberRegulation != null">
+				#{numberRegulation,jdbcType=VARCHAR},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=VARCHAR},
+			</if>
+			<if test="standardScore != null">
+				#{standardScore,jdbcType=DOUBLE},
+			</if>
+			<if test="checkWay != null">
+				#{checkWay,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.gzjy.review.modle.ComProjectDetails">
+		update com_project_details
+		<set>
+			<if test="comType != null">
+				com_type = #{comType,jdbcType=VARCHAR},
+			</if>
+			<if test="projectName != null">
+				project_name = #{projectName,jdbcType=VARCHAR},
+			</if>
+			<if test="numberRegulation != null">
+				number_regulation = #{numberRegulation,jdbcType=VARCHAR},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=VARCHAR},
+			</if>
+			<if test="standardScore != null">
+				standard_score = #{standardScore,jdbcType=DOUBLE},
+			</if>
+			<if test="checkWay != null">
+				check_way = #{checkWay,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=CHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.gzjy.review.modle.ComProjectDetails">
+		update com_project_details
+		set com_type = #{comType,jdbcType=VARCHAR},
+		project_name = #{projectName,jdbcType=VARCHAR},
+		number_regulation = #{numberRegulation,jdbcType=VARCHAR},
+		content = #{content,jdbcType=VARCHAR},
+		standard_score = #{standardScore,jdbcType=DOUBLE},
+		check_way = #{checkWay,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=CHAR}
+	</update>
 </mapper>
