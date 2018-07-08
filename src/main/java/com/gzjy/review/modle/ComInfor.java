@@ -19,11 +19,11 @@ public class ComInfor {
 
     private String comScale;
 
-    private Integer comScaleScore;
+    private Double comScaleScore;
 
     private String comVariety;
 
-    private Integer comVarietyScore;
+    private Double comVarietyScore;
 
     private String comTelephone;
 
@@ -93,11 +93,11 @@ public class ComInfor {
         this.comScale = comScale == null ? null : comScale.trim();
     }
 
-    public Integer getComScaleScore() {
+    public Double getComScaleScore() {
         return comScaleScore;
     }
 
-    public void setComScaleScore(Integer comScaleScore) {
+    public void setComScaleScore(Double comScaleScore) {
         this.comScaleScore = comScaleScore;
     }
 
@@ -109,11 +109,11 @@ public class ComInfor {
         this.comVariety = comVariety == null ? null : comVariety.trim();
     }
 
-    public Integer getComVarietyScore() {
+    public Double getComVarietyScore() {
         return comVarietyScore;
     }
 
-    public void setComVarietyScore(Integer comVarietyScore) {
+    public void setComVarietyScore(Double comVarietyScore) {
         this.comVarietyScore = comVarietyScore;
     }
 

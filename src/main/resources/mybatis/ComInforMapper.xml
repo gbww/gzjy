@@ -32,15 +32,15 @@
   </delete>
   <insert id="insert" parameterType="com.gzjy.review.modle.ComInfor" >
     insert into com_infor (id, com_name, com_type, 
-      com_principal, com_credit_code, "com_ licence", 
+      com_principal, com_credit_code, com_ licence, 
       com_address, com_scale, com_scale_score, 
       com_variety, com_variety_score, com_telephone, 
       updated_at)
     values (#{id,jdbcType=CHAR}, #{comName,jdbcType=VARCHAR}, #{comType,jdbcType=VARCHAR}, 
       #{comPrincipal,jdbcType=VARCHAR}, #{comCreditCode,jdbcType=VARCHAR}, #{comLicence,jdbcType=VARCHAR}, 
-      #{comAddress,jdbcType=VARCHAR}, #{comScale,jdbcType=VARCHAR}, #{comScaleScore,jdbcType=INTEGER}, 
-      #{comVariety,jdbcType=VARCHAR}, #{comVarietyScore,jdbcType=INTEGER}, #{comTelephone,jdbcType=VARCHAR}, 
-      #{updatedAt,jdbcType=TIMESTAMP})
+      #{comAddress,jdbcType=VARCHAR}, #{comScale,jdbcType=VARCHAR}, #{comScaleScore,jdbcType=DOUBLE}, 
+      #{comVariety,jdbcType=VARCHAR}, #{comVarietyScore,jdbcType=DOUBLE}, #{comTelephone,jdbcType=VARCHAR}, 
+      #{updatedAt,jdbcType=DATE})
   </insert>
   <insert id="insertSelective" parameterType="com.gzjy.review.modle.ComInfor" >
     insert into com_infor
@@ -61,7 +61,7 @@
         com_credit_code,
       </if>
       <if test="comLicence != null" >
-        "com_ licence",
+        com_licence,
       </if>
       <if test="comAddress != null" >
         com_address,
@@ -111,19 +111,19 @@
         #{comScale,jdbcType=VARCHAR},
       </if>
       <if test="comScaleScore != null" >
-        #{comScaleScore,jdbcType=INTEGER},
+        #{comScaleScore,jdbcType=DOUBLE},
       </if>
       <if test="comVariety != null" >
         #{comVariety,jdbcType=VARCHAR},
       </if>
       <if test="comVarietyScore != null" >
-        #{comVarietyScore,jdbcType=INTEGER},
+        #{comVarietyScore,jdbcType=DOUBLE},
       </if>
       <if test="comTelephone != null" >
         #{comTelephone,jdbcType=VARCHAR},
       </if>
       <if test="updatedAt != null" >
-        #{updatedAt,jdbcType=TIMESTAMP},
+        #{updatedAt,jdbcType=DATE},
       </if>
     </trim>
   </insert>
@@ -143,7 +143,7 @@
         com_credit_code = #{comCreditCode,jdbcType=VARCHAR},
       </if>
       <if test="comLicence != null" >
-        "com_ licence" = #{comLicence,jdbcType=VARCHAR},
+        com_licence = #{comLicence,jdbcType=VARCHAR},
       </if>
       <if test="comAddress != null" >
         com_address = #{comAddress,jdbcType=VARCHAR},
@@ -152,19 +152,19 @@
         com_scale = #{comScale,jdbcType=VARCHAR},
       </if>
       <if test="comScaleScore != null" >
-        com_scale_score = #{comScaleScore,jdbcType=INTEGER},
+        com_scale_score = #{comScaleScore,jdbcType=DOUBLE},
       </if>
       <if test="comVariety != null" >
         com_variety = #{comVariety,jdbcType=VARCHAR},
       </if>
       <if test="comVarietyScore != null" >
-        com_variety_score = #{comVarietyScore,jdbcType=INTEGER},
+        com_variety_score = #{comVarietyScore,jdbcType=DOUBLE},
       </if>
       <if test="comTelephone != null" >
         com_telephone = #{comTelephone,jdbcType=VARCHAR},
       </if>
       <if test="updatedAt != null" >
-        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+        updated_at = #{updatedAt,jdbcType=DATE},
       </if>
     </set>
     where id = #{id,jdbcType=CHAR}
@@ -175,14 +175,14 @@
       com_type = #{comType,jdbcType=VARCHAR},
       com_principal = #{comPrincipal,jdbcType=VARCHAR},
       com_credit_code = #{comCreditCode,jdbcType=VARCHAR},
-      "com_ licence" = #{comLicence,jdbcType=VARCHAR},
+      com_licence = #{comLicence,jdbcType=VARCHAR},
       com_address = #{comAddress,jdbcType=VARCHAR},
       com_scale = #{comScale,jdbcType=VARCHAR},
-      com_scale_score = #{comScaleScore,jdbcType=INTEGER},
+      com_scale_score = #{comScaleScore,jdbcType=DOUBLE},
       com_variety = #{comVariety,jdbcType=VARCHAR},
-      com_variety_score = #{comVarietyScore,jdbcType=INTEGER},
+      com_variety_score = #{comVarietyScore,jdbcType=DOUBLE},
       com_telephone = #{comTelephone,jdbcType=VARCHAR},
-      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
+      updated_at = #{updatedAt,jdbcType=DATE}
     where id = #{id,jdbcType=CHAR}
   </update>
 
