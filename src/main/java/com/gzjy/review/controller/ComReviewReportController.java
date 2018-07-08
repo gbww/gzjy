@@ -37,7 +37,7 @@ public class ComReviewReportController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value = "/select/{reviewReportId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/selectById/{reviewReportId}", method = RequestMethod.GET)
 	public Response selectByPrimaryKey(@PathVariable(name = "reviewReportId",required = true) String reviewReportId){
 		ComReviewReport comReviewReport=comReviewReportService.selectByPrimaryKey(reviewReportId);
 		return Response.success(comReviewReport);
@@ -50,7 +50,7 @@ public class ComReviewReportController {
 	 * @param CompanyId 企业id
 	 * @return
 	 */
-	@RequestMapping(value = "/select/{companyId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/selectByCompanyId/{companyId}", method = RequestMethod.GET)
 	public Response selectByCompanyId(
 			@RequestParam(name = "pageCount", defaultValue = "10") Integer pageCount,
 			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
@@ -70,7 +70,7 @@ public class ComReviewReportController {
 	 * @return
 	 */
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public Response add( String companyId){
+	public Response add(@RequestParam(name="companyId",required = true) String companyId){
 		try {
 
 			String reviewReportId=comReviewReportService.insertComReviewReport(companyId);
@@ -104,7 +104,7 @@ public class ComReviewReportController {
 	 * @return
 	 */
 	@RequestMapping(value = "/PerfectReport",method = RequestMethod.PUT)
-	public Response perfectReport(String reviewReportId){
+	public Response perfectReport(@RequestParam(name="reviewReportId",required = true)String reviewReportId){
 		try {
 
 			comReviewReportService.perfectReport(reviewReportId);

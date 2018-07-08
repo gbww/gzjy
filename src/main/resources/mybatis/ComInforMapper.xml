@@ -186,7 +186,7 @@
     where id = #{id,jdbcType=CHAR}
   </update>
 
-  <select id="selectByFilters">
+  <select id="selectByFilters"  resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from com_infor

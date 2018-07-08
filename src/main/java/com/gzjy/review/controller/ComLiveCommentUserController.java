@@ -143,7 +143,7 @@ public class ComLiveCommentUserController {
 	 * @param ids 主键
 	 * @return
 	 */
-	@RequestMapping(value = "/delete")
+	@RequestMapping(value = "/delete",method = RequestMethod.DELETE)
 	public Response delete(@RequestBody List<String> ids){
 		try {	
 			comLiveCommentUserService.batchDeleteById(ids);

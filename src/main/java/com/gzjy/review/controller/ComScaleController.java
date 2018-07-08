@@ -36,7 +36,7 @@ public class ComScaleController {
 	 * @param pageNum
 	 * @return
 	 */
-	@RequestMapping(value = "/selectALL", method = RequestMethod.GET)
+	@RequestMapping(value = "/selectAll", method = RequestMethod.GET)
 	public Response selectALL(){
 
 		List<ComScale> comVarietyFormats = comScaleService.selectALL();

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gzjy.common.Response;
@@ -34,8 +35,8 @@ public class ComProjectDetailsController {
 	 * @param comType 企业类型 
 	 * @return
 	 */
-	@RequestMapping(value = "/select/comType", method = RequestMethod.GET)
-	public Response selectByComType(String comType){
+	@RequestMapping(value = "/selectByComType", method = RequestMethod.GET)
+	public Response selectByComType( @RequestParam(name="comType",required = true) String comType){
 
 		List<ComProjectDetails> comProjectDetails = comProjectDetailsService.selectByComType(comType);
 		return Response.success(comProjectDetails);
