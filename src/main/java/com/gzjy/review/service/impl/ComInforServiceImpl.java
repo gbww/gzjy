@@ -7,11 +7,14 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gzjy.common.ShortUUID;
 import com.gzjy.review.mapper.ComInforMapper;
+import com.gzjy.review.mapper.ComProjectReviewMapper;
+import com.gzjy.review.mapper.ComReviewReportMapper;
 import com.gzjy.review.modle.ComInfor;
 import com.gzjy.review.service.ComInforService;
 
@@ -25,6 +28,10 @@ public class ComInforServiceImpl implements ComInforService {
 
     @Autowired
     private ComInforMapper comInforMapper;
+	@Autowired
+	private ComReviewReportMapper comReviewReportMapper;
+	@Autowired
+	private ComProjectReviewMapper comProjectReviewMapper;
 
     @Override
     public PageInfo<ComInfor> selectByPages(Integer pageNum, Integer pageSize) {
@@ -59,8 +66,16 @@ public class ComInforServiceImpl implements ComInforService {
     }
 
     @Override
-    public int deleteCominfors(String ids) {
-        return comInforMapper.deleteByPrimaryKey(ids);
+    @Transactional
+    public int deleteCominfors(String id) {
+    	//根据企业id删除企业信息
+    	int n=comInforMapper.deleteByPrimaryKey(id);
+    	//根据企业id删除报告信息
+    	comReviewReportMapper.deleteByCompanyId(id);
+    	//根据企业id删除企业审核项信息
+    	comProjectReviewMapper.deleteByCompanyId(id);
+    	
+        return n;
     }
     
 }

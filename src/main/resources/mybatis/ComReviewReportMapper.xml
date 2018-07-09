@@ -49,6 +49,10 @@
 		delete from com_review_report
 		where review_report_id = #{reviewReportId,jdbcType=CHAR}
 	</delete>
+	<delete id="deleteByCompanyId" parameterType="java.lang.String">
+		delete from com_review_report
+		where company_id = #{companyId,jdbcType=CHAR}
+	</delete>
 	<insert id="insert" parameterType="com.gzjy.review.modle.ComReviewReport">
 		insert into com_review_report (review_report_id, company_id,
 		evaluate_product_type,

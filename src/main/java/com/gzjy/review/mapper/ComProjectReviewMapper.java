@@ -9,6 +9,8 @@ import com.gzjy.review.modle.ComProjectReview;
 @Mapper
 public interface ComProjectReviewMapper {
 	int deleteByPrimaryKey(String id);
+	
+	int deleteByCompanyId(String companyId);
 
 	int insert(ComProjectReview record);
 

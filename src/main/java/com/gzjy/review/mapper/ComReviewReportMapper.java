@@ -8,6 +8,8 @@ import com.gzjy.review.modle.ComReviewReport;
 @Mapper
 public interface ComReviewReportMapper {
 	int deleteByPrimaryKey(String reviewReportId);
+	
+	int deleteByCompanyId(String companyId);
 
 	int insert(ComReviewReport record);
 

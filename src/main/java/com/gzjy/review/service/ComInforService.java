@@ -41,9 +41,9 @@ public interface ComInforService {
     int updateComInfor(ComInfor comInfor);
 
     /**
-     * 批量删除企业信息
-     * @param ids
+     * 删除企业信息
+     * @param id
      * @return
      */
-    int deleteCominfors(String ids);
+    int deleteCominfors(String id);
 }

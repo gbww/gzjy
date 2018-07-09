@@ -66,6 +66,10 @@
 		from com_project_review
 		where id = #{id,jdbcType=CHAR}
 	</select>
+	<delete id="deleteByCompanyId" parameterType="java.lang.String">
+		delete from com_project_review
+		where company_id = #{companyId,jdbcType=CHAR}
+	</delete>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		delete from
 		com_project_review
