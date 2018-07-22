@@ -59,8 +59,8 @@ public class ReportService {
 		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
 	}
 
-	public ReceiveSample getReceiveSample(String receiveSampleId) {
-		return receiveSampleMapper.selectByPrimaryKey(receiveSampleId);
+	public ReceiveSample getReceiveSample(String reportId) {
+		return receiveSampleMapper.selectByPrimaryKey(reportId);
 	}
 
 	
@@ -70,7 +70,7 @@ public class ReportService {
 	 * @param receiveSampleId
 	 */
 	@Transactional
-	public void deploymentProcess(String receiveSampleId) {
+	public void deploymentProcess(String reportId) {
 		RuntimeService runtimeService = processEngine.getRuntimeService();
 		User user = userService.getCurrentUser();
 		Map<String, Object> variables = new HashMap<String, Object>();
@@ -78,15 +78,15 @@ public class ReportService {
 		variables.put("tag", 1);
 		// 启动流程引擎时首先要指定编制人，默认是当前用户
 		variables.put("editPersion", user.getName());
-		String processId = runtimeService.startProcessInstanceByKey("ReportProcess", receiveSampleId, variables).getId();
+		String processId = runtimeService.startProcessInstanceByKey("ReportProcess", reportId, variables).getId();
 		// 流程启动成功之后将返回的流程ID回填到合同receive_sample表中
 		ReceiveSample receiveSample = new ReceiveSample();
-		receiveSample.setReceiveSampleId(receiveSampleId);		
+		receiveSample.setReportId(reportId);		
 		receiveSample.setReportProcessId(processId);
 		//同时将编制人回填到数据库中
 		receiveSample.setDrawUser(user.getName());
 		//将检验项分配最多的人指定为主检人
-		List<HashMap<String,String>> data=receiveSampleItemMapper.selectCountGroupByUser(receiveSampleId);
+		List<HashMap<String,String>> data=receiveSampleItemMapper.selectCountGroupByUser(reportId);
 		int max=0;
 		String principalInspector = null;
 		for(HashMap<String,String> map:data) {
@@ -106,7 +106,7 @@ public class ReportService {
 	 * @throws Exception 
 	 */
 	@Transactional
-	public void modifyDrawUser(String receiveSampleId, String processId, String newDrawUser) throws Exception {
+	public void modifyDrawUser(String reportId, String processId, String newDrawUser) throws Exception {
 		TaskService taskService = processEngine.getTaskService();
 		User user = userService.getCurrentUser();
 		List<Task> tasks =taskService.createTaskQuery().executionId(processId).
@@ -118,7 +118,7 @@ public class ReportService {
 			taskService.delegateTask(task.getId(), newDrawUser);
 		}
 		ReceiveSample receiveSample = new ReceiveSample();
-		receiveSample.setReceiveSampleId(receiveSampleId);
+		receiveSample.setReceiveSampleId(reportId);
 		receiveSample.setDrawUser(newDrawUser);
 		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
 	}
@@ -245,7 +245,7 @@ public class ReportService {
 	 * @param taskId  任务编号
 	 */
 	@Transactional
-	public void doEditTask(String taskId, String receiveSampleId, String examinePersonName, String comment, String reportProcessId) {
+	public void doEditTask(String taskId, String reportId, String examinePersonName, String comment, String reportProcessId) {
 		User user=userService.getCurrentUser();
 		TaskService taskService = processEngine.getTaskService();
 		RuntimeService runtimeService = processEngine.getRuntimeService();
@@ -255,7 +255,7 @@ public class ReportService {
 		//执行任务过程中需要设置标记位方便流程引擎区分
 		runtimeService.setVariable(task.getExecutionId(), "tag", 2);
 		ReceiveSample receiveSample = new ReceiveSample();
-		receiveSample.setReceiveSampleId(receiveSampleId);
+		receiveSample.setReportId(reportId);
 		//将审核人信息回填到数据库
 		receiveSample.setExamineUser(examinePersonName);
 		//设置合同状态为待审核
@@ -272,7 +272,7 @@ public class ReportService {
 	 * @param taskId  任务编号
 	 */
 	@Transactional
-	public void doExamineTask(String taskId, String receiveSampleId,String approvePersonName, boolean pass, String comment, String reportProcessId) {
+	public void doExamineTask(String taskId, String reportId,String approvePersonName, boolean pass, String comment, String reportProcessId) {
 		TaskService taskService = processEngine.getTaskService();
 		User user=userService.getCurrentUser();
 		RuntimeService runtimeService = processEngine.getRuntimeService();
@@ -287,7 +287,7 @@ public class ReportService {
 		}
 		//设置合同状态为待批准
 		ReceiveSample receiveSample = new ReceiveSample();
-		receiveSample.setReceiveSampleId(receiveSampleId);			
+		receiveSample.setReportId(reportId);			
 		if(pass) {
 			receiveSample.setReportStatus(2);
 			receiveSample.setApprovalUser(approvePersonName);
@@ -307,7 +307,7 @@ public class ReportService {
 	 * @param taskId  任务编号
 	 */
 	@Transactional
-	public void doApproveTask(String taskId, String receiveSampleId, boolean pass,String comment, String reportProcessId) {
+	public void doApproveTask(String taskId, String reportId, boolean pass,String comment, String reportProcessId) {
 		TaskService taskService = processEngine.getTaskService();
 		User user=userService.getCurrentUser();
 		RuntimeService runtimeService = processEngine.getRuntimeService();
@@ -319,7 +319,7 @@ public class ReportService {
 			runtimeService.setVariable(task.getExecutionId(), "tag", 2);
 		}
 		ReceiveSample receiveSample = new ReceiveSample();
-		receiveSample.setReceiveSampleId(receiveSampleId);	
+		receiveSample.setReportId(reportId);	
 		if(pass) {
 			receiveSample.setReportStatus(3);
 		}else {
@@ -356,8 +356,8 @@ public class ReportService {
 	 * @param receiveSampleId
 	 * @return List<ReceiveSampleItem>
 	 */
-	public List<ReceiveSampleItem> getReceiveSampleItemList(String receiveSampleId) {
-		 return receiveSampleItemMapper.selectByReceiveSampleId(receiveSampleId);
+	public List<ReceiveSampleItem> getReceiveSampleItemList(String reportId) {
+		 return receiveSampleItemMapper.selectByReportId(reportId);
 	}
 	
 	/**
@@ -480,7 +480,7 @@ public class ReportService {
 	}
 	
 	
-	public int mutiUpdateReportStatusByReceiveSampleIdList(String reportStatus,List<String> receiveSampleIdList) {
-		return receiveSampleMapper.mutiUpdateReportStatusByReceiveSampleIdList(reportStatus, receiveSampleIdList);
+	public int mutiUpdateReportStatusByReportIdList(String reportStatus,List<String> reportIdList) {
+		return receiveSampleMapper.mutiUpdateReportStatusByReportIdList(reportStatus, reportIdList);
 	}
 }

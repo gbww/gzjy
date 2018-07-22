@@ -21,14 +21,14 @@ public interface ReceiveSampleItemMapper {
     ReceiveSampleItem selectByPrimaryKey(String id);
     //查询授予当前用户的检验项列表
     List<ReceiveSampleItem> selectByUser(@Param("filters") Map<String, Object> filter,@Param("orderby")String order);
-    //根据接样ID查询检验项列表
-    List<ReceiveSampleItem> selectByReceiveSampleId(String receiveSampleId);
+    //根据报告ID查询检验项列表
+    List<ReceiveSampleItem> selectByReportId(@Param("reportId")String reportId);
 
     int updateByPrimaryKeySelective(ReceiveSampleItem record);
-    Integer getCountsByReceiveSampleId(String receiveSampleId);
+    Integer getCountsByReportId(String reportId);
     int updateByPrimaryKey(ReceiveSampleItem record);
     //根据接收样品的id删除
-    int deleteByReceiveSampleId(String id);
+    int deleteByReportId(String id);
     //测试一对一连表查询
     List<ReceiveSampleItem> selectTestDetail(@Param("filters") Map<String, Object> filter,@Param("orderby")String order);
     
@@ -37,9 +37,9 @@ public interface ReceiveSampleItemMapper {
             @Param("timeEnd") Timestamp timeEnd);
     
     
-    List<ReceiveSampleItem> selectDoingItems(@Param("receiveSampleId")String receiveSampleId);
+    List<ReceiveSampleItem> selectDoingItems(@Param("reportId")String reportId);
     
     List<ReceiveSampleItem> select(@Param("filters") Map<String, Object> filter,@Param("orderby")String order);
     
-    List<HashMap<String,String>> selectCountGroupByUser(@Param("receiveSampleId")String receiveSampleId);
+    List<HashMap<String,String>> selectCountGroupByUser(@Param("reportId")String reportId);
 }

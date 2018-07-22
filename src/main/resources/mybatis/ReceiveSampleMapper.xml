@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.gzjy.receive.mapper.ReceiveSampleMapper" >
   <resultMap id="BaseResultMap" type="com.gzjy.receive.model.ReceiveSample" >
-    <id column="receive_sample_id" property="receiveSampleId" jdbcType="CHAR" />
-    <result column="report_id" property="reportId" jdbcType="CHAR" />
+   <id column="report_id" property="reportId" jdbcType="CHAR" />
+    <result column="receive_sample_id" property="receiveSampleId" jdbcType="CHAR" />   
     <result column="sample_type" property="sampleType" jdbcType="VARCHAR" />
     <result column="check_type" property="checkType" jdbcType="VARCHAR" />
     <result column="entrusted_unit" property="entrustedUnit" jdbcType="VARCHAR" />
@@ -89,10 +89,10 @@
     select 
     <include refid="Base_Column_List" />
     from receive_sample
-    where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}
+    where report_id = #{reportId,jdbcType=CHAR}
   </select>
   
-    <select id="selectByReportId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="selectByReportId" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from receive_sample
@@ -125,7 +125,7 @@
 					${key} LIKE #{filters[${key}]}
 				</if>
 			</foreach>
-			and  receive_sample_id IN( select receive_sample_id from receive_sample_item where
+			and  report_id IN( select report_id from receive_sample_item where
 			test_user=#{user} and status=1
 			)
 		</where>
@@ -189,12 +189,12 @@
 	
 	
   <select id="selectAllItem" parameterType="com.gzjy.receive.model.ReceiveSample" resultType="hashmap">
-		select A.*,B.* from receive_sample A, receive_sample_item B where A.receive_sample_id = B.receive_sample_id		
+		select A.*,B.* from receive_sample A, receive_sample_item B where A.report_id = B.report_id		
 	</select>
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from receive_sample
-    where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}
+    where report_id = #{reportId,jdbcType=CHAR}
   </delete>
   <insert id="insert" parameterType="com.gzjy.receive.model.ReceiveSample" >
     insert into receive_sample (receive_sample_id, report_id, sample_type, 
@@ -664,8 +664,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.gzjy.receive.model.ReceiveSample" >
     update receive_sample
     <set >
-      <if test="reportId != null" >
-        report_id = #{reportId,jdbcType=CHAR},
+      <if test="receiveSampleId != null" >
+        receive_sample_id = #{receiveSampleId,jdbcType=CHAR},
       </if>
       <if test="sampleType != null" >
         sample_type = #{sampleType,jdbcType=VARCHAR},
@@ -866,27 +866,27 @@
         created_at = #{createdAt,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}
+    where report_id = #{reportId,jdbcType=CHAR}
   </update>
   
   
-  <update id="mutiUpdateReportStatusByReceiveSampleIdList" >
+  <update id="mutiUpdateReportStatusByReportIdList" >
     update receive_sample
     <set >
       <if test="reportStatus != null" >
         report_status = #{reportStatus,jdbcType=CHAR},
       </if>      
     </set>
-    where receive_sample_id in 
-    <foreach collection="receiveSampleIdList" item="receiveSampleId" index="index"
+    where report_id in 
+    <foreach collection="reportIdList" item="reportId" index="index"
            open="(" close=")" separator=",">
-           #{receiveSampleId}
+           #{reportId}
     </foreach>
   </update>
   
   <update id="updateByPrimaryKey" parameterType="com.gzjy.receive.model.ReceiveSample" >
     update receive_sample
-    set report_id = #{reportId,jdbcType=CHAR},
+    set receive_sample_id = #{receiveSampleId,jdbcType=CHAR},
       sample_type = #{sampleType,jdbcType=VARCHAR},
       check_type = #{checkType,jdbcType=VARCHAR},
       entrusted_unit = #{entrustedUnit,jdbcType=VARCHAR},
@@ -953,6 +953,6 @@
       devices = #{devices,jdbcType=VARCHAR},
       report_status = #{reportStatus,jdbcType=INTEGER},
       created_at = #{createdAt,jdbcType=TIMESTAMP}
-    where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}
+    where report_id = #{reportId,jdbcType=CHAR}
   </update>
 </mapper>

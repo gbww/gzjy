@@ -166,7 +166,7 @@
     select 
     <include refid="Base_Column_List" />
     from receive_sample_item
-    where receive_sample_id = #{receiveSampleId}
+    where report_id = #{reportId}
     and  status !=2
   </select>
   
@@ -247,12 +247,12 @@
     from receive_sample_item
     where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}
   </select>
-  <!--  根据接样ID查询检验项列表 -->
-   <select id="selectByReceiveSampleId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <!--  根据报告ID查询检验项列表 -->
+   <select id="selectByReportId" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from receive_sample_item
-    where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}
+    where report_id = #{reportId,jdbcType=CHAR}
   </select>
   
   
@@ -279,7 +279,7 @@
 	
 	<select id="selectCountGroupByUser" parameterType="java.lang.String" resultType="hashmap">
 		select count(test_user) as total,test_user from receive_sample_item where 
-		receive_sample_id=#{receiveSampleId,jdbcType=VARCHAR}
+		report_id=#{reportId,jdbcType=VARCHAR}
 		GROUP BY test_user 		
 	</select>
   
@@ -289,9 +289,9 @@
     where id = #{id,jdbcType=CHAR}
   </delete>
    <!--根据接收样品的id删除 -->
-    <delete id="deleteByReceiveSampleId" parameterType="java.lang.String" >
+    <delete id="deleteByReportId" parameterType="java.lang.String" >
     delete from receive_sample_item
-    where receive_sample_id = #{id,jdbcType=CHAR}
+    where report_id = #{id,jdbcType=CHAR}
   </delete>
  
   <insert id="insert" parameterType="com.gzjy.receive.model.ReceiveSampleItem" >
