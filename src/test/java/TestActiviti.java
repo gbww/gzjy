@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gzjy.Application;
 
+
 /**
  * @author xuewenlong@cmss.chinamobile.com
  * @updated 2017年5月1日
