@@ -44,6 +44,7 @@ public class Application  {
      *  如果不加会报org.apache.ibatis.binding.BindingException: Invalid bound statement (not found): com.blog.mapper.MessageMapper.findMessageInfo异常
      *   因为找不到*Mapper.xml，也就无法映射mapper中的接口方法。 
     */ 
+    
     sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(MAPPER_LOCATION)); 
     return sqlSessionFactoryBean.getObject();
     }

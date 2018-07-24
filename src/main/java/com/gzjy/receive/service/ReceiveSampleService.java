@@ -99,16 +99,15 @@ public class ReceiveSampleService {
             if(!userClient.nameExist(record.getApprovalUser()))
                 throw new BizException("批准人在数据库中不存在");
         }
-	    if(receiveSampleMapper.selectByPrimaryKey(record.getReceiveSampleId())!=null){
+	    /*if(receiveSampleMapper.selectByPrimaryKey(record.getReceiveSampleId())!=null){
 	        throw new BizException("抽样单ID已经存在");
-	    }
-	    if(receiveSampleMapper.selectByReportId(record.getReportId()).size()>0){
+	    }*/
+  
+	    if(receiveSampleMapper.selectByPrimaryKey(record.getReportId())!=null){
             throw new BizException("报告编号已经存在");
         }
-	   
-	    
-	    
-		if (StringUtils.isBlank(record.getReceiveSampleId())) {
+ 
+		if (StringUtils.isBlank(record.getReceiveSampleId())||StringUtils.isBlank(record.getReportId())) {
 			return false;
 		} else {
 		    record.setCreatedAt(new Date());
@@ -140,10 +139,10 @@ public class ReceiveSampleService {
 	
 	
 	@Transactional
-    public Boolean checkReceiveSampleIsFinished(String receiveSampleId) {
+    public Boolean checkReceiveSampleIsFinished(String reportId) {
 
         List<ReceiveSampleItem> doingItems = receiveSampleItemMapper
-                .selectDoingItems(receiveSampleId);
+                .selectDoingItems(reportId);
         if (doingItems.size() > 0)
             return false;
         else
@@ -162,18 +161,18 @@ public class ReceiveSampleService {
 				continue;
 			}
 			if (StringUtils.isBlank(item.getId())) {  //添加检测项
-			    ReceiveSample receive= receiveSampleMapper.selectByPrimaryKey(item.getReceiveSampleId());
+			    ReceiveSample receive= receiveSampleMapper.selectByPrimaryKey(item.getReportId());
 			    if(receive==null) {			        
-			        System.out.println("接样单ID不存在");
-                    logger.error("接样单ID不存在");
-                    throw new BizException("抽样单ID不存在");
+			        System.out.println("报告单ID不存在");
+                    logger.error("报告单ID不存在");
+                    throw new BizException("报告单ID不存在");
 			    }
 			    else {
 			        if(receive.getStatus()==1) {  //抽样单处于完成状态了
 			            receive.setStatus(0);
 			            receiveSampleMapper.updateByPrimaryKeySelective(receive);
 			        }
-			        item.setReportId(receive.getReportId());
+			        item.setReceiveSampleId(receive.getReceiveSampleId());
 			        
 			    }
 				item.setId(UUID.random());
@@ -220,7 +219,7 @@ public class ReceiveSampleService {
             }
 		    
 			receiveSampleMapper.deleteByPrimaryKey(recordId);
-			receiveSampleItemMapper.deleteByReceiveSampleId(recordId);
+			receiveSampleItemMapper.deleteByReportId(recordId);
 		} catch (Exception e) {
 			i = 0;
 			e.printStackTrace();
@@ -231,7 +230,7 @@ public class ReceiveSampleService {
 
 	@Transactional
 	public ReceiveSample updateReceiveSample(ReceiveSample record) {
-		ReceiveSample existRecord = receiveSampleMapper.selectByPrimaryKey(record.getReceiveSampleId());
+		ReceiveSample existRecord = receiveSampleMapper.selectByPrimaryKey(record.getReportId());
 	     
 	        
 		if (existRecord != null) {
@@ -406,22 +405,22 @@ public class ReceiveSampleService {
 		}
 
 	}
-
-	public List<ReceiveSampleItem> getItemsByReceiveSampleId(String ReceiveSampleId) {
-		if (StringUtils.isBlank(ReceiveSampleId)) {
-			throw new BizException("接样ID参数是空值");
-		}
-		List<ReceiveSampleItem> record = receiveSampleItemMapper.selectByReceiveSampleId(ReceiveSampleId);
-		return record;
-
-	}
 	
-	
-	public int getCountsByReceiveSampleId(String receiveSampleId) {
-        if (StringUtils.isBlank(receiveSampleId)) {
+	public List<ReceiveSampleItem> getItemsByReportId(String reportId) {
+        if (StringUtils.isBlank(reportId)) {
             throw new BizException("接样ID参数是空值");
         }
-        return   receiveSampleItemMapper.getCountsByReceiveSampleId(receiveSampleId);
+        List<ReceiveSampleItem> record = receiveSampleItemMapper.selectByReportId(reportId);
+        return record;
+
+    }
+	
+	
+	public int getCountsByReportId(String reportId) {
+        if (StringUtils.isBlank(reportId)) {
+            throw new BizException("报告ID参数是空值");
+        }
+        return   receiveSampleItemMapper.getCountsByReportId(reportId);
          
 
     }
@@ -436,12 +435,12 @@ public class ReceiveSampleService {
 		}
 
 	}
-	public Boolean setStatus(String receiveSampleId,Integer status) {
+	public Boolean setStatus(String reportId,Integer status) {
 	    ReceiveSample record=new ReceiveSample();
-	    record.setReceiveSampleId(receiveSampleId);
+	    record.setReportId(reportId);
 	    record.setStatus(status);
-	    int resoult=receiveSampleMapper.updateByPrimaryKeySelective(record);
-	    if(resoult==1) {
+	    int result=receiveSampleMapper.updateByPrimaryKeySelective(record);
+	    if(result==1) {
 	        return true;
 	    }
 	    else
@@ -450,7 +449,7 @@ public class ReceiveSampleService {
     }
 	
 	@Transactional
-	public Boolean upload(MultipartFile file,String receiveSampleId) throws IOException {
+	public Boolean upload(MultipartFile file,String reportId) throws IOException {
 	   
 	  // 使用文件系统      
 	        if (file.getSize() / (1024 * 1024) > 10) {
@@ -468,15 +467,15 @@ public class ReceiveSampleService {
 	        if (!epicNFSClient.hasRemoteDir(parentPath)) {
 	            epicNFSClient.createRemoteDir(parentPath);
 	        }	        
-	        String filePath=parentPath+"/"+file.getOriginalFilename();
-	       ReceiveSample sample=receiveSampleMapper.selectByPrimaryKey(receiveSampleId);
+	        String filePath=parentPath+"/"+reportId+file.getOriginalFilename();
+	       ReceiveSample sample=receiveSampleMapper.selectByPrimaryKey(reportId);
 	        if(sample!=null) {
 	            if(!StringUtils.isBlank(sample.getAppendix())) {
 	                deleteAttachment(sample.getAppendix());
 	            }
 	            ReceiveSample record=new ReceiveSample();
                 record.setAppendix(filePath);
-                record.setReceiveSampleId(sample.getReceiveSampleId());	           	                
+                record.setReportId(sample.getReportId());	           	                
 	                receiveSampleMapper.updateByPrimaryKeySelective(record);
 	                InputStream in=file.getInputStream();
 	                try {
@@ -576,7 +575,7 @@ public class ReceiveSampleService {
 	public void generateExcel(Workbook workbook, ReceiveSample data) throws IOException, IllegalAccessException, InvocationTargetException, ParseException {
 		List<ReceiveSampleItem> receiveSampleItems =null;
 		if(data.getReceiveSampleId()!=null) {
-			receiveSampleItems = getItemsByReceiveSampleId(data.getReceiveSampleId());
+			receiveSampleItems = getItemsByReportId(data.getReportId());
 		}
 		Sheet sheet = workbook.getSheetAt(0);
 		Iterator<Row> rows = sheet.rowIterator();

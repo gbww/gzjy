@@ -134,6 +134,9 @@ public class ReceiveSampleController {
 		if (StringUtils.isBlank(receiveSample.getReceiveSampleId())) {
 			return Response.fail("接收样品编号不能为空");
 		}
+		if (StringUtils.isBlank(receiveSample.getReportId())) {
+            return Response.fail("报告编号不能为空");
+        }
 		Boolean flag = receiveSampleService.addReceiveSample(receiveSample);
 		return Response.success(flag);
 	}
@@ -149,6 +152,9 @@ public class ReceiveSampleController {
         if (StringUtils.isBlank(receiveSample.getReceiveSampleId())) {
             return Response.fail("接收样品编号不能为空");
         }
+        if (StringUtils.isBlank(receiveSample.getReportId())) {
+            return Response.fail("报告编号不能为空");
+        }
         receiveSample = receiveSampleService.updateReceiveSample(receiveSample);
         
         return Response.success(receiveSample);
@@ -156,15 +162,15 @@ public class ReceiveSampleController {
 
 	// 变更接样中检验项基本信息（添加检验项）
 	@Privileges(name = "SAMPLE-ADDITEM", scope = { 1 })
-	@RequestMapping(value = "/sample/item/add/{receiveSampleId}", method = RequestMethod.POST)
-	public Response addItem(@PathVariable("receiveSampleId") String receiveSample,
+	@RequestMapping(value = "/sample/item/add/{reportId}", method = RequestMethod.POST)
+	public Response addItem(@PathVariable("reportId") String reportId,
 			@Validated(value = { Add.class }) @RequestBody List<ReceiveSampleItem> items, BindingResult result) {
 		if (result.hasErrors()) {
 			return Response.fail(result.getFieldError().getDefaultMessage());
 		}
 		for (ReceiveSampleItem item : items) {
-			if (!item.getReceiveSampleId().equals(receiveSample)) {
-				return Response.fail("接样单ID存在异常");
+			if (!item.getReportId().equals(reportId)) {
+				return Response.fail("报告编号ID存在异常");
 			}
 		}
 		boolean flag = receiveSampleService.addReceiveSampleItems(items);
@@ -174,15 +180,15 @@ public class ReceiveSampleController {
 	
 	// 更新接样中检验项基本信息
 	//@Privileges(name = "SAMPLE-ADDITEM", scope = { 1 })
-    @RequestMapping(value = "/sample/item/update/{receiveSampleId}", method = RequestMethod.POST)
-    public Response updateItem(@PathVariable("receiveSampleId") String receiveSample,
-            @Validated(value = { Add.class }) @RequestBody List<ReceiveSampleItem> items, BindingResult result) {
+    @RequestMapping(value = "/sample/item/update/{reportId}", method = RequestMethod.POST)
+    public Response updateItem(@PathVariable("reportId") String reportId,
+            @Validated(value = { Update.class }) @RequestBody List<ReceiveSampleItem> items, BindingResult result) {
         if (result.hasErrors()) {
             return Response.fail(result.getFieldError().getDefaultMessage());
         }
         for (ReceiveSampleItem item : items) {
-            if (!item.getReceiveSampleId().equals(receiveSample)) {
-                return Response.fail("接样单ID存在异常");
+            if (!item.getReportId().equals(reportId)) {
+                return Response.fail("报告编号ID存在异常");
             }
         }
         boolean flag = receiveSampleService.addReceiveSampleItems(items);
@@ -202,8 +208,8 @@ public class ReceiveSampleController {
 		
 		boolean flag = receiveSampleService.updateSampleItemsResoult(items);
 		for (ReceiveSampleItem item : items) {
-		    if(receiveSampleService.checkReceiveSampleIsFinished(item.getReceiveSampleId())) { //如果接样单的检测项都完成了结果录入
-		        receiveSampleService.setStatus(item.getReceiveSampleId(), 1);
+		    if(receiveSampleService.checkReceiveSampleIsFinished(item.getReportId())) { //如果接样单的检测项都完成了结果录入
+		        receiveSampleService.setStatus(item.getReportId(), 1);
 		    }
         }
 
@@ -213,13 +219,13 @@ public class ReceiveSampleController {
 	// 删除接样单（包括接样单中的检验项）
 	@Privileges(name = "SAMPLE-DELETESAMPLE", scope = { 1 })
 	@RequestMapping(value = "/sample/delete", method = RequestMethod.POST)
-	public Response deleteSample(@RequestBody List<String> ids, BindingResult result) {
+	public Response deleteSample(@RequestBody List<String> reportIds, BindingResult result) {
 		String record = null;
 		if (result.hasErrors()) {
 			return Response.fail(result.getFieldError().getDefaultMessage());
 		}
 
-		for (String id : ids) {
+		for (String id : reportIds) {
 			receiveSampleService.delete(id);
 			record += id + "、";
 		}
@@ -230,15 +236,15 @@ public class ReceiveSampleController {
 
 	// 删除接样中检验项基本信息（删除检验项时直接调用后台接口删除）
 	@Privileges(name = "SAMPLE-DELETEITEM", scope = { 1 })
-	@RequestMapping(value = "/sample/items/{receiveSampleId}/delete", method = RequestMethod.POST)
-	public Response deleteItem(@PathVariable("receiveSampleId") String receiveSample, @RequestBody List<String> items,
+	@RequestMapping(value = "/sample/items/{reportId}/delete", method = RequestMethod.POST)
+	public Response deleteItem(@PathVariable("reportId") String reportId, @RequestBody List<String> items,
 			BindingResult result) {
 		if (result.hasErrors()) {
 			return Response.fail(result.getFieldError().getDefaultMessage());
 		}
 		for (String id : items) {
 			ReceiveSampleItem itemRecord = receiveSampleService.getItem(id);
-			if (!itemRecord.getReceiveSampleId().equals(receiveSample)) {
+			if (!itemRecord.getReportId().equals(reportId)) {
 				throw new BizException("传递了一个错误的检验项ID");
 			}
 		}
@@ -251,7 +257,7 @@ public class ReceiveSampleController {
 	// 查询接样信息
 	@RequestMapping(value = "/sample", method = RequestMethod.GET)
 	@Privileges(name = "SAMPLE-SELECT", scope = { 1 })
-	public Response list(@RequestParam(name = "receiveSampleId", required = false) String id,
+	public Response list(@RequestParam(name = "receiveSampleId", required = false) String receiveSampleId,
 	        @RequestParam(name = "reportId", required = false) String reportId,
 			@RequestParam(name = "entrustedUnit", required = false) String entrustedUnit,
 			@RequestParam(name = "inspectedUnit", required = false) String inspectedUnit,
@@ -291,8 +297,8 @@ public class ReceiveSampleController {
 		if(!StringUtils.isBlank(productionUnit)) {
             filter.put("production_unit", productionUnit);
         }
-		if (!StringUtils.isBlank(id)) {
-			filter.put("receive_sample_id", id);
+		if (!StringUtils.isBlank(receiveSampleId)) {
+			filter.put("receive_sample_id", receiveSampleId);
 		}
 		if (!StringUtils.isBlank(entrustedUnit)) {
 			filter.put("entrusted_unit", entrustedUnit);
@@ -333,7 +339,7 @@ public class ReceiveSampleController {
 	// 查询未分配的接样信息
     @RequestMapping(value = "/sample/listForDistribute", method = RequestMethod.GET)
     @Privileges(name = "SAMPLE-DISTRIBUTE-SELECT", scope = { 1 })
-    public Response listSampleForDistribute(@RequestParam(name = "receiveSampleId", required = false) String id,
+    public Response listSampleForDistribute(@RequestParam(name = "receiveSampleId", required = false) String receiveSampleId,
             @RequestParam(name = "reportId", required = false) String reportId,
             @RequestParam(name = "entrustedUnit", required = false) String entrustedUnit,
             @RequestParam(name = "inspectedUnit", required = false) String inspectedUnit,
@@ -373,8 +379,8 @@ public class ReceiveSampleController {
         if(!StringUtils.isBlank(productionUnit)) {
             filter.put("production_unit", productionUnit);
         }
-        if (!StringUtils.isBlank(id)) {
-            filter.put("receive_sample_id", id);
+        if (!StringUtils.isBlank(receiveSampleId)) {
+            filter.put("receive_sample_id", receiveSampleId);
         }
         if (!StringUtils.isBlank(entrustedUnit)) {
             filter.put("entrusted_unit", entrustedUnit);
@@ -444,109 +450,7 @@ public class ReceiveSampleController {
         return Response.success(receiveSampleService.selectUnderDepartmentReceiveSampleItems(pageNum, pageSize, order, filter));
     }
     
-    
 	
-	
-		
-	
-/*	//查看报告列表
-	@RequestMapping(value = "/sample/reports", method = RequestMethod.GET)
-	@Privileges(name = "SAMPLE-REPORTLIST", scope = { 1 })
-    public Response listReports(@RequestParam(name = "receiveSampleId", required = false) String id,
-            @RequestParam(name = "reportId", required = false) String reportId,
-            @RequestParam(name = "entrustedUnit", required = false) String entrustedUnit,
-            @RequestParam(name = "inspectedUnit", required = false) String inspectedUnit,
-            @RequestParam(name = "sampleName", required = false) String sampleName,
-            @RequestParam(name = "executeStandard", required = false) String executeStandard,
-            @RequestParam(name = "productionUnit", required = false) String productionUnit,
-            @RequestParam(name = "sampleType", required = false) String sampleType,
-            @RequestParam(name = "checkType", required = false) String checkType,
-            @RequestParam(name = "reportStatus", required = false) Integer reportStatus,
-            @RequestParam(name = "order", required = false) String order,
-            @RequestParam(name = "status", defaultValue = "5") int status,
-            @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
-            
-            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
-            @RequestParam(value = "startTime", required = false) String startTime,
-            @RequestParam(value = "endTime", required = false) String endTime) {
-        Map<String, Object> filter = new HashMap<String, Object>();
-
-        if (StringUtils.isBlank(startTime)) {
-            startTime = null;
-        }
-        if (StringUtils.isBlank(endTime)) {
-            endTime=null;
-        }
-        if(!StringUtils.isBlank(reportId)) {
-            filter.put("report_id", reportId);
-        }
-        if(!StringUtils.isBlank(inspectedUnit)) {
-            filter.put("inspected_unit", inspectedUnit);
-        }
-        if(!StringUtils.isBlank(sampleName)) {
-            filter.put("sample_name", sampleName);
-        }
-        if(!StringUtils.isBlank(executeStandard)) {
-            filter.put("execute_standard", executeStandard);
-        }
-        if(!StringUtils.isBlank(productionUnit)) {
-            filter.put("production_unit", productionUnit);
-        }
-        if (!StringUtils.isBlank(id)) {
-            filter.put("receive_sample_id", id);
-        }
-        if (!StringUtils.isBlank(entrustedUnit)) {
-            filter.put("entrusted_unit", entrustedUnit);
-        }
-        if (!StringUtils.isBlank(sampleType)) {
-            filter.put("sample_type", sampleType);
-        }
-        if (!StringUtils.isBlank(checkType)) {
-            filter.put("check_type", checkType);
-        }
-        if (reportStatus!=null&&reportStatus!=5) {  //所有的不加登录人的过滤
-            filter.put("report_status", reportStatus);
-            User u=userService.getCurrentUser();
-            boolean superUser= u.getRole().isSuperAdmin();
-            if(!superUser) {
-                String name=u.getName();               
-                    if(reportStatus==0) {
-                        filter.put("draw_user", name);
-                    }
-                    if(reportStatus==1) {
-                        filter.put("examine_user", name);
-                    }
-                    if(reportStatus==2) {
-                        filter.put("approval_user", name);
-                    }                             
-            }    
-            
-        }
-        if (StringUtils.isBlank(order)) {
-            order = "created_at desc";
-        }
-        if (status != 5) {
-            filter.put("status", status);
-        }
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date start = null;
-        Date end = null;
-
-        try {
-            start = startTime == null ? null : sdf.parse(startTime);
-            end = endTime == null ? null : sdf.parse(endTime);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new BizException("输入的时间格式不合法！");
-        }
-
-        return Response.success(receiveSampleService.select(pageNum, pageSize, order, filter, start, end));
-    }*/
-    
-	
-	
-
-
 	// test
 	@RequestMapping(value = "/sampletest", method = RequestMethod.GET)
 	public Response list(@RequestParam(name = "entrustedunit", required = false) String entrustedUnit,
@@ -592,18 +496,18 @@ public class ReceiveSampleController {
         return Response.success(receiveSampleService.selectCountItemByDepartment(filter, order, start, end));
         
     }
-	// 根据ID获取接样信息
-	@RequestMapping(value = "/sample/{id}", method = RequestMethod.GET)
-	public Response getReceiveSample(@PathVariable(name = "id") String id) {
+	// 根据报告ID获取接样信息
+	@RequestMapping(value = "/sample/{reportId}", method = RequestMethod.GET)
+	public Response getReceiveSample(@PathVariable(name = "reportId") String reportId) {
 
-		return Response.success(receiveSampleService.getReceiveSample(id));
+		return Response.success(receiveSampleService.getReceiveSample(reportId));
 	}
 
-	// 根据接样ID获得接样对应的检验项信息列表
-	@RequestMapping(value = "/sample/items/{id}", method = RequestMethod.GET)
-	public Response getItems(@PathVariable(name = "id") String id) {
+	// 根据报告ID获得接样对应的检验项信息列表
+	@RequestMapping(value = "/sample/items/{reportId}", method = RequestMethod.GET)
+	public Response getItems(@PathVariable(name = "reportId") String reportId) {
 
-		return Response.success(receiveSampleService.getItemsByReceiveSampleId(id));
+		return Response.success(receiveSampleService.getItemsByReportId(reportId));
 	}
 	
 
@@ -618,11 +522,11 @@ public class ReceiveSampleController {
 	}
 
 	// 设置接样单的状态
-	@RequestMapping(value = "/sample/{receivesampleid}/status/{status}", method = RequestMethod.GET)
-	public Response setSampleStatus(@PathVariable(name = "receivesampleid") String receiveSampleId,
+	@RequestMapping(value = "/sample/{reportId}/status/{status}", method = RequestMethod.GET)
+	public Response setSampleStatus(@PathVariable(name = "reportId") String reportId,
 			@PathVariable(name = "status") Integer status) {
 
-		return Response.success(receiveSampleService.setStatus(receiveSampleId, status));
+		return Response.success(receiveSampleService.setStatus(reportId, status));
 	}
 
 	// 查询当前用户检验项信息(检测人员关心的检验项)	
@@ -657,7 +561,7 @@ public class ReceiveSampleController {
         }
 		PageInfo<ReceiveSampleItem> items=receiveSampleService.selectCurrentUserItems(pageNum, pageSize, order, filter);
 		for(ReceiveSampleItem item: items.getList()) {
-		    String id=item.getReceiveSampleId();
+		    String id=item.getReportId();
 		    ReceiveSample sample=new ReceiveSample();
 		     sample=receiveSampleService.getReceiveSample(id);
 		    item.setSample(sample);
@@ -701,11 +605,11 @@ public class ReceiveSampleController {
  // 上传
     @RequestMapping(value = "/attachment/upload", method = RequestMethod.POST)
     public void uploadReceiveAppendix(@RequestParam("file") MultipartFile file,
-             @RequestParam(name = "receiveSampleId", required = false) String receiveSampleId            
+             @RequestParam(name = "reportId", required = false) String reportId            
             ) {
         
             try {
-                receiveSampleService.upload(file, receiveSampleId);
+                receiveSampleService.upload(file, reportId);
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -722,6 +626,20 @@ public class ReceiveSampleController {
                     
             }
                
+    }
+    
+    
+    //删除附件
+    @RequestMapping(value = "/attachment/delete", method = RequestMethod.DELETE)
+    public void deleteReceiveAppendix(
+             @RequestParam(name = "reportId", required = false) String reportId            
+            ) {
+       ReceiveSample sample=receiveSampleService.getReceiveSample(reportId);
+       try {
+        receiveSampleService.deleteAttachment(sample.getAppendix());
+    } catch (Exception e) {
+        e.printStackTrace();
+    }         
     }
     
     // 下载

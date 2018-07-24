@@ -82,17 +82,17 @@ public class ReportController {
 	}
 
 	/**
-	 * 根据receiveSampleId获取报告详情
+	 * 根据reportId获取报告详情
 	 * 
-	 * @param receiveSampleId
+	 * @param reportId
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/{receiveSampleId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{reportId}", method = RequestMethod.GET)
 	@Privileges(name = "REPORT-DETAIL", scope = { 1 })
-	public Response reportDetail(@PathVariable(required = true) String receiveSampleId) throws Exception {
+	public Response reportDetail(@PathVariable(required = true) String reportId) throws Exception {
 		try {
-			ReceiveSample receiveSample = reportService.getReceiveSample(receiveSampleId);
+			ReceiveSample receiveSample = reportService.getReceiveSample(reportId);
 			ReportExtend reportExtend = reportExtendMapper.selectByReportId(receiveSample.getReportId());
 			Map<String, Object> result = new HashMap<String, Object>();
 			result.put("receiveSample", receiveSample);
@@ -113,9 +113,9 @@ public class ReportController {
 	 */
 	@RequestMapping(value = "/process", method = RequestMethod.POST)
 	@Privileges(name = "REPORT-PROCESS-START", scope = { 1 })
-	public Response startProcess(@RequestParam(required = true) String receiveSampleId) throws Exception {
+	public Response startProcess(@RequestParam(required = true) String reportId) throws Exception {
 		try {
-			reportService.deploymentProcess(receiveSampleId);
+			reportService.deploymentProcess(reportId);
 			return Response.success("success");
 		} catch (Exception e) {
 			logger.error(e + "");
@@ -188,11 +188,11 @@ public class ReportController {
 	 */
 	@RequestMapping(value = "/process/task/edit/{taskId}", method = RequestMethod.GET)
 	@Privileges(name = "REPORT-TASK-EDIT-DO", scope = { 1 })
-	public Response completeEditTask(@PathVariable String taskId, @RequestParam(required = true) String receiveSampleId,
+	public Response completeEditTask(@PathVariable String taskId, @RequestParam(required = true) String reportId,
 			@RequestParam(required = true) String examinePersonName, @RequestParam(required = false) String comment,
 			@RequestParam(required = true) String reportProcessId) {
 		try {
-			reportService.doEditTask(taskId, receiveSampleId, examinePersonName, comment, reportProcessId);
+			reportService.doEditTask(taskId, reportId, examinePersonName, comment, reportProcessId);
 			return Response.success("success");
 		} catch (Exception e) {
 			logger.error(e + "");
@@ -212,11 +212,11 @@ public class ReportController {
 	@RequestMapping(value = "/process/task/examine/{taskId}", method = RequestMethod.GET)
 	@Privileges(name = "REPORT-TASK-EXAMINE-DO", scope = { 1 })
 	public Response completeExamineTask(@PathVariable String taskId,
-			@RequestParam(required = true) String receiveSampleId,
+			@RequestParam(required = true) String reportId,
 			@RequestParam(required = false) String approvePersonName, @RequestParam(required = true) boolean pass,
 			@RequestParam(required = false) String comment, @RequestParam(required = true) String reportProcessId) {
 		try {
-			reportService.doExamineTask(taskId, receiveSampleId, approvePersonName, pass, comment, reportProcessId);
+			reportService.doExamineTask(taskId, reportId, approvePersonName, pass, comment, reportProcessId);
 			return Response.success("success");
 		} catch (Exception e) {
 			logger.error(e + "");
@@ -235,10 +235,10 @@ public class ReportController {
 	@Privileges(name = "REPORT-TASK-APPROVE-DO", scope = { 1 })
 	@RequestMapping(value = "/process/task/approve/{taskId}", method = RequestMethod.GET)
 	public Response completeApproveTask(@PathVariable String taskId,
-			@RequestParam(required = true) String receiveSampleId, @RequestParam(required = true) boolean pass,
+			@RequestParam(required = true) String reportId, @RequestParam(required = true) boolean pass,
 			@RequestParam(required = false) String comment, @RequestParam(required = true) String reportProcessId) {
 		try {
-			reportService.doApproveTask(taskId, receiveSampleId, pass, comment, reportProcessId);
+			reportService.doApproveTask(taskId, reportId, pass, comment, reportProcessId);
 			return Response.success("success");
 		} catch (Exception e) {
 			logger.error(e + "");
@@ -461,11 +461,11 @@ public class ReportController {
 	 * 查看报告中的检验项
 	 * @return
 	 */
-	@RequestMapping(value = "/list/{receiveSampleId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/list/{reportId}", method = RequestMethod.GET)
 	@Privileges(name = "REPORT-LIST-ITEM-GET", scope = { 1 })
-	public Response detailReportItem(@PathVariable(name = "receiveSampleId", required = true) String receiveSampleId) {
+	public Response detailReportItem(@PathVariable(name = "reportId", required = true) String reportId) {
 		try {
-			List<ReceiveSampleItem> getReceiveSampleItemList = reportService.getReceiveSampleItemList(receiveSampleId);
+			List<ReceiveSampleItem> getReceiveSampleItemList = reportService.getReceiveSampleItemList(reportId);
 			return Response.success(getReceiveSampleItemList);
 		} catch (Exception e) {
 			logger.error(e + "");
@@ -478,7 +478,7 @@ public class ReportController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/item/{receiveSampleItemId}", method = RequestMethod.POST)
+	@RequestMapping(value = "/item/{reportId}", method = RequestMethod.POST)
 	@Privileges(name = "REPORT-LIST-ITEM-UPDATE", scope = { 1 })
 	public Response detailReport(@RequestBody List<ReceiveSampleItem> items) {
 
@@ -498,13 +498,13 @@ public class ReportController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/{receiveSampleItemId}/property/qianfa", method = RequestMethod.PUT)
+	@RequestMapping(value = "/{reportId}/property/qianfa", method = RequestMethod.PUT)
 	//@Privileges(name = "REPORT-QIANFA-UPDATE", scope = { 1 })
 	public Response updateQianfa(
-			@PathVariable(name = "receiveSampleItemId", required = true) String receiveSampleItemId,
+			@PathVariable(name = "reportId", required = true) String reportId,
 			@RequestParam(required = true) String qianfaDate) {
 		ReceiveSample record = new ReceiveSample();
-		record.setReceiveSampleId(receiveSampleItemId);
+		record.setReportId(reportId);
 		SimpleDateFormat myFmt2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		try {
 			record.setQianfaDate(myFmt2.parse(qianfaDate));
@@ -586,11 +586,11 @@ public class ReportController {
 	 */
 	@RequestMapping(value = "/export", method = RequestMethod.GET)
 	//@Privileges(name = "REPORT-PDF-EXPORT", scope = { 1 })
-	public Response exportReport(@RequestParam(name = "receiveSampleId", required = true) String receiveSampleId,
+	public Response exportReport(@RequestParam(name = "reportId", required = true) String reportId,
 			HttpServletResponse response) {
 		OutputStream out = null;
 		try {
-			ReceiveSample result = receiveSampleService.getReceiveSample(receiveSampleId);
+			ReceiveSample result = receiveSampleService.getReceiveSample(reportId);
 			if (result == null) {
 				return Response.fail("未查询到对应的报告信息");
 			}
@@ -604,11 +604,11 @@ public class ReportController {
 			// 设定报表所需要的外部参数内容
 			Map<String, Object> rptParameters = new HashMap<String, Object>();
 			if(templateName.contains("green")) {
-			    int count=receiveSampleService.getCountsByReceiveSampleId(receiveSampleId);
+			    int count=receiveSampleService.getCountsByReportId(reportId);
 			    rptParameters.put("items_count", count);
 			}
 			
-			rptParameters.put("receiveSampleId", receiveSampleId);
+			rptParameters.put("reportId", reportId);
 			// 传入报表源文件绝对路径，外部参数对象，DB连接，得到JasperPring对象
 			JasperPrint jasperPrint = JasperFillManager.fillReport(templateDir, rptParameters,
 					dataSource.getConnection());
@@ -616,7 +616,7 @@ public class ReportController {
 			response.setContentType("application/octet-stream;charset=UTF-8");
 			// response.setDateHeader("Expires", 0); // 清除页面缓存
 			response.setHeader("Content-disposition",
-					"attachment;filename=" + URLEncoder.encode(receiveSampleId + ".pdf", "UTF-8"));
+					"attachment;filename=" + URLEncoder.encode(reportId + ".pdf", "UTF-8"));
 			out = response.getOutputStream();
 			JasperExportManager.exportReportToPdfStream(jasperPrint, out);
 			out.flush();
@@ -644,10 +644,10 @@ public class ReportController {
 	 */
 	@RequestMapping(value = "/preview", method = RequestMethod.GET)
 	//@Privileges(name = "REPORT-PREVIEW", scope = { 1 })
-	public Response viewReport(@RequestParam(name = "receiveSampleId", required = true) String receiveSampleId,
+	public Response viewReport(@RequestParam(name = "reportId", required = true) String reportId,
 			@RequestParam(name = "type", required = true) String type, HttpServletResponse response) {
 		try {
-			ReceiveSample result = receiveSampleService.getReceiveSample(receiveSampleId);
+			ReceiveSample result = receiveSampleService.getReceiveSample(reportId);
 			if (result == null) {
 				return Response.fail("未查询到对应的报告信息");
 			}
@@ -662,10 +662,10 @@ public class ReportController {
 			// 设定报表所需要的外部参数内容
 			Map<String, Object> rptParameters = new HashMap<String, Object>();
 			if(templateName.contains("green")) {
-                int count=receiveSampleService.getCountsByReceiveSampleId(receiveSampleId);
+                int count=receiveSampleService.getCountsByReportId(reportId);
                 rptParameters.put("items_count", count);
             }
-			rptParameters.put("receiveSampleId", receiveSampleId);
+			rptParameters.put("reportId", reportId);
 			// 传入报表源文件绝对路径，外部参数对象，DB连接，得到JasperPring对象
 			JasperPrint jasperPrint = JasperFillManager.fillReport(templateDir, rptParameters,
 					dataSource.getConnection());
@@ -676,13 +676,13 @@ public class ReportController {
 				response.setContentType("text/html;charset=UTF-8");
 				// response.setDateHeader("Expires", 0); // 清除页面缓存
 				response.setHeader("Content-disposition",
-						"inline;filename=" + URLEncoder.encode(receiveSampleId + ".xml", "UTF-8"));
+						"inline;filename=" + URLEncoder.encode(reportId + ".xml", "UTF-8"));
 				JasperExportManager.exportReportToXmlStream(jasperPrint, out);
 			} else if (type.equals("html")) {
 				response.setContentType("text/html;charset=UTF-8");
 				// response.setDateHeader("Expires", 0); // 清除页面缓存
 				response.setHeader("Content-disposition",
-						"inline;filename=" + URLEncoder.encode(receiveSampleId + ".html", "UTF-8"));
+						"inline;filename=" + URLEncoder.encode(reportId + ".html", "UTF-8"));
 				HtmlExporter exporter = new HtmlExporter();
 				exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
 				exporter.setExporterOutput(new SimpleHtmlExporterOutput(out));
@@ -693,7 +693,7 @@ public class ReportController {
 				response.setContentType("application/pdf;charset=UTF-8");
 				// response.setDateHeader("Expires", 0); // 清除页面缓存
 				response.setHeader("Content-disposition",
-						"inline;filename=" + URLEncoder.encode(receiveSampleId + ".pdf", "UTF-8"));
+						"inline;filename=" + URLEncoder.encode(reportId + ".pdf", "UTF-8"));
 				JasperExportManager.exportReportToPdfStream(jasperPrint, out);
 			}
 
@@ -718,10 +718,10 @@ public class ReportController {
 	 */
 	@RequestMapping(value = "/preview", method = RequestMethod.POST)
 	//@Privileges(name = "REPORT-MUTI-PREVIEW", scope = { 1 })
-	public Response batchviewReport(@RequestBody() List<String> receiveSampleIds, HttpServletResponse response) {
+	public Response batchviewReport(@RequestBody() List<String> reportIds, HttpServletResponse response) {
 		List<JasperPrint> prints = new ArrayList<JasperPrint>();
 		OutputStream out = null;
-		for (String id : receiveSampleIds) {
+		for (String id : reportIds) {
 			ReceiveSample node = receiveSampleService.getReceiveSample(id);
 			if (node == null) {
 				logger.error("抽验单编号：" + id + "不存在");
@@ -735,10 +735,10 @@ public class ReportController {
 					String templateDir = "/var/lib/docs/gzjy/template/" + templateName;
 					Map<String, Object> rptParameters = new HashMap<String, Object>();
 					if(templateName.contains("green")) {
-		                int count=receiveSampleService.getCountsByReceiveSampleId(id);
+		                int count=receiveSampleService.getCountsByReportId(id);
 		                rptParameters.put("items_count", count);
 		            }
-					rptParameters.put("receiveSampleId", id);
+					rptParameters.put("reportId", id);
 					// 传入报表源文件绝对路径，外部参数对象，DB连接，得到JasperPring对象
 					JasperPrint jasperPrint = new JasperPrint();
 					try {
@@ -798,14 +798,14 @@ public class ReportController {
 	@RequestMapping(value = "/status/muti", method = RequestMethod.GET)
 	//@Privileges(name = "REPORT-MUTI-STATUS-UPDATE", scope = { 1 })
 	public Response viewReport(@RequestParam(name = "reportStatus", required = true) String reportStatus,
-			@RequestParam(name = "receiveSampleIdList", required = true) String receiveSampleIdList) {
-		String[] temp = receiveSampleIdList.split(";");
+			@RequestParam(name = "reportIdList", required = true) String reportIdList) {
+		String[] temp = reportIdList.split(";");
 		List<String> idList = new ArrayList<String>();
 		for(String s:temp) {
 			idList.add(s);
 		}
 		try {
-			reportService.mutiUpdateReportStatusByReceiveSampleIdList(reportStatus, idList);
+			reportService.mutiUpdateReportStatusByReportIdList(reportStatus, idList);
 			return Response.success("success");
 		} catch (Exception e) {
 			logger.error(e + "");
@@ -820,11 +820,11 @@ public class ReportController {
 	@RequestMapping(value = "/drawuser", method = RequestMethod.PUT)
 	//@Privileges(name = "REPORT-MUTI-STATUS-UPDATE", scope = { 1 })
 	public Response modifyDrawUser(
-			@RequestParam(required = true) String receiveSampleId,
+			@RequestParam(required = true) String reportId,
 			@RequestParam(required = true) String processId,
 			@RequestParam(required = true) String newDrawUser) {
 		try {
-			reportService.modifyDrawUser(receiveSampleId, processId, newDrawUser);
+			reportService.modifyDrawUser(reportId, processId, newDrawUser);
 			return Response.success("success");
 		} catch (Exception e) {
 			logger.error(e + "");
