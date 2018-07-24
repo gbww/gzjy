@@ -150,7 +150,7 @@
 	</select>
 
 	<delete id="deleteByIds">
-		delete from check_item where id not in
+		delete from check_item_catalog_mapping where id not in
 		<foreach item="item" index="index" collection="idList" open="("
 			separator="," close=")">
 			#{item}

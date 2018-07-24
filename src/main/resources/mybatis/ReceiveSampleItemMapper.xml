@@ -241,11 +241,11 @@
   
   
   
-  <select id="getCountsByReceiveSampleId" resultType="java.lang.Integer" parameterType="java.lang.String" >
+  <select id="getCountsByReportId" resultType="java.lang.Integer" parameterType="java.lang.String" >
     select 
     count(*)
     from receive_sample_item
-    where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}
+    where report_id = #{reportId,jdbcType=CHAR}
   </select>
   <!--  根据报告ID查询检验项列表 -->
    <select id="selectByReportId" resultMap="BaseResultMap" parameterType="java.lang.String" >
