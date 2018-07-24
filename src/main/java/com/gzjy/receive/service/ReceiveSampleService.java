@@ -138,6 +138,7 @@ public class ReceiveSampleService {
 	}
 	
 	
+	
 	@Transactional
     public Boolean checkReceiveSampleIsFinished(String reportId) {
 
