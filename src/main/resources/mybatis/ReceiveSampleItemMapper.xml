@@ -215,7 +215,7 @@
    <select id="selectByUser" resultMap="BaseResultMap" >
     select 
     <include refid="Detail_Column_List" />
-    from receive_sample_item a left join receive_sample b on a.receive_sample_id=b.receive_sample_id
+    from receive_sample_item a left join receive_sample b on a.report_id=b.report_id
           <where>
         	<foreach collection="filters.keys" item="key" separator="and">
     	<choose>
@@ -241,11 +241,11 @@
   
   
   
-  <select id="getCountsByReceiveSampleId" resultType="java.lang.Integer" parameterType="java.lang.String" >
+  <select id="getCountsByReportId" resultType="java.lang.Integer" parameterType="java.lang.String" >
     select 
     count(*)
     from receive_sample_item
-    where receive_sample_id = #{receiveSampleId,jdbcType=CHAR}
+    where report_id = #{reportId,jdbcType=CHAR}
   </select>
   <!--  根据报告ID查询检验项列表 -->
    <select id="selectByReportId" resultMap="BaseResultMap" parameterType="java.lang.String" >
@@ -258,7 +258,7 @@
   
   	<select id="selectCountGroupByDepartment" resultMap="CountItemResultByTestRoom">
 		select
-		count(receive_sample_id) item_count,test_room,status,updated_at
+		count(report_id) item_count,test_room,status,updated_at
 		from receive_sample_item
 		<where>
 			<foreach collection="filters.keys" item="key" separator="and">

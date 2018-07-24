@@ -195,6 +195,27 @@ public class ReceiveSampleController {
 
         return Response.success("操作成功：" + flag);
     }
+    
+    
+    /**
+     * 
+     * @param items   传ReceiveSampleItem的uuid
+     * @param result
+     * @return
+     * ReceiveSampleController.java
+     */
+  //批量分配检测项
+    @RequestMapping(value = "/sample/item/distribute", method = RequestMethod.POST)
+    public Response distributeItems(@RequestBody List<ReceiveSampleItem> items, BindingResult result) {
+        if (result.hasErrors()) {
+            return Response.fail(result.getFieldError().getDefaultMessage());
+        }
+        boolean flag = receiveSampleService.addReceiveSampleItems(items);
+
+        return Response.success("操作成功：" + flag);
+    }
+    
+    
 	
 	
 	//设置检测项结果
