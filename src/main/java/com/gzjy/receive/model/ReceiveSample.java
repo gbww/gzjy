@@ -152,7 +152,7 @@ public class ReceiveSample implements Serializable{
     //附件
     private String appendix;
     
-    //接样状态(0:未完成，1：完成)5作为查询时判断是否是全部查询的判断
+    //接样状态(0:未下发检测项，-1：已下发检测项，1：完成)5作为查询时判断是否是全部查询的判断
     private Integer status;
     //创建时间
     private Date createdAt;

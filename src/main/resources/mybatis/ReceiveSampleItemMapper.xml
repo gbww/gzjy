@@ -136,7 +136,7 @@
     a.id, a.receive_sample_id, a.report_id, a.name, a.method, a.unit, a.standard_value, a.detection_limit, 
     a.quantitation_limit, a.device, a.default_price, a.test_room, a.subpackage, a.item_result, a.measured_value, 
     a.test_user, a.status, a.updated_at,
-    b.receive_sample_id, b.report_id, b.sample_type, b.check_type, b.entrusted_unit,
+    b.receive_sample_id rs_receive_sample_id, b.report_id rs_report_id, b.sample_type, b.check_type, b.entrusted_unit,
 		b.entrusted_unit_address,
 		b.entrusted_user_phone, b.entrusted_user_email, b.inspected_unit, b.inspected_unit_address,
 		b.inspected_user, b.inspected_user_phone, b.inspected_user_email,
@@ -150,7 +150,7 @@
 		b.production_address, b.production_user, b.production_phone, b.cost, b.remarks, b.data_remarks,
 		b.responsible_person, b.sample_holder, b.receive_user, b.receive_date,
 		b.arrange_finish_date,
-		b.finish_date, b.protocol_id, b.subpackage, b.result, b.determine, b.approval_user,
+		b.finish_date, b.protocol_id, b.subpackage rs_subpackage, b.result, b.determine, b.approval_user,
 		b.examine_user,
 		b.draw_user, b.principal_inspector, b.status rs_status, b.report_status, b.created_at
   </sql>
@@ -212,7 +212,7 @@
   
   
   <!--  查询授予当前用户的检验项列表 -->
-   <select id="selectByUser" resultMap="BaseResultMap" >
+   <select id="selectByUser" resultMap="DetailResultMap" >
     select 
     <include refid="Detail_Column_List" />
     from receive_sample_item a left join receive_sample b on a.report_id=b.report_id
@@ -227,6 +227,10 @@
     	</when>
     	<when test="key=='report_id'">
     	 a.report_id LIKE CONCAT('%',#{filters[${key}]},'%' )
+    	</when>
+    	
+    	<when test="key=='receivesample_status'">
+    	 b.status = #{filters[${key}]}
     	</when>
         <otherwise>
         <if test="null!=filters[key]">

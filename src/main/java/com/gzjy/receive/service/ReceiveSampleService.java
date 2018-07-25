@@ -341,7 +341,8 @@ public class ReceiveSampleService {
        if(!superUser) {
            String name=u.getName();
            filter.put("test_user", name);
-       }    
+       }
+       filter.put("receivesample_status", "-1");
         List<ReceiveSampleItem> list = new ArrayList<ReceiveSampleItem>();
         PageInfo<ReceiveSampleItem> pages = new PageInfo<ReceiveSampleItem>(list);
         pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {

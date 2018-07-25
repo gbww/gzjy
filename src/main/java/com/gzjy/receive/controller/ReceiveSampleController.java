@@ -357,7 +357,7 @@ public class ReceiveSampleController {
 	
 	
 	
-	// 查询未分配的接样信息
+	// 查询已经下发检测项任务到科室的接样信息
     @RequestMapping(value = "/sample/listForDistribute", method = RequestMethod.GET)
     @Privileges(name = "SAMPLE-DISTRIBUTE-SELECT", scope = { 1 })
     public Response listSampleForDistribute(@RequestParam(name = "receiveSampleId", required = false) String receiveSampleId,
@@ -371,7 +371,7 @@ public class ReceiveSampleController {
             @RequestParam(name = "checkType", required = false) String checkType,
             @RequestParam(name = "reportStatus", required = false) Integer reportStatus,
             @RequestParam(name = "order", required = false) String order,
-            @RequestParam(name = "status", defaultValue = "0") int status,
+            @RequestParam(name = "status", defaultValue = "-1") int status,
             @RequestParam(name = "pageNum", required = false) Integer pageNum,
             
             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
@@ -449,7 +449,7 @@ public class ReceiveSampleController {
            @RequestParam(name = "reportId", required = false) String reportId,
            @RequestParam(name = "name", required = false) String name,   //项目名称
            @RequestParam(name = "method", required = false) String method,
-           @RequestParam(name = "status", defaultValue = "0") Integer status,  //5代表所有
+           @RequestParam(name = "status", defaultValue = "-1") Integer status,  //5代表所有
            @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
         Map<String, Object> filter = new HashMap<String, Object>();
@@ -581,12 +581,7 @@ public class ReceiveSampleController {
             filter.put("method", method);
         }
 		PageInfo<ReceiveSampleItem> items=receiveSampleService.selectCurrentUserItems(pageNum, pageSize, order, filter);
-		for(ReceiveSampleItem item: items.getList()) {
-		    String id=item.getReportId();
-		    ReceiveSample sample=new ReceiveSample();
-		     sample=receiveSampleService.getReceiveSample(id);
-		    item.setSample(sample);
-		}
+		
 		
 		return Response.success(items);
 	}
@@ -596,7 +591,7 @@ public class ReceiveSampleController {
 	// 查询当前用户接样单信息(检测人员关心的接样单)
     @RequestMapping(value = "/sampleItem/sample", method = RequestMethod.GET)
     @Privileges(name = "SAMPLE-ITEMS-INPUT-SELECT", scope = { 1 })
-    public Response listReceiveItemByCurrentUser(@RequestParam(name = "status", defaultValue = "0") int status,
+    public Response listReceiveItemByCurrentUser(@RequestParam(name = "status", defaultValue = "-1") int status,
             @RequestParam(name = "order", required = false) String order,
              @RequestParam(name = "receiveSampleId", required = false) String receiveSampleId,
             @RequestParam(name = "reportId", required = false) String reportId,
