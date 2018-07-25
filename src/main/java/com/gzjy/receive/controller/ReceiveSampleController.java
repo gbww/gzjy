@@ -557,6 +557,7 @@ public class ReceiveSampleController {
 			@RequestParam(name = "order", required = false) String order,
 			@RequestParam(name = "receiveSampleId", required = false) String receiveSampleId,
 			@RequestParam(name = "reportId", required = false) String reportId,
+			@RequestParam(name = "sampleName", required = false) String sampleName,
 			@RequestParam(name = "name", required = false) String name,
 			@RequestParam(name = "method", required = false) String method,
 			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
@@ -573,6 +574,9 @@ public class ReceiveSampleController {
         }
 		if (!StringUtils.isBlank(reportId)) {
             filter.put("report_id", reportId);
+        }
+		if (!StringUtils.isBlank(sampleName)) {
+            filter.put("sample_name", sampleName);
         }
 		if (!StringUtils.isBlank(name)) {
             filter.put("name", name);
