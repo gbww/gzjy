@@ -27,7 +27,6 @@
     <include refid="Base_Column_List" />   
     from check_items_catalog
     where parent_id = #{productId,jdbcType=VARCHAR}
-    order by created_at asc 
     
   </select>  
   
