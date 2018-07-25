@@ -24,8 +24,8 @@
   
   
   <resultMap id="ReceiveSampleResultMap" type="com.gzjy.receive.model.ReceiveSample">
-			<id column="receive_sample_id" property="receiveSampleId" jdbcType="CHAR" />
-		<result column="report_id" property="reportId" jdbcType="CHAR" />
+  		<id column="report_id" property="reportId" jdbcType="CHAR" />
+		<result column="receive_sample_id" property="receiveSampleId" jdbcType="CHAR" />		
 		<result column="sample_type" property="sampleType" jdbcType="VARCHAR" />
 		<result column="check_type" property="checkType" jdbcType="VARCHAR" />
 		<result column="entrusted_unit" property="entrustedUnit"
@@ -240,7 +240,7 @@
     	</choose>    			
 		</foreach>
     </where>
-    order by a.${orderby}
+    order by ${orderby}
   </select>
   
   
