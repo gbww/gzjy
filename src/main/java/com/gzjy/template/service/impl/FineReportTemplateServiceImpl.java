@@ -48,7 +48,7 @@ public class FineReportTemplateServiceImpl implements FineReportTemplateService 
 			throw new BizException("模板名称已存在");
 		}
 		EpicNFSClient client = epicNFSService.getClient("gzjy");
-		// 建立远程存放excel模板文件目录
+		// 建立远程存放模板文件目录
 		if (!client.hasRemoteDir("template")) {
 			client.createRemoteDir("template");
 		}		

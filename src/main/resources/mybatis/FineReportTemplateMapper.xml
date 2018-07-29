@@ -30,16 +30,10 @@
 	</select>
 
 	<insert id="insert" parameterType="com.gzjy.template.model.FineReportTemplateModel">
-		insert into
-		fine_report_template(id, name, category, description, file_name,
-		created_at)
+		insert into	fine_report_template(id, name, category, description, file_name, created_at)
 		values (
-		#{id,jdbcType=VARCHAR},
-		#{name,jdbcType=VARCHAR},
-		#{category,jdbcType=VARCHAR},
-		#{description,jdbcType=VARCHAR},
-		#{fileName,jdbcType=VARCHAR},
-		#{createdAt,jdbcType=VARCHAR}
+			#{id,jdbcType=VARCHAR},	#{name,jdbcType=VARCHAR},#{category,jdbcType=VARCHAR},
+			#{description,jdbcType=VARCHAR},#{fileName,jdbcType=VARCHAR},#{createdAt,jdbcType=VARCHAR}
 		)
 	</insert>
 
