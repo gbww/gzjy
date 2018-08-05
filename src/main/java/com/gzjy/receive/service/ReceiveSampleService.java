@@ -9,6 +9,8 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -23,6 +25,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -40,6 +43,9 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,40 +83,40 @@ public class ReceiveSampleService {
 	private ReceiveSampleMapper receiveSampleMapper;
 	@Autowired
 	private ReceiveSampleItemMapper receiveSampleItemMapper;
-	
+
 	@Autowired
 	private UserSignMapper userSignMapper;
 	@Autowired
-    private UserService userClient;
+	private UserService userClient;
 	@Autowired
 	private EpicNFSService epicNFSService;
-	
+
 	@Transactional
 	public Boolean addReceiveSample(ReceiveSample record) {
-	    if(!StringUtils.isBlank(record.getDrawUser())){
-	        if(!userClient.nameExist(record.getDrawUser()))
-	            throw new BizException("编制人在数据库中不存在");
-	    }
-	    if(!StringUtils.isBlank(record.getExamineUser())){
-            if(!userClient.nameExist(record.getExamineUser()))
-                throw new BizException("审核人在数据库中不存在");
-        }
-	    if(!StringUtils.isBlank(record.getApprovalUser())){
-            if(!userClient.nameExist(record.getApprovalUser()))
-                throw new BizException("批准人在数据库中不存在");
-        }
-	    /*if(receiveSampleMapper.selectByPrimaryKey(record.getReceiveSampleId())!=null){
+		if(!StringUtils.isBlank(record.getDrawUser())){
+			if(!userClient.nameExist(record.getDrawUser()))
+				throw new BizException("编制人在数据库中不存在");
+		}
+		if(!StringUtils.isBlank(record.getExamineUser())){
+			if(!userClient.nameExist(record.getExamineUser()))
+				throw new BizException("审核人在数据库中不存在");
+		}
+		if(!StringUtils.isBlank(record.getApprovalUser())){
+			if(!userClient.nameExist(record.getApprovalUser()))
+				throw new BizException("批准人在数据库中不存在");
+		}
+		/*if(receiveSampleMapper.selectByPrimaryKey(record.getReceiveSampleId())!=null){
 	        throw new BizException("抽样单ID已经存在");
 	    }*/
-  
-	    if(receiveSampleMapper.selectByPrimaryKey(record.getReportId())!=null){
-            throw new BizException("报告编号已经存在");
-        }
- 
+
+		if(receiveSampleMapper.selectByPrimaryKey(record.getReportId())!=null){
+			throw new BizException("报告编号已经存在");
+		}
+
 		if (StringUtils.isBlank(record.getReceiveSampleId())||StringUtils.isBlank(record.getReportId())) {
 			return false;
 		} else {
-		    record.setCreatedAt(new Date());
+			record.setCreatedAt(new Date());
 			receiveSampleMapper.insertSelective(record);
 		}
 		logger.info("添加成功");
@@ -118,38 +124,38 @@ public class ReceiveSampleService {
 	}
 	@Transactional
 	public Boolean updateSampleItemsResoult(List<ReceiveSampleItem> items) {
-	    Boolean result=true;
-	    if (items.size() == 0) {
-            return false;
-        }
+		Boolean result=true;
+		if (items.size() == 0) {
+			return false;
+		}
 
-	    for(ReceiveSampleItem item:items) {
-	        ReceiveSampleItem exitItem = receiveSampleItemMapper.selectByPrimaryKey(item.getId());
-            if (exitItem != null) {
-                item.setUpdatedAt(new Date());
-                receiveSampleItemMapper.updateByPrimaryKey(item);
-            } else {
-                System.out.println("接样单中不存在此检验项ID");
-                logger.error("接样单中不存在此检验项ID");
-                result=false;
-            }
-	    }
-	    return result;
+		for(ReceiveSampleItem item:items) {
+			ReceiveSampleItem exitItem = receiveSampleItemMapper.selectByPrimaryKey(item.getId());
+			if (exitItem != null) {
+				item.setUpdatedAt(new Date());
+				receiveSampleItemMapper.updateByPrimaryKey(item);
+			} else {
+				System.out.println("接样单中不存在此检验项ID");
+				logger.error("接样单中不存在此检验项ID");
+				result=false;
+			}
+		}
+		return result;
 	}
-	
-	
-	
+
+
+
 	@Transactional
-    public Boolean checkReceiveSampleIsFinished(String reportId) {
+	public Boolean checkReceiveSampleIsFinished(String reportId) {
 
-        List<ReceiveSampleItem> doingItems = receiveSampleItemMapper
-                .selectDoingItems(reportId);
-        if (doingItems.size() > 0)
-            return false;
-        else
-            return true;
+		List<ReceiveSampleItem> doingItems = receiveSampleItemMapper
+				.selectDoingItems(reportId);
+		if (doingItems.size() > 0)
+			return false;
+		else
+			return true;
 
-    }
+	}
 
 	@Transactional
 	public Boolean addReceiveSampleItems(List<ReceiveSampleItem> items) {
@@ -162,33 +168,33 @@ public class ReceiveSampleService {
 				continue;
 			}
 			if (StringUtils.isBlank(item.getId())) {  //添加检测项
-			    ReceiveSample receive= receiveSampleMapper.selectByPrimaryKey(item.getReportId());
-			    if(receive==null) {			        
-			        System.out.println("报告单ID不存在");
-                    logger.error("报告单ID不存在");
-                    throw new BizException("报告单ID不存在");
-			    }
-			    else {
-			        if(receive.getStatus()==1) {  //抽样单处于完成状态了
-			            receive.setStatus(0);
-			            receiveSampleMapper.updateByPrimaryKeySelective(receive);
-			        }
-			        item.setReceiveSampleId(receive.getReceiveSampleId());
-			        
-			    }
+				ReceiveSample receive= receiveSampleMapper.selectByPrimaryKey(item.getReportId());
+				if(receive==null) {			        
+					System.out.println("报告单ID不存在");
+					logger.error("报告单ID不存在");
+					throw new BizException("报告单ID不存在");
+				}
+				else {
+					if(receive.getStatus()==1) {  //抽样单处于完成状态了
+						receive.setStatus(0);
+						receiveSampleMapper.updateByPrimaryKeySelective(receive);
+					}
+					item.setReceiveSampleId(receive.getReceiveSampleId());
+
+				}
 				item.setId(UUID.random());
-				 item.setUpdatedAt(new Date());
-				 if(item.getStatus()==null){
-				     item.setStatus(0);
-				     
-				 }
+				item.setUpdatedAt(new Date());
+				if(item.getStatus()==null){
+					item.setStatus(0);
+
+				}
 				receiveSampleItemMapper.insert(item);
-				
-				
+
+
 			} else {
 				ReceiveSampleItem exitItem = receiveSampleItemMapper.selectByPrimaryKey(item.getId());
 				if (exitItem != null) {
-				    item.setUpdatedAt(new Date());
+					item.setUpdatedAt(new Date());
 					receiveSampleItemMapper.updateByPrimaryKeySelective(item);
 				} else {
 					System.out.println("接样单中不存在此检验项ID");
@@ -214,11 +220,11 @@ public class ReceiveSampleService {
 	public int delete(String recordId) {
 		int i = 1;
 		try {
-		    ReceiveSample existRecord = receiveSampleMapper.selectByPrimaryKey(recordId);
-		    if(!StringUtils.isBlank(existRecord.getAppendix())) {
-                deleteAttachment(existRecord.getAppendix());
-            }
-		    
+			ReceiveSample existRecord = receiveSampleMapper.selectByPrimaryKey(recordId);
+			if(!StringUtils.isBlank(existRecord.getAppendix())) {
+				deleteAttachment(existRecord.getAppendix());
+			}
+
 			receiveSampleMapper.deleteByPrimaryKey(recordId);
 			receiveSampleItemMapper.deleteByReportId(recordId);
 		} catch (Exception e) {
@@ -232,25 +238,25 @@ public class ReceiveSampleService {
 	@Transactional
 	public ReceiveSample updateReceiveSample(ReceiveSample record) {
 		ReceiveSample existRecord = receiveSampleMapper.selectByPrimaryKey(record.getReportId());
-	     
-	        
+
+
 		if (existRecord != null) {
-		    if(!StringUtils.isBlank(record.getDrawUser())){
-                if(!userClient.nameExist(record.getDrawUser()))
-                    throw new BizException("编制人在数据库中不存在");
-            }
-            if(!StringUtils.isBlank(record.getExamineUser())){
-                if(!userClient.nameExist(record.getExamineUser()))
-                    throw new BizException("审核人在数据库中不存在");
-            }
-            if(!StringUtils.isBlank(record.getApprovalUser())){
-                if(!userClient.nameExist(record.getApprovalUser()))
-                    throw new BizException("批准人在数据库中不存在");
-            }
-            
-            if(!StringUtils.isBlank(record.getAppendix())) {
-                deleteAttachment(existRecord.getAppendix());
-            }
+			if(!StringUtils.isBlank(record.getDrawUser())){
+				if(!userClient.nameExist(record.getDrawUser()))
+					throw new BizException("编制人在数据库中不存在");
+			}
+			if(!StringUtils.isBlank(record.getExamineUser())){
+				if(!userClient.nameExist(record.getExamineUser()))
+					throw new BizException("审核人在数据库中不存在");
+			}
+			if(!StringUtils.isBlank(record.getApprovalUser())){
+				if(!userClient.nameExist(record.getApprovalUser()))
+					throw new BizException("批准人在数据库中不存在");
+			}
+
+			if(!StringUtils.isBlank(record.getAppendix())) {
+				deleteAttachment(existRecord.getAppendix());
+			}
 			receiveSampleMapper.updateByPrimaryKeySelective(record);
 		}
 
@@ -263,7 +269,7 @@ public class ReceiveSampleService {
 		List<ReceiveSample> list = new ArrayList<ReceiveSample>();
 		PageInfo<ReceiveSample> pages = new PageInfo<ReceiveSample>(list);
 		Timestamp start = timeStart == null ? null : new Timestamp(timeStart.getTime());
-        Timestamp end = timeEnd == null ? null : new Timestamp(timeEnd.getTime());
+		Timestamp end = timeEnd == null ? null : new Timestamp(timeEnd.getTime());
 		pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
 			@Override
 			public void doSelect() {
@@ -272,15 +278,15 @@ public class ReceiveSampleService {
 		});
 		return pages;
 	}
-	
-	
+
+
 	@Transactional
 	public PageInfo<ReceiveSample> selectAllCompareReportStaus(Integer pageNum, Integer pageSize, String order, Map<String, Object> filter,Date timeStart,Date timeEnd) {
 
 		List<ReceiveSample> list = new ArrayList<ReceiveSample>();
 		PageInfo<ReceiveSample> pages = new PageInfo<ReceiveSample>(list);
 		Timestamp start = timeStart == null ? null : new Timestamp(timeStart.getTime());
-        Timestamp end = timeEnd == null ? null : new Timestamp(timeEnd.getTime());
+		Timestamp end = timeEnd == null ? null : new Timestamp(timeEnd.getTime());
 		pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
 			@Override
 			public void doSelect() {
@@ -289,113 +295,133 @@ public class ReceiveSampleService {
 		});
 		return pages;
 	}
-	
-	
-	@Transactional
-    public List<ReceiveSample> selectNoPage( String order, Map<String, Object> filter,Date timeStart,Date timeEnd) {
 
-        List<ReceiveSample> list = new ArrayList<ReceiveSample>();
-       
-        Timestamp start = timeStart == null ? null : new Timestamp(timeStart.getTime());
-        Timestamp end = timeEnd == null ? null : new Timestamp(timeEnd.getTime());
-       
-        list= receiveSampleMapper.selectAll(filter, order,start,end);
-         
-        return list;
-    }
-	
-	
-	
-	
-	
+
+	@Transactional
+	public List<ReceiveSample> selectNoPage( String order, Map<String, Object> filter,Date timeStart,Date timeEnd) {
+
+		List<ReceiveSample> list = new ArrayList<ReceiveSample>();
+
+		Timestamp start = timeStart == null ? null : new Timestamp(timeStart.getTime());
+		Timestamp end = timeEnd == null ? null : new Timestamp(timeEnd.getTime());
+
+		list= receiveSampleMapper.selectAll(filter, order,start,end);
+
+		return list;
+	}
+
+
+
+
+
 	/**
 	 * 
 	测试
 	 */
 	public PageInfo<ReceiveSample> selectTest(Integer pageNum, Integer pageSize, Map<String, Object> filter) {
 
-        List<ReceiveSample> list = new ArrayList<ReceiveSample>();
-        PageInfo<ReceiveSample> pages = new PageInfo<ReceiveSample>(list);
-        pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
-            @Override
-            public void doSelect() {
-                receiveSampleMapper.selectTest(filter);
-            }
-        });
-        return pages;
-    }
-	
-	
-	   public List<SampleItemCountView> selectCountItemByDepartment( Map<String, Object> filter,String order,Date timeStart,Date timeEnd) {
-	       Timestamp start = timeStart == null ? null : new Timestamp(timeStart.getTime());
-	        Timestamp end = timeEnd == null ? null : new Timestamp(timeEnd.getTime());
-	        List<SampleItemCountView> list = receiveSampleItemMapper.selectCountGroupByDepartment(filter, order, start, end);
-	        return list;
-	     
-	    }
-	
-	
-    public PageInfo<ReceiveSampleItem> selectCurrentUserItems(Integer pageNum, Integer pageSize,String order,Map<String, Object> filter) {
-        User u=userClient.getCurrentUser();
-       boolean superUser= u.getRole().isSuperAdmin();
-       if(!superUser) {
-           String name=u.getName();
-           filter.put("test_user", name);
-       }
-       filter.put("receivesample_status", "-1");
-        List<ReceiveSampleItem> list = new ArrayList<ReceiveSampleItem>();
-        PageInfo<ReceiveSampleItem> pages = new PageInfo<ReceiveSampleItem>(list);
-        pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
-            @Override
-            public void doSelect() {
-                receiveSampleItemMapper.selectByUser(filter,order);
-            }
-        });
-        return pages;
-    }
-    
-    
-    public PageInfo<ReceiveSample> selectUnderDetection(Integer pageNum, Integer pageSize,String order,Map<String, Object> filter) {
-        User u=userClient.getCurrentUser();
-        List<ReceiveSample> list = new ArrayList<ReceiveSample>();
-        PageInfo<ReceiveSample> pages = new PageInfo<ReceiveSample>(list);
-        pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
-            @Override
-            public void doSelect() {
-                receiveSampleMapper.selectUnderDetection(u.getName(), filter,order);
-            }
-        });
-        return pages;
-    }
-    
-    public List<ReceiveSample> selectUnderDetectionForNOPage(String order,Map<String, Object> filter) {
-        User u=userClient.getCurrentUser(); 
-        List<ReceiveSample> list = new ArrayList<ReceiveSample>();
-      
-        list=receiveSampleMapper.selectUnderDetection(u.getName(), filter,order);
-         
-        return list;
-    }
-    
-    
-    public PageInfo<ReceiveSampleItem> selectUnderDepartmentReceiveSampleItems(Integer pageNum, Integer pageSize,String order,Map<String, Object> filter) {
-        User u=userClient.getCurrentUser();
-       boolean superUser= u.getRole().isSuperAdmin();
-       if(!superUser) {
-           String department=u.getOrganization().getName();
-           filter.put("test_room", department);
-       }   
-        List<ReceiveSampleItem> list = new ArrayList<ReceiveSampleItem>();
-        PageInfo<ReceiveSampleItem> pages = new PageInfo<ReceiveSampleItem>(list);
-        pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
-            @Override
-            public void doSelect() {
-                receiveSampleItemMapper.select(filter, order);
-            }
-        });
-        return pages;
-    }
-    
+		List<ReceiveSample> list = new ArrayList<ReceiveSample>();
+		PageInfo<ReceiveSample> pages = new PageInfo<ReceiveSample>(list);
+		pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
+			@Override
+			public void doSelect() {
+				receiveSampleMapper.selectTest(filter);
+			}
+		});
+		return pages;
+	}
+
+
+	public List<SampleItemCountView> selectCountItemByDepartment( Map<String, Object> filter,String order,Date timeStart,Date timeEnd) {
+		Timestamp start = timeStart == null ? null : new Timestamp(timeStart.getTime());
+		Timestamp end = timeEnd == null ? null : new Timestamp(timeEnd.getTime());
+		List<SampleItemCountView> list = receiveSampleItemMapper.selectCountGroupByDepartment(filter, order, start, end);
+		return list;
+
+	}
+
+
+	public PageInfo<ReceiveSampleItem> selectCurrentUserItems(Integer pageNum, Integer pageSize,String order,Map<String, Object> filter) {
+		User u=userClient.getCurrentUser();
+		boolean superUser= u.getRole().isSuperAdmin();
+		if(!superUser) {
+			String name=u.getName();
+			filter.put("test_user", name);
+		}
+		filter.put("receivesample_status", "-1");
+		List<ReceiveSampleItem> list = new ArrayList<ReceiveSampleItem>();
+		PageInfo<ReceiveSampleItem> pages = new PageInfo<ReceiveSampleItem>(list);
+		pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
+			@Override
+			public void doSelect() {
+				receiveSampleItemMapper.selectByUser(filter,order);
+			}
+		});
+		return pages;
+	}
+	public PageInfo<ReceiveSampleItem> writeExcel(Integer pageNum, Integer pageSize,String order,Map<String, Object> filter,OutputStream out) throws IOException {
+		/*User u=userClient.getCurrentUser();
+		boolean superUser= u.getRole().isSuperAdmin();
+		if(!superUser) {
+			String name=u.getName();
+			filter.put("test_user", name);
+		}*/
+		filter.put("test_user", "王维");
+		filter.put("receivesample_status", "-1");
+		List<ReceiveSampleItem> list = new ArrayList<ReceiveSampleItem>();
+		PageInfo<ReceiveSampleItem> pages = new PageInfo<ReceiveSampleItem>(list);
+		pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
+			@Override
+			public void doSelect() {
+				receiveSampleItemMapper.selectByUser(filter,order);
+			}
+		});
+		
+		return pages;
+	}
+
+
+	public PageInfo<ReceiveSample> selectUnderDetection(Integer pageNum, Integer pageSize,String order,Map<String, Object> filter) {
+		User u=userClient.getCurrentUser();
+		List<ReceiveSample> list = new ArrayList<ReceiveSample>();
+		PageInfo<ReceiveSample> pages = new PageInfo<ReceiveSample>(list);
+		pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
+			@Override
+			public void doSelect() {
+				receiveSampleMapper.selectUnderDetection(u.getName(), filter,order);
+			}
+		});
+		return pages;
+	}
+
+	public List<ReceiveSample> selectUnderDetectionForNOPage(String order,Map<String, Object> filter) {
+		User u=userClient.getCurrentUser(); 
+		List<ReceiveSample> list = new ArrayList<ReceiveSample>();
+
+		list=receiveSampleMapper.selectUnderDetection(u.getName(), filter,order);
+
+		return list;
+	}
+
+
+	public PageInfo<ReceiveSampleItem> selectUnderDepartmentReceiveSampleItems(Integer pageNum, Integer pageSize,String order,Map<String, Object> filter) {
+		User u=userClient.getCurrentUser();
+		boolean superUser= u.getRole().isSuperAdmin();
+		if(!superUser) {
+			String department=u.getOrganization().getName();
+			filter.put("test_room", department);
+		}   
+		List<ReceiveSampleItem> list = new ArrayList<ReceiveSampleItem>();
+		PageInfo<ReceiveSampleItem> pages = new PageInfo<ReceiveSampleItem>(list);
+		pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
+			@Override
+			public void doSelect() {
+				receiveSampleItemMapper.select(filter, order);
+			}
+		});
+		return pages;
+	}
+
 
 	public ReceiveSample getReceiveSample(String id) {
 
@@ -407,25 +433,25 @@ public class ReceiveSampleService {
 		}
 
 	}
-	
+
 	public List<ReceiveSampleItem> getItemsByReportId(String reportId) {
-        if (StringUtils.isBlank(reportId)) {
-            throw new BizException("接样ID参数是空值");
-        }
-        List<ReceiveSampleItem> record = receiveSampleItemMapper.selectByReportId(reportId);
-        return record;
+		if (StringUtils.isBlank(reportId)) {
+			throw new BizException("接样ID参数是空值");
+		}
+		List<ReceiveSampleItem> record = receiveSampleItemMapper.selectByReportId(reportId);
+		return record;
 
-    }
-	
-	
+	}
+
+
 	public int getCountsByReportId(String reportId) {
-        if (StringUtils.isBlank(reportId)) {
-            throw new BizException("报告ID参数是空值");
-        }
-        return   receiveSampleItemMapper.getCountsByReportId(reportId);
-         
+		if (StringUtils.isBlank(reportId)) {
+			throw new BizException("报告ID参数是空值");
+		}
+		return   receiveSampleItemMapper.getCountsByReportId(reportId);
 
-    }
+
+	}
 
 	public ReceiveSampleItem getItem(String itemId) {
 
@@ -438,133 +464,133 @@ public class ReceiveSampleService {
 
 	}
 	public Boolean setStatus(String reportId,Integer status) {
-	    ReceiveSample record=new ReceiveSample();
-	    record.setReportId(reportId);
-	    record.setStatus(status);
-	    int result=receiveSampleMapper.updateByPrimaryKeySelective(record);
-	    if(result==1) {
-	        return true;
-	    }
-	    else
-        return false;
+		ReceiveSample record=new ReceiveSample();
+		record.setReportId(reportId);
+		record.setStatus(status);
+		int result=receiveSampleMapper.updateByPrimaryKeySelective(record);
+		if(result==1) {
+			return true;
+		}
+		else
+			return false;
 
-    }
-	
+	}
+
 	@Transactional
 	public Boolean upload(MultipartFile file,String reportId) throws IOException {
-	   
-	  // 使用文件系统      
-	        if (file.getSize() / (1024 * 1024) > 10) {
-	          
-	                throw new BizException("文件[" + file.getOriginalFilename()
-	                        + "]过大，请上传大小不超过10M的文件");
-	            }
-	        EpicNFSClient epicNFSClient = epicNFSService.getClient("gzjy");
-	        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
-	        Calendar cal=Calendar.getInstance();
-	       
-	        String curDate = simpleDateFormat.format(cal.getTime());  
-	        
-	        String parentPath = "receive"+"/"+curDate ;
-	        if (!epicNFSClient.hasRemoteDir(parentPath)) {
-	            epicNFSClient.createRemoteDir(parentPath);
-	        }	        
-	        String filePath=parentPath+"/"+reportId+file.getOriginalFilename();
-	       ReceiveSample sample=receiveSampleMapper.selectByPrimaryKey(reportId);
-	        if(sample!=null) {
-	            if(!StringUtils.isBlank(sample.getAppendix())) {
-	                deleteAttachment(sample.getAppendix());
-	            }
-	            ReceiveSample record=new ReceiveSample();
-                record.setAppendix(filePath);
-                record.setReportId(sample.getReportId());	           	                
-	                receiveSampleMapper.updateByPrimaryKeySelective(record);
-	                InputStream in=file.getInputStream();
-	                try {
-                        epicNFSClient.upload(in,
-                                filePath);
-                    } catch (Exception e) {                       
-                        e.printStackTrace();
-                       
-                    } finally {
-                        if(in!=null)
-                            in.close();
-                        epicNFSClient.close();     
-                    }
-	                return true;
-	        }
-	        else
-	            return false;
-	        
-	       
-	         	
-	    }
-	
-	public void deleteAttachment(String path) {
-	    EpicNFSClient epicNFSClient = null;
-	    epicNFSClient = epicNFSService.getClient("gzjy");
-	    try {
-            epicNFSClient.deleteFile(path);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-	    finally {
-	        if (epicNFSClient != null) {
-                epicNFSClient.close();
-            }
-        }
-	}
-	
-	 @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-	    public HttpServletResponse  download(String path,HttpServletResponse response) throws IOException {
-	        EpicNFSClient epicNFSClient = null;
-	        InputStream inputStream = null;	        
-	        try {
-	            
-	            epicNFSClient = epicNFSService.getClient("gzjy");
-	           String realPath= epicNFSClient.getPath(path);
-	           File file = new File(realPath);
-	           String filename = file.getName();
-	           inputStream =  new BufferedInputStream(epicNFSClient.download(path));
-	           OutputStream  outputStream = new BufferedOutputStream(response.getOutputStream());
-	           byte[] buffer = new byte[1024];
-	           int len = -1;
-	           while ((len = inputStream.read(buffer)) != -1) {
-	                outputStream.write(buffer, 0, len);
-	            }
-	           
-	           response.addHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(filename, "UTF-8"));
-	           response.addHeader("Content-Length", "" + file.length());
-	           response.setContentType("application/octet-stream;charset=UTF-8");
-	           outputStream.flush();
-	           outputStream.close();
-	        } catch (IOException e) {
-	            throw new BizException("文件下载失败");
-	        } finally {
-	            try {
-	                if (inputStream != null) {
-	                    inputStream.close();
-	                    
-	                }
-	                if (epicNFSClient != null) {
-	                    epicNFSClient.close();
-	                }
-	            } catch (IOException e) {
-	                throw new BizException("IO流关闭失败");
-	            }
-	        }
-	        return response;
-	       
-	    }
-	
-	
-	
 
-	
-	
-	
-	
-	
+		// 使用文件系统      
+		if (file.getSize() / (1024 * 1024) > 10) {
+
+			throw new BizException("文件[" + file.getOriginalFilename()
+			+ "]过大，请上传大小不超过10M的文件");
+		}
+		EpicNFSClient epicNFSClient = epicNFSService.getClient("gzjy");
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+		Calendar cal=Calendar.getInstance();
+
+		String curDate = simpleDateFormat.format(cal.getTime());  
+
+		String parentPath = "receive"+"/"+curDate ;
+		if (!epicNFSClient.hasRemoteDir(parentPath)) {
+			epicNFSClient.createRemoteDir(parentPath);
+		}	        
+		String filePath=parentPath+"/"+reportId+file.getOriginalFilename();
+		ReceiveSample sample=receiveSampleMapper.selectByPrimaryKey(reportId);
+		if(sample!=null) {
+			if(!StringUtils.isBlank(sample.getAppendix())) {
+				deleteAttachment(sample.getAppendix());
+			}
+			ReceiveSample record=new ReceiveSample();
+			record.setAppendix(filePath);
+			record.setReportId(sample.getReportId());	           	                
+			receiveSampleMapper.updateByPrimaryKeySelective(record);
+			InputStream in=file.getInputStream();
+			try {
+				epicNFSClient.upload(in,
+						filePath);
+			} catch (Exception e) {                       
+				e.printStackTrace();
+
+			} finally {
+				if(in!=null)
+					in.close();
+				epicNFSClient.close();     
+			}
+			return true;
+		}
+		else
+			return false;
+
+
+
+	}
+
+	public void deleteAttachment(String path) {
+		EpicNFSClient epicNFSClient = null;
+		epicNFSClient = epicNFSService.getClient("gzjy");
+		try {
+			epicNFSClient.deleteFile(path);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		finally {
+			if (epicNFSClient != null) {
+				epicNFSClient.close();
+			}
+		}
+	}
+
+	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	public HttpServletResponse  download(String path,HttpServletResponse response) throws IOException {
+		EpicNFSClient epicNFSClient = null;
+		InputStream inputStream = null;	        
+		try {
+
+			epicNFSClient = epicNFSService.getClient("gzjy");
+			String realPath= epicNFSClient.getPath(path);
+			File file = new File(realPath);
+			String filename = file.getName();
+			inputStream =  new BufferedInputStream(epicNFSClient.download(path));
+			OutputStream  outputStream = new BufferedOutputStream(response.getOutputStream());
+			byte[] buffer = new byte[1024];
+			int len = -1;
+			while ((len = inputStream.read(buffer)) != -1) {
+				outputStream.write(buffer, 0, len);
+			}
+
+			response.addHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(filename, "UTF-8"));
+			response.addHeader("Content-Length", "" + file.length());
+			response.setContentType("application/octet-stream;charset=UTF-8");
+			outputStream.flush();
+			outputStream.close();
+		} catch (IOException e) {
+			throw new BizException("文件下载失败");
+		} finally {
+			try {
+				if (inputStream != null) {
+					inputStream.close();
+
+				}
+				if (epicNFSClient != null) {
+					epicNFSClient.close();
+				}
+			} catch (IOException e) {
+				throw new BizException("IO流关闭失败");
+			}
+		}
+		return response;
+
+	}
+
+
+
+
+
+
+
+
+
 	/**
 	 * 处理excel
 	 * @param workbook
@@ -685,29 +711,29 @@ public class ReceiveSampleService {
 						cell.setCellStyle(checkResultCellStype);
 					}
 					switch(y) {
-						case 0:
-							cell.setCellValue(x+1);
-							break;
-						case 1:
-							cell.setCellValue(item.getName());
-							break;
-						case 2:
-							cell.setCellValue(item.getUnit());
-							break;
-						case 3:
-							cell.setCellValue(item.getMethod());
-							break;						
-						case 5:
-							cell.setCellValue(item.getDevice());
-							break;
-						case 6:
-							cell.setCellValue(item.getItemResult());
-							break;
-						case 7:
-							cell.setCellValue(item.getDetectionLimit());
-							break;
-						default:
-							break;
+					case 0:
+						cell.setCellValue(x+1);
+						break;
+					case 1:
+						cell.setCellValue(item.getName());
+						break;
+					case 2:
+						cell.setCellValue(item.getUnit());
+						break;
+					case 3:
+						cell.setCellValue(item.getMethod());
+						break;						
+					case 5:
+						cell.setCellValue(item.getDevice());
+						break;
+					case 6:
+						cell.setCellValue(item.getItemResult());
+						break;
+					case 7:
+						cell.setCellValue(item.getDetectionLimit());
+						break;
+					default:
+						break;
 					}						
 				}
 			}		
@@ -720,19 +746,19 @@ public class ReceiveSampleService {
 		File file = new File(filePath);
 		if(file.exists()) {
 			bufferImg = ImageIO.read(file);        
-	        ImageIO.write(bufferImg, "png", byteArrayOut);
-	        Drawing  patriarch = workbook.getSheetAt(0).createDrawingPatriarch();
-	        HSSFClientAnchor anchor = new HSSFClientAnchor(rowIndex, cellIndex,rowIndex+1, cellIndex+1, 
-	        		(short)(cellIndex), rowIndex, (short) (cellIndex+1), rowIndex+1);
-	        anchor.setAnchorType(AnchorType.DONT_MOVE_AND_RESIZE);
-	        patriarch.createPicture(anchor, workbook.addPicture(byteArrayOut.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG)); 
+			ImageIO.write(bufferImg, "png", byteArrayOut);
+			Drawing  patriarch = workbook.getSheetAt(0).createDrawingPatriarch();
+			HSSFClientAnchor anchor = new HSSFClientAnchor(rowIndex, cellIndex,rowIndex+1, cellIndex+1, 
+					(short)(cellIndex), rowIndex, (short) (cellIndex+1), rowIndex+1);
+			anchor.setAnchorType(AnchorType.DONT_MOVE_AND_RESIZE);
+			patriarch.createPicture(anchor, workbook.addPicture(byteArrayOut.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG)); 
 		}        
 	}	
-	
+
 	public List<HashMap<String, String>>selectAllItem(ReceiveSample record){
 		return receiveSampleMapper.selectAllItem(record);
 	}
-	
+
 	public void generateExcelReport(Workbook workbook, List<HashMap<String, String>> datas) throws IOException, IllegalAccessException, InvocationTargetException, ParseException {
 		Sheet sheet = workbook.createSheet();		
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
