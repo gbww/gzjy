@@ -60,7 +60,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 public class ReceiveSampleController {
 
 	private static Logger logger = LoggerFactory.getLogger(ReceiveSampleService.class);
-
+  
 	@Autowired
 	private ReceiveSampleService receiveSampleService;
 
