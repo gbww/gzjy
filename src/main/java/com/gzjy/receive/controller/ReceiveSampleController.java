@@ -5,8 +5,10 @@
 package com.gzjy.receive.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -18,6 +20,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -585,7 +588,7 @@ public class ReceiveSampleController {
 				@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
 				@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
 				HttpServletResponse response) {
-			OutputStream out = null;
+			//OutputStream out = null;
 			Map<String, Object> filter = new HashMap<String, Object>();
 			if (status != 5) {
 				filter.put("status", status);
@@ -611,15 +614,13 @@ public class ReceiveSampleController {
 		
 			try {
 				
-				response.reset();
+				/*response.reset();
 				response.setContentType("application/octet-stream;charset=UTF-8");
-				// response.setDateHeader("Expires", 0); // 清除页面缓存
 				response.setHeader("Content-disposition",
 						"attachment;filename=" + URLEncoder.encode(reportId + ".xlsx", "UTF-8"));
 				out = response.getOutputStream();
-				//out = response.getOutputStream();
-//				JasperExportManager.exportReportToPdfStream(jasperPrint, out);
-				PageInfo<ReceiveSampleItem> items = receiveSampleService.writeExcel(pageNum, pageSize, order, filter, out);
+*/
+				PageInfo<ReceiveSampleItem> items = receiveSampleService.writeExcel(pageNum, pageSize, order, filter);
 				
 				XSSFWorkbook workbook = new XSSFWorkbook();
 				Date date = new Date();
@@ -690,12 +691,11 @@ public class ReceiveSampleController {
 				}
 				workbook.write(fos);
 				fos.close();
-				
-				out.flush();
-				out.close();
-				
-				
-				return Response.success(items);
+			
+					InputStream is = new FileInputStream("C:/Users/Administrator/Desktop/"+dateString2+"检测项.xlsx");
+					
+					
+				return Response.success(IOUtils.toByteArray(is));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				throw new BizException(e.toString());
