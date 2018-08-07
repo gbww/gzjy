@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,14 +21,14 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,18 +42,32 @@ import org.springframework.web.multipart.MultipartFile;
 import com.github.pagehelper.PageInfo;
 import com.gzjy.common.Add;
 import com.gzjy.common.Response;
+import com.gzjy.common.ShortUUID;
 import com.gzjy.common.Update;
 import com.gzjy.common.annotation.Privileges;
 import com.gzjy.common.exception.BizException;
+import com.gzjy.common.util.ExcelToPdf;
+import com.gzjy.common.util.FileOperate;
+import com.gzjy.common.util.fs.EpicNFSClient;
 import com.gzjy.common.util.fs.EpicNFSService;
 import com.gzjy.receive.model.ReceiveSample;
 import com.gzjy.receive.model.ReceiveSampleItem;
 import com.gzjy.receive.service.ReceiveSampleService;
 import com.gzjy.user.UserService;
+import com.gzjy.user.model.User;
 
+import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
+import net.sf.jasperreports.export.ExporterInput;
+import net.sf.jasperreports.export.OutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+//import xue.model.StudentBeanFactory;
+//import xue.model.StudentScore;
 
 /**
  * @author xuewenlong@cmss.chinamobile.com
@@ -63,7 +78,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 public class ReceiveSampleController {
 
 	private static Logger logger = LoggerFactory.getLogger(ReceiveSampleService.class);
-  
+
 	@Autowired
 	private ReceiveSampleService receiveSampleService;
 
@@ -545,11 +560,15 @@ public class ReceiveSampleController {
 			@RequestParam(name = "sampleName", required = false) String sampleName,
 			@RequestParam(name = "name", required = false) String name,
 			@RequestParam(name = "method", required = false) String method,
+			@RequestParam(name = "receive_status", required = false) String receiveStatus,
 			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
 			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 		Map<String, Object> filter = new HashMap<String, Object>();
 		if (status != 5) {
 			filter.put("status", status);
+		}
+		if(!StringUtils.isBlank(receiveStatus)) {
+		    filter.put("receivesample_status", receiveStatus);
 		}
 		if (StringUtils.isBlank(order)) {
 			order = "updated_at desc";
@@ -571,139 +590,11 @@ public class ReceiveSampleController {
         }
 		PageInfo<ReceiveSampleItem> items=receiveSampleService.selectCurrentUserItems(pageNum, pageSize, order, filter);
 		
-	
+		
 		return Response.success(items);
 	}
 	
-	// 导出Excel	
-		@RequestMapping(value = "/sampleItem/writeExcel", method = RequestMethod.GET)
-		//@Privileges(name = "SAMPLE-ITEMS-INPUT-SELECT", scope = { 1 })
-		public Response writeExcel(@RequestParam(name = "status", defaultValue = "0") int status,
-				@RequestParam(name = "order", required = false) String order,
-				@RequestParam(name = "receiveSampleId", required = false) String receiveSampleId,
-				@RequestParam(name = "reportId", required = false) String reportId,
-				@RequestParam(name = "sampleName", required = false) String sampleName,
-				@RequestParam(name = "name", required = false) String name,
-				@RequestParam(name = "method", required = false) String method,
-				@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
-				@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
-				HttpServletResponse response) {
-			//OutputStream out = null;
-			Map<String, Object> filter = new HashMap<String, Object>();
-			if (status != 5) {
-				filter.put("status", status);
-			}
-			if (StringUtils.isBlank(order)) {
-				order = "updated_at desc";
-			}
-			if (!StringUtils.isBlank(receiveSampleId)) {
-			    filter.put("receive_sample_id", receiveSampleId);
-	        }
-			if (!StringUtils.isBlank(reportId)) {
-	            filter.put("report_id", reportId);
-	        }
-			if (!StringUtils.isBlank(sampleName)) {
-	            filter.put("sample_name", sampleName);
-	        }
-			if (!StringUtils.isBlank(name)) {
-	            filter.put("name", name);
-	        }
-			if (!StringUtils.isBlank(method)) {
-	            filter.put("method", method);
-	        }
-		
-			try {
-				
-				/*response.reset();
-				response.setContentType("application/octet-stream;charset=UTF-8");
-				response.setHeader("Content-disposition",
-						"attachment;filename=" + URLEncoder.encode(reportId + ".xlsx", "UTF-8"));
-				out = response.getOutputStream();
-*/
-				PageInfo<ReceiveSampleItem> items = receiveSampleService.writeExcel(pageNum, pageSize, order, filter);
-				
-				XSSFWorkbook workbook = new XSSFWorkbook();
-				Date date = new Date();
-				SimpleDateFormat formatter1 = new SimpleDateFormat("HH-mm-ss");
-				SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd");
-				String dateString1 = formatter1.format(date); 
-				String dateString2 = formatter2.format(date); 
-
-				//FileOutputStream fos = new FileOutputStream(new File("/var/lib/docs/gzjy/"+dateString2+"检测项.xlsx"));
-				FileOutputStream fos = new FileOutputStream(new File("C:/Users/Administrator/Desktop/"+dateString2+"检测项.xlsx"));
-				XSSFSheet sheet = workbook.createSheet(dateString1);
-				int a=0;
-				XSSFRow row = sheet.createRow(a);
-				row.createCell(0).setCellValue("报告编号");
-				row.createCell(1).setCellValue("接样单编号");
-				row.createCell(2).setCellValue("样品名称");
-				row.createCell(3).setCellValue("项目名称");
-				row.createCell(4).setCellValue("检验方法");
-				row.createCell(5).setCellValue("判断依据");
-				row.createCell(6).setCellValue("标准值");
-				row.createCell(7).setCellValue("单位");
-				row.createCell(8).setCellValue("检出限");
-				row.createCell(9).setCellValue("要求完成日期");
-				row.createCell(10).setCellValue("检测室");
-				for ( ReceiveSampleItem pages1 : items.getList()) {
-					a=a+1;
-					XSSFRow row1 = sheet.createRow(a);
-					//a.report_id,a.receive_sample_id,a.sample_name,b.`name`,b.method,a.execute_standard,b.standard_value,
-					//b.unit,b.detection_limit,a.finish_date,b.test_room
-					row1.createCell(0).setCellValue(pages1.getSample().getReportId());
-
-					if(pages1.getSample().getReceiveSampleId()!=null){
-						row1.createCell(1).setCellValue(pages1.getSample().getReceiveSampleId());
-					}
-					if(pages1.getSample().getSampleName()!=null){
-						row1.createCell(2).setCellValue(pages1.getSample().getSampleName());
-					}
-					if(pages1.getName()!=null){
-						row1.createCell(3).setCellValue(pages1.getName());
-					}
-					if(pages1.getMethod()!=null){
-						row1.createCell(4).setCellValue(pages1.getMethod());
-					}
-					if(pages1.getSample().getExecuteStandard()!=null){
-						row1.createCell(5).setCellValue(pages1.getSample().getExecuteStandard());
-					}
-					if(pages1.getStandardValue()!=null){
-						row1.createCell(6).setCellValue(pages1.getStandardValue());
-					}
-					if(pages1.getUnit()!=null){
-						row1.createCell(7).setCellValue(pages1.getUnit());
-					}
-					if(pages1.getDetectionLimit()!=null){
-						row1.createCell(8).setCellValue(pages1.getDetectionLimit());
-					}
-					if(pages1.getSample().getFinishDate()!=null){
-						SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-						String dateString = formatter.format(pages1.getSample().getFinishDate()); 
-						System.out.println(dateString);
-						row1.createCell(9).setCellValue(dateString);
-					}
-					if(pages1.getTestRoom()!=null){
-						row1.createCell(10).setCellValue(pages1.getTestRoom());
-					}
-
-
-
-				}
-				workbook.write(fos);
-				fos.close();
-			
-					InputStream is = new FileInputStream("C:/Users/Administrator/Desktop/"+dateString2+"检测项.xlsx");
-					
-					
-				return Response.success(IOUtils.toByteArray(is));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				throw new BizException(e.toString());
-			}
-			
-		
-			
-		}
+	
 	
 	// 查询当前用户接样单信息(检测人员关心的接样单)
     @RequestMapping(value = "/sampleItem/sample", method = RequestMethod.GET)
