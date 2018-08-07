@@ -359,15 +359,15 @@ public class ReceiveSampleService {
 		});
 		return pages;
 	}
-	public PageInfo<ReceiveSampleItem> writeExcel(Integer pageNum, Integer pageSize,String order,Map<String, Object> filter,OutputStream out) throws IOException {
-		/*User u=userClient.getCurrentUser();
+	public PageInfo<ReceiveSampleItem> writeExcel(Integer pageNum, Integer pageSize,String order,Map<String, Object> filter) throws IOException {
+		User u=userClient.getCurrentUser();
 		boolean superUser= u.getRole().isSuperAdmin();
 		if(!superUser) {
 			String name=u.getName();
 			filter.put("test_user", name);
-		}*/
-		filter.put("test_user", "王维");
-		filter.put("receivesample_status", "-1");
+		}
+		/*filter.put("test_user", "王维");
+		filter.put("receivesample_status", "-1");*/
 		List<ReceiveSampleItem> list = new ArrayList<ReceiveSampleItem>();
 		PageInfo<ReceiveSampleItem> pages = new PageInfo<ReceiveSampleItem>(list);
 		pages = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(new ISelect() {
