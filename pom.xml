@@ -274,6 +274,12 @@
             <artifactId>jasperreport-fonts</artifactId>
             <version>6.5.1</version>
         </dependency>   
+        
+        <!-- 解决Spring Boot & Tomcat集成，JDBC连接超时问题 https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
+		<dependency>
+		    <groupId>com.zaxxer</groupId>
+		    <artifactId>HikariCP</artifactId>
+		</dependency>
 
 	</dependencies>
 	<!--maven的插件 -->
