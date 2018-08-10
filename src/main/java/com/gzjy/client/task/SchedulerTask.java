@@ -28,7 +28,7 @@ public class SchedulerTask {
     @Autowired
     private ClientSchedulerService schedulerService;
 
-    @Scheduled(cron = "0 0 0/1 * * ?") // 每隔两小时执行一次
+  //  @Scheduled(cron = "0 0 0/1 * * ?") // 每隔两小时执行一次
     protected void execute() {
         System.out.println("定时任务开始执行");
         //reminder();
