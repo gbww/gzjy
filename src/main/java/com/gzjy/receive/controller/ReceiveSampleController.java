@@ -218,7 +218,7 @@ public class ReceiveSampleController {
     
 	
 	
-	//设置检测项结果
+	//设置检测项结果（编辑）
 	@Privileges(name = "SAMPLE-UPDATEITEMRESULT", scope = { 1 })
 	@RequestMapping(value = "/sample/item/result", method = RequestMethod.POST)
 	public Response setItemResoult(@Validated(value = { Update.class }) @RequestBody List<ReceiveSampleItem> items,
@@ -236,6 +236,22 @@ public class ReceiveSampleController {
 
 		return Response.success("操作成功：" + flag);
 	}
+	
+	
+	//设置检测项结果状态为完成
+    @Privileges(name = "SAMPLE-UPDATEITEMRESULT", scope = { 1 })
+    @RequestMapping(value = "/sample/item/result/finish", method = RequestMethod.POST)
+    public Response setItemResoultFinish( @RequestBody List<String> items,
+            BindingResult result) {
+        if (result.hasErrors()) {
+            return Response.fail(result.getFieldError().getDefaultMessage());
+        }
+        boolean flag=receiveSampleService.setSampleItemsFinish(items);
+
+        return Response.success("操作成功：" + flag);
+    }
+	
+	
 
 	// 删除接样单（包括接样单中的检验项）
 	@Privileges(name = "SAMPLE-DELETESAMPLE", scope = { 1 })

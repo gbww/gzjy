@@ -133,7 +133,7 @@ public class ReceiveSampleService {
 			ReceiveSampleItem exitItem = receiveSampleItemMapper.selectByPrimaryKey(item.getId());
 			if (exitItem != null) {
 				item.setUpdatedAt(new Date());
-				receiveSampleItemMapper.updateByPrimaryKey(item);
+				receiveSampleItemMapper.updateByPrimaryKeySelective(item);
 			} else {
 				System.out.println("接样单中不存在此检验项ID");
 				logger.error("接样单中不存在此检验项ID");
@@ -143,6 +143,28 @@ public class ReceiveSampleService {
 		return result;
 	}
 
+	
+	@Transactional
+    public Boolean setSampleItemsFinish(List<String> items) {
+        Boolean result=true;
+        if (items.size() == 0) {
+            return false;
+        }
+        for(String id:items) {
+            ReceiveSampleItem  item=new ReceiveSampleItem();
+            item.setId(id);
+            ReceiveSampleItem exitItem = receiveSampleItemMapper.selectByPrimaryKey(id);
+            if (exitItem != null&&exitItem.getItemResult()!=null&&exitItem.getMeasuredValue()!=null&&exitItem.getTestUser()!=null) {
+                item.setUpdatedAt(new Date());
+                item.setStatus(2);
+                receiveSampleItemMapper.updateByPrimaryKeySelective(item);
+            } else {
+                //System.out.println("接样单中不存在此检验项ID,或者检测项结果或实测值未填");
+                logger.error("接样单中不存在此检验项ID,或者检测项结果或实测值未填");              
+            }
+        }
+        return result;
+    }
 
 
 	@Transactional
