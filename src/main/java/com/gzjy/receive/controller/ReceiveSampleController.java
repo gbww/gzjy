@@ -573,7 +573,7 @@ public class ReceiveSampleController {
 		return Response.success(receiveSampleService.setStatus(reportId, status));
 	}
 	// 批量设置接样单的状态
-	@RequestMapping(value = "/sample/status", method = RequestMethod.POST)
+	@RequestMapping(value = "/sample/status/{status}", method = RequestMethod.POST)
     public Response batchSetSampleStatus( List<String> reportIds,
             @PathVariable(name = "status") Integer status) {
 	    boolean result=true;
