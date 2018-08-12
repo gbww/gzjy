@@ -3,6 +3,7 @@ package com.gzjy.receive.controller;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -634,6 +635,14 @@ public class ReportController {
 					e.printStackTrace();
 				}
 			}
+			try {
+                if(!dataSource.getConnection().isClosed()) {
+                    dataSource.getConnection().close();
+                }
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 		}
 	}
 
@@ -707,6 +716,14 @@ public class ReportController {
 			logger.error(e + "");
 			return Response.fail(e.getMessage());
 		} finally {
+		    try {
+                if(!dataSource.getConnection().isClosed()) {
+                    dataSource.getConnection().close();
+                }
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 
 		}
 	}
@@ -785,6 +802,14 @@ public class ReportController {
 						e.printStackTrace();
 					}
 				}
+				try {
+                    if(!dataSource.getConnection().isClosed()) {
+                        dataSource.getConnection().close();
+                    }
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
 			}
 
 		}
