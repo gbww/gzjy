@@ -228,11 +228,11 @@ public class ReceiveSampleController {
 		}
 		
 		boolean flag = receiveSampleService.updateSampleItemsResoult(items);
-		for (ReceiveSampleItem item : items) {
+		/*for (ReceiveSampleItem item : items) {
 		    if(receiveSampleService.checkReceiveSampleIsFinished(item.getReportId())) { //如果接样单的检测项都完成了结果录入
 		        receiveSampleService.setStatus(item.getReportId(), 1);
 		    }
-        }
+        }*/
 
 		return Response.success("操作成功：" + flag);
 	}
@@ -247,6 +247,13 @@ public class ReceiveSampleController {
             return Response.fail(result.getFieldError().getDefaultMessage());
         }
         boolean flag=receiveSampleService.setSampleItemsFinish(items);
+        
+        for (String item : items) {
+           ReceiveSampleItem sampleItem= receiveSampleService.getItem(item);
+            if(receiveSampleService.checkReceiveSampleIsFinished(sampleItem.getReportId())) { //如果接样单的检测项都完成了结果录入               
+                receiveSampleService.setStatus(sampleItem.getReportId(), 1);
+            }
+        }
 
         return Response.success("操作成功：" + flag);
     }
