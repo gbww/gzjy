@@ -160,8 +160,18 @@ public class ReceiveSample implements Serializable{
     private Integer reportStatus;
     //主要设备
     private String devices;
+    //审核被驳回
+    private Integer isExamine;
 
-    public String getDevices() {
+    public Integer getIsExamine() {
+		return isExamine;
+	}
+
+	public void setIsExamine(Integer isExamine) {
+		this.isExamine = isExamine;
+	}
+
+	public String getDevices() {
         return devices;
     }
 

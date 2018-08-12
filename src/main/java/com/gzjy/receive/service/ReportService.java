@@ -260,6 +260,8 @@ public class ReportService {
 		receiveSample.setExamineUser(examinePersonName);
 		//设置合同状态为待审核
 		receiveSample.setReportStatus(1);
+		//恢复审核驳回状态
+		receiveSample.setIsExamine(0);
 		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
 		if(comment!=null) {
 			taskService.addComment(taskId,reportProcessId, "("+user.getName()+")编辑意见:"+comment);
@@ -293,6 +295,7 @@ public class ReportService {
 			receiveSample.setApprovalUser(approvePersonName);
 		}else {
 			receiveSample.setReportStatus(0);
+			receiveSample.setIsExamine(1);
 		}		
 		receiveSampleMapper.updateByPrimaryKeySelective(receiveSample);
 		if(comment!=null && (!StringUtils.isBlank(comment))) {
