@@ -572,6 +572,20 @@ public class ReceiveSampleController {
 
 		return Response.success(receiveSampleService.setStatus(reportId, status));
 	}
+	// 批量设置接样单的状态
+	@RequestMapping(value = "/sample/status", method = RequestMethod.POST)
+    public Response batchSetSampleStatus( List<String> reportIds,
+            @PathVariable(name = "status") Integer status) {
+	    boolean result=true;
+	    for(String reportId:reportIds) {
+	       boolean flag= receiveSampleService.setStatus(reportId, status);
+	       if(!flag) {
+	           result=flag;
+	       }
+	    }
+
+        return Response.success(result);
+    }
 
 	// 查询当前用户检验项信息(检测人员关心的检验项)	
 	@RequestMapping(value = "/sampleItem", method = RequestMethod.GET)

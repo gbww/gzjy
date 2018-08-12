@@ -485,6 +485,7 @@ public class ReceiveSampleService {
 		}
 
 	}
+	@Transactional
 	public Boolean setStatus(String reportId,Integer status) {
 		ReceiveSample record=new ReceiveSample();
 		record.setReportId(reportId);
