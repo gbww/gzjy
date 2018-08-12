@@ -121,6 +121,7 @@
 		from receive_sample
 		<where>			
 			<foreach collection="filters.keys" item="key" separator="and">
+				<choose>
 				<when test="key=='status'">
 				status=#{filters[${key}]}
 				</when>
@@ -129,6 +130,7 @@
 					${key} LIKE #{filters[${key}]}
 				</if>
 				</otherwise>
+				</choose>
 			</foreach>
 			and  report_id IN( select distinct (report_id) from receive_sample_item where
 			test_user=#{user} and status=1
