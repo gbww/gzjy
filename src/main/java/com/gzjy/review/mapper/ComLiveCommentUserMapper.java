@@ -2,9 +2,15 @@ package com.gzjy.review.mapper;
 
 import java.util.List;
 
+<<<<<<< Updated upstream
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+=======
+import org.apache.ibatis.annotations.Param;
+
+import com.gzjy.checkitems.model.CheckItem;
+>>>>>>> Stashed changes
 import com.gzjy.review.modle.ComLiveCommentUser;
 
 @Mapper
@@ -33,4 +39,10 @@ public interface ComLiveCommentUserMapper {
 	int batchInsertUser(@Param("comLiveCommentUser") List<ComLiveCommentUser> comLiveCommentUser);
 
 
+<<<<<<< Updated upstream
+=======
+    int updateByPrimaryKey(ComLiveCommentUser record);
+    
+    List<ComLiveCommentUser> selectAll();
+>>>>>>> Stashed changes
 }

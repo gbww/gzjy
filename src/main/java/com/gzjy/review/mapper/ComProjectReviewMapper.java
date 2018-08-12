@@ -2,8 +2,13 @@ package com.gzjy.review.mapper;
 
 import java.util.List;
 
+<<<<<<< Updated upstream
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+=======
+
+import com.gzjy.review.modle.ComProjectReview;
+>>>>>>> Stashed changes
 
 import com.gzjy.review.modle.ComProjectReview;
 @Mapper
@@ -38,6 +43,7 @@ public interface ComProjectReviewMapper {
 	 * @return
 	 */
 
+<<<<<<< Updated upstream
 	List<ComProjectReview> selectByReviewReportId(String reviewReportId);
 	/**
 	 * 批量修改企业审核项目
@@ -45,4 +51,9 @@ public interface ComProjectReviewMapper {
 	 * @return
 	 */
 	int batchupdate(@Param("comProjectReview1") List<ComProjectReview> comProjectReview1);
+=======
+    int updateByPrimaryKey(ComProjectReview record);
+
+	List<ComProjectReview> selectAll();
+>>>>>>> Stashed changes
 }

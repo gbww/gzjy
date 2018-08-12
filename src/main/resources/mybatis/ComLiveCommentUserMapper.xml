@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<<<<<<< Updated upstream
 <mapper namespace="com.gzjy.review.mapper.ComLiveCommentUserMapper">
 	<resultMap id="BaseResultMap" type="com.gzjy.review.modle.ComLiveCommentUser">
 		<id column="id" property="id" jdbcType="CHAR" />
@@ -206,4 +207,158 @@
 		#{identity,jdbcType=VARCHAR}
 		where id = #{id,jdbcType=CHAR}
 	</update>
+=======
+<mapper namespace="com.gzjy.review.mapper.ComLiveCommentUserMapper" >
+  <resultMap id="BaseResultMap" type="com.gzjy.review.modle.ComLiveCommentUser" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="position" property="position" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="first_meeting" property="firstMeeting" jdbcType="VARCHAR" />
+    <result column="live_meeting" property="liveMeeting" jdbcType="VARCHAR" />
+    <result column="last_meeting" property="lastMeeting" jdbcType="VARCHAR" />
+    <result column="review_report_id" property="reviewReportId" jdbcType="VARCHAR" />
+    <result column="identity" property="identity" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, position, telephone, first_meeting, live_meeting, last_meeting, review_report_id, 
+    identity
+  </sql>
+  
+  <select id="selectAll" resultMap="BaseResultMap">
+		
+		select
+		<include refid="Base_Column_List" />
+		from com_live_comment_user
+		
+	</select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from com_live_comment_user
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from com_live_comment_user
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gzjy.review.modle.ComLiveCommentUser" >
+    insert into com_live_comment_user (id, name, position, 
+      telephone, first_meeting, live_meeting, 
+      last_meeting, review_report_id, identity
+      )
+    values (#{id,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
+      #{telephone,jdbcType=VARCHAR}, #{firstMeeting,jdbcType=VARCHAR}, #{liveMeeting,jdbcType=VARCHAR}, 
+      #{lastMeeting,jdbcType=VARCHAR}, #{reviewReportId,jdbcType=VARCHAR}, #{identity,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gzjy.review.modle.ComLiveCommentUser" >
+    insert into com_live_comment_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="position != null" >
+        position,
+      </if>
+      <if test="telephone != null" >
+        telephone,
+      </if>
+      <if test="firstMeeting != null" >
+        first_meeting,
+      </if>
+      <if test="liveMeeting != null" >
+        live_meeting,
+      </if>
+      <if test="lastMeeting != null" >
+        last_meeting,
+      </if>
+      <if test="reviewReportId != null" >
+        review_report_id,
+      </if>
+      <if test="identity != null" >
+        identity,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="firstMeeting != null" >
+        #{firstMeeting,jdbcType=VARCHAR},
+      </if>
+      <if test="liveMeeting != null" >
+        #{liveMeeting,jdbcType=VARCHAR},
+      </if>
+      <if test="lastMeeting != null" >
+        #{lastMeeting,jdbcType=VARCHAR},
+      </if>
+      <if test="reviewReportId != null" >
+        #{reviewReportId,jdbcType=VARCHAR},
+      </if>
+      <if test="identity != null" >
+        #{identity,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gzjy.review.modle.ComLiveCommentUser" >
+    update com_live_comment_user
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        position = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="firstMeeting != null" >
+        first_meeting = #{firstMeeting,jdbcType=VARCHAR},
+      </if>
+      <if test="liveMeeting != null" >
+        live_meeting = #{liveMeeting,jdbcType=VARCHAR},
+      </if>
+      <if test="lastMeeting != null" >
+        last_meeting = #{lastMeeting,jdbcType=VARCHAR},
+      </if>
+      <if test="reviewReportId != null" >
+        review_report_id = #{reviewReportId,jdbcType=VARCHAR},
+      </if>
+      <if test="identity != null" >
+        identity = #{identity,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gzjy.review.modle.ComLiveCommentUser" >
+    update com_live_comment_user
+    set name = #{name,jdbcType=VARCHAR},
+      position = #{position,jdbcType=VARCHAR},
+      telephone = #{telephone,jdbcType=VARCHAR},
+      first_meeting = #{firstMeeting,jdbcType=VARCHAR},
+      live_meeting = #{liveMeeting,jdbcType=VARCHAR},
+      last_meeting = #{lastMeeting,jdbcType=VARCHAR},
+      review_report_id = #{reviewReportId,jdbcType=VARCHAR},
+      identity = #{identity,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  
+  
+  
+>>>>>>> Stashed changes
 </mapper>
