@@ -1,5 +1,17 @@
 package com.gzjy.review.controller;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +28,12 @@ import com.gzjy.common.exception.BizException;
 import com.gzjy.review.modle.ComReviewReport;
 import com.gzjy.review.service.ComReviewReportService;
 
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+
 
 /**
  * @Description: 企业评审报告信息控制层
@@ -30,7 +48,8 @@ public class ComReviewReportController {
 
 	@Autowired
 	private ComReviewReportService comReviewReportService;
-
+	@Autowired
+	private DataSource dataSource;
 
 	/**
 	 *  根据主键查询企业评审报告信息
@@ -52,8 +71,8 @@ public class ComReviewReportController {
 	 */
 	@RequestMapping(value = "/selectByCompanyId/{companyId}", method = RequestMethod.GET)
 	public Response selectByCompanyId(
-			 @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
-	            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+			@RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
+			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
 			@PathVariable(name = "companyId",required = true) String companyId){
 
 		PageInfo<ComReviewReport> comReviewReport = comReviewReportService.selectByCompanyId(pageNum,pageSize,companyId);
@@ -115,5 +134,78 @@ public class ComReviewReportController {
 		}
 	}
 
-	
+
+	/**
+	 * 批量预览pdf报告
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/preview", method = RequestMethod.GET)
+	//@Privileges(name = "REPORT-MUTI-PREVIEW", scope = { 1 })
+	public Response batchviewReport(@RequestParam(name = "reviewReportId", required = true) String reviewReportId, HttpServletResponse response) {
+		List<JasperPrint> prints = new ArrayList<JasperPrint>();
+		OutputStream out = null;
+		for (int i = 0; i <6; i++) {
+			System.out.println("111111111111111111111111111111111111111111111111111111111111111");
+			ComReviewReport node =comReviewReportService.selectByPrimaryKey(reviewReportId);
+			if (node == null) {
+
+			} else {
+
+
+				//String templateDir = "/var/lib/docs/gzjy/template/" + templateName;
+				String templateDir = "C:/Users/Administrator/Desktop/psmb/comReview" + i+".jasper";
+				Map<String, Object> rptParameters = new HashMap<String, Object>();
+
+				rptParameters.put("reportId", reviewReportId);
+				// 传入报表源文件绝对路径，外部参数对象，DB连接，得到JasperPring对象
+				JasperPrint jasperPrint = new JasperPrint();
+				try {
+					jasperPrint = JasperFillManager.fillReport(templateDir, rptParameters,
+							dataSource.getConnection());
+				} catch (Exception e) {
+					e.printStackTrace();
+					return Response.fail(e.getMessage());
+				}
+				prints.add(jasperPrint);
+
+			}
+		}
+		if (prints.size() == 0) {
+
+			return Response.fail("没有打印的报告");
+		} else {
+
+			try {
+				response.reset();
+				response.setContentType("application/pdf;charset=UTF-8");
+				// response.setContentType("arraybuffer;charset=UTF-8");
+				// response.setDateHeader("Expires", 0); // 清除页面缓存
+				response.setHeader("Content-disposition",
+						"inline;filename=" + URLEncoder.encode(UUID.randomUUID() + ".pdf", "UTF-8"));
+				out = response.getOutputStream();
+				JRPdfExporter exporter = new JRPdfExporter();
+				exporter.setExporterInput(SimpleExporterInput.getInstance(prints));
+				exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(out));
+				exporter.exportReport();
+				out.flush();
+
+
+				return Response.success("success");
+			} catch (Exception e) {
+
+				return Response.fail(e.getMessage());
+			} finally {
+				if (out != null) {
+					try {
+						out.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+
+		}
+	}
 }
