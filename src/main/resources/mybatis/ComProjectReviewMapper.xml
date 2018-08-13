@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<<<<<<< Updated upstream
 <mapper namespace="com.gzjy.review.mapper.ComProjectReviewMapper">
 	<resultMap id="BaseResultMap" type="com.gzjy.review.modle.ComProjectReview">
 		<id column="id" property="id" jdbcType="CHAR" />
@@ -14,12 +13,17 @@
 		<result column="score_level" property="scoreLevel" jdbcType="VARCHAR" />
 		<result column="remark" property="remark" jdbcType="VARCHAR" />
 		<result column="advise" property="advise" jdbcType="VARCHAR" />
+		<result column="standard_score" property="standardScore" jdbcType="DOUBLE" />
+		<result column="check_way" property="checkWay" jdbcType="VARCHAR" />
+		<result column="number_regulation" property="numberRegulation" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
 	</resultMap>
 	<sql id="Base_Column_List">
 		id, com_type, company_id, review_report_id, project_id,
 		project_name,
 		score, score_level,
-		remark, advise
+		remark,
+		advise,standard_score,check_way,number_regulation,content
 	</sql>
 
 
@@ -31,7 +35,8 @@
 			separator=",">
 			(#{item.id},#{item.score},#{item.scoreLevel},#{item.remark},#{item.advise})
 		</foreach>
-		on duplicate key update score=values(score),score_level=values(score_level),remark=values(remark),advise=values(advise)
+		on duplicate key update
+		score=values(score),score_level=values(score_level),remark=values(remark),advise=values(advise)
 	</update>
 
 	<select id="selectByReviewReportId" resultMap="BaseResultMap"
@@ -48,12 +53,13 @@
 	<insert id="batchInsertcomProjectReview">
 		insert into com_project_review (id, com_type, company_id,
 		review_report_id, project_id, project_name, score, score_level,
-		remark, advise)
+		remark, advise,standard_score,check_way,number_regulation,content)
 		values
 		<foreach collection="comProjectReview" item="item" index="index"
 			separator=",">
 			(#{item.id},#{item.comType},#{item.companyId},#{item.reviewReportId},#{item.projectId},
-			#{item.projectName},#{item.score},#{item.scoreLevel},#{item.remark},#{item.advise})
+			#{item.projectName},#{item.score},#{item.scoreLevel},#{item.remark},#{item.advise},
+			#{item.standardScore},#{item.checkWay},#{item.numberRegulation},#{item.content})
 		</foreach>
 
 	</insert>
@@ -68,7 +74,8 @@
 		where id = #{id,jdbcType=CHAR}
 	</select>
 	<delete id="deleteByCompanyId" parameterType="java.lang.String">
-		delete from com_project_review
+		delete from
+		com_project_review
 		where company_id = #{companyId,jdbcType=CHAR}
 	</delete>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
@@ -81,16 +88,23 @@
 		(id, com_type, company_id,
 		review_report_id, project_id, project_name,
 		score, score_level, remark,
-		advise)
-		values (#{id,jdbcType=CHAR},
+		advise,standard_score,check_way,number_regulation,content)
+		values
+		(#{id,jdbcType=CHAR},
 		#{comType,jdbcType=VARCHAR},
 		#{companyId,jdbcType=CHAR},
-		#{reviewReportId,jdbcType=VARCHAR}, #{projectId,jdbcType=VARCHAR},
+		#{reviewReportId,jdbcType=VARCHAR},
+		#{projectId,jdbcType=VARCHAR},
 		#{projectName,jdbcType=VARCHAR},
 		#{score,jdbcType=DOUBLE},
 		#{scoreLevel,jdbcType=VARCHAR},
 		#{remark,jdbcType=VARCHAR},
-		#{advise,jdbcType=VARCHAR})
+		#{advise,jdbcType=VARCHAR},
+		#{standardScore,jdbcType=DOUBLE},
+		#{checkWay,jdbcType=VARCHAR},
+		#{numberRegulation,jdbcType=VARCHAR},
+		#{content,jdbcType=VARCHAR}
+		)
 	</insert>
 	<insert id="insertSelective" parameterType="com.gzjy.review.modle.ComProjectReview">
 		insert into com_project_review
@@ -125,6 +139,20 @@
 			<if test="advise != null">
 				advise,
 			</if>
+
+			<if test="standardScore != null">
+				standard_score,
+			</if>
+			<if test="checkWay != null">
+				check_way,
+			</if>
+			<if test="numberRegulation != null">
+				number_regulation,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="id != null">
@@ -156,6 +184,19 @@
 			</if>
 			<if test="advise != null">
 				#{advise,jdbcType=VARCHAR},
+			</if>
+
+			<if test="standardScore != null">
+				#{standardScore,jdbcType=DOUBLE},
+			</if>
+			<if test="checkWay != null">
+				#{checkWay,jdbcType=VARCHAR},
+			</if>
+			<if test="numberRegulation != null">
+				#{numberRegulation,jdbcType=VARCHAR},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=VARCHAR},
 			</if>
 		</trim>
 	</insert>
@@ -189,6 +230,20 @@
 			<if test="advise != null">
 				advise = #{advise,jdbcType=VARCHAR},
 			</if>
+
+
+			<if test="standardScore != null">
+				standard_score=#{standardScore,jdbcType=DOUBLE},
+			</if>
+			<if test="checkWay != null">
+				check_way=#{checkWay,jdbcType=VARCHAR},
+			</if>
+			<if test="numberRegulation != null">
+				number_regulation=#{numberRegulation,jdbcType=VARCHAR},
+			</if>
+			<if test="content != null">
+				content=#{content,jdbcType=VARCHAR}
+			</if>
 		</set>
 		where id = #{id,jdbcType=CHAR}
 	</update>
@@ -207,171 +262,13 @@
 		score_level = #{scoreLevel,jdbcType=VARCHAR},
 		remark =
 		#{remark,jdbcType=VARCHAR},
-		advise = #{advise,jdbcType=VARCHAR}
+		advise = #{advise,jdbcType=VARCHAR},
+		standard_score=#{standardScore,jdbcType=DOUBLE},
+		check_way=#{checkWay,jdbcType=VARCHAR},
+		number_regulation=#{numberRegulation,jdbcType=VARCHAR},
+		content=#{content,jdbcType=VARCHAR}
 		where id
 		= #{id,jdbcType=CHAR}
 	</update>
-=======
-<mapper namespace="com.gzjy.review.mapper.ComProjectReviewMapper" >
-  <resultMap id="BaseResultMap" type="com.gzjy.review.modle.ComProjectReview" >
-    <id column="id" property="id" jdbcType="CHAR" />
-    <result column="com_type" property="comType" jdbcType="VARCHAR" />
-    <result column="company_id" property="companyId" jdbcType="CHAR" />
-    <result column="review_report_id" property="reviewReportId" jdbcType="VARCHAR" />
-    <result column="project_id" property="projectId" jdbcType="VARCHAR" />
-    <result column="project_name" property="projectName" jdbcType="VARCHAR" />
-    <result column="score" property="score" jdbcType="DOUBLE" />
-    <result column="score_level" property="scoreLevel" jdbcType="VARCHAR" />
-    <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="advise" property="advise" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    id, com_type, company_id, review_report_id, project_id, project_name, score, score_level, 
-    remark, advise
-  </sql>
-  
-  
-  <select id="selectAll" resultMap="BaseResultMap">
-		
-		select
-		<include refid="Base_Column_List" />
-		from com_project_review
-		
-	</select>
-  
-  
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from com_project_review
-    where id = #{id,jdbcType=CHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from com_project_review
-    where id = #{id,jdbcType=CHAR}
-  </delete>
-  <insert id="insert" parameterType="com.gzjy.review.modle.ComProjectReview" >
-    insert into com_project_review (id, com_type, company_id, 
-      review_report_id, project_id, project_name, 
-      score, score_level, remark, 
-      advise)
-    values (#{id,jdbcType=CHAR}, #{comType,jdbcType=VARCHAR}, #{companyId,jdbcType=CHAR}, 
-      #{reviewReportId,jdbcType=VARCHAR}, #{projectId,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}, 
-      #{score,jdbcType=DOUBLE}, #{scoreLevel,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{advise,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.gzjy.review.modle.ComProjectReview" >
-    insert into com_project_review
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="comType != null" >
-        com_type,
-      </if>
-      <if test="companyId != null" >
-        company_id,
-      </if>
-      <if test="reviewReportId != null" >
-        review_report_id,
-      </if>
-      <if test="projectId != null" >
-        project_id,
-      </if>
-      <if test="projectName != null" >
-        project_name,
-      </if>
-      <if test="score != null" >
-        score,
-      </if>
-      <if test="scoreLevel != null" >
-        score_level,
-      </if>
-      <if test="remark != null" >
-        remark,
-      </if>
-      <if test="advise != null" >
-        advise,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=CHAR},
-      </if>
-      <if test="comType != null" >
-        #{comType,jdbcType=VARCHAR},
-      </if>
-      <if test="companyId != null" >
-        #{companyId,jdbcType=CHAR},
-      </if>
-      <if test="reviewReportId != null" >
-        #{reviewReportId,jdbcType=VARCHAR},
-      </if>
-      <if test="projectId != null" >
-        #{projectId,jdbcType=VARCHAR},
-      </if>
-      <if test="projectName != null" >
-        #{projectName,jdbcType=VARCHAR},
-      </if>
-      <if test="score != null" >
-        #{score,jdbcType=DOUBLE},
-      </if>
-      <if test="scoreLevel != null" >
-        #{scoreLevel,jdbcType=VARCHAR},
-      </if>
-      <if test="remark != null" >
-        #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="advise != null" >
-        #{advise,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.gzjy.review.modle.ComProjectReview" >
-    update com_project_review
-    <set >
-      <if test="comType != null" >
-        com_type = #{comType,jdbcType=VARCHAR},
-      </if>
-      <if test="companyId != null" >
-        company_id = #{companyId,jdbcType=CHAR},
-      </if>
-      <if test="reviewReportId != null" >
-        review_report_id = #{reviewReportId,jdbcType=VARCHAR},
-      </if>
-      <if test="projectId != null" >
-        project_id = #{projectId,jdbcType=VARCHAR},
-      </if>
-      <if test="projectName != null" >
-        project_name = #{projectName,jdbcType=VARCHAR},
-      </if>
-      <if test="score != null" >
-        score = #{score,jdbcType=DOUBLE},
-      </if>
-      <if test="scoreLevel != null" >
-        score_level = #{scoreLevel,jdbcType=VARCHAR},
-      </if>
-      <if test="remark != null" >
-        remark = #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="advise != null" >
-        advise = #{advise,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=CHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.gzjy.review.modle.ComProjectReview" >
-    update com_project_review
-    set com_type = #{comType,jdbcType=VARCHAR},
-      company_id = #{companyId,jdbcType=CHAR},
-      review_report_id = #{reviewReportId,jdbcType=VARCHAR},
-      project_id = #{projectId,jdbcType=VARCHAR},
-      project_name = #{projectName,jdbcType=VARCHAR},
-      score = #{score,jdbcType=DOUBLE},
-      score_level = #{scoreLevel,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR},
-      advise = #{advise,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=CHAR}
-  </update>
->>>>>>> Stashed changes
+
 </mapper>
