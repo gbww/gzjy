@@ -20,7 +20,16 @@ public class ComProjectReview {
     private String remark;
 
     private String advise;
-
+    
+    private Double standardScore;
+    
+    private String checkWay;
+    
+    private String numberRegulation;
+    
+    private String content;
+    
+   
     public String getId() {
         return id;
     }
@@ -100,4 +109,37 @@ public class ComProjectReview {
     public void setAdvise(String advise) {
         this.advise = advise == null ? null : advise.trim();
     }
+
+	public Double getStandardScore() {
+		return standardScore;
+	}
+
+	public void setStandardScore(Double standardScore) {
+		this.standardScore = standardScore;
+	}
+
+	public String getCheckWay() {
+		return checkWay;
+	}
+
+	public void setCheckWay(String checkWay) {
+		this.checkWay = checkWay;
+	}
+
+	public String getNumberRegulation() {
+		return numberRegulation;
+	}
+
+	public void setNumberRegulation(String numberRegulation) {
+		this.numberRegulation = numberRegulation;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+    
 }

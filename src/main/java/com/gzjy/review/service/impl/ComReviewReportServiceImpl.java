@@ -63,6 +63,11 @@ public class ComReviewReportServiceImpl implements ComReviewReportService {
 			comProjectReview1.setReviewReportId(comReviewReport.getReviewReportId());
 			comProjectReview1.setProjectId(comProjectDetails2.getId());
 			comProjectReview1.setProjectName(comProjectDetails2.getContent());
+			comProjectReview1.setCheckWay(comProjectDetails2.getCheckWay());
+			comProjectReview1.setNumberRegulation(comProjectDetails2.getNumberRegulation());
+			comProjectReview1.setContent(comProjectDetails2.getContent());
+			comProjectReview1.setStandardScore(comProjectDetails2.getStandardScore());
+			
 			comProjectReview.add(comProjectReview1);		
 		}
 		//初始化企业审核项目

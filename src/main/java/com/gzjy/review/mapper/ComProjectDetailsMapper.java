@@ -2,11 +2,7 @@ package com.gzjy.review.mapper;
 
 import java.util.List;
 
-<<<<<<< Updated upstream
 import org.apache.ibatis.annotations.Mapper;
-=======
-import com.gzjy.review.modle.ComProjectDetails;
->>>>>>> Stashed changes
 
 import com.gzjy.review.modle.ComProjectDetails;
 @Mapper
@@ -23,11 +19,5 @@ public interface ComProjectDetailsMapper {
 
 	int updateByPrimaryKey(ComProjectDetails record);
 
-<<<<<<< Updated upstream
 	List<ComProjectDetails> selectByComType(String comType);
-=======
-    int updateByPrimaryKey(ComProjectDetails record);
-
-	List<ComProjectDetails> selectAll();
->>>>>>> Stashed changes
 }

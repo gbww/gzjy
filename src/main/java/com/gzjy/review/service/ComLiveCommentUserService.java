@@ -1,10 +1,7 @@
 package com.gzjy.review.service;
 
-<<<<<<< Updated upstream
 import java.util.List;
 
-=======
->>>>>>> Stashed changes
 import com.github.pagehelper.PageInfo;
 import com.gzjy.review.modle.ComLiveCommentUser;
 
@@ -14,7 +11,6 @@ import com.gzjy.review.modle.ComLiveCommentUser;
  * @Date: 2018/6/3010:27
  */
 public interface ComLiveCommentUserService {
-<<<<<<< Updated upstream
 	/**
 	 * 添加参与评审人员信息
 	 */
@@ -55,17 +51,4 @@ public interface ComLiveCommentUserService {
 	 * @return
 	 */
 	int batchDeleteById(String id);
-=======
-	ComLiveCommentUser selectByPrimaryKey(String id);
-
-	int insertreviewers(ComLiveCommentUser comLiveCommentUser);
-
-	int updatereviewer(ComLiveCommentUser comLiveCommentUser);
-
-	int deletereviewer(String id);
-
-	PageInfo<ComLiveCommentUser> selectALL(Integer pageNum, Integer pageCount);
-
-
->>>>>>> Stashed changes
 }

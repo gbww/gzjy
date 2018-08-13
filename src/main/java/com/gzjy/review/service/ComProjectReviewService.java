@@ -1,11 +1,7 @@
 package com.gzjy.review.service;
 
-<<<<<<< Updated upstream
 import java.util.List;
 
-=======
-import com.github.pagehelper.PageInfo;
->>>>>>> Stashed changes
 import com.gzjy.review.modle.ComProjectReview;
 
 /**
@@ -15,21 +11,9 @@ import com.gzjy.review.modle.ComProjectReview;
  */
 public interface ComProjectReviewService {
 
-<<<<<<< Updated upstream
 
 
 	List<ComProjectReview> selectByReviewReportId(String reviewReportId);
 
 	int batchupdate(List<ComProjectReview> comProjectReview);
-=======
-	PageInfo<ComProjectReview> selectALL(Integer pageNum, Integer pageCount);
-
-	ComProjectReview selectByPrimaryKey(String id);
-
-	int insertreviewers(ComProjectReview comProjectReview);
-
-	int updatereviewer(ComProjectReview comProjectReview);
-
-	int deletereviewer(String id);
->>>>>>> Stashed changes
 }
