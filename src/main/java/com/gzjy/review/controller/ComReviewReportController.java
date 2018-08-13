@@ -3,6 +3,7 @@ package com.gzjy.review.controller;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -155,9 +156,10 @@ public class ComReviewReportController {
 
 				//String templateDir = "/var/lib/docs/gzjy/template/" + templateName;
 				String templateDir = "C:/Users/Administrator/Desktop/psmb/comReview" + i+".jasper";
+				//String templateDir = "C:/Users/Administrator/Desktop/psmb/wugonghai.jasper";
 				Map<String, Object> rptParameters = new HashMap<String, Object>();
 
-				rptParameters.put("reportId", reviewReportId);
+				rptParameters.put("reviewReportId", reviewReportId);
 				// 传入报表源文件绝对路径，外部参数对象，DB连接，得到JasperPring对象
 				JasperPrint jasperPrint = new JasperPrint();
 				try {
@@ -203,7 +205,14 @@ public class ComReviewReportController {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				}
+				}try {
+	                if(!dataSource.getConnection().isClosed()) {
+	                    dataSource.getConnection().close();
+	                }
+	            } catch (SQLException e) {
+	                // TODO Auto-generated catch block
+	                e.printStackTrace();
+	            }
 			}
 
 		}
