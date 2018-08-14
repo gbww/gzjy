@@ -160,6 +160,7 @@ public class ComReviewReportController {
 				Map<String, Object> rptParameters = new HashMap<String, Object>();
 
 				rptParameters.put("reviewReportId", reviewReportId);
+				
 				// 传入报表源文件绝对路径，外部参数对象，DB连接，得到JasperPring对象
 				JasperPrint jasperPrint = new JasperPrint();
 				try {
