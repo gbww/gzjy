@@ -108,6 +108,7 @@
 		<result column="report_status" property="reportStatus"
 			jdbcType="INTEGER" />
 		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="is_examine" property="isExamine" jdbcType="INTEGER" />
 	</resultMap>
 	
   
@@ -195,18 +196,35 @@
     order by ${orderby}
   </select>
   
-  <select id="select" resultMap="BaseResultMap"  >
+  <select id="select" resultMap="DetailResultMap"  >
     select 
-    <include refid="Base_Column_List" />
-    from receive_sample_item
-    <where>
-			<foreach collection="filters.keys" item="key" separator="and">
-				<if test="null!=filters[key]">
-					${key} LIKE CONCAT('%',#{filters[${key}]},'%' )
-				</if>
-			</foreach>
-		</where>
-		order by ${orderby}
+    <include refid="Detail_Column_List" />
+    from receive_sample_item a left join receive_sample b on a.report_id=b.report_id
+          <where>
+        	<foreach collection="filters.keys" item="key" separator="and">
+    	<choose>
+    	<when test="key=='status'">
+    	 a.status = #{filters[${key}]}
+    	</when>
+    	<when test="key=='receive_sample_id'">
+    	 a.receive_sample_id LIKE CONCAT('%',#{filters[${key}]},'%' )
+    	</when>
+    	<when test="key=='report_id'">
+    	 a.report_id LIKE CONCAT('%',#{filters[${key}]},'%' )
+    	</when>
+    	
+    	<when test="key=='receivesample_status'">
+    	 b.status = #{filters[${key}]}
+    	</when>
+        <otherwise>
+        <if test="null!=filters[key]">
+         ${key} LIKE CONCAT('%',#{filters[${key}]},'%' )
+        </if>
+        </otherwise>    	
+    	</choose>    			
+		</foreach>
+    </where>
+    order by ${orderby}
   </select>
   
   
@@ -220,7 +238,7 @@
         	<foreach collection="filters.keys" item="key" separator="and">
     	<choose>
     	<when test="key=='status'">
-    	 a.status LIKE CONCAT('%',#{filters[${key}]},'%' )
+    	 a.status = #{filters[${key}]}
     	</when>
     	<when test="key=='receive_sample_id'">
     	 a.receive_sample_id LIKE CONCAT('%',#{filters[${key}]},'%' )

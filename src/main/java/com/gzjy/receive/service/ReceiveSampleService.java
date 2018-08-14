@@ -198,7 +198,7 @@ public class ReceiveSampleService {
 				}
 				else {
 					if(receive.getStatus()==1) {  //抽样单处于完成状态了
-						receive.setStatus(0);
+						receive.setStatus(-1);  //设置抽样处于下发状态
 						receiveSampleMapper.updateByPrimaryKeySelective(receive);
 					}
 					item.setReceiveSampleId(receive.getReceiveSampleId());

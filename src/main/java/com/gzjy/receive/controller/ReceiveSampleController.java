@@ -475,7 +475,8 @@ public class ReceiveSampleController {
            @RequestParam(name = "reportId", required = false) String reportId,
            @RequestParam(name = "name", required = false) String name,   //项目名称
            @RequestParam(name = "method", required = false) String method,
-           @RequestParam(name = "status", defaultValue = "-1") Integer status,  //5代表所有
+           @RequestParam(name = "status", defaultValue = "0") Integer status,  //5代表所有
+           @RequestParam(name = "assign", required = false,defaultValue="true") Boolean assign,  //未分配时传值false
            @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
         Map<String, Object> filter = new HashMap<String, Object>();
@@ -487,6 +488,9 @@ public class ReceiveSampleController {
         }
         if(!StringUtils.isBlank(method)) {
             filter.put("method", method);
+        }
+        if(!assign) {
+            filter.put("receivesample_status", -1);
         }
         if (status != 5) {
             filter.put("status", status);
