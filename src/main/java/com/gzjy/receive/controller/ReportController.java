@@ -614,7 +614,8 @@ public class ReportController {
 			JasperPrint jasperPrint = JasperFillManager.fillReport(templateDir, rptParameters,
 					dataSource.getConnection());
 			response.reset();
-			response.setContentType("application/octet-stream;charset=UTF-8");
+			//response.setContentType("application/octet-stream;charset=UTF-8");
+			response.setContentType("application/pdf;charset=UTF-8");
 			// response.setDateHeader("Expires", 0); // 清除页面缓存
 			response.setHeader("Content-disposition",
 					"attachment;filename=" + URLEncoder.encode(reportId + ".pdf", "UTF-8"));
@@ -782,6 +783,7 @@ public class ReportController {
 				response.setHeader("Content-disposition",
 						"inline;filename=" + URLEncoder.encode(UUID.randomUUID() + ".pdf", "UTF-8"));
 				out = response.getOutputStream();
+				
 				JRPdfExporter exporter = new JRPdfExporter();
 				exporter.setExporterInput(SimpleExporterInput.getInstance(prints));
 				exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(out));
