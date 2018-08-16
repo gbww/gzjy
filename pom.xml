@@ -277,10 +277,10 @@
         </dependency>   
         
         <!-- 解决Spring Boot & Tomcat集成，JDBC连接超时问题 https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
-		<dependency>
+	<!-- 	<dependency>
 		    <groupId>com.zaxxer</groupId>
 		    <artifactId>HikariCP</artifactId>
-		</dependency>
+		</dependency> -->
 
 	</dependencies>
 	<!--maven的插件 -->

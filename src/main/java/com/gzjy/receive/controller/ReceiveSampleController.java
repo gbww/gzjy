@@ -9,29 +9,25 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,32 +41,19 @@ import org.springframework.web.multipart.MultipartFile;
 import com.github.pagehelper.PageInfo;
 import com.gzjy.common.Add;
 import com.gzjy.common.Response;
-import com.gzjy.common.ShortUUID;
 import com.gzjy.common.Update;
 import com.gzjy.common.annotation.Privileges;
+import com.gzjy.common.annotation.RequestLimit;
 import com.gzjy.common.exception.BizException;
-import com.gzjy.common.util.ExcelToPdf;
-import com.gzjy.common.util.FileOperate;
-import com.gzjy.common.util.fs.EpicNFSClient;
 import com.gzjy.common.util.fs.EpicNFSService;
 import com.gzjy.receive.model.ReceiveSample;
 import com.gzjy.receive.model.ReceiveSampleItem;
 import com.gzjy.receive.service.ReceiveSampleService;
 import com.gzjy.user.UserService;
-import com.gzjy.user.model.User;
 
-import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
-import net.sf.jasperreports.export.ExporterInput;
-import net.sf.jasperreports.export.OutputStreamExporterOutput;
-import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
-//import xue.model.StudentBeanFactory;
-//import xue.model.StudentScore;
 
 /**
  * @author xuewenlong@cmss.chinamobile.com
@@ -91,6 +74,14 @@ public class ReceiveSampleController {
 	private UserService userService;
 	 @Autowired
 	 private DataSource dataSource; 
+	 
+	 @RequestMapping(value = "/sample/xue_test1", method = RequestMethod.GET)
+	 @RequestLimit(count=10,time=60000)
+	    public String testRequestLimit(HttpServletRequest request) {
+	     return "hello";
+	 }
+	 
+	 
 	@RequestMapping(value = "/sample/xue_test", method = RequestMethod.GET)
 	public void testReport() throws Exception{
 	    //设定报表所需要的外部参数内容
@@ -643,6 +634,7 @@ public class ReceiveSampleController {
 	// 查询当前用户接样单信息(检测人员关心的接样单)
     @RequestMapping(value = "/sampleItem/sample", method = RequestMethod.GET)
     @Privileges(name = "SAMPLE-ITEMS-INPUT-SELECT", scope = { 1 })
+   
     public Response listReceiveItemByCurrentUser(@RequestParam(name = "status", defaultValue = "-1") int status,
             @RequestParam(name = "order", required = false) String order,
              @RequestParam(name = "receiveSampleId", required = false) String receiveSampleId,
