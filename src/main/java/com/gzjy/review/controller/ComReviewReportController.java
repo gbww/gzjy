@@ -3,6 +3,7 @@ package com.gzjy.review.controller;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -146,8 +148,9 @@ public class ComReviewReportController {
 	public Response batchviewReport(@RequestParam(name = "reviewReportId", required = true) String reviewReportId, HttpServletResponse response) {
 		List<JasperPrint> prints = new ArrayList<JasperPrint>();
 		OutputStream out = null;
+		Connection con= DataSourceUtils.getConnection(dataSource);
 		for (int i = 0; i <6; i++) {
-			System.out.println("111111111111111111111111111111111111111111111111111111111111111");
+		
 			ComReviewReport node =comReviewReportService.selectByPrimaryKey(reviewReportId);
 			if (node == null) {
 
@@ -165,7 +168,7 @@ public class ComReviewReportController {
 				JasperPrint jasperPrint = new JasperPrint();
 				try {
 					jasperPrint = JasperFillManager.fillReport(templateDir, rptParameters,
-							dataSource.getConnection());
+					        con);
 				} catch (Exception e) {
 					e.printStackTrace();
 					return Response.fail(e.getMessage());
