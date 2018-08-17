@@ -3,6 +3,7 @@ package com.gzjy.receive.controller;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,9 +16,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import org.activiti.engine.task.Comment;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,6 +71,8 @@ public class ReportController {
 	TemplateMapper templateMapper;
 	@Autowired
 	private DataSource dataSource;
+	@Autowired
+	SqlSessionFactory  factory;
 	@Autowired
 	private EpicNFSService epicNFSService;
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
@@ -589,6 +594,8 @@ public class ReportController {
 	//@Privileges(name = "REPORT-PDF-EXPORT", scope = { 1 })
 	public Response exportReport(@RequestParam(name = "reportId", required = true) String reportId,
 			HttpServletResponse response) {
+	    
+	    Connection con= DataSourceUtils.getConnection(dataSource);
 		OutputStream out = null;
 		try {
 			ReceiveSample result = receiveSampleService.getReceiveSample(reportId);
@@ -612,7 +619,7 @@ public class ReportController {
 			rptParameters.put("reportId", reportId);
 			// 传入报表源文件绝对路径，外部参数对象，DB连接，得到JasperPring对象
 			JasperPrint jasperPrint = JasperFillManager.fillReport(templateDir, rptParameters,
-					dataSource.getConnection());
+			        con);
 			response.reset();
 			//response.setContentType("application/octet-stream;charset=UTF-8");
 			response.setContentType("application/pdf;charset=UTF-8");
@@ -636,14 +643,6 @@ public class ReportController {
 					e.printStackTrace();
 				}
 			}
-			try {
-                if(!dataSource.getConnection().isClosed()) {
-                    dataSource.getConnection().close();
-                }
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
 		}
 	}
 
@@ -656,6 +655,9 @@ public class ReportController {
 	//@Privileges(name = "REPORT-PREVIEW", scope = { 1 })
 	public Response viewReport(@RequestParam(name = "reportId", required = true) String reportId,
 			@RequestParam(name = "type", required = true) String type, HttpServletResponse response) {
+	
+	    Connection con= DataSourceUtils.getConnection(dataSource);
+	    OutputStream out = null;
 		try {
 			ReceiveSample result = receiveSampleService.getReceiveSample(reportId);
 			if (result == null) {
@@ -678,10 +680,10 @@ public class ReportController {
 			rptParameters.put("reportId", reportId);
 			// 传入报表源文件绝对路径，外部参数对象，DB连接，得到JasperPring对象
 			JasperPrint jasperPrint = JasperFillManager.fillReport(templateDir, rptParameters,
-					dataSource.getConnection());
+			        con);
 			response.reset();
 
-			OutputStream out = response.getOutputStream();
+			 out = response.getOutputStream();
 			if (type.equals("xml")) {
 				response.setContentType("text/html;charset=UTF-8");
 				// response.setDateHeader("Expires", 0); // 清除页面缓存
@@ -708,23 +710,29 @@ public class ReportController {
 			}
 
 			out.flush();
-			if (out != null) {
-				out.close();
-			}
+			
 			logger.info("Export success!!");
 			return Response.success("success");
 		} catch (Exception e) {
 			logger.error(e + "");
 			return Response.fail(e.getMessage());
 		} finally {
-		    try {
+		    if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    
+                    e.printStackTrace();
+                }
+            }
+		   /* try {
                 if(!dataSource.getConnection().isClosed()) {
                     dataSource.getConnection().close();
                 }
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
-            }
+            }*/
 
 		}
 	}
@@ -737,6 +745,7 @@ public class ReportController {
 	@RequestMapping(value = "/preview", method = RequestMethod.POST)
 	//@Privileges(name = "REPORT-MUTI-PREVIEW", scope = { 1 })
 	public Response batchviewReport(@RequestBody() List<String> reportIds, HttpServletResponse response) {
+	    Connection con= DataSourceUtils.getConnection(dataSource);
 		List<JasperPrint> prints = new ArrayList<JasperPrint>();
 		OutputStream out = null;
 		for (String id : reportIds) {
@@ -761,7 +770,7 @@ public class ReportController {
 					JasperPrint jasperPrint = new JasperPrint();
 					try {
 						jasperPrint = JasperFillManager.fillReport(templateDir, rptParameters,
-								dataSource.getConnection());
+						        con);
 					} catch (Exception e) {
 						e.printStackTrace();
 						return Response.fail(e.getMessage());
@@ -804,14 +813,7 @@ public class ReportController {
 						e.printStackTrace();
 					}
 				}
-				try {
-                    if(!dataSource.getConnection().isClosed()) {
-                        dataSource.getConnection().close();
-                    }
-                } catch (SQLException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+			
 			}
 
 		}
