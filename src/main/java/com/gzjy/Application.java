@@ -19,6 +19,10 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import com.gzjy.interceptor.FrUrlInterceptor;
 
 @SpringBootApplication
 @Configuration
@@ -47,6 +51,23 @@ public class Application  {
     
     sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(MAPPER_LOCATION)); 
     return sqlSessionFactoryBean.getObject();
+    }
+    
+    @Configuration
+    static class WebConfig extends WebMvcConfigurerAdapter {
+    @Autowired
+    FrUrlInterceptor frUrlInterceptor;
+
+        /**
+         * 配置拦截器
+         * 
+         * @author lance
+         * @param registry
+         */
+        @Override
+        public void addInterceptors(InterceptorRegistry registry) {
+            registry.addInterceptor(frUrlInterceptor).addPathPatterns("/v1/ahgz/**");
+        }
     }
     
 

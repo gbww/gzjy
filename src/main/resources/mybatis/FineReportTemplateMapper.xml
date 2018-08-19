@@ -8,10 +8,11 @@
 		<result column="category" property="category" jdbcType="VARCHAR" />
 		<result column="description" property="description" jdbcType="VARCHAR" />
 		<result column="file_name" property="fileName" jdbcType="VARCHAR" />
+		<result column="visit_url" property="visitUrl" jdbcType="VARCHAR" />
 		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, name, category, description, file_name, created_at
+		id, name, category, description, file_name, visit_url,created_at
 	</sql>
 
 	<select id="selectByName" resultMap="BaseResultMap"
@@ -30,10 +31,10 @@
 	</select>
 
 	<insert id="insert" parameterType="com.gzjy.template.model.FineReportTemplateModel">
-		insert into	fine_report_template(id, name, category, description, file_name, created_at)
+		insert into	fine_report_template(id, name, category, description, visit_url,file_name, created_at)
 		values (
 			#{id,jdbcType=VARCHAR},	#{name,jdbcType=VARCHAR},#{category,jdbcType=VARCHAR},
-			#{description,jdbcType=VARCHAR},#{fileName,jdbcType=VARCHAR},#{createdAt,jdbcType=VARCHAR}
+			#{description,jdbcType=VARCHAR},#{visitUrl,jdbcType=VARCHAR},#{fileName,jdbcType=VARCHAR},#{createdAt,jdbcType=VARCHAR}
 		)
 	</insert>
 
@@ -73,6 +74,9 @@
 			</if>
 			<if test="fileName != null">
 				file_name = #{fileName,jdbcType=VARCHAR},
+			</if>
+			<if test="visitUrl != null">
+				visit_url = #{visitUrl,jdbcType=VARCHAR},
 			</if>
 		</set>
 		where id = #{id,jdbcType=VARCHAR}

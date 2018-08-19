@@ -6,6 +6,7 @@ public class FineReportTemplateModel {
 	private String id;
 	private String name;
 	private String category;
+	private String visitUrl;
 	private String description;
 	private String fileName;
 	private Date createdAt;
@@ -44,6 +45,12 @@ public class FineReportTemplateModel {
 	}
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
+	}
+	public String getVisitUrl() {
+		return visitUrl;
+	}
+	public void setVisitUrl(String visitUrl) {
+		this.visitUrl = visitUrl;
 	}
 	
 }
