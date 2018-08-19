@@ -57,7 +57,7 @@ public class FineReportTemplateServiceImpl implements FineReportTemplateService 
 		if (!client.hasRemoteDir("template/fr")) {
 			client.createRemoteDir("template/fr");
 		}		
-		String fileName=file.getOriginalFilename();
+		String fileName=ShortUUID.getInstance().generateShortID()+".cpt";
 		try {
 			client.upload(file.getInputStream(), "template/fr/" + fileName);
 			client.close();	
