@@ -112,12 +112,12 @@ public class FineReportTemplateController {
 		@RequestMapping(value = "/fr/upload", method = RequestMethod.POST)
 		@Privileges(name = "TEMPLATE-UPLOAD", scope = { 1 })
 		public Response uploadTemplate(@RequestParam("file") MultipartFile file, 
-				@RequestParam String name, @RequestParam String description, @RequestParam String category,@RequestParam String roleId) {
+				@RequestParam String name, @RequestParam String description, @RequestParam String category,@RequestParam String roleIdList) {
 			if(!file.getOriginalFilename().endsWith(".cpt")) {
 				return Response.fail("模板文件仅支持.cpt后缀文件");
 			}
 			try {
-				fineReportTemplateService.uploadFile(file, name, description, category, roleId);
+				fineReportTemplateService.uploadFile(file, name, description, category, roleIdList);
 				return Response.success("success");
 			}
 			catch (Exception e) {

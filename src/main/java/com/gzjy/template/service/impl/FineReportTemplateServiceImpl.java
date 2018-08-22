@@ -47,7 +47,7 @@ public class FineReportTemplateServiceImpl implements FineReportTemplateService 
 		return fineReportTemplateMapper.insert(record);
 	}
 
-	public void uploadFile(MultipartFile file, String name, String description,String category,String roleId) {
+	public void uploadFile(MultipartFile file, String name, String description,String category,String roleIdList) {
 		FineReportTemplateModel temp = fineReportTemplateMapper.selectByName(name);
 		if(temp!=null) {
 			throw new BizException("模板名称已存在");
@@ -72,12 +72,15 @@ public class FineReportTemplateServiceImpl implements FineReportTemplateService 
 			record.setDescription(description);
 			record.setVisitUrl("fr/"+fileName);
 			fineReportTemplateMapper.insert(record);
-			FineReportTemplateRoleMappingModel frRecord = new FineReportTemplateRoleMappingModel();
-			frRecord.setId(ShortUUID.getInstance().generateShortID());
-			frRecord.setTemplateId(random_id);
-			frRecord.setCreatedAt(new Date());
-			frRecord.setRoleId(roleId);
-			fineReportTemplateRoleMappingMapper.insert(frRecord);
+			String [] roleList = roleIdList.split(";");
+			for(int i=0;i<roleIdList.length();i++) {
+				FineReportTemplateRoleMappingModel frRecord = new FineReportTemplateRoleMappingModel();
+				frRecord.setId(ShortUUID.getInstance().generateShortID());
+				frRecord.setTemplateId(random_id);
+				frRecord.setCreatedAt(new Date());
+				frRecord.setRoleId(roleList[i]);
+				fineReportTemplateRoleMappingMapper.insert(frRecord);
+			}
 		} catch (Exception e) {
 			logger.info("文件上传失败:"+e);
 			throw new BizException("文件上传失败");
