@@ -73,7 +73,7 @@ public class FineReportTemplateServiceImpl implements FineReportTemplateService 
 			record.setVisitUrl("fr/"+fileName);
 			fineReportTemplateMapper.insert(record);
 			String [] roleList = roleIdList.split(";");
-			for(int i=0;i<roleIdList.length();i++) {
+			for(int i=0;i<roleList.length;i++) {
 				FineReportTemplateRoleMappingModel frRecord = new FineReportTemplateRoleMappingModel();
 				frRecord.setId(ShortUUID.getInstance().generateShortID());
 				frRecord.setTemplateId(random_id);
