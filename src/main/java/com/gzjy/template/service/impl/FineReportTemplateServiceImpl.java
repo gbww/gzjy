@@ -70,7 +70,7 @@ public class FineReportTemplateServiceImpl implements FineReportTemplateService 
 			record.setCreatedAt(new Date());
 			record.setCategory(category);
 			record.setDescription(description);
-			record.setVisitUrl("fr/"+fileName);
+			record.setVisitUrl("/software/tomcat/apache-tomcat-8.0.52/webapps/WebReport/"+fileName);
 			fineReportTemplateMapper.insert(record);
 			String [] roleList = roleIdList.split(";");
 			for(int i=0;i<roleList.length;i++) {
