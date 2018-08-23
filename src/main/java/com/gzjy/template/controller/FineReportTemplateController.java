@@ -16,6 +16,7 @@ import com.gzjy.common.Response;
 import com.gzjy.common.ShortUUID;
 import com.gzjy.common.annotation.Privileges;
 import com.gzjy.template.model.FineReportTemplateModel;
+import com.gzjy.template.model.FineReportTemplateRoleMappingModel;
 import com.gzjy.template.service.FineReportTemplateService;;
 
 @RestController
@@ -67,7 +68,7 @@ public class FineReportTemplateController {
 		@Privileges(name = "TEMPLATE-UPDATE", scope = { 1 })
 		@RequestMapping(value = "/fr/{id}", method = RequestMethod.PUT)
 		public Response updateFineReportTemplate(@RequestParam("file") MultipartFile file,@PathVariable String id,
-				@RequestParam String name, @RequestParam String description, @RequestParam String category) {
+				@RequestParam String name, @RequestParam String description, @RequestParam String category, @RequestParam String roleIdList) {
 			if(!file.getOriginalFilename().endsWith(".cpt")) {
 				return Response.fail("模板文件仅支持.cpt后缀文件");
 			}
@@ -78,7 +79,7 @@ public class FineReportTemplateController {
 			record.setCategory(category);
 			record.setFileName(file.getOriginalFilename());
 			try {			
-				fineReportTemplateService.ModifyTemplateFile(file, record);			
+				fineReportTemplateService.ModifyTemplateFile(file, record, roleIdList);	
 				return Response.success("success");
 			}
 			catch (Exception e) {

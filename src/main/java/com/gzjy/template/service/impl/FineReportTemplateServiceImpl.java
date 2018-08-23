@@ -87,12 +87,12 @@ public class FineReportTemplateServiceImpl implements FineReportTemplateService 
 		}
 	}
 	
-	public void ModifyTemplateFile(MultipartFile file, FineReportTemplateModel record) {
+	public void ModifyTemplateFile(MultipartFile file, FineReportTemplateModel record, String roleIdList) {
 		EpicNFSClient client = epicNFSService.getClient("gzjy");		
 		String excelName = file.getOriginalFilename();
 		try {			
 			FineReportTemplateModel oldTemplate = fineReportTemplateMapper.selectById(record.getId());
-			String filePath = "/var/lib/docs/gzjy/template/"+oldTemplate.getFileName();
+			String filePath = "/var/lib/docs/gzjy/template/fr/"+oldTemplate.getFileName();
 			File oldFile = new File(filePath);
 			if (oldFile.exists() && oldFile.isFile()) {
 				logger.info("File path:" + oldFile.getAbsolutePath());
@@ -101,11 +101,26 @@ public class FineReportTemplateServiceImpl implements FineReportTemplateService 
 				}
 				logger.info("旧模板文件删除成功");
 			}
-			client.upload(file.getInputStream(), "template/" + excelName);
+			client.upload(file.getInputStream(), "template/fr/" + excelName);
 			client.close();	
-			logger.info("新模板文件成功上传到服务器");			
+			logger.info("新模板文件成功上传到服务器");
 			record.setFileName(excelName);
 			fineReportTemplateMapper.updateByPrimaryKeySelective(record);
+			String [] roleList = roleIdList.split(";");
+			ArrayList<String> oldRoleIdList = fineReportTemplateRoleMappingMapper.selectRoleIdListById(record.getId());
+			if(oldRoleIdList.size()>0) {
+				fineReportTemplateRoleMappingMapper.deleteByIds(oldRoleIdList);
+			}
+			/*ArrayList<String> delRoleIdList = new ArrayList<String>();
+			ArrayList<String> addRoleIdList = new ArrayList<String>();*/
+			for(int i=0;i<roleList.length;i++) {
+				FineReportTemplateRoleMappingModel frRecord = new FineReportTemplateRoleMappingModel();
+				frRecord.setId(ShortUUID.getInstance().generateShortID());
+				frRecord.setTemplateId(record.getId());
+				frRecord.setCreatedAt(new Date());
+				frRecord.setRoleId(roleList[i]);
+				fineReportTemplateRoleMappingMapper.insert(frRecord);
+			}
 		} catch (Exception e) {
 			logger.info("文件上传失败:"+e);
 			throw new BizException("文件上传失败");

@@ -11,7 +11,7 @@ public interface FineReportTemplateService {
 	FineReportTemplateModel selectByName(String name);
 	int insert(FineReportTemplateModel record); 
 	int updateByPrimaryKeySelective(FineReportTemplateModel record);
-	public void ModifyTemplateFile(MultipartFile file, FineReportTemplateModel record);
+	public void ModifyTemplateFile(MultipartFile file, FineReportTemplateModel record, String roleIdList);
 	void uploadFile(MultipartFile file, String name, String description,String category,String roleId);
 	PageInfo<FineReportTemplateModel> getPageList(Integer pageNum, Integer pageSize, String name, String type, String category);
 	ArrayList<String> selectTypeByCagegory(String category);
