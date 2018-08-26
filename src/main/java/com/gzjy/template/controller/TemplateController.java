@@ -48,7 +48,7 @@ public class TemplateController {
 	 * @return
 	 */
 	@RequestMapping(value = "/template", method = RequestMethod.POST)
-	public Response createTemplate(@RequestBody Template record) {		
+	public Response createTemplate(@RequestBody Template record) {
 		try {
 			record.setId(ShortUUID.getInstance().generateShortID());
 			record.setCreatedAt(new Date());
@@ -68,16 +68,19 @@ public class TemplateController {
 	@Privileges(name = "TEMPLATE-UPDATE", scope = { 1 })
 	@RequestMapping(value = "/template/{id}", method = RequestMethod.PUT)
 	public Response updateTemplate(@RequestParam("file") MultipartFile file,@PathVariable String id,
-			@RequestParam String name, @RequestParam String description, @RequestParam String category) {
-		if(!file.getOriginalFilename().endsWith(".jasper")) {
-			return Response.fail("模板文件仅支持.jasper后缀文件");
+			@RequestParam String name, @RequestParam String description, @RequestParam String category,
+			@RequestParam Integer type) {
+		if(!(file.getOriginalFilename().endsWith(".jasper")||file.getOriginalFilename().endsWith(".cpt"))) {
+			return Response.fail("模板文件仅支持.jasper或.cpt后缀文件");
 		}
 		Template record = new Template();
 		record.setId(id);
 		record.setName(name);
 		record.setDescription(description);
 		record.setCategory(category);
-		record.setExcelName(file.getOriginalFilename());
+		record.setType(type);
+		record.setVisitUrl("");
+		record.setFileName(file.getOriginalFilename());
 		try {			
 			templateService.ModifyTemplateFile(file, record);			
 			return Response.success("success");
@@ -113,12 +116,12 @@ public class TemplateController {
 	@RequestMapping(value = "/template/upload", method = RequestMethod.POST)
 	@Privileges(name = "TEMPLATE-UPLOAD", scope = { 1 })
 	public Response uploadTemplate(@RequestParam("file") MultipartFile file, 
-			@RequestParam String name, @RequestParam String description, @RequestParam String category) {
-		if(!file.getOriginalFilename().endsWith(".jasper")) {
-			return Response.fail("模板文件仅支持.jasper后缀文件");
+			@RequestParam String name, @RequestParam String description, @RequestParam String category,@RequestParam Integer type) {
+		if(!(file.getOriginalFilename().endsWith(".jasper")||file.getOriginalFilename().endsWith(".cpt"))) {
+			return Response.fail("模板文件仅支持.jasper或.cpt后缀文件");
 		}
 		try {
-			templateService.uploadFile(file, name, description, category);
+			templateService.uploadFile(file, name, description, category, type);
 			return Response.success("success");
 		}
 		catch (Exception e) {

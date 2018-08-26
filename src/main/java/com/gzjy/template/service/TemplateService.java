@@ -12,7 +12,7 @@ public interface TemplateService {
 	int insert(Template record); 
 	int updateByPrimaryKeySelective(Template record);
 	public void ModifyTemplateFile(MultipartFile file, Template record);
-	void uploadFile(MultipartFile file, String name, String description,String category);
+	void uploadFile(MultipartFile file, String name, String description,String category, Integer type);
 	PageInfo<Template> getPageList(Integer pageNum, Integer pageSize, String name, String type, String category);
 	ArrayList<String> selectTypeByCagegory(String category);
 	int deleteByPrimaryKey(String id) throws Exception ;

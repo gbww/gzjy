@@ -9,16 +9,18 @@
 		<result column="template_id" jdbcType="VARCHAR" property="templateId" />
 		<result column="template_name" jdbcType="VARCHAR" property="templateName" />
 		<result column="template_desc" jdbcType="VARCHAR" property="templateDesc" />
+		<result column="type" jdbcType="INTEGER" property="type" />
+		<result column="visit_url" jdbcType="VARCHAR" property="visitUrl" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
-		id, report_id, template_id, template_name, template_desc
+		id, report_id, template_id, template_name, template_desc, type, visit_url
 	</sql>
 
-	<select id="selectAll" resultMap="BaseResultMap">		
+	<select id="selectAll" parameterType="java.lang.Integer" resultMap="BaseResultMap">		
 		select
 		<include refid="Base_Column_List" />
-		from report_extend		
+		from report_extend where type=#{type,jdbcType=INTEGER}
 	</select>
 
 	<select id="selectByPrimaryKey" parameterType="java.lang.String"
@@ -38,13 +40,15 @@
 	</select>
 
 	<insert id="insert" parameterType="com.gzjy.receive.model.ReportExtend">
-		insert into report_extend(id, report_id, template_id, template_name, template_desc)
+		insert into report_extend(id, report_id, template_id, template_name, template_desc, type, visit_url)
 		values (
 		#{id,jdbcType=VARCHAR},
 		#{reportId,jdbcType=VARCHAR},
 		#{templateId,jdbcType=VARCHAR},
 		#{templateName,jdbcType=VARCHAR},
-		#{templateDesc,jdbcType=VARCHAR}
+		#{templateDesc,jdbcType=VARCHAR},
+		#{type,jdbcType=INTEGER},
+		#{visit_url,jdbcType=VARCHAR},
 		)
 	</insert>	
 
@@ -62,7 +66,13 @@
 			</if>
 			<if test="templateDesc != null">
 				template_desc = #{templateDesc,jdbcType=VARCHAR},
-			</if>			
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=INTEGER},
+			</if>	
+			<if test="visitUrl != null">
+				visit_url = #{visitUrl,jdbcType=VARCHAR},
+			</if>		
 		</set>
 		where id = #{id,jdbcType=VARCHAR}
 	</update>

@@ -606,7 +606,7 @@ public class ReportController {
 			if (reportExtend == null) {
 				throw new BizException("报告模板不存在");
 			}
-			String templateName = templateMapper.selectById(reportExtend.getTemplateId()).getExcelName();
+			String templateName = templateMapper.selectById(reportExtend.getTemplateId()).getFileName();
 
 			String templateDir = "/var/lib/docs/gzjy/template/" + templateName;
 			// 设定报表所需要的外部参数内容
@@ -668,7 +668,7 @@ public class ReportController {
 			if (reportExtend == null) {
 				throw new BizException("报告模板不存在");
 			}
-			String templateName = templateMapper.selectById(reportExtend.getTemplateId()).getExcelName();
+			String templateName = templateMapper.selectById(reportExtend.getTemplateId()).getFileName();
 			String templateDir = "/var/lib/docs/gzjy/template/" + templateName;
 
 			// 设定报表所需要的外部参数内容
@@ -758,7 +758,7 @@ public class ReportController {
 				if (reportExtend == null) {
 					logger.error("抽验单编号：" + id + "的模板不存在");
 				} else {
-					String templateName = templateMapper.selectById(reportExtend.getTemplateId()).getExcelName();
+					String templateName = templateMapper.selectById(reportExtend.getTemplateId()).getFileName();
 					String templateDir = "/var/lib/docs/gzjy/template/" + templateName;
 					Map<String, Object> rptParameters = new HashMap<String, Object>();
 					if(templateName.contains("green")) {

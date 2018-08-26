@@ -15,6 +15,10 @@ public class ReportExtend implements Serializable{
     private String templateName;
     //模板描述
     private String templateDesc;
+    //模板类型（0是Jasper报表模板 ,1是帆软模板）
+    private Integer type;
+    
+    private String visitUrl;
 	public String getId() {
 		return id;
 	}
@@ -48,5 +52,16 @@ public class ReportExtend implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-    
+	public Integer getType() {
+		return type;
+	}
+	public void setType(Integer type) {
+		this.type = type;
+	}
+	public String getVisitUrl() {
+		return visitUrl;
+	}
+	public void setVisitUrl(String visitUrl) {
+		this.visitUrl = visitUrl;
+	}
 }

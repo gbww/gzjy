@@ -6,36 +6,39 @@
     <result column="name" property="name" jdbcType="VARCHAR" />       
     <result column="category" property="category" jdbcType="VARCHAR" />      
     <result column="description" property="description" jdbcType="VARCHAR" />
-    <result column="excel_name" property="excelName" jdbcType="VARCHAR" />
+    <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+    <result column="visit_url" property="visitUrl" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
     <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
   </resultMap>
+  
   <sql id="Base_Column_List" >
-    id, name, category, description, excel_name, created_at
+    id, name, category, description, file_name, created_at,visit_url, type
   </sql>
   
   <select id="selectByName" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from template
-    where name = #{name,jdbcType=VARCHAR}
+    from template where name = #{name,jdbcType=VARCHAR}
   </select>
   
   <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from template
-    where id = #{id,jdbcType=VARCHAR}
+    from template where id = #{id,jdbcType=VARCHAR}
   </select>
   
   <insert id="insert" parameterType="com.gzjy.template.model.Template">
-		insert into template(id, name, category, description, excel_name, created_at)
+		insert into template(id, name, category, description, file_name, created_at, type, visit_url)
 		values (
 		#{id,jdbcType=VARCHAR},
 		#{name,jdbcType=VARCHAR},		
 		#{category,jdbcType=VARCHAR},
 		#{description,jdbcType=VARCHAR},
-		#{excelName,jdbcType=VARCHAR},
-		#{createdAt,jdbcType=VARCHAR}		
+		#{fileName,jdbcType=VARCHAR},
+		#{createdAt,jdbcType=VARCHAR},
+		#{type,jdbcType=INTEGER},
+		#{visitUrl,jdbcType=VARCHAR}
 		)
 	</insert>
 	
@@ -52,12 +55,15 @@
 			</if>								
 			<if test="category != null">
 				and category = #{category}
-			</if>					
+			</if>	
+			<if test="type != null">
+				and type = #{type}
+			</if>				
 		</where>
 		order by created_at desc
 	</select>
 	
-	<select id="selectTypeByCagegory" resultType="java.lang.String">			
+	<select id="selectTypeByCagegory" parameterType="java.lang.Integer" resultType="java.lang.String">			
 		select distinct type from template where category = #{category}
 	</select>
 	
@@ -72,16 +78,15 @@
 			</if>
 			<if test="description != null">
 				description = #{description,jdbcType=VARCHAR},
-			</if>	
-			<if test="excelName != null">
-				excel_name = #{excelName,jdbcType=VARCHAR},
+			</if>
+			<if test="fileName != null">
+				file_name = #{FileName,jdbcType=VARCHAR},
 			</if>		
 		</set>
 		where id = #{id,jdbcType=VARCHAR}
 	</update>
 	
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-		delete from template
-		where id = #{id,jdbcType=VARCHAR}
+		delete from template where id = #{id,jdbcType=VARCHAR}
 	</delete>
 </mapper>

@@ -7,8 +7,10 @@ public class Template {
 	private String name;	
 	private String category;
 	private String description;
-	private String excelName;
+	private String fileName;
 	private Date createdAt;
+	private Integer type;
+	private String visitUrl;
 	public String getId() {
 		return id;
 	}
@@ -33,16 +35,28 @@ public class Template {
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}	
-	public String getExcelName() {
-		return excelName;
+	public String getFileName() {
+		return fileName;
 	}
-	public void setExcelName(String excelName) {
-		this.excelName = excelName;
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 	public String getCategory() {
 		return category;
 	}
 	public void setCategory(String category) {
 		this.category = category;
-	}	
+	}
+	public Integer getType() {
+		return type;
+	}
+	public void setType(Integer type) {
+		this.type = type;
+	}
+	public String getVisitUrl() {
+		return visitUrl;
+	}
+	public void setVisitUrl(String visitUrl) {
+		this.visitUrl = visitUrl;
+	}
 }
