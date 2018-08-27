@@ -59,24 +59,19 @@ public class TemplateServiceImpl implements TemplateService {
             throw new BizException("模板名称已存在");
         }
         EpicNFSClient client = epicNFSService.getClient("gzjy");
-        String uploadPath = null;
-        if (type == 0) {
-            // 建立远程存放模板文件目录
-            if (!client.hasRemoteDir("template")) {
-                client.createRemoteDir("template");
-            }
-            uploadPath = "template/";
-        } else {
-            File uploadPathFile = new File(frUploadPath);
-            if (!uploadPathFile.isDirectory()) {
-                throw new BizException("帆软模板远程存放路径不存在");
-            }
-            uploadPath = frUploadPath;
-        }
         String originFileName = file.getOriginalFilename();
         String fileName = UUID.random() + originFileName.substring(originFileName.lastIndexOf('.'), originFileName.length());
         try {
-            FileUpload.upload(file.getInputStream(), uploadPath + fileName);
+            // 建立远程存放模板文件目录
+            if (type == 0) {
+                client.upload(file.getInputStream(), "template/" + fileName);
+            } else {
+                File uploadPathFile = new File(frUploadPath);
+                if (!uploadPathFile.isDirectory()) {
+                    uploadPathFile.mkdirs();
+                }
+                FileUpload.upload(file.getInputStream(), frUploadPath + fileName);
+            }
             logger.info("文件上传到服务器成功");
             String templateId = ShortUUID.getInstance().generateShortID();
             Template record = new Template();
@@ -107,20 +102,23 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     public void ModifyTemplateFile(MultipartFile file, Template record, String roleIdList) {
-        EpicNFSClient client = epicNFSService.getClient("gzjy");
         String originFileName = file.getOriginalFilename();
         String fileName = UUID.random() + originFileName.substring(originFileName.lastIndexOf('.'), originFileName.length());
         Template oldTemplate = templateMapper.selectById(record.getId());
         try {
             //先删除原来模板的文件
+            String filePath = null;
             if (oldTemplate.getType() == 0) {
-                String filePath = "/var/lib/docs/gzjy/template/" + oldTemplate.getFileName();
-                File oldFile = new File(filePath);
-                if (oldFile.exists() && oldFile.isFile()) {
-                    logger.info("File path:" + oldFile.getAbsolutePath());
-                    if (!oldFile.delete()) {
-                        throw new Exception("模板文件删除失败");
-                    }
+                filePath = "/var/lib/docs/gzjy/template/" + oldTemplate.getFileName();
+            } else {
+                filePath = frUploadPath + oldTemplate.getFileName();
+            }
+            File oldFile = new File(filePath);
+            if (oldFile.exists() && oldFile.isFile()) {
+                logger.info("File path:" + oldFile.getAbsolutePath());
+                boolean deleteResult = oldFile.delete();
+                if (!deleteResult) {
+                    logger.info("模板文件删除失败：" + filePath);
                 }
             }
             //上传模板文件
