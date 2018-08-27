@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.gzjy.common.util.UUID;
 import com.gzjy.template.mapper.FineReportTemplateRoleMappingMapper;
 import com.gzjy.template.model.FineReportTemplateRoleMappingModel;
 import org.slf4j.Logger;
@@ -73,7 +74,7 @@ public class TemplateServiceImpl implements TemplateService {
             uploadPath = frUploadPath;
         }
         String originFileName = file.getOriginalFilename();
-        String fileName = ShortUUID.getInstance().generateShortID()+originFileName.substring(originFileName.lastIndexOf('.'), originFileName.length());
+        String fileName = UUID.random()+originFileName.substring(originFileName.lastIndexOf('.'), originFileName.length());
         try {
             client.upload(file.getInputStream(), uploadPath + fileName);
             client.close();
@@ -109,7 +110,7 @@ public class TemplateServiceImpl implements TemplateService {
     public void ModifyTemplateFile(MultipartFile file, Template record, String roleIdList) {
         EpicNFSClient client = epicNFSService.getClient("gzjy");
         String originFileName = file.getOriginalFilename();
-        String fileName = ShortUUID.getInstance().generateShortID()+originFileName.substring(originFileName.lastIndexOf('.'), originFileName.length());
+        String fileName = UUID.random()+originFileName.substring(originFileName.lastIndexOf('.'), originFileName.length());
         Template oldTemplate = templateMapper.selectById(record.getId());
         try {
             //先删除原来模板的文件
