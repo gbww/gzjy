@@ -40,7 +40,6 @@ public class TemplateServiceImpl implements TemplateService {
     @Autowired
     private FineReportTemplateRoleMappingMapper fineReportTemplateRoleMappingMapper;
 
-
     @Value("${fr-upload-path}")
     private String frUploadPath;
 
@@ -184,6 +183,5 @@ public class TemplateServiceImpl implements TemplateService {
         }
         return templateMapper.deleteByPrimaryKey(id);
     }
-
 
 }
