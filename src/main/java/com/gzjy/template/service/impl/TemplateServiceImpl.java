@@ -40,8 +40,12 @@ public class TemplateServiceImpl implements TemplateService {
     @Autowired
     private FineReportTemplateRoleMappingMapper fineReportTemplateRoleMappingMapper;
 
-    @Value("${fr-upload-path}")
+    @Value("${fr-upload-path: }")
     private String frUploadPath;
+
+    @Value("${domain: }")
+    private String domain;
+
 
     private static Logger logger = LoggerFactory.getLogger(ReceiveSampleService.class);
 
@@ -83,7 +87,7 @@ public class TemplateServiceImpl implements TemplateService {
             record.setDescription(description);
             record.setType(type);
             if (type == 1) {
-                record.setVisitUrl("/WebReport/ReportServer?reportlet=" + fileName);
+                record.setVisitUrl(domain + "/WebReport/ReportServer?reportlet=" + fileName);
                 String[] roleList = roleIdList.split(";");
                 for (int i = 0; i < roleList.length; i++) {
                     FineReportTemplateRoleMappingModel frRecord = new FineReportTemplateRoleMappingModel();
@@ -127,7 +131,7 @@ public class TemplateServiceImpl implements TemplateService {
             //更新原表记录
             record.setFileName(fileName);
             if (record.getType() == 1) {
-                record.setVisitUrl("/WebReport/ReportServer?reportlet=" + fileName);
+                record.setVisitUrl(domain + "/WebReport/ReportServer?reportlet=" + fileName);
                 ArrayList<String> oldRoleIdList = fineReportTemplateRoleMappingMapper.selectRoleIdListById(record.getId());
                 if (oldRoleIdList.size() > 0) {
                     fineReportTemplateRoleMappingMapper.deleteByIds(oldRoleIdList);
