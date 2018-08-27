@@ -62,27 +62,31 @@ public class TemplateController {
 	
 	/**
 	 * 修改模板表数据记录
-	 * @param record
+	 * @param
 	 * @return
 	 */
 	@Privileges(name = "TEMPLATE-UPDATE", scope = { 1 })
 	@RequestMapping(value = "/template/{id}", method = RequestMethod.PUT)
-	public Response updateTemplate(@RequestParam("file") MultipartFile file,@PathVariable String id,
-			@RequestParam String name, @RequestParam String description, @RequestParam String category,
-			@RequestParam Integer type) {
-		if(!(file.getOriginalFilename().endsWith(".jasper")||file.getOriginalFilename().endsWith(".cpt"))) {
-			return Response.fail("模板文件仅支持.jasper或.cpt后缀文件");
-		}
+	public Response updateTemplate(
+	        @RequestParam("file") MultipartFile file,@PathVariable String id,
+			@RequestParam String name, @RequestParam String description,
+            @RequestParam String category,	@RequestParam Integer type,
+            @RequestParam String roleIdList) {
+	    if(type ==0 && !(file.getOriginalFilename().endsWith(".jasper"))){
+            return Response.fail("jasper模板文件仅支持.jasper");
+        }
+        if(type ==1 && !(file.getOriginalFilename().endsWith(".cpt"))) {
+            return Response.fail("帆软模板文件仅支持.cpt");
+        }
 		Template record = new Template();
 		record.setId(id);
 		record.setName(name);
 		record.setDescription(description);
 		record.setCategory(category);
 		record.setType(type);
-		record.setVisitUrl("");
 		record.setFileName(file.getOriginalFilename());
 		try {			
-			templateService.ModifyTemplateFile(file, record);			
+			templateService.ModifyTemplateFile(file, record, roleIdList);
 			return Response.success("success");
 		}
 		catch (Exception e) {
@@ -92,7 +96,7 @@ public class TemplateController {
 	
 	/**
 	 * 删除模板表数据记录
-	 * @param record
+	 * @param
 	 * @return
 	 */
 	@RequestMapping(value = "/template/{id}", method = RequestMethod.DELETE)
@@ -107,21 +111,33 @@ public class TemplateController {
 		}
 	}
 	
-	
-	/**
-	 * 上传模板文件
-	 * @param file
-	 * @return
-	 */
+
+    /**
+     * 上传模板文件
+     * @param file 模板文件
+     * @param name 模板名称
+     * @param description 模板描述
+     * @param category 模板分类
+     * @param type 模板类型（0-Jasper模板 1-帆软模板）
+     * @param roleIdList 角色编号（1l2;456;789）
+     * @return
+     */
 	@RequestMapping(value = "/template/upload", method = RequestMethod.POST)
 	@Privileges(name = "TEMPLATE-UPLOAD", scope = { 1 })
 	public Response uploadTemplate(@RequestParam("file") MultipartFile file, 
-			@RequestParam String name, @RequestParam String description, @RequestParam String category,@RequestParam Integer type) {
-		if(!(file.getOriginalFilename().endsWith(".jasper")||file.getOriginalFilename().endsWith(".cpt"))) {
-			return Response.fail("模板文件仅支持.jasper或.cpt后缀文件");
-		}
+			@RequestParam String name, @RequestParam String description, @RequestParam String category,
+                                   @RequestParam Integer type,@RequestParam(required = false) String roleIdList) {
+        if(type ==0 && !(file.getOriginalFilename().endsWith(".jasper"))){
+            return Response.fail("jasper模板文件仅支持.jasper");
+        }
+        if(type ==1 && !(file.getOriginalFilename().endsWith(".cpt"))) {
+            return Response.fail("帆软模板文件仅支持.cpt");
+        }
+		if(type ==1 && (roleIdList==null||"".equals(roleIdList))){
+            return Response.fail("上传帆软模板文件需绑定对应的角色");
+        }
 		try {
-			templateService.uploadFile(file, name, description, category, type);
+			templateService.uploadFile(file, name, description, category, type, roleIdList);
 			return Response.success("success");
 		}
 		catch (Exception e) {
@@ -131,7 +147,7 @@ public class TemplateController {
 	
 	/**
 	 * 获取模板列表
-	 * @param record
+	 * @param
 	 * @return
 	 */
 	@RequestMapping(value = "/templates", method = RequestMethod.GET)
@@ -154,7 +170,7 @@ public class TemplateController {
 	
 	/**
 	 * 获取模板类别列表
-	 * @param record
+	 * @param
 	 * @return
 	 */
 	@RequestMapping(value = "/template/types", method = RequestMethod.GET)

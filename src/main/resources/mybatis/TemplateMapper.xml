@@ -80,7 +80,7 @@
 				description = #{description,jdbcType=VARCHAR},
 			</if>
 			<if test="fileName != null">
-				file_name = #{FileName,jdbcType=VARCHAR},
+				file_name = #{fileName,jdbcType=VARCHAR},
 			</if>		
 		</set>
 		where id = #{id,jdbcType=VARCHAR}
