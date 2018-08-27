@@ -45,7 +45,7 @@ public class TemplateServiceImpl implements TemplateService {
     private static Logger logger = LoggerFactory.getLogger(ReceiveSampleService.class);
 
     public Template selectByName(String name) {
-        return templateMapper.selectByName(name);
+        return templateMapper.selectByName(name.trim());
     }
 
     public int insert(Template record) {

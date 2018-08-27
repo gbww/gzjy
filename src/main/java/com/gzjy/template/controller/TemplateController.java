@@ -28,8 +28,8 @@ public class TemplateController {
 	
 	/**
 	 * 根据名称获取模板信息
-	 * @param name
-	 * @return
+	 * @param name 模板名称
+	 * @return Response
 	 */
 	@RequestMapping(value = "/template", method = RequestMethod.GET)
 	public Response getTemplateByName(@RequestParam(required = true) String name) {		
@@ -46,7 +46,7 @@ public class TemplateController {
 	 * 添加模板表数据记录
 	 * @param record
 	 * @return
-	 */
+	 *//*
 	@RequestMapping(value = "/template", method = RequestMethod.POST)
 	public Response createTemplate(@RequestBody Template record) {
 		try {
@@ -58,13 +58,19 @@ public class TemplateController {
 		catch (Exception e) {
 			return Response.fail(e.getMessage());
 		}
-	}
-	
-	/**
-	 * 修改模板表数据记录
-	 * @param
-	 * @return
-	 */
+	}*/
+
+    /**
+     * 修改模板
+     * @param file 模板文件
+     * @param id 模板编号
+     * @param name 模板名称
+     * @param description 模板描述
+     * @param category 模板分类
+     * @param type 模板类型
+     * @param roleIdList 角色数组
+     * @return Response
+     */
 	@Privileges(name = "TEMPLATE-UPDATE", scope = { 1 })
 	@RequestMapping(value = "/template/{id}", method = RequestMethod.PUT)
 	public Response updateTemplate(
@@ -84,8 +90,7 @@ public class TemplateController {
 		record.setDescription(description);
 		record.setCategory(category);
 		record.setType(type);
-		record.setFileName(file.getOriginalFilename());
-		try {			
+		try {
 			templateService.ModifyTemplateFile(file, record, roleIdList);
 			return Response.success("success");
 		}
