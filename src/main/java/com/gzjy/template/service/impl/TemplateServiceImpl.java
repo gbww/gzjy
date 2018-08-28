@@ -169,8 +169,8 @@ public class TemplateServiceImpl implements TemplateService {
         return templateMapper.updateByPrimaryKeySelective(record);
     }
 
-    public ArrayList<String> selectTypeByCagegory(String category) {
-        return templateMapper.selectTypeByCagegory(category);
+    public ArrayList<String> selectTypeByCategory(String category) {
+        return templateMapper.selectTypeByCategory(category);
     }
 
     public int deleteByPrimaryKey(String id) throws Exception {

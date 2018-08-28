@@ -1,11 +1,8 @@
 package com.gzjy.template.controller;
 
 import java.util.ArrayList;
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageInfo;
 import com.gzjy.common.Response;
-import com.gzjy.common.ShortUUID;
 import com.gzjy.common.annotation.Privileges;
 import com.gzjy.template.model.Template;
 import com.gzjy.template.service.TemplateService;
@@ -42,24 +38,6 @@ public class TemplateController {
 		}
 	}
 	
-	/**
-	 * 添加模板表数据记录
-	 * @param record
-	 * @return
-	 *//*
-	@RequestMapping(value = "/template", method = RequestMethod.POST)
-	public Response createTemplate(@RequestBody Template record) {
-		try {
-			record.setId(ShortUUID.getInstance().generateShortID());
-			record.setCreatedAt(new Date());
-			templateService.insert(record);
-			return Response.success("success");
-		}
-		catch (Exception e) {
-			return Response.fail(e.getMessage());
-		}
-	}*/
-
     /**
      * 修改模板
      * @param file 模板文件
@@ -101,8 +79,8 @@ public class TemplateController {
 	
 	/**
 	 * 删除模板表数据记录
-	 * @param
-	 * @return
+	 * @param id 模板编号
+	 * @return Response
 	 */
 	@RequestMapping(value = "/template/{id}", method = RequestMethod.DELETE)
 	@Privileges(name = "TEMPLATE-DELETE", scope = { 1 })
@@ -125,13 +103,15 @@ public class TemplateController {
      * @param category 模板分类
      * @param type 模板类型（0-Jasper模板 1-帆软模板）
      * @param roleIdList 角色编号（1l2;456;789）
-     * @return
+     * @return Response
      */
 	@RequestMapping(value = "/template/upload", method = RequestMethod.POST)
 	@Privileges(name = "TEMPLATE-UPLOAD", scope = { 1 })
-	public Response uploadTemplate(@RequestParam("file") MultipartFile file, 
-			@RequestParam String name, @RequestParam String description, @RequestParam String category,
-                                   @RequestParam Integer type,@RequestParam(required = false) String roleIdList) {
+	public Response uploadTemplate(
+			@RequestParam("file") MultipartFile file, @RequestParam String name,
+			@RequestParam String description, @RequestParam String category,
+			@RequestParam Integer type,@RequestParam(required = false) String roleIdList
+	) {
         if(type ==0 && !(file.getOriginalFilename().endsWith(".jasper"))){
             return Response.fail("jasper模板文件仅支持.jasper");
         }
@@ -152,8 +132,9 @@ public class TemplateController {
 	
 	/**
 	 * 获取模板列表
-	 * @param
-	 * @return
+	 * @param type 模板类型
+	 * @param category 模板分类
+	 * @return Response
 	 */
 	@RequestMapping(value = "/templates", method = RequestMethod.GET)
 	@Privileges(name = "TEMPLATE-SELECT", scope = { 1 })
@@ -162,7 +143,8 @@ public class TemplateController {
 		    @RequestParam(required = false,defaultValue="1") Integer pageNum,
 		    @RequestParam(required = false,defaultValue="10") Integer pageSize,
 		    @RequestParam(required = false) String type,
-		    @RequestParam(required = false) String category) {
+		    @RequestParam(required = false) String category)
+	{
 		try {
 			PageInfo<Template> result = templateService.getPageList(pageNum, pageSize, name, type, category);
 			return Response.success(result);
@@ -175,14 +157,14 @@ public class TemplateController {
 	
 	/**
 	 * 获取模板类别列表
-	 * @param
-	 * @return
+	 * @param category 类别
+	 * @return Response
 	 */
 	@RequestMapping(value = "/template/types", method = RequestMethod.GET)
 	@Privileges(name = "TEMPLATE-TYPE-SELECT", scope = { 1 })
 	public Response getTypeList(@RequestParam(required = true) String category) {
 		try {
-			ArrayList<String> data = templateService.selectTypeByCagegory(category);
+			ArrayList<String> data = templateService.selectTypeByCategory(category);
 			return Response.success(data);
 		}
 		catch (Exception e) {

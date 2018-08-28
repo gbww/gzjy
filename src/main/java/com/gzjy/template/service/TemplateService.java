@@ -14,13 +14,13 @@ public interface TemplateService {
 
     int updateByPrimaryKeySelective(Template record);
 
-    public void ModifyTemplateFile(MultipartFile file, Template record, String roleIdList);
+    void ModifyTemplateFile(MultipartFile file, Template record, String roleIdList);
 
     void uploadFile(MultipartFile file, String name, String description, String category, Integer type, String roleIdList);
 
     PageInfo<Template> getPageList(Integer pageNum, Integer pageSize, String name, String type, String category);
 
-    ArrayList<String> selectTypeByCagegory(String category);
+    ArrayList<String> selectTypeByCategory(String category);
 
     int deleteByPrimaryKey(String id) throws Exception;
 }

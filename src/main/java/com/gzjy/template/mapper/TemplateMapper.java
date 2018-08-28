@@ -16,5 +16,5 @@ public interface TemplateMapper {
 	int deleteByPrimaryKey(@Param("id")String id);
 	Template selectById(@Param("id")String id);
 	List<Template> selectAll(@Param("name")String name,@Param("type")String type, @Param("category")String category);
-	ArrayList<String> selectTypeByCagegory(@Param("category")String category);
+	ArrayList<String> selectTypeByCategory(@Param("category")String category);
 }
