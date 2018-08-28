@@ -18,4 +18,6 @@ public interface FineReportTemplateRoleMappingMapper {
 	FineReportTemplateRoleMappingModel selectById(@Param("id")String id);
 	List<FineReportTemplateRoleMappingModel> selectAll(@Param("name")String name,@Param("type")String type, @Param("category")String category);
 	ArrayList<String> selectTypeByCagegory(@Param("category")String category);
+	ArrayList<String> selectRoleIdListById(@Param("id")String id);
+	int deleteByIds(@Param("idList")List<String> idList);
 }

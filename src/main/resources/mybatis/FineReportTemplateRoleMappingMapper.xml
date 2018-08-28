@@ -51,7 +51,11 @@
 	<!-- <select id="selectTypeByCagegory" resultType="java.lang.String">
 		select distinct type from fine_report_template_role_mapping where category = #{category}
 	</select> -->
-
+	
+	<select id="selectRoleIdListById" resultType="java.lang.String">
+		select distinct role_id from fine_report_template_role_mapping where template_id = #{id}
+	</select>
+	
 	<update id="updateByPrimaryKeySelective" parameterType="com.gzjy.template.model.FineReportTemplateModel">
 		update fine_report_template_role_mapping
 		<set>
@@ -68,4 +72,13 @@
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		delete from	fine_report_template_role_mapping where id = #{id,jdbcType=VARCHAR}
 	</delete>
+	
+	<delete id="deleteByIds">
+		delete from fine_report_template_role_mapping where role_id in
+		<foreach item="item" index="index" collection="idList" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
 </mapper>
