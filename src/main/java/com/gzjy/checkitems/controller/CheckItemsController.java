@@ -41,8 +41,8 @@ public class CheckItemsController {
 	
 	/**
 	 * 根据ID获取当前目录
-	 * @param record
-	 * @return
+	 * @param id 编号
+	 * @return Response
 	 */
 	@RequestMapping(value = "/checkitemscatalog/{id}", method = RequestMethod.GET)
 	@Privileges(name = "CHECKITEM-CATALOG-SELECT", scope = { 1 })
@@ -59,8 +59,8 @@ public class CheckItemsController {
 	
 	/**
 	 * 添加检验项目录
-	 * @param record
-	 * @return
+	 * @param record CheckItemsCatalog
+	 * @return Response
 	 */
 	@RequestMapping(value = "/checkitemscatalog", method = RequestMethod.POST)
 	@Privileges(name = "CHECKITEM-CATALOG-ADD", scope = { 1 })
@@ -81,8 +81,8 @@ public class CheckItemsController {
 	
 	/**
 	 * 根据ID获取当前目录子目录
-	 * @param record
-	 * @return
+	 * @param parentId 父级编号
+	 * @return Response
 	 */
 	@RequestMapping(value = "/checkitemscatalog/children", method = RequestMethod.GET)
 	//@Privileges(name = "CHECKITEM-CATALOG-CHILD-SELECT", scope = { 1 })
@@ -98,8 +98,8 @@ public class CheckItemsController {
 	
 	/**
 	 * 修改检验项目录
-	 * @param record
-	 * @return
+	 * @param record CheckItemsCatalog
+	 * @return Response
 	 */
 	@RequestMapping(value = "/checkitemscatalog", method = RequestMethod.PUT)
 	@Privileges(name = "CHECKITEM-CATALOG-UPDATE", scope = { 1 })
@@ -115,8 +115,8 @@ public class CheckItemsController {
 	
 	/**
 	 * 根据ID递归删除当前目录
-	 * @param record
-	 * @return
+	 * @param id 编号
+	 * @return Response
 	 */
 	@RequestMapping(value = "/checkitemscatalog/{id}", method = RequestMethod.DELETE)
 	@Privileges(name = "CHECKITEM-CATALOG-RECURSION-DELETE", scope = { 1 })
@@ -133,8 +133,8 @@ public class CheckItemsController {
 	
 	/**
 	 * 检验项的录入
-	 * @param record
-	 * @return
+	 * @param record CheckItem对象
+	 * @return success
 	 */
 	@Privileges(name = "CHECKITEM-ADD", scope = { 1 })
 	@RequestMapping(value = "/checkitemscatalog/item", method = RequestMethod.POST)
@@ -153,8 +153,8 @@ public class CheckItemsController {
 	
 	/**
 	 * 获取检验项列表
-	 * @param record
-	 * @return
+	 * @param search 查询条件
+	 * @return Response
 	 */
 	@RequestMapping(value = "/checkitemscatalog/item", method = RequestMethod.GET)
 	@Privileges(name = "CHECKITEM-SELECT", scope = { 1 })
@@ -176,8 +176,6 @@ public class CheckItemsController {
 	
 	/**
 	 * 检验项的修改
-	 * @param record
-	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/item/{id}", method = RequestMethod.PUT)
 	@Privileges(name = "CHECKITEM-UPDATE", scope = { 1 })
@@ -196,8 +194,6 @@ public class CheckItemsController {
 	
 	/**
 	 * 检验项的删除
-	 * @param record
-	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/item/{id}", method = RequestMethod.DELETE)
 	@Privileges(name = "CHECKITEM-DELETE", scope = { 1 })
@@ -214,8 +210,6 @@ public class CheckItemsController {
 	
 	/**
 	 * 检验项的检验
-	 * @param record
-	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/item/check", method = RequestMethod.POST)
 	public Response validateCheckItem(@RequestBody CheckItem checkItem) {
@@ -232,8 +226,6 @@ public class CheckItemsController {
 	
 	/**
 	 * 检验项的详情
-	 * @param record
-	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/item/{id}", method = RequestMethod.GET)
 	@Privileges(name = "CHECKITEM-GET", scope = { 1 })
@@ -250,8 +242,6 @@ public class CheckItemsController {
 	
 	/**
 	 * 获取检验项列表树
-	 * @param record
-	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/item/{catalogId}/tree", method = RequestMethod.GET)
 	public Response getCheckItemListById(@PathVariable String catalogId) {
@@ -267,8 +257,6 @@ public class CheckItemsController {
 	
 	/**
 	 * 插入数据到检验项关系表中
-	 * @param record
-	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/item/mapping", method = RequestMethod.POST)
 	@Privileges(name = "CHECKITEM-MAPPING-ADD", scope = { 1 })
@@ -290,8 +278,6 @@ public class CheckItemsController {
 	
 	/**
 	 * 修改自定义检验项
-	 * @param record
-	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/item/mapping", method = RequestMethod.PUT)
 	@Privileges(name = "CHECKITEM-MAPPING-ADD", scope = { 1 })
@@ -308,8 +294,6 @@ public class CheckItemsController {
 	
 	/**
 	 * 查询自定义检验项
-	 * @param record
-	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/item/mapping/{catalogId}", method = RequestMethod.GET)
 	@Privileges(name = "CHECKITEM-MAPPING-ADD", scope = { 1 })
@@ -326,8 +310,6 @@ public class CheckItemsController {
 	
 	/**
 	 * 批量插入数据到检验项关系表中
-	 * @param record
-	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/item/mapping/list", method = RequestMethod.POST)
 	@Privileges(name = "CHECKITEM-MAPPING-MUPL-ADD", scope = { 1 })
@@ -367,8 +349,6 @@ public class CheckItemsController {
 	
 	/**
 	 * 删除检验项关系表中数据
-	 * @param record
-	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/item/mapping/{id}", method = RequestMethod.DELETE)
 	@Privileges(name = "CHECKITEM-MAPPING-DELETE", scope = { 1 })
@@ -385,8 +365,6 @@ public class CheckItemsController {
 	
 	/**
 	 * 检验项的批量导入
-	 * @param file
-	 * @return
 	 */
 	@RequestMapping(value = "/checkitems/import", method = RequestMethod.POST)
 	public Response multiImport(@RequestParam("file") MultipartFile file) {
@@ -402,8 +380,6 @@ public class CheckItemsController {
 	
 	/**
 	 * 自定义检验项的批量导入（excel文件导入）
-	 * @param file
-	 * @return
 	 */
 	@RequestMapping(value = "/checkitemscatalog/item/mapping/import", method = RequestMethod.POST)
 	public Response checkitemscatalogMultiImport(@RequestParam("file") MultipartFile file,

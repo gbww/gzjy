@@ -8,9 +8,13 @@ import com.gzjy.checkitems.model.CheckItemsCatalog;
 
 @Mapper
 public interface CheckItemsCatalogMapper {
-	CheckItemsCatalog selectByPrimaryKey(String id);
-	int insert(CheckItemsCatalog record);	
-	List<CheckItemsCatalog> selectByParentId(String parentId);
-	int updateByPrimaryKeySelective(CheckItemsCatalog record);	
-	void deleteByPrimaryKey(String id);
+    CheckItemsCatalog selectByPrimaryKey(String id);
+
+    int insert(CheckItemsCatalog record);
+
+    List<CheckItemsCatalog> selectByParentId(String parentId);
+
+    int updateByPrimaryKeySelective(CheckItemsCatalog record);
+
+    void deleteByPrimaryKey(String id);
 }
